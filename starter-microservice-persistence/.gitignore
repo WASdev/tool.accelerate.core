@@ -1,0 +1,9 @@
+/build
+/.settings
+/.project
+/.classpath
+/.apt_generated
+/target
+/.factorypath
+/pom.xml
+/bin

@@ -1,0 +1,42 @@
+<!-- Copyright (c) 2016 IBM Corp.
+ 
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+ 
+     http://www.apache.org/licenses/LICENSE-2.0
+ 
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.-->
+<server description="Liberty server" >
+
+    <featureManager>
+        <feature>servlet-3.1</feature>
+        <feature>jaxrs-2.0</feature>
+        <feature>jsonp-1.0</feature>
+        <feature>cdi-1.2</feature>
+        <feature>ssl-1.0</feature>
+        <feature>apiDiscovery-1.0</feature>
+	</featureManager>
+    
+    <httpEndpoint httpPort="9082" httpsPort="9445" id="defaultHttpEndpoint" host="*"/>
+
+	<keyStore password="password" />
+    
+    <basicRegistry id="basic" realm="ibm/api">
+        <user name="guest" password="password" />
+    </basicRegistry>
+    
+    <application location="liberty-starter-application.war"
+        id="DevExperience" context-root="/start"></application>
+    <application location="liberty-filter-application.war" id="filter" context-root="/"></application>
+    <application location="starter-microservice-web.war" id="web" context-root="/web"></application>
+    <application location="starter-microservice-persistence.war" id="persistence" context-root="/persistence"></application>
+    <application location="starter-microservice-rest.war" id="rest" context-root="/rest"></application>
+    <application location="starter-microservice-watsonsdk.war" id="watsonsdk" context-root="/watsonsdk"></application>
+    <application location="starter-microservice-websocket.war" id="websocket" context-root="/websocket"></application>
+    <application location="starter-microservice-springboot.war" id="springboot" context-root="/springboot"></application>
+</server>

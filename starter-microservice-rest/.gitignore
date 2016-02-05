@@ -1,8 +1,7 @@
+/pom.xml
+/target
 /build
-/.gradle
-/.project
 /.classpath
+/.project
 /.settings
 /bin
-
-/usr

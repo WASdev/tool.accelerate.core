@@ -1,0 +1,11 @@
+/.project
+/.settings
+/build
+/servers/.classCache
+/servers/*/logs
+/servers/*/workarea
+/servers/*/apps
+/servers/*/StarterServer.zip
+/servers/*/dropins
+/bin/
+/.classpath

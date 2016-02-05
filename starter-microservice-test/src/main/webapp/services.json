@@ -1,0 +1,10 @@
+{
+    "services": [
+        {
+            "id" : "test",
+            "name" : "Test",
+            "description" : "Test",
+            "endpoint" : "/test"
+        }
+    ]
+}
