@@ -1,0 +1,117 @@
+/*
+ * Copyright (c) 2016 IBM Corp.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+*/ 
+apply from: '../common-java.gradle'
+apply from: '../common-war.gradle'
+
+dependencies {
+    compile project(':liberty-starter-model')
+    providedCompile group:'javax.servlet', name:'javax.servlet-api', version:'3.1.0'
+    providedCompile group:'javax.ws.rs', name:'javax.ws.rs-api', version: '2.0'
+    providedCompile group:'javax.json', name:'javax.json-api', version:'1.0'
+    providedCompile group: 'io.swagger', name: 'swagger-annotations', version: '1.5.4'
+    providedCompile group: 'javax.enterprise', name: 'cdi-api', version: '1.2'
+    providedCompile group: 'javax.annotation', name: 'javax.annotation-api', version: '1.2'
+    providedCompile group:'com.sebastian-daschner', name:'jaxrs-analyzer-maven-plugin', version:'0.9'
+    compile group: 'commons-io', name: 'commons-io', version: '2.4' 
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+    testCompile group: 'net.sourceforge.htmlunit', name: 'htmlunit', version: '2.19'
+    testRuntime group: 'org.apache.cxf', name: 'cxf-rt-rs-client', version: '3.1.1'
+    testRuntime group: 'org.glassfish', name: 'javax.json', version: '1.0.4'
+}
+
+buildutils {
+	contextRoot = '/start'
+}
+
+libertyutils {
+    serverEnv = ['com.ibm.liberty.starter.servicesJsonLocation=http://localhost:9082/test/services.json']
+}
+
+// Zip up the skeletonBuildImage so it can be included in the war file
+task compressSkeletonBuildImage(type: Jar) {
+    from 'skeletons/base'
+    destinationDir = sourceSets.main.output.resourcesDir
+    baseName = '/services/skeletonLibertyBuildImage'
+    exclude '**/target'
+    exclude '**/.project'
+}
+
+// Copy the base index.html file and pom.xml into resources so it is included in the war
+// These files are special as they will be munged before being put in the zip 
+task copySpecialFiles(type: Copy) {
+    from 'skeletons/specialFiles'
+    destinationDir = sourceSets.main.output.resourcesDir
+}
+
+war {
+    exclude '**/target'
+    exclude '**/.project'
+}
+
+task fvt(type: Test) {
+    group 'Verification'
+    description 'Runs the functional verification tests.'
+    reports.html.destination = file("$buildDir/reports/it")
+    reports.junitXml.destination = file("$buildDir/test-results/it")
+    include '**/it/**'
+    exclude '**/unit/**'
+
+    systemProperties = ['liberty.test.port': "${libertyApplicationTestPort}", 'liberty.temp.dir': "${buildDir}/temp" ]
+  
+}
+
+test {
+    reports.html.destination = file("$buildDir/reports/unit")
+    reports.junitXml.destination = file("$buildDir/test-results/unit")
+    include '**/unit/**'
+    exclude '**/it/**'
+}
+
+task deployApp(dependsOn: 'fvt') {
+    finalizedBy libertyStart
+}
+
+task cleanDropins (type: Delete){
+    delete fileTree(dir: '../liberty-starter-wlpcfg/servers/StarterServer/dropins')
+}
+
+liberty {
+    install {
+          type = "javaee7"
+    }
+    serverName = 'StarterServer'
+    userDir = '../liberty-starter-wlpcfg'
+    
+    features {
+        name = ['apiDiscovery-1.0']
+        acceptLicense = true
+    }
+    
+    packageLiberty {
+        include = 'usr'
+        archive = 'build/libs/WebSphereArtisanLiberty.zip'
+    }
+}
+
+clean.dependsOn(':liberty-starter-wlpcfg:cleanServer')
+war.dependsOn(':liberty-filter-application:publishWar', ':starter-microservice-test:publishTestWar', ':starter-microservice-web:publishWar', ':starter-microservice-persistence:publishWar', ':starter-microservice-rest:publishWar', ':starter-microservice-websocket:publishWar', ':starter-microservice-springboot:publishWar', ':starter-microservice-watsonsdk:publishWar', 'compressSkeletonBuildImage', 'copySpecialFiles', 'createSwaggerJSON')
+installFeature.dependsOn('installLiberty')
+libertyStart.dependsOn('installFeature', 'addServerEnv', 'publishWar')
+fvt.dependsOn('libertyStart', 'testClasses')
+fvt.finalizedBy('libertyStop', 'removeServerEnv')
+check.dependsOn('fvt')
+libertyPackage.dependsOn('publishWar', 'cleanDropins')
+apply from: rootProject.file('only-run-liberty-start-if-fvt-is-not-up-to-date.gradle')

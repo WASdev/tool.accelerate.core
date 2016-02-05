@@ -1,0 +1,25 @@
+/*
+ * Copyright (c) 2016 IBM Corp.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+*/
+// Make sure that LibertyStart's up to date check matches fvt's up to date check. See:
+// https://discuss.gradle.org/t/how-can-i-start-a-server-conditionally-before-a-functionaltestrun/6389/2
+libertyStart.ext.fvtRanSuccessfullyTrigger = file("${buildDir}/fvtRanSuccessfullyTrigger")
+libertyStart.inputs.files(fvt.inputs.files, libertyStart.fvtRanSuccessfullyTrigger)
+libertyStart.outputs.files(fvt.outputs.files)
+gradle.taskGraph.afterTask { Task task, TaskState state ->
+    if (task.name == "fvt" && state.failure) {
+        libertyStart.fvtRanSuccessfullyTrigger << new Date()
+    }
+}

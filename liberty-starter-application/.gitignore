@@ -1,0 +1,11 @@
+/bin
+/.classpath
+/.project
+/build
+/.settings
+/src/main/webapp/skeletonLibertyBuildImage.zip
+/src/main/resources/*.zip
+/.apt_generated
+/target
+/.factorypath
+/cloudant_config.properties

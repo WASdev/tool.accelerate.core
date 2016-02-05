@@ -1,0 +1,40 @@
+{
+    "services": [
+        {
+            "id" : "rest",
+            "name" : "REST",
+            "description" : "JAX-RS implementation",
+            "endpoint" : "/rest"
+        },
+        {
+            "id" : "websocket",
+            "name" : "Web Sockets",
+            "description" : "WebSocket implementation",
+            "endpoint" : "/websocket"
+        },
+        {
+            "id" : "persistence",
+            "name" : "Persistence",
+            "description" : "JPA data persistence",
+            "endpoint" : "/persistence"
+        },
+        {
+            "id": "web",
+            "name" : "Servlet",
+            "description": "Servlet 3.1",
+            "endpoint" : "/web"
+        },
+        {
+            "id": "springboot",
+            "name": "Spring Boot with Spring MVC",
+            "description": "Spring Boot with Spring MVC",
+            "endpoint" : "/springboot"
+        },
+        {
+            "id": "watsonsdk",
+            "name": "Watson SDK Dependency",
+            "description": "Adds the Watson SDK dependency to the project, allowing you to integrate Watson services",
+            "endpoint" : "/watsonsdk"
+        }
+    ]
+}

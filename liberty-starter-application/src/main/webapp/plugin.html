@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Liberty Starter</title>
+<!-- <link rel="stylesheet" href="css/bootstrap.min.css">-->
+<meta charset="utf-8"/>
+<link
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"
+	rel="stylesheet" type="text/css" />
+<link
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css"
+	rel="stylesheet" type="text/css" />
+<link rel="stylesheet" href="css/liberty.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.3/angular.min.js"></script>
+<script src="https://cdn.rawgit.com/eligrey/FileSaver.js/master/FileSaver.js"></script>
+<script src="js/v1/plugin.js"></script>
+</head>
+<body>
+    <div ng-app="libertyTechnologyDeveloperApp" ng-controller="libertyTechnologyDeveloperController">
+        <div class="container-fluid">
+            <div class="row">
+                <div id="header" class="col-sm-12">
+                    <div class="page-header">
+                        <h1>Build your own Liberty starter plugin!</h1>
+                        <h2>Define the attributes of your Liberty technology, download the app, configure it and then deploy it somewhere.</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <!-- begin main view -->
+                <div id="main" class="col-sm-6">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Technology Details</h3>
+                        </div>
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-sm-1"></div>
+                                <div class="col-sm-10">
+                                    <label>Technology Name:</label><input name="techName" type="text" data-ng-model="form.techName" />
+                                    <label>Unique namespace:</label><input name="namespace" type="text" data-ng-model="form.namespace" />
+                                </div>
+                                <div class="col-sm-1"></div>
+                            </div>
+                            <div class="row">
+                                <div class="submitClass">
+                                    <div class="col-sm-1"></div>
+                                    <div class="col-sm-10">
+                                        <button type="button" class="btn btn-success btn-md"
+                                            ng-click="submitTech()">
+                                            <span class="glyphicon glyphicon-save"></span>Submit New Tech Type
+                                        </button>
+                                    </div>
+                                    <div class="col-sm-1"></div>
+                                </div>
+                            </div>
+                            <div class="row" ng-if="returnedApiKey">
+                                <div class="col-sm-1"></div>
+                                <div class="col-sm-10">
+                                    The API Key is : {{returnedApiKey}}
+                                </div>
+                                <div class="col-sm-1"></div>
+                            </div>
+                                                       <div class="row" ng-if="failureMessage">
+                                <div class="col-sm-1"></div>
+                                <div class="col-sm-10">
+                                    Something went wrong : {{failureMessage}}
+                                </div>
+                                <div class="col-sm-1"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- begin side view -->
+                <div class="col-sm-6">
+                    <div class="row">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">Getting started...</h3>
+                            </div>
+                            <div class="panel-body">
+                                    <ol>
+                                        <li>Fill out the details above</li>
+                                        <li>Click <code>Submit new Tech Type</code>. Make a note of your API key (you need to keep this secure)</li>
+                                        <li>Unzip the project you download and add your project-specific files in</li>
+                                        <li>Start up your application</li>
+                                    </ol>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">Help us to help you!</h3>
+                            </div>
+                            <div class="panel-body">
+                                <p>To give us feedback please 
+                                raise an <a href="https://github.com/WASdev/tool.artisan.core/issues/">issue</a> on our <a href="https://github.com/WASdev/tool.artisan.core/">GitHub page</a>.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div><hr/></div>
+            <div class="row">
+                <div class="col-sm-9">
+                        <p>Copyright (c) 2015 IBM Corp.</p>
+                        <p>Licensed under the Apache License, Version 2.0 (the "License"); 
+                        you may not use this file except in compliance with the License. You 
+                        may obtain a copy of the License at 
+                        <a href="http://www.apache.org/licenses/LICENSE-2.0">www.apache.org/licenses/LICENSE-2.0</a>.</p>
+                        <p>Unless required by applicable law or agreed to in writing, software 
+                        distributed under the License is distributed on an "AS IS" BASIS, 
+                        WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.<br>
+                        See the License for the specific language governing permissions and 
+                        limitations under the License.</p>
+                </div>
+                 <div class="col-sm-3">
+                        <div class="row">
+                            <div class="col-sm-10">
+                                <div class="poweredBy">Powered by Liberty <img src="images/liberty-was-logo.png"/></div>
+                            </div>
+                        </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
