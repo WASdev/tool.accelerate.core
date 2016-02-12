@@ -232,6 +232,11 @@ $(document).ready(function() {
 		window.open("https://github.com/WASdev/tool.artisan.core/", "_blank");
 	});
 	
+    $("#step3NameInput").on("keypress", function(event) {
+		if(!(/[a-z0-9]/i.test(event.key) || event.key == "-" || event.key == "_")) {
+			event.preventDefault();
+		}
+	});
 	
 	retrieveTechnologiesFromServer().done(function() {
 		populateTechnologies();
