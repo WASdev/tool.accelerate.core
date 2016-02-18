@@ -47,7 +47,7 @@ public class PayloadTest {
     
     @Test
     public void testTestMicroservice() throws Exception {
-        String queryString = "name=test";
+        String queryString = "tech=test";
         callDataEndpoint(queryString);
         assertTrue("Expected net.wasdev.wlp.starters.test groupId. Found " + groups, groups.contains("net.wasdev.wlp.starters.test"));
         assertTrue("Expected provided-pom artifact. Found " + artifacts, artifacts.contains("provided-pom"));

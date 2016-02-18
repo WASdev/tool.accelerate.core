@@ -47,14 +47,14 @@ public class LibertyTechnologySelector {
 
     @GET
     @Produces("application/zip")
-    public Response getResponse(@QueryParam("name") String[] names, @Context UriInfo info) throws NullPointerException, IOException {
+    public Response getResponse(@QueryParam("tech") String[] techs, @QueryParam("name") String name, @Context UriInfo info) throws NullPointerException, IOException {
         log.info("GET request for /data");
         try {
             final ServiceConnector serviceConnector = new ServiceConnector(info.getBaseUri());
             final List<Service> serviceList = new ArrayList<Service>();
-            for (String name : names) {
+            for (String tech : techs) {
                 
-                Service service = serviceConnector.getServiceObjectFromId(name);
+                Service service = serviceConnector.getServiceObjectFromId(tech);
                 if (service != null) {
                     serviceList.add(service);
                 }
@@ -75,8 +75,13 @@ public class LibertyTechnologySelector {
                 }
             };
 
+            String zipname = ((name == null) || (name.length() == 0)) ? "libertyProject.zip" : name;
+            if(!zipname.toLowerCase().endsWith(".zip")) {
+            	zipname += ".zip";
+            }
+            
             return Response.ok(so, "application/zip").header("Content-Disposition",
-                                                             "attachment; filename=\"libertyProject.zip\"").build();
+                                                             "attachment; filename=\"" + zipname + "\"").build();
         } catch (IllegalArgumentException e) {
             return Response.status(Response.Status.FORBIDDEN).build();
         } catch (Exception e) {

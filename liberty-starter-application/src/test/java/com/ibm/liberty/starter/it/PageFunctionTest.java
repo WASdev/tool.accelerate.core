@@ -36,7 +36,7 @@ public class PageFunctionTest {
         try {
             page = webClient.getPage("http://localhost:" + port + "/start/");
             String title = page.getTitleText();
-            assertTrue("Title is " + title, title.equals("Liberty Starter"));
+            assertTrue("Title is " + title, title.equals("Liberty Groove"));
         } catch (Exception e){
             org.junit.Assert.fail("Caught exception: " + e);
         } finally {
