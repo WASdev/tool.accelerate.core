@@ -131,16 +131,9 @@ body {
 	margin-bottom: 120px;
 }
 
-/*
-#bannerContainer {
-	background-color: #F0F0F0;
-}
-*/
-
 #banner {
 	position: relative;
 	height: 236px;
-	/*height: 330px;*/
 	width: 1280px;
 	margin-left: auto;
 	margin-right: auto;
@@ -390,13 +383,6 @@ body {
     text-align: center;
     margin-top: 36px;
 }
-
-/*
-#step3DownloadButton:hover {
-	background-color: #152935;
-	color: #FFFFFF;
-}
-*/
 
 #step3LocalLeftBlock {
 	display: inline-block;
