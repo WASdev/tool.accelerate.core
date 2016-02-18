@@ -15,36 +15,37 @@
  */
 
 $(document).ready(function() {
-	
+
 	var serviceURL = "/start/api/v1";
 	var technologies = [];
 	var currentStep = 1;
-	
+
 	var populateTechnologies = function() {
 		var step1TechnologiesContainer = $("#step1TechnologiesContainer");
 		step1TechnologiesContainer.empty();
 		for(var i = 0; i < technologies.length; i++) {
 			var technology = technologies[i];
 			var technologyTag = $("<a href=\"#\" class=\"step1Technology\" data-technologyid=\"" + technology.id + "\">" + technology.name + "</a>");
+			technologyTag.append('<span class="technology-checkmark"></span>');
 			step1TechnologiesContainer.append(technologyTag);
 		}
 	};
-	
+
 	var getCurrentStep = function() {
 		var windowScroll = $(window).scrollTop();
-		for(var i = 0; i < 3; i ++) {			
+		for(var i = 0; i < 3; i ++) {
 			var shift = 55 * (i + 1) + i;
 			var step = $("#step" + (i + 1));
-			var stepOffset = step.offset(); 
+			var stepOffset = step.offset();
 			var height = step.outerHeight();
 			if(windowScroll + shift < stepOffset.top + height) {
 				return i + 1;
 			}
 		}
 	};
-	
+
 	var updateSteps = function() {
-		
+
 		var step = getCurrentStep();
 		if(step != currentStep) {
 			var navigationBottomContainer = $("#navigationBottomContainer");
@@ -95,7 +96,7 @@ $(document).ready(function() {
 			updateNextSectionEnablement();
 		}
 	};
-	
+
 	var updateStep1Summary = function() {
 		var selectedTechnologies = $("#step1TechnologiesContainer .step1Technology.selected");
 		var selectedTechnologiesText = "";
@@ -107,7 +108,7 @@ $(document).ready(function() {
 		}
 		$("#navigationTop1 .variableContent").text(selectedTechnologiesText);
 	};
-	
+
 	var refreshSectionVisibility = function() {
 		var currentlyVisibleSections = $(".step:not(.hidden").size();
 		var selectedTechnologies = $("#step1TechnologiesContainer .step1Technology.selected");
@@ -128,13 +129,13 @@ $(document).ready(function() {
 				window.setTimeout(function() {
 					$.scrollify.enable();
 				}, 500);
-				
+
 			}
 			$.scrollify.update();
 			updateNextSectionEnablement();
 		}
 	};
-	
+
 	var updateNextSectionEnablement = function() {
 		if($("#step" + (currentStep + 1)).hasClass("hidden")) {
 			$("#navigationBottomContainer").addClass("disabled");
@@ -151,9 +152,9 @@ $(document).ready(function() {
             }
         });
     };
-	
+
 	var submitRequest = function() {
-		
+
 		// Selected technologies
 		var selectedTechnologies = $("#step1TechnologiesContainer .step1Technology.selected");
 		var url = serviceURL + "/data?tech=";
@@ -163,11 +164,11 @@ $(document).ready(function() {
 				url += "&tech=";
 			}
 		}
-		
+
 		// Deploy location
 		var deployLocation = $("#step2DeployLocationsContainer .step2DeployLocation.selected").data("value");
 		url += "&deploy=" + deployLocation;
-		
+
 		// Project name
 		var projectName = $("#step3NameInput").val();
 		if(projectName != "") {
@@ -177,14 +178,14 @@ $(document).ready(function() {
 		}
 		window.location.assign(url);
 	};
-	
+
 	$("#step1TechnologiesContainer").on("click", ".step1Technology", function(event) {
 		event.preventDefault();
 		$(event.currentTarget).toggleClass("selected");
 		updateStep1Summary();
 		refreshSectionVisibility();
 	});
-	
+
 	$("#step2DeployLocationsContainer .step2DeployLocation").on("click", function(event) {
 		event.preventDefault();
 		$("#step2DeployLocationsContainer .step2DeployLocation").removeClass("selected");
@@ -197,60 +198,60 @@ $(document).ready(function() {
 			$("#step3Local").addClass("hidden");
 			$("#step3Bluemix").removeClass("hidden");
 		}
-		
+
 		refreshSectionVisibility();
 	});
-	
+
 	$("#navigationBottomContainer").click(function(event) {
 		event.preventDefault();
 		if(!$("#navigationBottomContainer").hasClass("disabled")) {
 			$.scrollify.next();
 		}
 	});
-	
+
 	$(".navigationTop").click(function(event) {
 		event.preventDefault();
 		$.scrollify.move(Number(event.currentTarget.dataset.targetsection));
 	});
-	
+
 	$(window).scroll(function() {
 		updateSteps();
 	});
-	
+
 	$("#step3DownloadButton").click(function(event) {
 		event.preventDefault();
 		submitRequest();
 	});
-	
+
 	$("#helpUsToHelpYouGetInTouchButton").click(function(event) {
 		event.preventDefault();
 		window.open("https://github.com/WASdev/tool.artisan.core/issues/", "_blank");
 	});
-	
+
 	$("#gitHubLink").click(function(event) {
 		event.preventDefault();
 		window.open("https://github.com/WASdev/tool.artisan.core/", "_blank");
 	});
-	
+
     $("#step3NameInput").on("keypress", function(event) {
 		if(!(/[a-z0-9]/i.test(event.key) || event.key == "-" || event.key == "_")) {
 			event.preventDefault();
 		}
 	});
-	
+
 	retrieveTechnologiesFromServer().done(function() {
 		populateTechnologies();
 
 		$("#navigationTopContainer, #mainContent, #navigationBottomContainer").removeClass("hidden");
-		
+
 		$.scrollify({
 	        section: ".step:not(.hidden)"
 	    });
-	    
-		
+
+
 	    $.scrollify.instantMove(0);
 	    $.scrollify.disable();
-	    
+
 	}).fail(function() {
 		$("#serviceError").fadeIn();
 	});

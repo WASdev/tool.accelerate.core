@@ -245,6 +245,7 @@ body {
 	margin-right: 40px;
 	text-decoration: none;
 	margin-bottom: 34px;
+	position: relative;
 }
 
 #step1TechnologiesContainer .step1Technology:nth-child(3n+3) {
@@ -253,8 +254,13 @@ body {
 
 
 #step1TechnologiesContainer .step1Technology.selected {
-	background-color: #F0F0F0;
-	border-color: #4A4A4A;
+	background-color: #F2CC12;
+	border-color: #F2CC12;
+	font-weight: bold;
+}
+
+#step1TechnologiesContainer .step1Technology.selected .technology-checkmark {
+	display: block;
 }
 
 #step1TechnologiesContainer .step1Technology:active {
@@ -270,6 +276,17 @@ body {
 	border-color: #4A4A4A;
 }
 
+.technology-checkmark {
+	background-image: url("../img/checkmark.jpg");
+	background-repeat: no-repeat;
+	background-size: contain;
+	display: none;
+	height: 38px;
+	position: absolute;
+	right: 26px;
+	top: 24px;
+	width: 38px;
+}
 
 /* STEP TWO */
 
