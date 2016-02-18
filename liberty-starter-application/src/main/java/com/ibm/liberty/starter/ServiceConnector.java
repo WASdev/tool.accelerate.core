@@ -53,7 +53,7 @@ public class ServiceConnector {
         Services services = getObjectFromEndpoint(Services.class, 
                                                   serverHostPort + "/start/api/v1/services", 
                                                   MediaType.APPLICATION_JSON_TYPE);
-        log.info("(SysOut) Setting SERVICES object to " + services.getServices());
+        log.info("Setting SERVICES object to " + services.getServices());
         return services;
     }
     

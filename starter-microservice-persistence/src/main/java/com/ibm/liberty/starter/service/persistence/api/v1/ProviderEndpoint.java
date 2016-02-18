@@ -12,12 +12,13 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/ 
+ *******************************************************************************/
 package com.ibm.liberty.starter.service.persistence.api.v1;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.regex.Pattern;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -36,8 +37,8 @@ import com.ibm.liberty.starter.api.v1.model.provider.Tag;
 
 @Path("v1/provider")
 public class ProviderEndpoint {
-    
-   
+
+    private Pattern xmlPattern = Pattern.compile("[a-zA-Z0-9-_/.%<>!]*");
 
     @GET
     @Path("/")
@@ -46,67 +47,66 @@ public class ProviderEndpoint {
         Provider details = new Provider();
         String description = getStringResource("/description.html");
         details.setDescription(description);
-        
+
         Location repoLocation = new Location();
         String url = info.getBaseUri().resolve("../artifacts").toString();
         repoLocation.setUrl(url);
         details.setRepoUrl(repoLocation);
-    	
-    	Dependency providedDependency = new Dependency();
-    	providedDependency.setScope(Scope.PROVIDED);
+
+        Dependency providedDependency = new Dependency();
+        providedDependency.setScope(Scope.PROVIDED);
         providedDependency.setGroupId("net.wasdev.wlp.starters.persistence");
         providedDependency.setArtifactId("provided-pom");
         providedDependency.setVersion("0.0.1");
-    	
+
         Dependency runtimeDependency = new Dependency();
         runtimeDependency.setScope(Scope.RUNTIME);
         runtimeDependency.setGroupId("net.wasdev.wlp.starters.persistence");
         runtimeDependency.setArtifactId("runtime-pom");
         runtimeDependency.setVersion("0.0.1");
-        
-        Dependency[] dependencies = {providedDependency, runtimeDependency};
+
+        Dependency[] dependencies = { providedDependency, runtimeDependency };
         details.setDependencies(dependencies);
-    	return details;
+        return details;
     }
-    
+
     //read the description contained in the index.html file
     private String getStringResource(String path) {
-    	InputStream in = getClass().getResourceAsStream(path);
-    	
-    	StringBuilder index = new StringBuilder();
-    	char[] buffer = new char[1024];
-    	int read = 0;
-    	try(InputStreamReader reader = new InputStreamReader(in)){
-    		while((read = reader.read(buffer)) != -1) {
-    			index.append(buffer, 0, read);
-    		}
-    	} catch (IOException e) {
-    		//just return what we've got
-    		return index.toString();
-    	}
-    	return index.toString();
+        InputStream in = getClass().getResourceAsStream(path);
+        StringBuilder index = new StringBuilder();
+        char[] buffer = new char[1024];
+        int read = 0;
+        try (InputStreamReader reader = new InputStreamReader(in)) {
+            while ((read = reader.read(buffer)) != -1) {
+                index.append(buffer, 0, read);
+            }
+        } catch (IOException e) {
+            //just return what we've got
+            return index.toString();
+        }
+        return index.toString();
     }
 
     @GET
     @Path("samples")
     @Produces(MediaType.APPLICATION_JSON)
     public Response constructSample(@Context UriInfo info) {
-    	StringBuilder json = new StringBuilder("{\n");
-    	String base = info.getBaseUri().resolve("../sample").toString();
-    	json.append("\"base\" : \"" + base + "\",\n");
-    	json.append(getStringResource("/locations.json"));
-    	json.append("}\n");
-    	return Response.ok(json.toString()).build();
+        StringBuilder json = new StringBuilder("{\n");
+        String base = info.getBaseUri().resolve("../sample").toString();
+        json.append("\"base\" : \"" + base + "\",\n");
+        json.append(getStringResource("/locations.json"));
+        json.append("}\n");
+        return Response.ok(json.toString()).build();
     }
-    
+
     @GET
     @Path("config")
     @Produces(MediaType.APPLICATION_JSON)
     public ServerConfig getServerConfig() throws Exception {
-    	ServerConfig config = new ServerConfig();
-    	Tag[] tags = new Tag[]{new Tag("featureManager")};
-    	tags[0].setTags(new Tag[]{new Tag("feature", "jpa-2.1")});
-    	config.setTags(tags);
-    	return config;
+        ServerConfig config = new ServerConfig();
+        Tag[] tags = new Tag[] { new Tag("featureManager") };
+        tags[0].setTags(new Tag[] { new Tag("feature", "jpa-2.1") });
+        config.setTags(tags);
+        return config;
     }
 }
