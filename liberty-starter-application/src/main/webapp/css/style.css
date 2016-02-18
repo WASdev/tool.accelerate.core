@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
+
 @font-face {
 	font-family: "HelvNeueRoman";
 	src: url("../fonts/HelvNeueRomanforIBM.otf");
@@ -101,7 +101,7 @@ body {
 }
 
 #navigationBottomContainer .navigationBottom {
-	color: FFFFFF;	
+	color: FFFFFF;
 	font-size: 16px;
 	font-family: "HelvNeueRoman";
 }
@@ -181,7 +181,7 @@ body {
 }
 
 #step1TechnologiesContainer {
-	margin-top: 30px;	
+	margin-top: 30px;
 	border-bottom: solid 1px #BEBEBE;
 	padding-bottom: 8px;
 }
@@ -493,6 +493,7 @@ body {
 	width: 540px;
 	line-height: 25px;
 	text-align: justify;
+    float: left;
 }
 
 #helpUsToHelpYouGetInTouchButton {
@@ -556,4 +557,28 @@ body {
 	background-color: #a90f22;
 	padding: 40px;
 	margin: 40px;
+}
+
+.linksForMoreInformation {
+    float: right;
+    margin: -38px 0 0;
+    width: 300px;
+}
+
+.linksForMoreInformation p {
+    color: #152935;
+    font-family: "HelvNeueBold";
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.linksForMoreInformation ul {
+    margin: 0;
+    padding: 0;
+}
+
+.linksForMoreInformation li {
+    list-style: none inside;
+    margin-bottom: 20px;
 }
