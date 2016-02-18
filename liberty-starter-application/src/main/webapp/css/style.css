@@ -252,15 +252,10 @@ body {
 	margin-right: 0;
 }
 
-
 #step1TechnologiesContainer .step1Technology.selected {
 	background-color: #F2CC12;
 	border-color: #F2CC12;
 	font-weight: bold;
-}
-
-#step1TechnologiesContainer .step1Technology.selected .technology-checkmark {
-	display: block;
 }
 
 #step1TechnologiesContainer .step1Technology:active {
@@ -276,7 +271,7 @@ body {
 	border-color: #4A4A4A;
 }
 
-.technology-checkmark {
+.state-checkmark {
 	background-image: url("../img/checkmark.jpg");
 	background-repeat: no-repeat;
 	background-size: contain;
@@ -286,6 +281,11 @@ body {
 	right: 26px;
 	top: 24px;
 	width: 38px;
+}
+
+#step1TechnologiesContainer .step1Technology.selected .state-checkmark,
+#step2DeployLocationsContainer .step2DeployLocation.selected .state-checkmark {
+	display: block;
 }
 
 /* STEP TWO */
@@ -325,11 +325,13 @@ body {
 	display: block;
 	text-decoration: none;
 	margin-bottom: 34px;
+	position: relative;
 }
 
 #step2DeployLocationsContainer .step2DeployLocation.selected {
-	background-color: #F0F0F0;
-	border-color: #4A4A4A;
+	background-color: #F2CC12;
+	border-color: #F2CC12;
+	font-weight: bold;
 }
 
 #step2DeployLocationsContainer .step2DeployLocation:active {

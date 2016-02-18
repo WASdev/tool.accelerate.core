@@ -26,7 +26,7 @@ $(document).ready(function() {
 		for(var i = 0; i < technologies.length; i++) {
 			var technology = technologies[i];
 			var technologyTag = $("<a href=\"#\" class=\"step1Technology\" data-technologyid=\"" + technology.id + "\">" + technology.name + "</a>");
-			technologyTag.append('<span class="technology-checkmark"></span>');
+			technologyTag.append('<span class="state-checkmark"></span>');
 			step1TechnologiesContainer.append(technologyTag);
 		}
 	};
