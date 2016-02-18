@@ -20,7 +20,9 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
+import java.util.regex.Pattern;
 
+import javax.validation.ValidationException;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -28,6 +30,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.StreamingOutput;
 import javax.ws.rs.core.UriInfo;
 import javax.xml.parsers.ParserConfigurationException;
@@ -35,8 +38,10 @@ import javax.xml.transform.TransformerException;
 
 import org.xml.sax.SAXException;
 
+import com.ibm.liberty.starter.PatternValidation;
 import com.ibm.liberty.starter.ProjectZipConstructor;
 import com.ibm.liberty.starter.ServiceConnector;
+import com.ibm.liberty.starter.PatternValidation.PatternType;
 import com.ibm.liberty.starter.api.v1.model.internal.Services;
 import com.ibm.liberty.starter.api.v1.model.registration.Service;
 
@@ -47,16 +52,20 @@ public class LibertyTechnologySelector {
 
     @GET
     @Produces("application/zip")
-    public Response getResponse(@QueryParam("tech") String[] techs, @QueryParam("name") String name, @Context UriInfo info) throws NullPointerException, IOException {
+    public Response getResponse(@QueryParam("tech") String[] techs, @QueryParam("name") String name,
+                                @Context UriInfo info) throws NullPointerException, IOException {
         log.info("GET request for /data");
         try {
             final ServiceConnector serviceConnector = new ServiceConnector(info.getBaseUri());
             final List<Service> serviceList = new ArrayList<Service>();
             for (String tech : techs) {
-                
-                Service service = serviceConnector.getServiceObjectFromId(tech);
-                if (service != null) {
-                    serviceList.add(service);
+                if (PatternValidation.checkPattern(PatternType.TECH, tech)) {
+                    Service service = serviceConnector.getServiceObjectFromId(tech);
+                    if (service != null) {
+                        serviceList.add(service);
+                    }
+                } else {
+                    throw new ValidationException("Invalid technology type.");
                 }
             }
 
@@ -75,15 +84,25 @@ public class LibertyTechnologySelector {
                 }
             };
 
-            String zipname = ((name == null) || (name.length() == 0)) ? "libertyProject.zip" : name;
-            if(!zipname.toLowerCase().endsWith(".zip")) {
-            	zipname += ".zip";
+            if (name == null || name.length() == 0) {
+                log.severe("No name passed in.");
+                throw new ValidationException();
             }
-            
-            return Response.ok(so, "application/zip").header("Content-Disposition",
-                                                             "attachment; filename=\"" + zipname + "\"").build();
+            if (!PatternValidation.checkPattern(PatternType.NAME, name)) {
+                log.severe("Invalid file name.");
+                throw new ValidationException();
+            }
+
+            if (name.length() > 50) {
+                log.severe("Invalid file name length.");
+                throw new ValidationException();
+            }
+            name += ".zip";
+            return Response.ok(so, "application/zip").header("Content-Disposition", "attachment; filename=\"" + name + "\"").build();
         } catch (IllegalArgumentException e) {
             return Response.status(Response.Status.FORBIDDEN).build();
+        } catch (ValidationException e) {
+            return Response.status(Status.BAD_REQUEST).entity("Validation of the input failed.").build();
         } catch (Exception e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
         }

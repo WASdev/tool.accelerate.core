@@ -26,7 +26,9 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriInfo;
 
+import com.ibm.liberty.starter.PatternValidation;
 import com.ibm.liberty.starter.ServiceConnector;
+import com.ibm.liberty.starter.PatternValidation.PatternType;
 import com.ibm.liberty.starter.api.v1.model.registration.Service;
 
 @Path("v1/repo")
@@ -35,19 +37,24 @@ public class RepositoryCallInterceptor {
     @GET
     @Path("net/wasdev/wlp/starters/{tech}/{path: .*}")
     public Response getArtifacts(@PathParam("tech") String tech, @PathParam("path") String path, @Context UriInfo info) throws IOException {
-        String fileExtension = "net/wasdev/wlp/starters/" + tech + "/" + path;
-        System.out.println("Request for artifact file " + fileExtension);
-        ServiceConnector serviceConnector = new ServiceConnector(info.getBaseUri());
-        Service service = serviceConnector.getServiceObjectFromId(tech);
-        if (service == null) {
-            return Response.status(Status.NOT_FOUND).entity("Tech type " + tech + " not found").build();
-        }
-        try {
-            InputStream is = serviceConnector.getArtifactAsInputStream(service, fileExtension);
-            return Response.ok(is).build();
-        } catch (Exception e) {
-            System.out.println("File " + fileExtension + " not found so returning a 404.");
-            return Response.status(Status.NOT_FOUND).entity("File not found: " + fileExtension + " not found.").build();
+        if (PatternValidation.checkPattern(PatternType.TECH, tech)
+            && PatternValidation.checkPattern(PatternType.PATH_EXTENSION, path)) {
+            String fileExtension = "net/wasdev/wlp/starters/" + tech + "/" + path;
+            System.out.println("Request for artifact file " + fileExtension);
+            ServiceConnector serviceConnector = new ServiceConnector(info.getBaseUri());
+            Service service = serviceConnector.getServiceObjectFromId(tech);
+            if (service == null) {
+                return Response.status(Status.NOT_FOUND).entity("Tech type " + tech + " not found").build();
+            }
+            try {
+                InputStream is = serviceConnector.getArtifactAsInputStream(service, fileExtension);
+                return Response.ok(is).build();
+            } catch (Exception e) {
+                System.out.println("File " + fileExtension + " not found so returning a 404.");
+                return Response.status(Status.NOT_FOUND).entity("File not found: " + fileExtension + " not found.").build();
+            }
+        } else {
+            return Response.status(Status.BAD_REQUEST).entity("Invalid file request.").build();
         }
 
     }

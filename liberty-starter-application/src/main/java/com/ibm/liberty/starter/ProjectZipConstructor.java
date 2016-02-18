@@ -106,17 +106,29 @@ public class ProjectZipConstructor {
         }
         
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        BufferedReader reader = new BufferedReader(new InputStreamReader(htmlIS));
-        String line = null;
-        while ((line = reader.readLine()) != null) {
-            baos.write(line.getBytes());
-            baos.write(System.lineSeparator().getBytes());
-            if (line.contains("<div id=\"technologies\">")) {
-                Set<String> keys = techDescriptions.keySet();
-                for (String key : keys) {
-                    baos.write(techDescriptions.get(key));
-                }
+        final int MAX_SIZE = 200000;
+        char[] buffer = new char[MAX_SIZE];
+        BufferedReader reader = null;
+        try {
+            reader = new BufferedReader(new InputStreamReader(htmlIS));
+            reader.read(buffer, 0, MAX_SIZE);
+        } catch (Exception e ){
+            return null;
+        } finally {
+            reader.close();
+        }
+        String contents = new String(buffer);
+        int index = contents.indexOf("<div id=\"technologies\">");
+        if (index != -1) {
+            int length = contents.length();
+            String first = contents.substring(0, index);
+            String last = contents.substring(index, length);
+            baos.write(first.getBytes());
+            Set<String> keys = techDescriptions.keySet();
+            for (String key : keys) {
+                baos.write(techDescriptions.get(key));
             }
+            baos.write(last.getBytes());
         }
         return baos.toByteArray();
     }

@@ -31,6 +31,7 @@ import javax.ws.rs.core.Response;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
+import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.w3c.dom.Document;
@@ -47,7 +48,7 @@ public class PayloadTest {
     
     @Test
     public void testTestMicroservice() throws Exception {
-        String queryString = "tech=test";
+        String queryString = "tech=test&name=TestApp";
         callDataEndpoint(queryString);
         assertTrue("Expected net.wasdev.wlp.starters.test groupId. Found " + groups, groups.contains("net.wasdev.wlp.starters.test"));
         assertTrue("Expected provided-pom artifact. Found " + artifacts, artifacts.contains("provided-pom"));
@@ -103,7 +104,7 @@ public class PayloadTest {
     public void testBase() throws Exception {
         Client client = ClientBuilder.newClient();
         String port = System.getProperty("liberty.test.port");
-        String url = "http://localhost:" + port + "/start/api/v1/data?name=test";
+        String url = "http://localhost:" + port + "/start/api/v1/data?tech=test&name=Test";
         System.out.println("Testing " + url);
         Response response = client.target(url).request("application/zip").get();
         responseStatus = response.getStatus();
@@ -144,7 +145,9 @@ public class PayloadTest {
         Response response = client.target(url).request("application/zip").get();
         responseStatus = response.getStatus();
         contentDisposition = response.getHeaders().get("Content-Disposition");
-        assertTrue("Response status is: " + responseStatus, this.responseStatus == 200);
+        if (this.responseStatus != 200) {
+            Assert.fail("Expected response status 200, instead found " + responseStatus + ". Response was " + response.readEntity(String.class));
+        }
         parseResponse(response);
         System.out.println("Content disposition: " + contentDisposition);
         System.out.println("Groups: " + groups);
@@ -159,7 +162,7 @@ public class PayloadTest {
         ZipInputStream zipIn = new ZipInputStream(entityInputStream);
         // This system property is being set in the liberty-starter-application/build.gradle file
         String tempDir = System.getProperty("liberty.temp.dir");
-        File file = new File(tempDir + "/LibertyProject.zip");
+        File file = new File(tempDir + "/TestApp.zip");
         System.out.println("Creating zip file: " + file.toString());
         file.getParentFile().mkdirs();
         ZipOutputStream zipOut = new ZipOutputStream(new FileOutputStream(file));

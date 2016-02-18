@@ -17,19 +17,24 @@ package com.ibm.liberty.starter.api.v1.temp;
 
 import java.io.InputStream;
 import java.net.URI;
+import java.util.regex.Pattern;
 
 import javax.json.Json;
 import javax.json.JsonObject;
 import javax.json.JsonReader;
+import javax.validation.ValidationException;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
 
 //Temporary class until we put services.json into Cloudant
 @Path("v1/services")
 public class ServiceFinder {
+    
+    private Pattern pathPattern = Pattern.compile("[a-zA-Z0-9-_/.:]*");
 
     @GET
     @Path("/")
@@ -40,34 +45,33 @@ public class ServiceFinder {
         if (jsonLocation == null) {
             jsonLocation = "/services.json";
         }
-        URI uri = new URI(jsonLocation);
-        String protocol = uri.getScheme();
-        InputStream is = null;
-        if ("http".equals(protocol)) {
-            try {
-                is = uri.toURL().openConnection().getInputStream();
-                JsonReader reader = Json.createReader(is);
-                jsonData = reader.readObject();
-                return Response.ok(jsonData.toString(), MediaType.APPLICATION_JSON_TYPE).build();
-            } finally {
-                is.close();
+        try {
+            if (!checkPattern(pathPattern, jsonLocation)) {
+                throw new ValidationException();
             }
-        }
-        if ("https".equals(protocol)) {
-            // TODO: put in system to deal with this.
-        }
-        if (protocol == null || "classpath".equals(protocol)) {
-            try {
-                is = ServiceFinder.class.getResourceAsStream(uri.getPath());
-                JsonReader reader = Json.createReader(is);
-                jsonData = reader.readObject();
-                return Response.ok(jsonData.toString(), MediaType.APPLICATION_JSON_TYPE).build();
-            } finally {
-                if (is != null) {
-                    is.close();
+            URI uri = new URI(jsonLocation);
+            InputStream is = null;
+                try {
+                    is = ServiceFinder.class.getResourceAsStream(uri.getPath());
+                    JsonReader reader = Json.createReader(is);
+                    jsonData = reader.readObject();
+                    return Response.ok(jsonData.toString(), MediaType.APPLICATION_JSON_TYPE).build();
+                } finally {
+                    if (is != null) {
+                        is.close();
+                    }
                 }
-            }
+        } catch (ValidationException e) {
+            return Response.status(Status.BAD_REQUEST).entity("Invalid environment variable com.ibm.liberty.starter.servicesJsonLocation set.").build();
         }
-        return Response.ok("{ \"services\": []}", MediaType.APPLICATION_JSON_TYPE).build();
     }
+    
+    public static boolean checkPattern(Pattern pattern, String object) {
+        boolean patternPassed = false;
+        if (pattern.matcher(object).matches()) {
+            patternPassed = true;
+        }
+        return patternPassed;
+    }
+    
 }
