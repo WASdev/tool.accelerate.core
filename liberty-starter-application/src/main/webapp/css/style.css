@@ -156,7 +156,7 @@ body {
 	width: 100%;
 }
 
-#bannerImg {
+.banner-img {
     background-image: url("../img/wavelight_unsplash.jpg");
     background-position: 57.3% 50%;
     z-index: 3;
@@ -164,7 +164,7 @@ body {
     background-repeat: no-repeat;
 }
 
-#bannerFade {
+.banner-fade {
 	background: #4178BE;
 	opacity: 0.9;
 	z-index: 5;
@@ -538,6 +538,11 @@ body {
 	margin-top: 63px;
 	height: 195px;
 	background-color: rgb(241, 204, 21);
+	position: relative;
+}
+
+#helpUsToHelpYou a {
+	color: #fff;
 }
 
 #helpUsToHelpYouContent {
@@ -545,20 +550,21 @@ body {
 	width: 1100px;
 	margin-left: auto;
 	margin-right: auto;
+	z-index: 10;
 }
 
 #helpUsToHelpYouTitle {
 	padding-top: 40px;
 	font-family: "HelvNeueBold";
 	font-size: 18px;
-	color: #152935;
+	color: #fff;
 }
 
 #helpUsToHelpYouDescription {
 	padding-top: 20px;
 	font-family: "HelvNeueRoman";
 	font-size: 16px;
-	color: #152935;
+	color: #fff;
 	width: 540px;
 	line-height: 25px;
 	text-align: justify;
@@ -570,7 +576,7 @@ body {
 	border: solid 1px #152935;
 	font-family: "HelvNeueBold";
 	font-size: 16px;
-	color: #152935;
+	color: #fff;
 	text-decoration: none;
 	height: 60px;
 	line-height: 60px;
@@ -635,7 +641,7 @@ body {
 }
 
 .linksForMoreInformation p {
-    color: #152935;
+    color: #fff;
     font-family: "HelvNeueBold";
     font-size: 18px;
     font-weight: bold;
@@ -650,4 +656,5 @@ body {
 .linksForMoreInformation li {
     list-style: none inside;
     margin-bottom: 20px;
+	color: #fff;
 }
