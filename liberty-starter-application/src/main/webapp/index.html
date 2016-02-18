@@ -40,7 +40,10 @@
 			<div id="step1" class="step">
 				<div id="bannerContainer">
 					<div id="banner">
-						<div id="bannerLine1">Liberty app accelerator</div>
+						<div id="bannerImg" class="banner-img layered-bg"></div>
+						<div id="bannerFade" class="banner-fade layered-bg"></div>
+						<div id="bannerTriangle"></div>
+						<div id="bannerLine1"><span>Liberty</span> app accelerator</div>
 						<div id="bannerLine2">Easily start WebSphere Liberty, a Java EE application server</div>
 					</div>
 				</div>
@@ -61,8 +64,14 @@
 					<div id="step2Description1">Deploy</div>
 					<div id="step2Description2">Where do you want to deploy your project?</div>
 					<div id="step2DeployLocationsContainer">
-						<a href="#" class="step2DeployLocation" data-value="local">Deploy to Local</a>
-						<a href="#" class="step2DeployLocation" data-value="bluemix">Deploy to Bluemix</a>
+						<a href="#" class="step2DeployLocation" data-value="local">
+							Deploy to Local
+							<span class="state-checkmark"></span>
+						</a>
+						<a href="#" class="step2DeployLocation" data-value="bluemix">
+							Deploy to Bluemix
+							<span class="state-checkmark"></span>
+						</a>
 					</div>
 				</div>
 			</div>
@@ -106,6 +115,8 @@
 						</div>
 				</div>
 				<div id="helpUsToHelpYou">
+					<div id="bannerImgFooter" class="banner-img layered-bg"></div>
+					<div id="bannerFadeFooter" class="banner-fade layered-bg"></div>
 					<div id="helpUsToHelpYouContent">
 						<div id="helpUsToHelpYouTitle">Help us to help you!</div>
 						<div id="helpUsToHelpYouDescription">We will be adding new technologies and capabilities to this page over time. Get in touch
@@ -119,6 +130,7 @@
 								</li>
 								<li>
 									<a href="https://developer.ibm.com/wasdev/docs/category/getting-started/" title="Link to WASDev Tutorial page">WASDev Tutorial page</a>
+
 								</li>
 							</ul>
 						</div>
