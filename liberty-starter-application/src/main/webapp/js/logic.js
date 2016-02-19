@@ -239,6 +239,34 @@ $(document).ready(function() {
 		}
 	});
 
+	$("#step3OptionalWDTTrigger a").click(function(event){
+		event.preventDefault();
+
+		var container = $(this).parent().parent();
+		var headerSection = container.find("#step3OptionalWDTTrigger");
+		var openArrow = container.find(".wdtContentActive");
+		var closeArrow = container.find(".wdtContentDeactive");
+		var contentSection = container.find("#step3OptionalWDTContent");
+
+		if ( contentSection.hasClass("hidden") ) {
+			openArrow.addClass("hidden");
+			closeArrow.removeClass("hidden");
+			contentSection.removeClass("hidden");
+		} else {
+			openArrow.removeClass("hidden");
+			closeArrow.addClass("hidden");
+			contentSection.addClass("hidden");
+		}
+
+		// Update Scrollify
+		// The .update() method recalculates the height of the 'section'
+		// We need this method to be called because when you initially get
+		// to the 'Download' screen the height does not consider the hidden
+		// steps found in the 'Optional WDT' Section. This method will
+		// recalculate the height after the content is displayed.
+		$.scrollify.update();
+	});
+
 	var changedAppName = $("#step3NameInput");
 	var reflectChangedAppName = $(".step3NameOfProject");
 	$("#step3NameInput").on("input", function(event) {
