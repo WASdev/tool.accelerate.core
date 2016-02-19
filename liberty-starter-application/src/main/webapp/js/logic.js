@@ -239,6 +239,13 @@ $(document).ready(function() {
 		}
 	});
 
+	var changedAppName = $("#step3NameInput");
+	var reflectChangedAppName = $(".step3NameOfProject");
+	$("#step3NameInput").on("input", function(event) {
+		var value = $(this).val();
+		reflectChangedAppName.text(value);
+	});
+
 	retrieveTechnologiesFromServer().done(function() {
 		populateTechnologies();
 
