@@ -3,10 +3,10 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>net.wasdev.wlp.starters.websocket</groupId>
-    <artifactId>provided-pom</artifactId>
-    <version>0.0.1</version>
+    <artifactId>runtime-pom</artifactId>
+    <version>0.0.2</version>
 
-    <name>provided-pom</name>
+    <name>runtime-pom</name>
     
     <licenses>
         <license>
@@ -24,9 +24,10 @@
 
     <dependencies>
         <dependency>
-            <groupId>javax.websocket</groupId>
-            <artifactId>javax.websocket-api</artifactId>
-            <version>1.1</version>
+            <groupId>net.wasdev.wlp.starters.websocket</groupId>
+            <artifactId>server-snippet</artifactId>
+            <type>xml</type>
+            <version>0.0.2</version>
         </dependency>
     </dependencies>
 
