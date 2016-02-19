@@ -48,6 +48,7 @@ body {
 	top: 0;
 	left: 0;
 	width: 100%;
+	z-index: 2;
 }
 
 #navigationTopContainer .navigationTop {
@@ -98,6 +99,7 @@ body {
 	width: 1100px;
 	margin-left: auto;
 	margin-right: auto;
+	overflow: hidden;
 }
 
 #navigationBottomContainer .navigationBottom {
@@ -386,12 +388,16 @@ body {
 
 #step3LocalLeftBlock {
 	display: inline-block;
+	float: left;
+	width: 43%;
 }
 
 #step3LocalRightBlock {
 	display: inline-block;
 	vertical-align: top;
 	margin-top: 160px;
+	float: right;
+	width: 51%;
 }
 
 #step3LocalRightBlockItem1 {
@@ -642,4 +648,146 @@ body {
     list-style: none inside;
     margin-bottom: 20px;
 	color: #fff;
+}
+
+/**
+*******************************
+****** Optional WDT Stylings
+*******************************
+ **/
+
+ /* Trigger */
+ #step3OptionalWDT {
+     margin-top: 40px;
+     clear: both;
+     width: 1100px;
+     margin-left: auto;
+     margin-right: auto;
+ }
+
+#step3OptionalWDTTrigger {
+	position: relative;
+}
+
+#step3OptionalWDT #step3OptionalWDTTrigger a {
+    background-color: #F0F0F0;
+    color: #152935;
+    display: block;
+    padding: 18px 20px 14px 20px;
+    text-decoration: none;
+}
+
+.wdtArrowPlacement {
+	position: absolute;
+	right: 20px;
+	top: 18px;
+}
+
+.wdtContentActive {
+	width: 0;
+	height: 0;
+	border-style: solid;
+	border-width: 15px 15px 0 15px;
+	border-color: #282828 transparent transparent transparent;
+}
+
+.wdtContentActive.hidden {
+	display: none;
+}
+
+.wdtContentDeactive {
+	width: 0;
+	height: 0;
+	border-style: solid;
+	border-width: 0 15px 15px 15px;
+	border-color: transparent transparent #282828 transparent;
+}
+
+.wdtContentDeActive.hidden {
+	display: none;
+}
+
+/* Content */
+#step3OptionalWDTContent {
+	background: #fff;
+}
+
+#step3OptionalWDTContent.hidden {
+	display: none;
+}
+
+#step3OptionalWDTContent #WDTSteps {
+	margin: 0;
+	overflow: hidden;
+	padding: 0;
+}
+
+#step3OptionalWDTContent .WDTStep {
+	float: left;
+	height: 400px;
+	list-style: inside none;
+	margin: 10px 24px 20px;
+	padding: 20px 28px;
+	width: 40%;
+}
+
+#step3OptionalWDTContent .WDTStep p {
+	text-align: left;
+}
+
+#step3OptionalWDTContent .WDTStepImage {
+	background-color: transparent;
+	background-repeat: no-repeat;
+	background-size: contain;
+	background-position: 50% 50%;
+	border: 1px solid #F0F0F0;
+	display: block;
+	height: 302px;
+	margin: 0 auto;
+	overflow: hidden;
+	width: 450px;
+}
+
+#step3OptionalWDTContent #WDTStep1 .WDTStepImage {
+	background-image: url("../img/wdt-step1.png");
+}
+
+#step3OptionalWDTContent #WDTStep2 .WDTStepImage {
+	background-image: url("../img/wdt-step2.png");
+}
+
+#step3OptionalWDTContent #WDTStep3 .WDTStepImage {
+	background-image: url("../img/wdt-step3.png");
+}
+
+#step3OptionalWDTContent #WDTStep4 .WDTStepImage {
+	background-image: url("../img/wdt-step4.png");
+}
+
+#step3OptionalWDTContent #WDTStep5 {
+	height: 80px;
+}
+
+#step3OptionalWDTContent #WDTStep5 {
+	/*display: none;*/
+	clear: both;
+	float: none;
+	margin-top: 0;
+	padding-top: 0;
+	width: 100%;
+}
+
+#step3OptionalWDTContent .stepNumber {
+	margin: 20px 0px 0 10px;
+	width: 100%;
+}
+
+#step3OptionalWDTContent p {
+	line-height: 22px;
+	margin: 10px 0px 0 10px;
+}
+
+#step3OptionalWDTContent .WDTStepImage img {
+	height: 100%;
+	width: 100%;
 }
