@@ -31,6 +31,7 @@ buildutils {
 
 task installAllPOMs(type: MavenTask) {
 	id 'websocket'
+	version '0.0.2'
 	hasProvided true
 	hasRuntime true
 	hasServerSnippet true

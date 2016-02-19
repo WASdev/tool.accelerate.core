@@ -22,6 +22,7 @@ import org.gradle.api.tasks.TaskAction
 
 class MavenTask extends DefaultTask {
 	String id = 'unknown'
+	String version = '0.0.1'
 	boolean hasProvided = false;
 	boolean hasRuntime = false;
 	boolean hasCompile = false;
@@ -50,10 +51,10 @@ class MavenTask extends DefaultTask {
 	
 	def generateMavenInstallArgs = { fileName, artifactId, packaging ->
     [ 'install:install-file', 
-      "-Dfile=" + project.projectDir.getAbsolutePath() + "/repository/" + fileName, 
+      "-Dfile=" + project.projectDir.getAbsolutePath() + "/repository/" + version + "/" + fileName, 
       '-DgroupId=net.wasdev.wlp.starters.' + id, 
       '-DartifactId=' + artifactId, 
-      '-Dversion=0.0.1', 
+      '-Dversion=' + version, 
       '-Dpackaging=' + packaging, 
       "-DlocalRepositoryPath=" + project.buildDir.getAbsolutePath() + "/mavenRepository/artifacts", 
       '-DcreateChecksum=true']
