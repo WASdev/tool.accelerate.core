@@ -43,6 +43,7 @@ liberty {
     deploy {
     	dir = "${buildDir}/libs"
     	include = '*.war'
+    	timeout = "35000"
     }    
 }
 
