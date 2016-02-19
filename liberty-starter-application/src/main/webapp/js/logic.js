@@ -25,7 +25,7 @@ $(document).ready(function() {
 		step1TechnologiesContainer.empty();
 		for(var i = 0; i < technologies.length; i++) {
 			var technology = technologies[i];
-			var technologyTag = $("<a href=\"#\" class=\"step1Technology\" data-technologyid=\"" + technology.id + "\">" + technology.name + "</a>");
+			var technologyTag = $("<a href=\"#\" class=\"step1Technology\" data-technologyname=\""+ technology.name +"\" data-technologyid=\"" + technology.id + "\">" + technology.name + "</a>");
 			technologyTag.append('<span class="state-checkmark"></span>');
 			step1TechnologiesContainer.append(technologyTag);
 		}
@@ -101,7 +101,7 @@ $(document).ready(function() {
 		var selectedTechnologies = $("#step1TechnologiesContainer .step1Technology.selected");
 		var selectedTechnologiesText = "";
 		for(var i = 0; i < selectedTechnologies.size(); i++) {
-			selectedTechnologiesText += selectedTechnologies.get(i).innerHTML;
+			selectedTechnologiesText += selectedTechnologies.get(i).dataset.technologyname;
 			if(i + 1 < selectedTechnologies.size()) {
 				selectedTechnologiesText += ", ";
 			}
@@ -190,7 +190,7 @@ $(document).ready(function() {
 		event.preventDefault();
 		$("#step2DeployLocationsContainer .step2DeployLocation").removeClass("selected");
 		$(event.currentTarget).addClass("selected");
-		$("#navigationTop2 .variableContent").text(event.currentTarget.innerHTML);
+		$("#navigationTop2 .variableContent").text(event.currentTarget.dataset.text);
 		if(event.currentTarget.dataset.value == "local") {
 			$("#step3Bluemix").addClass("hidden");
 			$("#step3Local").removeClass("hidden");
