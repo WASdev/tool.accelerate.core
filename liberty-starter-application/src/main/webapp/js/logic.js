@@ -110,7 +110,7 @@ $(document).ready(function() {
 	};
 
 	var refreshSectionVisibility = function() {
-		var currentlyVisibleSections = $(".step:not(.hidden").size();
+		var currentlyVisibleSections = $(".step:not(.hidden)").size();
 		var selectedTechnologies = $("#step1TechnologiesContainer .step1Technology.selected");
 		if(selectedTechnologies.size() == 0) {
 			$("#step2, #step3").addClass("hidden");
@@ -123,7 +123,7 @@ $(document).ready(function() {
 				$("#step3").removeClass("hidden");
 			}
 		}
-		var visibleSections = $(".step:not(.hidden").size();
+		var visibleSections = $(".step:not(.hidden)").size();
 		if(currentlyVisibleSections != visibleSections) {
 			if(currentStep == 1 && $.scrollify.isDisabled()) {
 				window.setTimeout(function() {
