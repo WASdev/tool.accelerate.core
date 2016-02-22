@@ -41,9 +41,11 @@ public class ServiceFinder {
     @Produces(MediaType.APPLICATION_JSON)
     public Response getServices() throws Exception {
         JsonObject jsonData = null;
-        String jsonLocation = System.getenv("com.ibm.liberty.starter.servicesJsonLocation");
+        String jsonLocation = System.getenv("com_ibm_liberty_starter_servicesJsonLocation");
         if (jsonLocation == null) {
             jsonLocation = "/services.json";
+        } else {
+            jsonLocation = jsonLocation + ".json";
         }
         try {
             if (!checkPattern(pathPattern, jsonLocation)) {

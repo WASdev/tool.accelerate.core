@@ -37,7 +37,7 @@ buildutils {
 }
 
 libertyutils {
-    serverEnv = ['com.ibm.liberty.starter.servicesJsonLocation=/testServices.json']
+    serverEnv = ['com_ibm_liberty_starter_servicesJsonLocation=/testServices']
 }
 
 // Zip up the skeletonBuildImage so it can be included in the war file
