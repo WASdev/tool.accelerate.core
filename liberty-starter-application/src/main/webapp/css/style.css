@@ -133,6 +133,10 @@ body {
 	margin-bottom: 120px;
 }
 
+#step1 .stepContent {
+	height: 700px;
+}
+
 #banner {
 	position: relative;
 	height: 236px;
