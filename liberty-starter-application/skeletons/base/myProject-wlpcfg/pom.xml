@@ -36,6 +36,8 @@
         <testServerHttpsPort>9443</testServerHttpsPort>
         <warName>myArtifactId-application</warName>
         <warVersion>1.0-SNAPSHOT</warVersion>
+        <!--This is set in the ibm-web-ext.xml file -->
+        <warContext>myLibertyApp</warContext>
     </properties>
 
     <dependencies>
@@ -145,7 +147,7 @@
                             </includes>
                             <systemPropertyVariables>
                                 <liberty.test.port>${testServerHttpPort}</liberty.test.port>
-                                <war.name>${warName}-${warVersion}</war.name>
+                                <war.name>${warContext}</war.name>
                             </systemPropertyVariables>
                         </configuration>
                     </execution>

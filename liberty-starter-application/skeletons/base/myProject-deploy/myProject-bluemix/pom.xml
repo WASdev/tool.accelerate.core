@@ -50,7 +50,9 @@
         <!-- <cf.password></cf.password> -->
         <app.name>liberty-app-builder</app.name>
         <war.name>myArtifactId-application-1.0-SNAPSHOT</war.name>
-        <cf.context.root>${app.name}.${cf.context}/${war.name}</cf.context.root>
+        <!--This is set in the ibm-web-ext.xml file -->
+        <war.context>myLibertyApp</war.context>
+        <cf.context.root>${app.name}.${cf.context}/${war.context}</cf.context.root>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     </properties>
 

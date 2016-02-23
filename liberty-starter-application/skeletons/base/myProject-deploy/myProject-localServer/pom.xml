@@ -44,6 +44,8 @@
         <testServerHttpPort>9080</testServerHttpPort>
         <testServerHttpsPort>9443</testServerHttpsPort>
         <warName>myArtifactId-application-1.0-SNAPSHOT</warName>
+        <!--This is set in the ibm-web-ext.xml file -->
+        <warContext>myLibertyApp</warContext>
     </properties>
 
     <build>
@@ -95,7 +97,7 @@
                         </goals>
                         <configuration>
                             <systemPropertyVariables>
-                                <local.context.root>http://localhost:${testServerHttpPort}/${warName}</local.context.root>
+                                <local.context.root>http://localhost:${testServerHttpPort}/${warContext}</local.context.root>
                             </systemPropertyVariables>
                             <includes>
                                 <include>**/fvt/**</include>
@@ -129,7 +131,7 @@
                             <tasks>
                                 <echo>************************************************************</echo>
                                 <echo>************************************************************</echo>
-                                <echo>Your application is running at http://localhost:${testServerHttpPort}/${warName}/</echo>
+                                <echo>Your application is running at http://localhost:${testServerHttpPort}/${warContext}/</echo>
                                 <echo>************************************************************</echo>
                                 <echo>You will need to stop your server before running mvn install again:</echo>
                                 <echo>mvn clean -P stopServer</echo>
