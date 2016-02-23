@@ -44,9 +44,14 @@ class LibertyUtils implements Plugin<Project> {
 		project.task('removeServerEnv') {
 			doLast{
 		    	if (project.hasProperty('libertyutils')) {
-		    		def envFile = new File(project.projectDir.getAbsolutePath() + "../liberty-starter-wlpcfg/servers/StarterServer/server.env")
+		    		def envFile = new File(project.projectDir.getAbsolutePath() + "/../liberty-starter-wlpcfg/servers/StarterServer/server.env")
 		    		if (envFile.exists()) {
-		    			delete envFile
+		    		    System.out.println("Deleting server.env file")
+		    			if (!envFile.delete()) {
+		    			   throw new GradleScriptException("Failed to delete server.env file.")
+		    			}
+		    		} else {
+		    		    System.out.println("server.env file does not exist at location " + project.projectDir.getAbsolutePath() + "/../liberty-starter-wlpcfg/servers/StarterServer/server.env")
 		    		}
 		    	}
 		    }
