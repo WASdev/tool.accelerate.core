@@ -17,25 +17,41 @@
 <!DOCTYPE html>
 <html>
 	<head>
-	<meta charset="utf-8">
+		<meta charset="utf-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<title>Liberty app accelerator</title>
 		<link href="css/style.css" rel="stylesheet">
+		<script>
+			(function(i, s, o, g, r, a, m) {
+				i['GoogleAnalyticsObject'] = r;
+				i[r] = i[r] || function() {
+					(i[r].q = i[r].q || []).push(arguments)
+				}, i[r].l = 1 * new Date();
+				a = s.createElement(o), m = s.getElementsByTagName(o)[0];
+				a.async = 1;
+				a.src = g;
+				m.parentNode.insertBefore(a, m)
+			})(window, document, 'script', '//www.google-analytics.com/analytics.js',
+					'ga');
+			ga('create', 'UA-70962553-1', 'auto');
+			ga('send', 'pageview');
+		</script>
 	</head>
 	<body>
-
+	
 		<div id="navigationTopContainer" class="hidden">
-			<a href="#" id="navigationTop1" class="navigationTop" style="display: none;" data-targetsection="0">
-				Step 1 / 3: SELECTED TECHNOLOGIES: <span class="variableContent"></span>
-			</a>
-			<a href="#" id="navigationTop2" class="navigationTop" style="display: none;" data-targetsection="1">
-				Step 2 / 3: DEPLOY TO: <span class="variableContent"></span>
+			<a href="#" id="navigationTop1" class="navigationTop"
+				style="display: none;" data-targetsection="0"> Step 1 / 3:
+				SELECTED TECHNOLOGIES: <span class="variableContent"></span>
+			</a> <a href="#" id="navigationTop2" class="navigationTop"
+				style="display: none;" data-targetsection="1"> Step 2 / 3: DEPLOY
+				TO: <span class="variableContent"></span>
 			</a>
 		</div>
-
+	
 		<div id="mainContent" class="hidden">
-
+	
 			<!-- STEP ONE -->
 			<div id="step1" class="step">
 				<div id="bannerContainer">
@@ -43,81 +59,109 @@
 						<div id="bannerImg" class="banner-img layered-bg"></div>
 						<div id="bannerFade" class="banner-fade layered-bg"></div>
 						<div id="bannerTriangle"></div>
-						<div id="bannerLine1"><span>Liberty</span> app accelerator</div>
-						<div id="bannerLine2">Easily start WebSphere Liberty, a Java EE application server</div>
+						<div id="bannerLine1">
+							<span>Liberty</span> app accelerator
+						</div>
+						<div id="bannerLine2">Easily start WebSphere Liberty, a Java
+							EE application server</div>
 					</div>
 				</div>
 				<div class="stepContent">
 					<div class="stepBar"></div>
 					<div class="stepNumber">STEP 1 / 3</div>
-					<div id="step1Description1">WebSphere Liberty can be configured to support the selected technology types as a project that you can download as a zip file or use with GitHub.</div>
-					<div id="step1Description2">Select one or more technology types:</div>
+					<div id="step1Description1">WebSphere Liberty can be
+						configured to support the selected technology types as a project
+						that you can download as a zip file or use with GitHub.</div>
+					<div id="step1Description2">Select one or more technology
+						types:</div>
 					<div id="step1TechnologiesContainer"></div>
 				</div>
 			</div>
-
+	
 			<!-- STEP TWO -->
 			<div id="step2" class="step hidden">
 				<div class="stepContent">
 					<div class="stepBar"></div>
 					<div class="stepNumber">STEP 2 / 3</div>
 					<div id="step2Description1">Deploy</div>
-					<div id="step2Description2">Where do you want to deploy your project?</div>
+					<div id="step2Description2">Where do you want to deploy your
+						project?</div>
 					<div id="step2DeployLocationsContainer">
-						<a href="#" class="step2DeployLocation" data-text="Deploy to Local" data-value="local">
-							Deploy to Local
-							<span class="state-checkmark"></span>
-						</a>
-						<a href="#" class="step2DeployLocation" data-text="Deploy to Bluemix" data-value="bluemix">
-							Deploy to Bluemix
-							<span class="state-checkmark"></span>
+						<a href="#" class="step2DeployLocation" data-text="Deploy to Local"
+							data-value="local"> Deploy to Local <span
+							class="state-checkmark"></span>
+						</a> <a href="#" class="step2DeployLocation"
+							data-text="Deploy to Bluemix" data-value="bluemix"> Deploy to
+							Bluemix <span class="state-checkmark"></span>
 						</a>
 					</div>
 				</div>
 			</div>
-
+	
 			<!-- STEP THREE -->
 			<div id="step3" class="step hidden">
 				<div class="stepContent">
-						<div id="step3LocalLeftBlock">
-							<div class="stepBar"></div>
-							<div class="stepNumber">STEP 3 / 3</div>
-							<div id="step3Description1">Download</div>
-							<div id="step3Description2">Name the project containing your selected technologies and download as a ZIP file.</div>
-							<input id="step3NameInput" type="text" placeholder="Example name: LibertyProject" autocomplete="off" maxlength="50">
-							<a id="step3DownloadButton" href="#">Download Now</a>
+					<div id="step3LocalLeftBlock">
+						<div class="stepBar"></div>
+						<div class="stepNumber">STEP 3 / 3</div>
+						<div id="step3Description1">Download</div>
+						<div id="step3Description2">Name the project containing your
+							selected technologies and download as a ZIP file.</div>
+						<input id="step3NameInput" type="text"
+							placeholder="Example name: LibertyProject" autocomplete="off"
+							maxlength="50"> <a id="step3DownloadButton" href="#">Download
+							Now</a>
+					</div>
+					<div id="step3LocalRightBlock">
+						<div id="step3Local">
+							<p id="step3LocalRightBlockItem1">
+								Once the download is complete, <span
+									id="step3LocalRightBlockItem1RightText">locate your
+									project and unzip it.</span>
+							</p>
+							<div id="step3LocalRightBlockItem2">
+								<div id="step3LocalRightBlockItem2Line1">Your application
+									code can be found in:</div>
+								<div id="step3LocalRightBlockItem2Line2">LibertyProject-application/src/main/java</div>
+							</div>
+							<div id="step3LocalRightBlockItem3">
+								On the <span class="step3NameOfProject">LibertyProject</span>
+								pom.xml run mvn install
+							</div>
+							<div id="step3LocalRightBlockItem4">
+								<div id="step3LocalRightBlockItem4Line1">Access your
+									application at:</div>
+								<div id="step3LocalRightBlockItem4Line2">http://localhost:9080/myLibertyApp/</div>
+								<div id="step3LocalRightBlockItem4Line3">Your Liberty
+									server can be found in:</div>
+								<div id="step3LocalRightBlockItem4Line4">myProject-wlpcfg/target/wlp/usr/servers/LibertyProjectServer</div>
+							</div>
 						</div>
-						<div id="step3LocalRightBlock">
-							<div id="step3Local">
-								<p id="step3LocalRightBlockItem1">Once the download is complete, <span id="step3LocalRightBlockItem1RightText">locate your project and unzip it.</span></p>
-								<div id="step3LocalRightBlockItem2">
-									<div id="step3LocalRightBlockItem2Line1">Your application code can be found in:</div>
-									<div id="step3LocalRightBlockItem2Line2">LibertyProject-application/src/main/java</div>
-								</div>
-								<div id="step3LocalRightBlockItem3">On the <span class="step3NameOfProject">LibertyProject</span> pom.xml run mvn install</div>
-								<div id="step3LocalRightBlockItem4">
-									<div id="step3LocalRightBlockItem4Line1">Access your application at:</div>
-									<div id="step3LocalRightBlockItem4Line2">http://localhost:9080/myLibertyApp/</div>
-									<div id="step3LocalRightBlockItem4Line3">Your Liberty server can be found in:</div>
-									<div id="step3LocalRightBlockItem4Line4">myProject-wlpcfg/target/wlp/usr/servers/LibertyProjectServer</div>
+						<div id="step3Bluemix" class="hidden">
+							<div id="step3BluemixRightBlockItem1">
+								<div id="step3BluemixRightBlockItem1Line1">
+									On the <span class="step3NameOfProject">LibertyProject</span>
+									pom.xml run mvn install -P bluemix -Dcf.org=<span
+										class="purpleCode">[your email address]</span> -Dcf.username=<span
+										class="purpleCode">[your username]</span> -Dcf.password=<span
+										class="purpleCode">[your password]</span>
 								</div>
 							</div>
-							<div id="step3Bluemix" class="hidden">
-								<div id="step3BluemixRightBlockItem1">
-									<div id="step3BluemixRightBlockItem1Line1">On the <span class="step3NameOfProject">LibertyProject</span> pom.xml run mvn install -P bluemix -Dcf.org=<span class="purpleCode">[your email address]</span> -Dcf.username=<span class="purpleCode">[your username]</span> -Dcf.password=<span class="purpleCode">[your password]</span></div>
-								</div>
-								<div id="step3BluemixRightBlockItem2">
-									<div id="step3BluemixRightBlockItem2Line1">Access your application at:</div>
-									<div id="step3BluemixRightBlockItem2Line2">liberty-app-builder.eu-gb.mybluemix.net/myLibertyApp/</div>
-									<div id="step3BluemixRightBlockItem2Line3">To manage your deployed application visit your dashboard on Bluemix.</div>
-								</div>
+							<div id="step3BluemixRightBlockItem2">
+								<div id="step3BluemixRightBlockItem2Line1">Access your
+									application at:</div>
+								<div id="step3BluemixRightBlockItem2Line2">liberty-app-builder.eu-gb.mybluemix.net/myLibertyApp/</div>
+								<div id="step3BluemixRightBlockItem2Line3">To manage your
+									deployed application visit your dashboard on Bluemix.</div>
 							</div>
 						</div>
+					</div>
 				</div>
-
+	
 				<div id="step3OptionalWDT">
 					<div id="step3OptionalWDTTrigger">
-						<a href="#" title="Link to Open WDT Content Instructions"><span>Optional</span>, import downloaded Maven into the WebSphere Developer Tool</a>
+						<a href="#" title="Link to Open WDT Content Instructions"><span>Optional</span>,
+							import downloaded Maven into the WebSphere Developer Tool</a>
 						<div class="wdtContentActive wdtArrowPlacement"></div>
 						<div class="wdtContentDeactive wdtArrowPlacement hidden"></div>
 					</div>
@@ -128,7 +172,8 @@
 									<!-- <img src="img/wdt-step1.png" /> -->
 								</div>
 								<div class="stepNumber">Step 1</div>
-								<p>Go to the WebSphere Development Tool and Import "Existing Maven Projects".</p>
+								<p>Go to the WebSphere Development Tool and Import "Existing
+									Maven Projects".</p>
 							</li>
 							<li id="WDTStep2" class="WDTStep">
 								<div class="WDTStepImage">
@@ -142,7 +187,8 @@
 									<!-- <img src="img/wdt-step3.png" /> -->
 								</div>
 								<div class="stepNumber">Step 3</div>
-								<p>Once the project is imported, make changes to the custom code and build your app.</p>
+								<p>Once the project is imported, make changes to the custom
+									code and build your app.</p>
 							</li>
 							<li id="WDTStep4" class="WDTStep">
 								<div class="WDTStepImage">
@@ -153,68 +199,79 @@
 							</li>
 							<li id="WDTStep5" class="WDTStep">
 								<div class="stepNumber">Step 5</div>
-								<p>Lastly, navigate to this URL on your browser to access your app - <a href="http://localhost:9080/myLibertyApp/" title="Link to access your application." target="_blank">http://localhost:9080/myLibertyApp/</a>.</p>
+								<p>
+									Lastly, navigate to this URL on your browser to access your app
+									- <a href="http://localhost:9080/myLibertyApp/"
+										title="Link to access your application." target="_blank">http://localhost:9080/myLibertyApp/</a>.
+								</p>
 							</li>
-
+	
 						</ul>
 					</div>
 				</div>
-
+	
 				<div id="helpUsToHelpYou">
 					<div id="bannerImgFooter" class="banner-img layered-bg"></div>
 					<div id="bannerFadeFooter" class="banner-fade layered-bg"></div>
 					<div id="helpUsToHelpYouContent">
 						<div id="helpUsToHelpYouTitle">Help us to help you!</div>
-						<div id="helpUsToHelpYouDescription">We will be adding new technologies and capabilities to this page over time. Get in touch
-							To give us feedback or tell us which technology types you would like to see please raise an issue on our <a href="#" id="gitHubLink">GitHub page</a>.
+						<div id="helpUsToHelpYouDescription">
+							We will be adding new technologies and capabilities to this page
+							over time. Get in touch To give us feedback or tell us which
+							technology types you would like to see please raise an issue on
+							our <a href="#" id="gitHubLink">GitHub page</a>.
 						</div>
 						<div class="linksForMoreInformation">
 							<p>Links for more information:</p>
 							<ul>
-								<li>
-									<a href="https://developer.ibm.com/wasdev/docs/microservices/" title="Link to WASDev Microservices page">WASDev Microservices page</a>
-								</li>
-								<li>
-									<a href="https://developer.ibm.com/wasdev/docs/category/getting-started/" title="Link to WASDev Tutorial page">WASDev Tutorial page</a>
-
-								</li>
+								<li><a
+									href="https://developer.ibm.com/wasdev/docs/microservices/"
+									title="Link to WASDev Microservices page">WASDev
+										Microservices page</a></li>
+								<li><a
+									href="https://developer.ibm.com/wasdev/docs/category/getting-started/"
+									title="Link to WASDev Tutorial page">WASDev Tutorial page</a></li>
 							</ul>
 						</div>
 					</div>
 				</div>
 				<div id="finalText">
-					<span id="poweredByLiberty">Powered by Liberty, runs on Bluemix.</span>
+					<span id="poweredByLiberty">Powered by Liberty, runs on
+						Bluemix.</span>
 					<div id="disclaimer">
-						<p>
-							Copyright (c) 2015 IBM Corp.Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
-							compliance with the License. You may obtain a copy of the License at www.apache.org/licenses/LICENSE-2.0.
-						</p>
-						<p>
-							Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS"
-							BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific
-							language governing permissions and limitations under the License.
-						</p>
+						<p>Copyright (c) 2015 IBM Corp.Licensed under the Apache
+							License, Version 2.0 (the "License"); you may not use this file
+							except in compliance with the License. You may obtain a copy of
+							the License at www.apache.org/licenses/LICENSE-2.0.</p>
+						<p>Unless required by applicable law or agreed to in writing,
+							software distributed under the License is distributed on an "AS
+							IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
+							express or implied. See the License for the specific language
+							governing permissions and limitations under the License.</p>
 					</div>
 				</div>
 			</div>
 		</div>
-
-		<div id="serviceError" style="display: none;">
-			Unfortunately the Liberty app accelerator service appears to be down at the moment. Please try again later.
-		</div>
-
+	
+		<div id="serviceError" style="display: none;">Unfortunately the
+			Liberty app accelerator service appears to be down at the moment.
+			Please try again later.</div>
+	
 		<a href="#" id="navigationBottomContainer" class="disabled hidden">
 			<div id="navigationBottom1" class="navigationBottom">
 				STEP 2 / 3: <span class="highlightedText">DEPLOY</span>
 			</div>
-			<div id="navigationBottom2" class="navigationBottom" style="display: none;">
+			<div id="navigationBottom2" class="navigationBottom"
+				style="display: none;">
 				STEP 3 / 3: <span class="highlightedText">DOWNLOAD</span>
 			</div>
 		</a>
-
-		<script type="text/javascript" src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
-		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/scrollify/0.1.12/jquery.scrollify.min.js"></script>
+	
+		<script type="text/javascript"
+			src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
+		<script type="text/javascript"
+			src="https://cdnjs.cloudflare.com/ajax/libs/scrollify/0.1.12/jquery.scrollify.min.js"></script>
 		<script type="text/javascript" src="js/logic.js"></script>
-
+	
 	</body>
 </html>
