@@ -40,7 +40,7 @@ public class PomModifierTest {
 
     @Before
     public void createPomWithDependencies() throws SAXException, IOException, ParserConfigurationException {
-        String pomString = "<project><dependencies/></project>";
+        String pomString = "<project><dependencies/><properties/></project>";
         try (InputStream inputStream = new ByteArrayInputStream(pomString.getBytes())) {
             pomModifier = new PomModifier();
             pomModifier.setInputStream(inputStream);
@@ -83,7 +83,6 @@ public class PomModifierTest {
         assertTrue("Only one wibble should be added " + outputPom, outputPomWithWhitespaceRemoved.lastIndexOf("wibble") == outputPomWithWhitespaceRemoved.indexOf("wibble"));
     }
     
-    //@Ignore
     @Test
     public void testAddNameToPom() throws Exception {
         DependencyHandler depHand = MockDependencyHandler.getDependencyHandlerWithName("TestName");
