@@ -48,7 +48,6 @@
         <!-- <cf.org></cf.org> -->
         <!-- <cf.username></cf.username> -->
         <!-- <cf.password></cf.password> -->
-        <app.name>liberty-app-builder</app.name>
         <war.name>myArtifactId-application-1.0-SNAPSHOT</war.name>
         <!--This is set in the ibm-web-ext.xml file -->
         <war.context>myLibertyApp</war.context>

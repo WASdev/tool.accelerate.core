@@ -27,13 +27,15 @@ import com.ibm.liberty.starter.api.v1.model.registration.Service;
 public class DependencyHandler {
 
     private final ServiceConnector serviceConnector;
+    private final String appName;
 
     private Map<String, Dependency> providedDependency = new HashMap<String, Dependency>();
     private Map<String, Dependency> runtimeDependency = new HashMap<String, Dependency>();
     private Map<String, Dependency> compileDependency = new HashMap<String, Dependency>();
 
-    public DependencyHandler(Services services, ServiceConnector serviceConnector) {
+    public DependencyHandler(Services services, ServiceConnector serviceConnector, String appName) {
         this.serviceConnector = serviceConnector;
+        this.appName = appName;
         setServices(services);
     }
     
@@ -70,6 +72,10 @@ public class DependencyHandler {
 
     public Map<String, Dependency> getCompileDependency() {
         return compileDependency;
+    }
+    
+    public String getAppName() {
+        return appName;
     }
 
 }

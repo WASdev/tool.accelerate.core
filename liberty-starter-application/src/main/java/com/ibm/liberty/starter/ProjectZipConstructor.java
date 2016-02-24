@@ -51,10 +51,12 @@ public class ProjectZipConstructor {
     private static final String BASE_INDEX_HTML = "indexHtml/index.html";
     private static final String INDEX_HTML_PATH = "myProject-application/src/main/webapp/index.html";
     private static final String POM_FILE = "pomXml/pom.xml";
+    private String appName;
     
-    public ProjectZipConstructor(ServiceConnector serviceConnector, Services services) {
+    public ProjectZipConstructor(ServiceConnector serviceConnector, Services services, String appName) {
         this.serviceConnector = serviceConnector;
         this.services = services;
+        this.appName = appName;
     }
     
     public ConcurrentHashMap<String, byte[]> getFileMap() {
@@ -160,7 +162,7 @@ public class ProjectZipConstructor {
         InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream(POM_FILE);
         PomModifier pomModifier = new PomModifier();
         pomModifier.setInputStream(inputStream);
-        DependencyHandler depHand = new DependencyHandler(services, serviceConnector);
+        DependencyHandler depHand = new DependencyHandler(services, serviceConnector, appName);
         pomModifier.addStarterPomDependencies(depHand);
         byte[] bytes = pomModifier.getBytes();
         putFileInMap("pom.xml", bytes);

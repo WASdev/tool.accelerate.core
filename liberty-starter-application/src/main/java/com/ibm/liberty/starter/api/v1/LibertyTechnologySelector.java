@@ -68,22 +68,6 @@ public class LibertyTechnologySelector {
                     throw new ValidationException("Invalid technology type.");
                 }
             }
-
-            StreamingOutput so = new StreamingOutput() {
-
-                @Override
-                public void write(OutputStream os) throws IOException, WebApplicationException {
-                    Services services = new Services();
-                    services.setServices(serviceList);
-                    ProjectZipConstructor projectZipConstructor = new ProjectZipConstructor(serviceConnector, services);
-                    try {
-                        projectZipConstructor.buildZip(os);
-                    } catch (SAXException | ParserConfigurationException | TransformerException e) {
-                        throw new WebApplicationException(e);
-                    }
-                }
-            };
-
             if (name == null || name.length() == 0) {
                 log.severe("No name passed in.");
                 throw new ValidationException();
@@ -97,6 +81,23 @@ public class LibertyTechnologySelector {
                 log.severe("Invalid file name length.");
                 throw new ValidationException();
             }
+            
+            final String appName = name;
+
+            StreamingOutput so = new StreamingOutput() {
+
+                @Override
+                public void write(OutputStream os) throws IOException, WebApplicationException {
+                    Services services = new Services();
+                    services.setServices(serviceList);
+                    ProjectZipConstructor projectZipConstructor = new ProjectZipConstructor(serviceConnector, services, appName);
+                    try {
+                        projectZipConstructor.buildZip(os);
+                    } catch (SAXException | ParserConfigurationException | TransformerException e) {
+                        throw new WebApplicationException(e);
+                    }
+                }
+            };
             name += ".zip";
             return Response.ok(so, "application/zip").header("Content-Disposition", "attachment; filename=\"" + name + "\"").build();
         } catch (IllegalArgumentException e) {

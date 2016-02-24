@@ -31,8 +31,8 @@ import com.ibm.liberty.starter.api.v1.model.registration.Service;
 
 public class MockDependencyHandler extends DependencyHandler {
     
-    public MockDependencyHandler(Services services, ServiceConnector serviceConnector) {
-        super(services, serviceConnector);
+    public MockDependencyHandler(Services services, ServiceConnector serviceConnector, String appName) {
+        super(services, serviceConnector, appName);
     }
 
     private Map<String, Dependency> providedDependency = new HashMap<String, Dependency>();
@@ -64,7 +64,7 @@ public class MockDependencyHandler extends DependencyHandler {
         dependencies[0] = createDependency(Dependency.Scope.PROVIDED);
         dependencies[1] = createDependency(Dependency.Scope.RUNTIME);
         MockServiceConnector serviceConnector = new MockServiceConnector(uri, dependencies);
-        DependencyHandler depHand = new DependencyHandler(getServices(), serviceConnector);
+        DependencyHandler depHand = new DependencyHandler(getServices(), serviceConnector, null);
         return depHand;
     }
     
@@ -73,7 +73,7 @@ public class MockDependencyHandler extends DependencyHandler {
         Dependency[] dependencies = new Dependency[1];
         dependencies[0] = createDependency(Dependency.Scope.PROVIDED);
         MockServiceConnector serviceConnector = new MockServiceConnector(uri, dependencies);
-        DependencyHandler depHand = new DependencyHandler(getServices(), serviceConnector);
+        DependencyHandler depHand = new DependencyHandler(getServices(), serviceConnector, null);
         return depHand;
     }
     
@@ -83,7 +83,16 @@ public class MockDependencyHandler extends DependencyHandler {
         dependencies[0] = createDependency(Dependency.Scope.PROVIDED);
         dependencies[1] = createDependency(Dependency.Scope.PROVIDED);
         MockServiceConnector serviceConnector = new MockServiceConnector(uri, dependencies);
-        DependencyHandler depHand = new DependencyHandler(getServices(), serviceConnector);
+        DependencyHandler depHand = new DependencyHandler(getServices(), serviceConnector, null);
+        return depHand;
+    }
+    
+    public static DependencyHandler getDependencyHandlerWithName(String name) throws URISyntaxException {
+        URI uri = new URI("");
+        Dependency[] dependencies = new Dependency[1];
+        dependencies[0] = createDependency(Dependency.Scope.PROVIDED);
+        MockServiceConnector serviceConnector = new MockServiceConnector(uri, dependencies);
+        DependencyHandler depHand = new DependencyHandler(getServices(), serviceConnector, name);
         return depHand;
     }
 

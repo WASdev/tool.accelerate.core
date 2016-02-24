@@ -28,6 +28,7 @@ import javax.xml.transform.TransformerException;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.Ignore;
 import org.xml.sax.SAXException;
 
 import com.ibm.liberty.starter.DependencyHandler;
@@ -80,6 +81,17 @@ public class PomModifierTest {
         assertTrue("OutputPom should have had a wibble dependency added" + outputPom,
                    outputPomWithWhitespaceRemoved.contains("<dependency><groupId>net.wasdev.wlp.starters.wibble</groupId><artifactId>providedArtifactId</artifactId><version>0.0.1</version><type>pom</type><scope>provided</scope></dependency>"));
         assertTrue("Only one wibble should be added " + outputPom, outputPomWithWhitespaceRemoved.lastIndexOf("wibble") == outputPomWithWhitespaceRemoved.indexOf("wibble"));
+    }
+    
+    //@Ignore
+    @Test
+    public void testAddNameToPom() throws Exception {
+        DependencyHandler depHand = MockDependencyHandler.getDependencyHandlerWithName("TestName");
+        
+        String outputPom = addTechAndWritePom(depHand);
+        String outputPomWithWhitespaceRemoved = outputPom.replaceAll("\\s", "");
+        assertTrue("OutputPom should have had the app name added " + outputPom,
+                   outputPomWithWhitespaceRemoved.contains("<app.name>TestName</app.name>"));
     }
 
     private String addTechAndWritePom(DependencyHandler depHand) throws TransformerException {
