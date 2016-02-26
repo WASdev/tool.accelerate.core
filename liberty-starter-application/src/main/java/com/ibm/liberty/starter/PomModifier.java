@@ -118,18 +118,11 @@ public class PomModifier {
     }
 
     private void appendAppNameProperty(NodeList propertiesNodeList) {
-        if (propertiesNodeList != null) {
-            Node propertiesNode = propertiesNodeList.item(0);
-            if (propertiesNode != null) {
-                Node appNameNode = doc.createElement("app.name");
-                appNameNode.setTextContent(appName);
-                propertiesNode.appendChild(appNameNode);
-            } else {
-                System.out.println("Properties node list item 0 is null");
-            }
-        } else {
-            System.out.println("Properties node list empty");
-        }
+        System.out.println("Setting cf.host node to " + appName);
+        Node propertiesNode = propertiesNodeList.item(0);
+        Node appNameNode = doc.createElement("cf.host");
+        appNameNode.setTextContent(appName);
+        propertiesNode.appendChild(appNameNode);
     }
 
     private void appendDependencyNode(Node dependenciesNode, String dependencyGroupId, String dependencyArtifactId, Scope dependencyScope, String dependencyVersion) {

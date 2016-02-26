@@ -40,7 +40,7 @@ public class PomModifierTest {
 
     @Before
     public void createPomWithDependencies() throws SAXException, IOException, ParserConfigurationException {
-        String pomString = "<project><dependencies/><properties/></project>";
+        String pomString = "<project><dependencies/><properties><!--Testing--></properties></project>";
         try (InputStream inputStream = new ByteArrayInputStream(pomString.getBytes())) {
             pomModifier = new PomModifier();
             pomModifier.setInputStream(inputStream);
@@ -90,7 +90,7 @@ public class PomModifierTest {
         String outputPom = addTechAndWritePom(depHand);
         String outputPomWithWhitespaceRemoved = outputPom.replaceAll("\\s", "");
         assertTrue("OutputPom should have had the app name added " + outputPom,
-                   outputPomWithWhitespaceRemoved.contains("<app.name>TestName</app.name>"));
+                   outputPomWithWhitespaceRemoved.contains("<!--Testing--><cf.host>TestName</cf.host>"));
     }
 
     private String addTechAndWritePom(DependencyHandler depHand) throws TransformerException {
