@@ -28,6 +28,7 @@ import javax.xml.transform.TransformerException;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.Ignore;
 import org.xml.sax.SAXException;
 
 import com.ibm.liberty.starter.DependencyHandler;
@@ -39,7 +40,7 @@ public class PomModifierTest {
 
     @Before
     public void createPomWithDependencies() throws SAXException, IOException, ParserConfigurationException {
-        String pomString = "<project><dependencies/></project>";
+        String pomString = "<project><dependencies/><properties><!--Testing--></properties></project>";
         try (InputStream inputStream = new ByteArrayInputStream(pomString.getBytes())) {
             pomModifier = new PomModifier();
             pomModifier.setInputStream(inputStream);
@@ -80,6 +81,16 @@ public class PomModifierTest {
         assertTrue("OutputPom should have had a wibble dependency added" + outputPom,
                    outputPomWithWhitespaceRemoved.contains("<dependency><groupId>net.wasdev.wlp.starters.wibble</groupId><artifactId>providedArtifactId</artifactId><version>0.0.1</version><type>pom</type><scope>provided</scope></dependency>"));
         assertTrue("Only one wibble should be added " + outputPom, outputPomWithWhitespaceRemoved.lastIndexOf("wibble") == outputPomWithWhitespaceRemoved.indexOf("wibble"));
+    }
+    
+    @Test
+    public void testAddNameToPom() throws Exception {
+        DependencyHandler depHand = MockDependencyHandler.getDependencyHandlerWithName("TestName");
+        
+        String outputPom = addTechAndWritePom(depHand);
+        String outputPomWithWhitespaceRemoved = outputPom.replaceAll("\\s", "");
+        assertTrue("OutputPom should have had the app name added " + outputPom,
+                   outputPomWithWhitespaceRemoved.contains("<!--Testing--><cf.host>TestName</cf.host>"));
     }
 
     private String addTechAndWritePom(DependencyHandler depHand) throws TransformerException {

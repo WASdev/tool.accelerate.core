@@ -35,6 +35,7 @@ import javax.xml.transform.stream.StreamResult;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 import com.ibm.liberty.starter.api.v1.model.provider.Dependency;
@@ -47,6 +48,7 @@ public class PomModifier {
     private Map<String, Dependency> runtimePomsToAdd = new HashMap<>();
     private Map<String, Dependency> compilePomsToAdd = new HashMap<>();
     private String groupIdBase = "net.wasdev.wlp.starters.";
+    private String appName;
 
     public void setInputStream(InputStream pomInputStream) throws SAXException, IOException, ParserConfigurationException {
         DocumentBuilderFactory domFactory = DocumentBuilderFactory.newInstance();
@@ -59,18 +61,19 @@ public class PomModifier {
         addDependency(Dependency.Scope.PROVIDED, depHand.getProvidedDependency());
         addDependency(Dependency.Scope.RUNTIME, depHand.getRuntimeDependency());
         addDependency(Dependency.Scope.COMPILE, depHand.getCompileDependency());
+        appName = depHand.getAppName() != null ? depHand.getAppName() : "LibertyProject";
     }
-    
+
     private void addDependency(Dependency.Scope scope, Map<String, Dependency> mapToAdd) {
         System.out.println("Setting map for dependencies with scope " + scope + " to " + mapToAdd.toString());
         switch (scope) {
-            case PROVIDED :
+            case PROVIDED:
                 providedPomsToAdd = mapToAdd;
                 break;
-            case RUNTIME :
+            case RUNTIME:
                 runtimePomsToAdd = mapToAdd;
                 break;
-            case COMPILE :
+            case COMPILE:
                 compilePomsToAdd = mapToAdd;
                 break;
         }
@@ -90,6 +93,9 @@ public class PomModifier {
         appendDependencyNodes(dependenciesNode, runtimePomsToAdd);
         System.out.println("Appending dependency nodes for compile poms");
         appendDependencyNodes(dependenciesNode, compilePomsToAdd);
+
+        NodeList propertiesNodeList = doc.getElementsByTagName("properties");
+        appendAppNameProperty(propertiesNodeList);
         TransformerFactory transformFactory = TransformerFactory.newInstance();
         Transformer transformer = transformFactory.newTransformer();
         transformer.setOutputProperty(OutputKeys.INDENT, "yes");
@@ -109,6 +115,14 @@ public class PomModifier {
             String groupId = groupIdBase + serviceId;
             appendDependencyNode(dependenciesNode, groupId, dependency.getArtifactId(), dependency.getScope(), dependency.getVersion());
         }
+    }
+
+    private void appendAppNameProperty(NodeList propertiesNodeList) {
+        System.out.println("Setting cf.host node to " + appName);
+        Node propertiesNode = propertiesNodeList.item(0);
+        Node appNameNode = doc.createElement("cf.host");
+        appNameNode.setTextContent(appName);
+        propertiesNode.appendChild(appNameNode);
     }
 
     private void appendDependencyNode(Node dependenciesNode, String dependencyGroupId, String dependencyArtifactId, Scope dependencyScope, String dependencyVersion) {

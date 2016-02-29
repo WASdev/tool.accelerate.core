@@ -37,25 +37,6 @@
         </dependency>
     </dependencies>
 
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <cf.context>eu-gb.mybluemix.net</cf.context>
-        <cf.target>https://api.eu-gb.bluemix.net</cf.target>
-        <cf.space>dev</cf.space>
-        <!-- The cloud foundry organization, username and password can be 
-            entered here. -->
-        <!-- <cf.org></cf.org> -->
-        <!-- <cf.username></cf.username> -->
-        <!-- <cf.password></cf.password> -->
-        <app.name>liberty-app-builder</app.name>
-        <war.name>myArtifactId-application-1.0-SNAPSHOT</war.name>
-        <!--This is set in the ibm-web-ext.xml file -->
-        <war.context>myLibertyApp</war.context>
-        <cf.context.root>${app.name}.${cf.context}/${war.context}</cf.context.root>
-        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-    </properties>
-
     <build>
         <plugins>
             <plugin>
@@ -142,7 +123,7 @@
                     <space>${cf.space}</space>
                     <username>${cf.username}</username>
                     <password>${cf.password}</password>
-                    <appname>${app.name}</appname>
+                    <appname>${cf.host}</appname>
                     <memory>512</memory>
                 </configuration>
                 <executions>

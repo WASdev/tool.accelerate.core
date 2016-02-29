@@ -37,17 +37,6 @@
         </dependency>
     </dependencies>
 
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <wlpServerName>LibertyProjectServer</wlpServerName>
-        <testServerHttpPort>9080</testServerHttpPort>
-        <testServerHttpsPort>9443</testServerHttpsPort>
-        <warName>myArtifactId-application-1.0-SNAPSHOT</warName>
-        <!--This is set in the ibm-web-ext.xml file -->
-        <warContext>myLibertyApp</warContext>
-    </properties>
-
     <build>
         <plugins>
             <!-- Enable liberty-maven plugin -->

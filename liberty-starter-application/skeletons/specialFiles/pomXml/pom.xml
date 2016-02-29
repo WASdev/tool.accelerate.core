@@ -12,6 +12,28 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        
+        <!-- Liberty server properties -->
+        <wlpServerName>LibertyProjectServer</wlpServerName>
+        <testServerHttpPort>9080</testServerHttpPort>
+        <testServerHttpsPort>9443</testServerHttpsPort>
+        <warName>myArtifactId-application</warName>
+        <warVersion>1.0-SNAPSHOT</warVersion>
+        <!--This is set in the ibm-web-ext.xml file -->
+        <warContext>myLibertyApp</warContext>
+        
+        <!-- Cloud Foundry/Bluemix properties -->
+        <cf.context>eu-gb.mybluemix.net</cf.context>
+        <cf.target>https://api.eu-gb.bluemix.net</cf.target>
+        <cf.space>dev</cf.space>
+        <cf.context.root>${cf.host}.${cf.context}/${warContext}</cf.context.root>
+        
+        <!-- The Cloud Foundry or Bluemix organization, username and password can be 
+            entered here. -->
+        <!-- <cf.org></cf.org> -->
+        <!-- <cf.username></cf.username> -->
+        <!-- <cf.password></cf.password> -->
+        <!-- This is the host for your app in Bluemix and what it will be called in the dashboard. -->
     </properties>
     
     <dependencies>

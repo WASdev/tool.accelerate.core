@@ -43,7 +43,7 @@ public class DependencyHandlerTest {
         dependencies[2] = createDependency(Dependency.Scope.COMPILE, "wibble");
         MockServiceConnector serviceConnector = new MockServiceConnector(uri, dependencies);
         String [] services = {"wibble"};
-        DependencyHandler depHand = new DependencyHandler(getServicesObject(services), serviceConnector);
+        DependencyHandler depHand = new DependencyHandler(getServicesObject(services), serviceConnector, null);
         Map<String, Dependency> providedDependency = depHand.getProvidedDependency();
         Set<String> providedKeys = providedDependency.keySet();
         assertTrue("Expected one provided dependency. Found " + providedKeys.size(), providedKeys.size() == 1);
