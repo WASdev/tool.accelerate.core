@@ -48,7 +48,7 @@ public class PayloadTest {
     
     @Test
     public void testTestMicroservice() throws Exception {
-        String queryString = "tech=test&name=TestApp";
+        String queryString = "tech=test&name=TestApp&deploy=local";
         callDataEndpoint(queryString);
         assertTrue("Expected net.wasdev.wlp.starters.test groupId. Found " + groups, groups.contains("net.wasdev.wlp.starters.test"));
         assertTrue("Expected provided-pom artifact. Found " + artifacts, artifacts.contains("provided-pom"));
@@ -104,7 +104,7 @@ public class PayloadTest {
     public void testBase() throws Exception {
         Client client = ClientBuilder.newClient();
         String port = System.getProperty("liberty.test.port");
-        String url = "http://localhost:" + port + "/start/api/v1/data?tech=test&name=Test";
+        String url = "http://localhost:" + port + "/start/api/v1/data?tech=test&name=Test&deploy=local";
         System.out.println("Testing " + url);
         Response response = client.target(url).request("application/zip").get();
         responseStatus = response.getStatus();

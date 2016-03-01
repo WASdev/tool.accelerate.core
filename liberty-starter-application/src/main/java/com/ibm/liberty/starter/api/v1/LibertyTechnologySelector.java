@@ -42,6 +42,7 @@ import com.ibm.liberty.starter.PatternValidation;
 import com.ibm.liberty.starter.ProjectZipConstructor;
 import com.ibm.liberty.starter.ServiceConnector;
 import com.ibm.liberty.starter.PatternValidation.PatternType;
+import com.ibm.liberty.starter.ProjectZipConstructor.DeployType;
 import com.ibm.liberty.starter.api.v1.model.internal.Services;
 import com.ibm.liberty.starter.api.v1.model.registration.Service;
 
@@ -53,7 +54,7 @@ public class LibertyTechnologySelector {
     @GET
     @Produces("application/zip")
     public Response getResponse(@QueryParam("tech") String[] techs, @QueryParam("name") String name,
-                                @QueryParam("deploy") final String deployType, @Context UriInfo info) throws NullPointerException, IOException {
+                                @QueryParam("deploy") final String deploy, @Context UriInfo info) throws NullPointerException, IOException {
         log.info("GET request for /data");
         try {
             final ServiceConnector serviceConnector = new ServiceConnector(info.getBaseUri());
@@ -81,6 +82,12 @@ public class LibertyTechnologySelector {
                 log.severe("Invalid file name length.");
                 throw new ValidationException();
             }
+            
+            if (deploy == null) {
+                log.severe("No deploy type specified");
+                throw new ValidationException();
+            }
+            final DeployType deployType = DeployType.valueOf(deploy.toUpperCase());
             
             final String appName = name;
 
