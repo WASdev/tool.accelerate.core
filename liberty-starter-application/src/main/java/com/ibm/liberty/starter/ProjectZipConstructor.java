@@ -48,15 +48,20 @@ public class ProjectZipConstructor {
     private Services services;
     private ConcurrentHashMap<String, byte[]> fileMap = new ConcurrentHashMap<String, byte[]>();
     private static final String SKELETON_JAR_FILENAME = "services/skeletonLibertyBuildImage.jar";
-    private static final String BASE_INDEX_HTML = "indexHtml/index.html";
+    private static final String BASE_INDEX_HTML = "index.html";
     private static final String INDEX_HTML_PATH = "myProject-application/src/main/webapp/index.html";
-    private static final String POM_FILE = "pomXml/pom.xml";
+    private static final String POM_FILE = "pom.xml";
     private String appName;
+    public enum DeployType {
+        LOCAL, BLUEMIX
+    }
+    private DeployType deployType;
     
-    public ProjectZipConstructor(ServiceConnector serviceConnector, Services services, String appName) {
+    public ProjectZipConstructor(ServiceConnector serviceConnector, Services services, String appName, DeployType deployType) {
         this.serviceConnector = serviceConnector;
         this.services = services;
         this.appName = appName;
+        this.deployType = deployType;
     }
     
     public ConcurrentHashMap<String, byte[]> getFileMap() {
@@ -160,7 +165,7 @@ public class ProjectZipConstructor {
     public void addPomFileToMap() throws SAXException, IOException, ParserConfigurationException, TransformerException {
         System.out.println("Entering method ProjectZipConstructor.addPomFileToMap()");
         InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream(POM_FILE);
-        PomModifier pomModifier = new PomModifier();
+        PomModifier pomModifier = new PomModifier(deployType);
         pomModifier.setInputStream(inputStream);
         DependencyHandler depHand = new DependencyHandler(services, serviceConnector, appName);
         pomModifier.addStarterPomDependencies(depHand);

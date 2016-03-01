@@ -48,23 +48,4 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
-    
-    <profiles>
-        <profile>
-            <id>localServer</id>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>
-            <modules>
-                <module>myProject-localServer</module>
-            </modules>
-        </profile>
-        <profile>
-            <id>bluemix</id>
-            <modules>
-                <module>myProject-bluemix</module>
-            </modules>
-        </profile>
-    </profiles>
-
 </project>

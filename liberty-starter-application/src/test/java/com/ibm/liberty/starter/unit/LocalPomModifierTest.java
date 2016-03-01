@@ -28,21 +28,21 @@ import javax.xml.transform.TransformerException;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.Ignore;
 import org.xml.sax.SAXException;
 
 import com.ibm.liberty.starter.DependencyHandler;
 import com.ibm.liberty.starter.PomModifier;
+import com.ibm.liberty.starter.ProjectZipConstructor.DeployType;
 
-public class PomModifierTest {
+public class LocalPomModifierTest {
     
     private PomModifier pomModifier;
 
     @Before
     public void createPomWithDependencies() throws SAXException, IOException, ParserConfigurationException {
-        String pomString = "<project><dependencies/><properties><!--Testing--></properties></project>";
+        String pomString = "<project><dependencies/><properties><!--Testing--></properties><profiles><profile><id>localServer</id></profile></profiles></project>";
         try (InputStream inputStream = new ByteArrayInputStream(pomString.getBytes())) {
-            pomModifier = new PomModifier();
+            pomModifier = new PomModifier(DeployType.LOCAL);
             pomModifier.setInputStream(inputStream);
         }
     }
@@ -91,6 +91,15 @@ public class PomModifierTest {
         String outputPomWithWhitespaceRemoved = outputPom.replaceAll("\\s", "");
         assertTrue("OutputPom should have had the app name added " + outputPom,
                    outputPomWithWhitespaceRemoved.contains("<!--Testing--><cf.host>TestName</cf.host>"));
+    }
+    
+    @Test
+    public void testActiveLocalDeploy() throws Exception {
+        DependencyHandler depHand = MockDependencyHandler.getProvidedInstance();
+        String outputPom = addTechAndWritePom(depHand);
+        String outputPomWithWhitespaceRemoved = outputPom.replaceAll("\\s", "");
+        assertTrue("OutputPom should have had the app name added " + outputPom,
+                   outputPomWithWhitespaceRemoved.contains("<id>localServer</id><activation><activeByDefault>true</activeByDefault></activation>"));
     }
 
     private String addTechAndWritePom(DependencyHandler depHand) throws TransformerException {

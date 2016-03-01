@@ -28,7 +28,7 @@ public class EndpointInputValidationTest {
 
     @Test
     public void testTechSelectorInvalidTechType() throws Exception {
-        String endpoint = "/start/api/v1/data?tech=ABC123";
+        String endpoint = "/start/api/v1/data?tech=ABC123&deploy=local";
         Response response = callEndpoint(endpoint);
         int status = response.getStatus();
         assertTrue("Response incorrect, response status was " + status, status == Response.Status.BAD_REQUEST.getStatusCode());
@@ -36,7 +36,7 @@ public class EndpointInputValidationTest {
 
     @Test
     public void testTechSelectorValidName() throws Exception {
-        String endpoint = "/start/api/v1/data?tech=test&name=testName";
+        String endpoint = "/start/api/v1/data?tech=test&name=testName&deploy=local";
         Response response = callEndpoint(endpoint);
         int status = response.getStatus();
         assertTrue("Response incorrect, response status was " + status, status == 200);
@@ -44,7 +44,7 @@ public class EndpointInputValidationTest {
 
     @Test
     public void testTechSelectorInvalidName() throws Exception {
-        String endpoint = "/start/api/v1/data?tech=test&name=in/valid";
+        String endpoint = "/start/api/v1/data?tech=test&name=in/valid&deploy=local";
         Response response = callEndpoint(endpoint);
         int status = response.getStatus();
         assertTrue("Response incorrect, response status was " + status, status == Response.Status.BAD_REQUEST.getStatusCode());
