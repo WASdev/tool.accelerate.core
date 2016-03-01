@@ -53,7 +53,7 @@ public class LibertyTechnologySelector {
     @GET
     @Produces("application/zip")
     public Response getResponse(@QueryParam("tech") String[] techs, @QueryParam("name") String name,
-                                @Context UriInfo info) throws NullPointerException, IOException {
+                                @QueryParam("deploy") final String deployType, @Context UriInfo info) throws NullPointerException, IOException {
         log.info("GET request for /data");
         try {
             final ServiceConnector serviceConnector = new ServiceConnector(info.getBaseUri());
@@ -90,7 +90,7 @@ public class LibertyTechnologySelector {
                 public void write(OutputStream os) throws IOException, WebApplicationException {
                     Services services = new Services();
                     services.setServices(serviceList);
-                    ProjectZipConstructor projectZipConstructor = new ProjectZipConstructor(serviceConnector, services, appName);
+                    ProjectZipConstructor projectZipConstructor = new ProjectZipConstructor(serviceConnector, services, appName, deployType);
                     try {
                         projectZipConstructor.buildZip(os);
                     } catch (SAXException | ParserConfigurationException | TransformerException e) {

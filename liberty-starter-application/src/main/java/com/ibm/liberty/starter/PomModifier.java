@@ -38,6 +38,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
+import com.ibm.liberty.starter.ProjectZipConstructor.DeployType;
 import com.ibm.liberty.starter.api.v1.model.provider.Dependency;
 import com.ibm.liberty.starter.api.v1.model.provider.Dependency.Scope;
 
@@ -49,6 +50,11 @@ public class PomModifier {
     private Map<String, Dependency> compilePomsToAdd = new HashMap<>();
     private String groupIdBase = "net.wasdev.wlp.starters.";
     private String appName;
+    private DeployType deployType;
+
+    public PomModifier(DeployType deployType) {
+        this.deployType = deployType;
+    }
 
     public void setInputStream(InputStream pomInputStream) throws SAXException, IOException, ParserConfigurationException {
         DocumentBuilderFactory domFactory = DocumentBuilderFactory.newInstance();
@@ -96,6 +102,9 @@ public class PomModifier {
 
         NodeList propertiesNodeList = doc.getElementsByTagName("properties");
         appendAppNameProperty(propertiesNodeList);
+
+        appendDeployType();
+
         TransformerFactory transformFactory = TransformerFactory.newInstance();
         Transformer transformer = transformFactory.newTransformer();
         transformer.setOutputProperty(OutputKeys.INDENT, "yes");
@@ -123,6 +132,48 @@ public class PomModifier {
         Node appNameNode = doc.createElement("cf.host");
         appNameNode.setTextContent(appName);
         propertiesNode.appendChild(appNameNode);
+    }
+
+    private void appendDeployType() {
+        String nodeValue = null;
+        switch (deployType) {
+            case LOCAL:
+                System.out.println("PomModifier adding profile activation for localServer");
+                nodeValue = "localServer";
+                break;
+            case BLUEMIX:
+                System.out.println("PomModifier adding profile activation for bluemix");
+                nodeValue = "bluemix";
+                break;
+        }
+        NodeList profileNodeList = doc.getElementsByTagName("profile");
+        int length = profileNodeList.getLength();
+        Node profileNode = null;
+        for (int i = 0; i < length; i++) {
+            profileNode = profileNodeList.item(i);
+            if (profileNodeHasId(profileNode, nodeValue)) {
+                break;
+            }
+        }
+        Node activationNode = doc.createElement("activation");
+        Node activeByDefault = doc.createElement("activeByDefault");
+        activeByDefault.setTextContent("true");
+        activationNode.appendChild(activeByDefault);
+        profileNode.appendChild(activationNode);
+    }
+
+    private boolean profileNodeHasId(Node node, String id) {
+        // This will ignore white space nodes
+        if (node.getNodeType() == Node.ELEMENT_NODE && node.hasChildNodes()) {
+            NodeList nodeList = node.getChildNodes();
+            int length = nodeList.getLength();
+            for (int i = 0; i < length; i++) {
+                if (id.equals(nodeList.item(i).getTextContent())) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     private void appendDependencyNode(Node dependenciesNode, String dependencyGroupId, String dependencyArtifactId, Scope dependencyScope, String dependencyVersion) {

@@ -32,7 +32,7 @@ public class ZipConstructorTest {
     @Test
     public void testMapInitializer() throws IOException {
         Services services = new Services();
-        ProjectZipConstructor zipConstructor = new ProjectZipConstructor(null, services, null);
+        ProjectZipConstructor zipConstructor = new ProjectZipConstructor(null, services, null, null);
         zipConstructor.initializeMap();
         ConcurrentHashMap<String, byte[]> map = zipConstructor.getFileMap();
         assertFalse(map.isEmpty());

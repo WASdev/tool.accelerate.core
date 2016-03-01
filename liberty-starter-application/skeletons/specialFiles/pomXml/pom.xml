@@ -36,9 +36,6 @@
         <!-- This is the host for your app in Bluemix and what it will be called in the dashboard. -->
     </properties>
     
-    <dependencies>
-    </dependencies>
-    
     <repositories>
         <repository>
             <id>liberty-starter-maven-repo</id>
@@ -52,5 +49,23 @@
         <module>myProject-wlpcfg</module>
         <module>myProject-deploy</module>
     </modules>
+    
+    
+    <profiles>
+        <profile>
+            <id>localServer</id>
+            <modules>
+                <module>myProject-deploy/myProject-localServer</module>
+            </modules>
+        </profile>
+        <profile>
+            <id>bluemix</id>
+            <modules>
+                <module>myProject-deploy/myProject-bluemix</module>
+            </modules>
+        </profile>
+    </profiles>
 
+    <dependencies>
+    </dependencies>
 </project>

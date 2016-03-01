@@ -5,7 +5,7 @@ import java.util.regex.Pattern;
 public class PatternValidation {
 
     public enum PatternType {
-        TECH, NAME, PATH_EXTENSION
+        TECH, NAME, PATH_EXTENSION, DEPLOY
     }
 
     public static boolean checkPattern(PatternType patternType, String object) {
@@ -29,6 +29,8 @@ public class PatternValidation {
             case PATH_EXTENSION:
                 pattern = Pattern.compile("[a-z0-9-_/.]*");
                 break;
+            case DEPLOY:
+                pattern = Pattern.compile("[a-z]*");
         }
         return pattern;
     }
