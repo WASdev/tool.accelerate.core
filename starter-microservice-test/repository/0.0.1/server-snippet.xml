@@ -14,5 +14,8 @@
 <server description="Web server snippet">
 
     <!-- Sample test server snippet -->
+    <featureManager>
+        <feature>servlet-3.1</feature>
+    </featureManager>
 
 </server>

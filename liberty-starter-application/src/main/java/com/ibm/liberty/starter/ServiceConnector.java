@@ -61,6 +61,10 @@ public class ServiceConnector {
         return services;
     }
     
+    public String getServerHostPort() {
+        return serverHostPort;
+    }
+    
     // Returns the service object associated with the given id
     public Service getServiceObjectFromId(String id) {
         System.out.println("Return service object for " + id);
