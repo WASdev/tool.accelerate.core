@@ -40,7 +40,9 @@ public class LocalPomModifierTest {
 
     @Before
     public void createPomWithDependencies() throws SAXException, IOException, ParserConfigurationException {
-        String pomString = "<project><dependencies/><properties><!--Testing--></properties><profiles><profile><id>localServer</id></profile></profiles></project>";
+        String pomString = "<project><dependencies/><properties><!--Testing--></properties>"
+                        + "<repositories><repository><id>liberty-starter-maven-repo</id><name>liberty-starter-maven-repo</name></repository></repositories>"
+                        + "<profiles><profile><id>localServer</id></profile></profiles></project>";
         try (InputStream inputStream = new ByteArrayInputStream(pomString.getBytes())) {
             pomModifier = new PomModifier(DeployType.LOCAL);
             pomModifier.setInputStream(inputStream);
@@ -102,7 +104,7 @@ public class LocalPomModifierTest {
                    outputPomWithWhitespaceRemoved.contains("<id>localServer</id><activation><activeByDefault>true</activeByDefault></activation>"));
     }
 
-    private String addTechAndWritePom(DependencyHandler depHand) throws TransformerException {
+    private String addTechAndWritePom(DependencyHandler depHand) throws TransformerException, IOException {
         pomModifier.addStarterPomDependencies(depHand);
         byte[] bytes = pomModifier.getBytes();
         String pomContents = new String(bytes, StandardCharsets.UTF_8);

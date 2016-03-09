@@ -24,7 +24,9 @@ public class BluemixPomModifierTest {
 
     @Before
     public void createPomWithDependencies() throws SAXException, IOException, ParserConfigurationException {
-        String pomString = "<project><dependencies/><properties><!--Testing--></properties><profiles><profile><id>bluemix</id></profile></profiles></project>";
+        String pomString = "<project><dependencies/><properties><!--Testing--></properties>"
+                        + "<repositories><repository><id>liberty-starter-maven-repo</id><name>liberty-starter-maven-repo</name></repository></repositories>"
+                        + "<profiles><profile><id>bluemix</id></profile></profiles></project>";
         try (InputStream inputStream = new ByteArrayInputStream(pomString.getBytes())) {
             pomModifier = new PomModifier(DeployType.BLUEMIX);
             pomModifier.setInputStream(inputStream);
@@ -40,7 +42,7 @@ public class BluemixPomModifierTest {
                    outputPomWithWhitespaceRemoved.contains("<id>bluemix</id><activation><activeByDefault>true</activeByDefault></activation>"));
     }
 
-    private String addTechAndWritePom(DependencyHandler depHand) throws TransformerException {
+    private String addTechAndWritePom(DependencyHandler depHand) throws TransformerException, IOException {
         pomModifier.addStarterPomDependencies(depHand);
         byte[] bytes = pomModifier.getBytes();
         String pomContents = new String(bytes, StandardCharsets.UTF_8);

@@ -88,13 +88,13 @@ public class PomModifier {
         }
     }
 
-    public byte[] getBytes() throws TransformerException {
+    public byte[] getBytes() throws TransformerException, IOException {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         writeToStream(baos);
         return baos.toByteArray();
     }
 
-    private void writeToStream(OutputStream pomOutputStream) throws TransformerException {
+    private void writeToStream(OutputStream pomOutputStream) throws TransformerException, IOException {
         Node dependenciesNode = doc.getElementsByTagName("dependencies").item(0);
         System.out.println("Appending dependency nodes for provided poms");
         appendDependencyNodes(dependenciesNode, providedPomsToAdd);
@@ -208,16 +208,22 @@ public class PomModifier {
         return false;
     }
     
-    private void appendRepoUrl() {
+    private void appendRepoUrl() throws IOException {
         System.out.println("Append repo url of " + repoUrl);
         NodeList repoNodeList = doc.getElementsByTagName("repository");
+        boolean foundRepoNode = false;
         for (int i = 0; i < repoNodeList.getLength(); i++) {
             Element repoNode = (Element) repoNodeList.item(i);
             if (nodeHasId(repoNode, "liberty-starter-maven-repo")) {
+                foundRepoNode = true;
                 Node urlNode = doc.createElement("url");
                 urlNode.setTextContent(repoUrl);
                 repoNode.appendChild(urlNode);
+                break;
             }
+        }
+        if (!foundRepoNode) {
+            throw new IOException("Repository url node not found in pom input");
         }
     }
 
