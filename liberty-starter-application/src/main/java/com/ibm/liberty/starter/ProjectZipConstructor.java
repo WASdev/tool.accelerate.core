@@ -48,7 +48,7 @@ public class ProjectZipConstructor {
     private Services services;
     private ConcurrentHashMap<String, byte[]> fileMap = new ConcurrentHashMap<String, byte[]>();
     private static final String SKELETON_JAR_FILENAME = "services/skeletonLibertyBuildImage.jar";
-    private static final String BASE_INDEX_HTML = "index.html";
+    private static final String BASE_INDEX_HTML = "payloadIndex.html";
     private static final String INDEX_HTML_PATH = "myProject-application/src/main/webapp/index.html";
     private static final String POM_FILE = "pom.xml";
     private String appName;

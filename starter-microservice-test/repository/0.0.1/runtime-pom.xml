@@ -24,8 +24,8 @@
 
     <dependencies>
         <dependency>
-            <groupId>net.wasdev.wlp.starters.servers</groupId>
-            <artifactId>websocket</artifactId>
+            <groupId>net.wasdev.wlp.starters.test</groupId>
+            <artifactId>server-snippet</artifactId>
             <type>xml</type>
             <version>0.0.1</version>
         </dependency>

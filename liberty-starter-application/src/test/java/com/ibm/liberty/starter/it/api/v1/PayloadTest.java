@@ -36,6 +36,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 public class PayloadTest {
@@ -43,9 +44,10 @@ public class PayloadTest {
     private int dependencySize = 0;
     private String artifacts = "";
     private String groups = "";
+    private String repoUrls = "";
     private int responseStatus;
     private Object contentDisposition;
-    
+
     @Test
     public void testTestMicroservice() throws Exception {
         String queryString = "tech=test&name=TestApp&deploy=local";
@@ -55,6 +57,14 @@ public class PayloadTest {
         assertTrue("Expected runtime-pom artifact. Found " + artifacts, artifacts.contains("runtime-pom"));
         assertTrue("Expected compile-pom artifact. Found " + artifacts, artifacts.contains("compile-pom"));
         assertTrue("Expected dependency size of 3. Found " + dependencySize, dependencySize == 3);
+    }
+
+    @Test
+    public void testRepoUrl() throws Exception {
+        String queryString = "tech=test&name=TestApp&deploy=local";
+        String expectedUrl = "http://localhost:" + System.getProperty("liberty.test.port") + "/start/api/v1/repo";
+        callDataEndpoint(queryString);
+        assertTrue("Expected repo url to be:" + expectedUrl + ", instead found:" + repoUrls, repoUrls.contains(expectedUrl));
     }
 
     @Test
@@ -175,31 +185,8 @@ public class PayloadTest {
                 DocumentBuilderFactory domFactory = DocumentBuilderFactory.newInstance();
                 DocumentBuilder db = domFactory.newDocumentBuilder();
                 Document doc = db.parse(zipIn);
-                NodeList pomDepend = doc.getElementsByTagName("dependencies");
-                int size = pomDepend.getLength();
-                System.out.println("Dependencies size is " + size);
-                for (int i = 0; i < size; i++) {
-                    Element element = (Element) pomDepend.item(i);
-                    NodeList children = element.getElementsByTagName("dependency");
-                    for (int j = 0; j < children.getLength(); j++) {
-                        Element childElement = (Element) children.item(j);
-                        dependencySize = children.getLength();
-                        NodeList group = childElement.getElementsByTagName("groupId");
-                        for (int k = 0; k < group.getLength(); k++) {
-                            Element groupEl = (Element) group.item(k);
-                            String groupId = groupEl.getTextContent();
-                            System.out.println("Groups found " + groupId);
-                            groups = groups + groupId + ";";
-                        }
-                        NodeList artifact = childElement.getElementsByTagName("artifactId");
-                        for (int k = 0; k < artifact.getLength(); k++) {
-                            Element artifactEl = (Element) artifact.item(k);
-                            String artifactId = artifactEl.getTextContent();
-                            System.out.println("Artifact found " + artifactId);
-                            artifacts = artifacts + artifactId + ";";
-                        }
-                    }
-                }
+                parseDependencies(doc.getElementsByTagName("dependencies"));
+                parseRepositories(doc.getElementsByTagName("repository"));
                 break;
             } else {
                 byte[] bytes = new byte[4096];
@@ -216,5 +203,41 @@ public class PayloadTest {
         zipOut.close();
         System.out.println("Deleting file:" + file.toPath());
         Files.delete(file.toPath());
+    }
+
+    private void parseDependencies(NodeList pomDepend) {
+        int size = pomDepend.getLength();
+        System.out.println("Dependencies size is " + size);
+        for (int i = 0; i < size; i++) {
+            Element element = (Element) pomDepend.item(i);
+            NodeList children = element.getElementsByTagName("dependency");
+            for (int j = 0; j < children.getLength(); j++) {
+                Element childElement = (Element) children.item(j);
+                dependencySize = children.getLength();
+                NodeList group = childElement.getElementsByTagName("groupId");
+                for (int k = 0; k < group.getLength(); k++) {
+                    Element groupEl = (Element) group.item(k);
+                    String groupId = groupEl.getTextContent();
+                    System.out.println("Groups found " + groupId);
+                    groups = groups + groupId + ";";
+                }
+                NodeList artifact = childElement.getElementsByTagName("artifactId");
+                for (int k = 0; k < artifact.getLength(); k++) {
+                    Element artifactEl = (Element) artifact.item(k);
+                    String artifactId = artifactEl.getTextContent();
+                    System.out.println("Artifact found " + artifactId);
+                    artifacts = artifacts + artifactId + ";";
+                }
+            }
+        }
+    }
+
+    private void parseRepositories(NodeList repos) {
+        int length = repos.getLength();
+        for (int i = 0; i < length; i++) {
+            Element repoNode = (Element) repos.item(i);
+            Node urlNode = repoNode.getElementsByTagName("url").item(0);
+            repoUrls = repoUrls + urlNode.getTextContent() + ";";
+        }
     }
 }

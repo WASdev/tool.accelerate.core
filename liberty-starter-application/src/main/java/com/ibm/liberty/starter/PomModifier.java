@@ -34,6 +34,7 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
 import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
@@ -51,6 +52,7 @@ public class PomModifier {
     private String groupIdBase = "net.wasdev.wlp.starters.";
     private String appName;
     private DeployType deployType;
+    private String repoUrl;
 
     public PomModifier(DeployType deployType) {
         this.deployType = deployType;
@@ -67,6 +69,7 @@ public class PomModifier {
         addDependency(Dependency.Scope.PROVIDED, depHand.getProvidedDependency());
         addDependency(Dependency.Scope.RUNTIME, depHand.getRuntimeDependency());
         addDependency(Dependency.Scope.COMPILE, depHand.getCompileDependency());
+        this.repoUrl = depHand.getServerHostPort() + "/start/api/v1/repo";
         appName = depHand.getAppName() != null ? depHand.getAppName() : "LibertyProject";
     }
 
@@ -85,13 +88,13 @@ public class PomModifier {
         }
     }
 
-    public byte[] getBytes() throws TransformerException {
+    public byte[] getBytes() throws TransformerException, IOException {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         writeToStream(baos);
         return baos.toByteArray();
     }
 
-    private void writeToStream(OutputStream pomOutputStream) throws TransformerException {
+    private void writeToStream(OutputStream pomOutputStream) throws TransformerException, IOException {
         Node dependenciesNode = doc.getElementsByTagName("dependencies").item(0);
         System.out.println("Appending dependency nodes for provided poms");
         appendDependencyNodes(dependenciesNode, providedPomsToAdd);
@@ -104,6 +107,7 @@ public class PomModifier {
         appendAppNameProperty(propertiesNodeList);
 
         appendDeployType();
+        appendRepoUrl();
 
         TransformerFactory transformFactory = TransformerFactory.newInstance();
         Transformer transformer = transformFactory.newTransformer();
@@ -124,56 +128,6 @@ public class PomModifier {
             String groupId = groupIdBase + serviceId;
             appendDependencyNode(dependenciesNode, groupId, dependency.getArtifactId(), dependency.getScope(), dependency.getVersion());
         }
-    }
-
-    private void appendAppNameProperty(NodeList propertiesNodeList) {
-        System.out.println("Setting cf.host node to " + appName);
-        Node propertiesNode = propertiesNodeList.item(0);
-        Node appNameNode = doc.createElement("cf.host");
-        appNameNode.setTextContent(appName);
-        propertiesNode.appendChild(appNameNode);
-    }
-
-    private void appendDeployType() {
-        String nodeValue = null;
-        switch (deployType) {
-            case LOCAL:
-                System.out.println("PomModifier adding profile activation for localServer");
-                nodeValue = "localServer";
-                break;
-            case BLUEMIX:
-                System.out.println("PomModifier adding profile activation for bluemix");
-                nodeValue = "bluemix";
-                break;
-        }
-        NodeList profileNodeList = doc.getElementsByTagName("profile");
-        int length = profileNodeList.getLength();
-        Node profileNode = null;
-        for (int i = 0; i < length; i++) {
-            profileNode = profileNodeList.item(i);
-            if (profileNodeHasId(profileNode, nodeValue)) {
-                break;
-            }
-        }
-        Node activationNode = doc.createElement("activation");
-        Node activeByDefault = doc.createElement("activeByDefault");
-        activeByDefault.setTextContent("true");
-        activationNode.appendChild(activeByDefault);
-        profileNode.appendChild(activationNode);
-    }
-
-    private boolean profileNodeHasId(Node node, String id) {
-        // This will ignore white space nodes
-        if (node.getNodeType() == Node.ELEMENT_NODE && node.hasChildNodes()) {
-            NodeList nodeList = node.getChildNodes();
-            int length = nodeList.getLength();
-            for (int i = 0; i < length; i++) {
-                if (id.equals(nodeList.item(i).getTextContent())) {
-                    return true;
-                }
-            }
-        }
-        return false;
     }
 
     private void appendDependencyNode(Node dependenciesNode, String dependencyGroupId, String dependencyArtifactId, Scope dependencyScope, String dependencyVersion) {
@@ -202,6 +156,75 @@ public class PomModifier {
         newDependency.appendChild(type);
         newDependency.appendChild(scope);
         dependenciesNode.appendChild(newDependency);
+    }
+    
+    private void appendAppNameProperty(NodeList propertiesNodeList) {
+        System.out.println("Setting cf.host node to " + appName);
+        Node propertiesNode = propertiesNodeList.item(0);
+        Node appNameNode = doc.createElement("cf.host");
+        appNameNode.setTextContent(appName);
+        propertiesNode.appendChild(appNameNode);
+    }
+
+    private void appendDeployType() {
+        String nodeValue = null;
+        switch (deployType) {
+            case LOCAL:
+                System.out.println("PomModifier adding profile activation for localServer");
+                nodeValue = "localServer";
+                break;
+            case BLUEMIX:
+                System.out.println("PomModifier adding profile activation for bluemix");
+                nodeValue = "bluemix";
+                break;
+        }
+        NodeList profileNodeList = doc.getElementsByTagName("profile");
+        int length = profileNodeList.getLength();
+        Node profileNode = null;
+        for (int i = 0; i < length; i++) {
+            profileNode = profileNodeList.item(i);
+            if (nodeHasId(profileNode, nodeValue)) {
+                break;
+            }
+        }
+        Node activationNode = doc.createElement("activation");
+        Node activeByDefault = doc.createElement("activeByDefault");
+        activeByDefault.setTextContent("true");
+        activationNode.appendChild(activeByDefault);
+        profileNode.appendChild(activationNode);
+    }
+
+    private boolean nodeHasId(Node node, String id) {
+        // This will ignore white space nodes
+        if (node.getNodeType() == Node.ELEMENT_NODE && node.hasChildNodes()) {
+            NodeList nodeList = node.getChildNodes();
+            int length = nodeList.getLength();
+            for (int i = 0; i < length; i++) {
+                if (id.equals(nodeList.item(i).getTextContent())) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+    
+    private void appendRepoUrl() throws IOException {
+        System.out.println("Append repo url of " + repoUrl);
+        NodeList repoNodeList = doc.getElementsByTagName("repository");
+        boolean foundRepoNode = false;
+        for (int i = 0; i < repoNodeList.getLength(); i++) {
+            Element repoNode = (Element) repoNodeList.item(i);
+            if (nodeHasId(repoNode, "liberty-starter-maven-repo")) {
+                foundRepoNode = true;
+                Node urlNode = doc.createElement("url");
+                urlNode.setTextContent(repoUrl);
+                repoNode.appendChild(urlNode);
+                break;
+            }
+        }
+        if (!foundRepoNode) {
+            throw new IOException("Repository url node not found in pom input");
+        }
     }
 
 }
