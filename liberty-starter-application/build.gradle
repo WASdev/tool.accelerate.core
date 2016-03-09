@@ -37,7 +37,7 @@ buildutils {
 }
 
 libertyutils {
-    serverEnv = ['com.ibm.liberty.starter.servicesJsonLocation=/testServices.json']
+    serverEnv = ['com_ibm_liberty_starter_servicesJsonLocation=/testServices']
 }
 
 // Zip up the skeletonBuildImage so it can be included in the war file
@@ -113,5 +113,6 @@ libertyStart.dependsOn('installFeature', 'addServerEnv', 'publishWar')
 fvt.dependsOn('libertyStart', 'testClasses')
 fvt.finalizedBy('libertyStop', 'removeServerEnv')
 check.dependsOn('fvt')
+build.dependsOn('libertyPackage')
 libertyPackage.dependsOn('publishWar', 'cleanDropins')
 apply from: rootProject.file('only-run-liberty-start-if-fvt-is-not-up-to-date.gradle')
