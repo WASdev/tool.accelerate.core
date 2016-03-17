@@ -1,6 +1,6 @@
 package com.ibm.liberty.starter.it.api.v1;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -8,6 +8,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -33,7 +36,7 @@ public class RunLocalPayloadTest {
     public static void assertMavenPathSet() throws IOException {
         System.out.println("RunLocalPayloadTest.assertMavenPathSet @BeforeClass entered");
         osName = System.getProperty("os.name");
-        assertTrue(osName != null);
+        assertNotNull(osName);
         File file = new File(System.getProperty("liberty.temp.dir"));
         file.mkdir();
         System.out.println("RunLocalPayloadTest.assertMavenPathSet System path is:" + System.getenv("PATH"));
@@ -47,10 +50,13 @@ public class RunLocalPayloadTest {
         pb.directory(file);
         Process process = pb.start();
         InputStream is = process.getInputStream();
+        InputStream errorStream = process.getErrorStream();
         String output = inputStreamToString(is);
+        String error = inputStreamToString(errorStream);
         is.close();
+        errorStream.close();
         System.out.println("Output from env is:" + output);
-        assertTrue(output, output.contains("Apache Maven"));
+        assertTrue("Std Out:" + output + "/nStd Error:" + error, output.contains("Apache Maven"));
     }
 
     @Before
@@ -66,46 +72,61 @@ public class RunLocalPayloadTest {
 
     @Test
     public void testLocalMvnInstallRuns() throws Exception {
-        testMvnInstall();
+        List<String> installCmd = Arrays.asList("install");
+        testMvnCommand(installCmd, installLog);
         testEndpoint();
-        testMvnClean();
     }
-
+    
     @After
     public void shutdownServer() throws IOException, InterruptedException {
-        try {
-            runMvnClean();
-        } catch (AssertionError e) {
-            System.out.println("Caught exception during server shutdown, ignoring because server should be shut down by test " + e.getMessage());
-        }
+        List<String> cleanCmd = Arrays.asList("clean", "-P", "stopServer");
+        testMvnCommand(cleanCmd, cleanLog);
     }
-
-    public void testMvnInstall() throws IOException, InterruptedException {
-        File logFile = runMvnInstall();
+    
+    private void testMvnCommand(List<String> args, String logFileString) throws IOException, InterruptedException {
+        List<String> logFileList = Arrays.asList("--log-file", logFileString);
+        String filePath = tempDir + extractedZip;
+        File logFile = new File(logFileString);
+        logFile.getParentFile().mkdirs();
+        logFile.createNewFile();
+        System.out.println("mvn output will go to " + logFileString);
+        File file = new File(filePath);
+        List<String> cmd;
+        if (osName.startsWith("Windows")) {
+            cmd = Arrays.asList("cmd", "/c", "mvn");
+        } else {
+            cmd = Arrays.asList("mvn");
+        }
+        List<String> processArgs = new ArrayList<String>();
+        processArgs.addAll(cmd);
+        processArgs.addAll(args);
+        processArgs.addAll(logFileList);
+        ProcessBuilder pb = new ProcessBuilder(processArgs);
+        pb.directory(file);
+        Process process = pb.start();
+        process.waitFor();
+        int exitValue = process.exitValue();
+        System.out.println("Exit value is " + exitValue);
+        assertEquals("Found incorrect exit value running command:" + processArgs, exitValue, 0);
         FileInputStream fis = new FileInputStream(logFile);
         String logs = inputStreamToString(fis);
-        assertTrue("testMvnInstall() expected message BUILD SUCCESS in logs located in " + logFile.getAbsolutePath(), logs.contains("BUILD SUCCESS"));
+        assertTrue("Expected message BUILD SUCCESS in logs located in " + logFile.getAbsolutePath(), logs.contains("BUILD SUCCESS"));
     }
-
+    
     public void testEndpoint() {
         Client client = ClientBuilder.newClient();
         String url = "http://localhost:9080/myLibertyApp/";
         System.out.println("Testing " + url);
         Response response = client.target(url).request().get();
         int status = response.getStatus();
-        assertTrue("Endpoint response status was not 200, found:" + status, status == 200);
+        assertEquals("Endpoint response status was not 200, found:" + status, status, 200);
         String responseString = response.readEntity(String.class);
         String[] expectedStrings = { "Welcome to your Liberty Application", "Test" };
-        assertTrue("Endpoint response incorrect, expected:" + expectedStrings[0] + ", found:" + responseString, responseString.contains(expectedStrings[0]));
-        assertTrue("Endpoint response incorrect, expected:" + expectedStrings[1] + ", found:" + responseString, responseString.contains(expectedStrings[1]));
+        assertTrue("Endpoint response incorrect, expected it to include:" + expectedStrings[0] + ", found:" + responseString, responseString.contains(expectedStrings[0]));
+        assertTrue("Endpoint response incorrect, expected it to include:" + expectedStrings[1] + ", found:" + responseString, responseString.contains(expectedStrings[1]));
     }
 
-    public void testMvnClean() throws IOException, InterruptedException {
-        File logFile = runMvnClean();
-        FileInputStream fis = new FileInputStream(logFile);
-        String logs = inputStreamToString(fis);
-        assertTrue("testMvnClean() expected message BUILD SUCCESS in logs located in " + logFile.getAbsolutePath(), logs.contains("BUILD SUCCESS"));
-    }
+
 
     private static void extractZip(InputStream entityInputStream) throws IOException {
         // Create a new ZipInputStream from the response InputStream
@@ -131,50 +152,6 @@ public class RunLocalPayloadTest {
             };
             fos.close();
         }
-    }
-
-    private File runMvnInstall() throws IOException, InterruptedException {
-        String filePath = tempDir + extractedZip;
-        File logFile = new File(installLog);
-        logFile.getParentFile().mkdirs();
-        logFile.createNewFile();
-        System.out.println("mvn output will go to " + installLog);
-        File file = new File(filePath);
-        ProcessBuilder pb = null;
-        if (osName.startsWith("Windows")) {
-            pb = new ProcessBuilder("cmd", "/c", "mvn", "install", "--log-file", installLog);
-        } else {
-            pb = new ProcessBuilder("mvn", "install", "--log-file", installLog);
-        }
-        pb.directory(file);
-        Process process = pb.start();
-        process.waitFor();
-        int exitValue = process.exitValue();
-        System.out.println("Exit value is " + exitValue);
-        assertTrue("runMvnInstall() expected return value of 0, instead found:" + exitValue, exitValue == 0);
-        return logFile;
-    }
-
-    private File runMvnClean() throws IOException, InterruptedException {
-        String filePath = tempDir + extractedZip;
-        File logFile = new File(cleanLog);
-        logFile.getParentFile().mkdirs();
-        logFile.createNewFile();
-        System.out.println("mvn output will go to " + cleanLog);
-        File file = new File(filePath);
-        ProcessBuilder pb = null;
-        if (osName.startsWith("Windows")) {
-            pb = new ProcessBuilder("cmd", "/c", "mvn", "clean", "-P", "stopServer", "--log-file", cleanLog);
-        } else {
-            pb = new ProcessBuilder("mvn", "clean", "-P", "stopServer", "--log-file", cleanLog);
-        }
-        pb.directory(file);
-        Process process = pb.start();
-        process.waitFor();
-        int exitValue = process.exitValue();
-        System.out.println("Exit value is " + exitValue);
-        assertTrue("runMvnClean() expected return value of 0, instead found:" + exitValue, exitValue == 0);
-        return logFile;
     }
 
     private static String inputStreamToString(InputStream inputStream) throws IOException {
