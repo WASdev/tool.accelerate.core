@@ -37,7 +37,7 @@ public class RunLocalPayloadTest {
         System.out.println("RunLocalPayloadTest.assertMavenPathSet @BeforeClass entered");
         osName = System.getProperty("os.name");
         assertNotNull(osName);
-        File file = new File(System.getProperty("liberty.temp.dir"));
+        File file = new File(tempDir);
         file.mkdir();
         System.out.println("RunLocalPayloadTest.assertMavenPathSet System path is:" + System.getenv("PATH"));
         ProcessBuilder pb = null;
