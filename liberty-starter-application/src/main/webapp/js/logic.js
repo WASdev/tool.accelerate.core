@@ -160,6 +160,7 @@ $(document).ready(function() {
 		var url = serviceURL + "/data?tech=";
 		for(var i = 0; i < selectedTechnologies.size(); i++) {
 			url += selectedTechnologies.get(i).dataset.technologyid;
+			// Google analytics event
 			ga('send', 'event', 'Technology', 'Downloaded', selectedTechnologies.get(i).dataset.technologyid);
 			if(i + 1 < selectedTechnologies.size()) {
 				url += "&tech=";
@@ -169,6 +170,7 @@ $(document).ready(function() {
 		// Deploy location
 		var deployLocation = $("#step2DeployLocationsContainer .step2DeployLocation.selected").data("value");
 		url += "&deploy=" + deployLocation;
+		// Google analytics event
 		ga('send', 'event', 'Deployment', 'Downloaded', deployLocation);
 
 		// Project name
@@ -180,10 +182,16 @@ $(document).ready(function() {
 		}
 		window.location.assign(url);
 	};
+	
+	var trackOutboundLink = function(url, linkLocation) {
+		// Google analytics event
+		ga('send', 'event', 'Outbound Link', url, linkLocation)
+	}
 
 	$("#step1TechnologiesContainer").on("click", ".step1Technology", function(event) {
 		event.preventDefault();
 		$(event.currentTarget).toggleClass("selected");
+		// Google analytics event
 		ga('send', 'event', 'Technology', 'Selected', event.currentTarget.dataset.technologyid);
 		updateStep1Summary();
 		refreshSectionVisibility();
@@ -194,6 +202,7 @@ $(document).ready(function() {
 		$("#step2DeployLocationsContainer .step2DeployLocation").removeClass("selected");
 		$(event.currentTarget).addClass("selected");
 		$("#navigationTop2 .variableContent").text(event.currentTarget.dataset.text);
+		// Google analytics event
 		ga('send', 'event', 'Deployment', 'Selected', event.currentTarget.dataset.value);
 		if(event.currentTarget.dataset.value == "local") {
 			$("#step3Bluemix").addClass("hidden");
