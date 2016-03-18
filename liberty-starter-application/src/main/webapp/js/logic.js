@@ -160,6 +160,7 @@ $(document).ready(function() {
 		var url = serviceURL + "/data?tech=";
 		for(var i = 0; i < selectedTechnologies.size(); i++) {
 			url += selectedTechnologies.get(i).dataset.technologyid;
+			ga('send', 'event', 'Technology', 'Downloaded', selectedTechnologies.get(i).dataset.technologyid);
 			if(i + 1 < selectedTechnologies.size()) {
 				url += "&tech=";
 			}
@@ -168,6 +169,7 @@ $(document).ready(function() {
 		// Deploy location
 		var deployLocation = $("#step2DeployLocationsContainer .step2DeployLocation.selected").data("value");
 		url += "&deploy=" + deployLocation;
+		ga('send', 'event', 'Deployment', 'Downloaded', deployLocation);
 
 		// Project name
 		var projectName = $("#step3NameInput").val();
@@ -182,6 +184,7 @@ $(document).ready(function() {
 	$("#step1TechnologiesContainer").on("click", ".step1Technology", function(event) {
 		event.preventDefault();
 		$(event.currentTarget).toggleClass("selected");
+		ga('send', 'event', 'Technology', 'Selected', event.currentTarget.dataset.technologyid);
 		updateStep1Summary();
 		refreshSectionVisibility();
 	});
@@ -191,6 +194,7 @@ $(document).ready(function() {
 		$("#step2DeployLocationsContainer .step2DeployLocation").removeClass("selected");
 		$(event.currentTarget).addClass("selected");
 		$("#navigationTop2 .variableContent").text(event.currentTarget.dataset.text);
+		ga('send', 'event', 'Deployment', 'Selected', event.currentTarget.dataset.value);
 		if(event.currentTarget.dataset.value == "local") {
 			$("#step3Bluemix").addClass("hidden");
 			$("#step3Local").removeClass("hidden");
@@ -242,6 +246,8 @@ $(document).ready(function() {
 	$("#step3OptionalWDTTrigger a").click(function(event){
 		event.preventDefault();
 
+		ga('send', 'event', 'Page assistance', 'clicked', 'WDT Section');
+		
 		var container = $(this).parent().parent();
 		var headerSection = container.find("#step3OptionalWDTTrigger");
 		var openArrow = container.find(".wdtContentActive");
