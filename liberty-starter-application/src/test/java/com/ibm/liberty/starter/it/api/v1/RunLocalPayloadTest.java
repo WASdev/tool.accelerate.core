@@ -16,6 +16,8 @@ import java.util.zip.ZipInputStream;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.Invocation.Builder;
+import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Response;
 
 import org.junit.After;
@@ -27,7 +29,7 @@ public class RunLocalPayloadTest {
 
     private final static String tempDir = System.getProperty("liberty.temp.dir");
     private static String osName;
-    private final String extractedZip = "/extractedZip";
+    private final String extractedZip = tempDir + "/extractedZip";
     private final static String installLog = tempDir + "/mvnLog/log.txt";
     private final static String cleanLog = tempDir + "/mvnLog/cleanLog.txt";
 
@@ -85,12 +87,10 @@ public class RunLocalPayloadTest {
     
     private void testMvnCommand(List<String> args, String logFileString) throws IOException, InterruptedException {
         List<String> logFileList = Arrays.asList("--log-file", logFileString);
-        String filePath = tempDir + extractedZip;
         File logFile = new File(logFileString);
         logFile.getParentFile().mkdirs();
-        logFile.createNewFile();
         System.out.println("mvn output will go to " + logFileString);
-        File file = new File(filePath);
+        File file = new File(extractedZip);
         List<String> cmd;
         if (osName.startsWith("Windows")) {
             cmd = Arrays.asList("cmd", "/c", "mvn");
@@ -117,7 +117,9 @@ public class RunLocalPayloadTest {
         Client client = ClientBuilder.newClient();
         String url = "http://localhost:9080/myLibertyApp/";
         System.out.println("Testing " + url);
-        Response response = client.target(url).request().get();
+        WebTarget target = client.target(url);
+        Builder builder = target.request();
+        Response response = builder.get();
         int status = response.getStatus();
         assertEquals("Endpoint response status was not 200, found:" + status, status, 200);
         String responseString = response.readEntity(String.class);
@@ -132,8 +134,6 @@ public class RunLocalPayloadTest {
         // Create a new ZipInputStream from the response InputStream
         ZipInputStream zipIn = new ZipInputStream(entityInputStream);
         String tempDir = System.getProperty("liberty.temp.dir");
-        File file = new File(tempDir + "/TestApp.zip");
-        System.out.println("Creating zip file: " + file.toString());
         File extractedZip = new File(tempDir + "/extractedZip");
         ZipEntry inputEntry = null;
         while ((inputEntry = zipIn.getNextEntry()) != null) {
