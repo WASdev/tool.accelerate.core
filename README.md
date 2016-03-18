@@ -44,27 +44,27 @@ The Watson SDK provides an API for accessing Watson Services. For the complete d
 # Building and adding to the app accelerator
 
 ## Building the Project
-Once you have downloaded the project, to build it you just need to run the command 'gradle clean build' in the top level project. Once the application has been built you can either run 'gradle :liberty-starter-application:libertyStart' to start the application or grab the StarterServer folder that is in liberty-starter-wlpcfg/servers and copy that into an existing Liberty install and run 'server run StarterServer'. The application should be available at localhost:9082.
+Once you have downloaded the project, to build it you just need to run the command <code>gradle clean build</code> in the top level project. Once the application has been built you can either run <code>gradle :liberty-starter-application:libertyStart</code> to start the application or grab the StarterServer folder that is in liberty-starter-wlpcfg/servers and copy that into an existing Liberty install and run <code>server run StarterServer</code>. The application should be available at <code>localhost:9082</code>.
 
 ## Project Structure
 The project is split up into several different pieces.
 
-* liberty-starter-application contains the code to build the main application including the code for the UI
-* liberty-starter-common contains common api code for the projects
-* liberty-filter-application is a simple war that redirects people to the context /start
-* liberty-starter-wlpcfg contains the Liberty usr directory where the logs and apps for the app accelerator will be put after a build
+* <code>liberty-starter-application</code> contains the code to build the main application including the code for the UI
+* <code>liberty-starter-common</code> contains common api code for the projects
+* <code>liberty-filter-application</code> is a simple war that redirects people to the context <code>/start</code>
+* <code>liberty-starter-wlpcfg</code> contains the Liberty usr directory where the logs and apps for the app accelerator will be put after a build
 
-There are then a set of starter-microservice-* projects that contain the code for the individual technology types.
+There are then a set of <code>starter-microservice-techId</code> projects that contain the code for the individual technology types.
 
 ## Adding new technologies
 To see an example of everything you can include in a technology see the starter-microservice-test project. This is the example project we use to test the main piece of the app against.
 
 To create a new technology you can start by creating a copy of once of the existing technologies. You then need to make a few small changes to make the rest of the app aware of the new technology:
 
-1. In liberty-starter-application/src/main/resources update the services.json file to add your new technology, including an id, name, description and the endpoint you want to use. This will add your technology as an option on the main page.
+1. In <code>liberty-starter-application/src/main/resources</code> update the services.json file to add your new technology, including an id, name, description and the endpoint you want to use. This will add your technology as an option on the main page.
 
-2. In the build.gradle file in liberty-starter-application on line 111 add your technology to the war.dependsOn list. You need to add ':nameOfYourProject:publishWar'. This will add your project to the build lifecycle.
+2. In the build.gradle file in <code>liberty-starter-application</code> in the last set of <code>dependsOn</code> commands add your technology to the <code>war.dependsOn</code> list. You need to add <code>:nameOfYourProject:publishWar</code>. This will add your project to the build lifecycle.
 
-3. In liberty-starter-wlpcfg/servers/StarterServer/server.xml add your application to the list. You need to provide the name of the war file being created in location, the context-root that matches the endpoint specified in the services.json file in step 1 and the id you specified in step 1.
+3. In <code>liberty-starter-wlpcfg/servers/StarterServer/server.xml</code> add your application to the list. You need to provide the name of the war file being created in location, the context-root that matches the endpoint specified in the <code>services.json</code> file in step 1 and the id you specified in step 1.
 
-If you run 'gradle clean build' your new project should now be built and the war should be put into the apps directory of your server.
+If you run <code>gradle clean build</code> your new project should now be built and the war should be put into the apps directory of your server.
