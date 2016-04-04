@@ -497,24 +497,17 @@ body {
     color: #152935;
 }
 
-#step3BluemixRightBlockItem1Line1 {
-    font-family: Courier;
-    font-size: 14px;
-    color: #BFE6FF;
-    margin-top: 13px;
-    background-color: #282828;
-    width: 534px;
-    padding-top: 27px;
-    padding-bottom: 27px;
-    padding-left: 25px;
+#step3BluemixRightBlockItem1 {
+    font-family: "HelvNeueBold";
+    font-size: 16px;
+    color: #152935;
 }
 
-#step3BluemixRightBlockItem1Line1 .purpleCode {
-    color: rgb(246, 144, 203);
+#step3BluemixRightBlockItem1RightText {
+    font-family: "HelvNeueRoman";
 }
 
 #step3BluemixRightBlockItem2 {
-    margin-top: 13px;
     background-color: #F0F0F0;
     width: 534px;
     padding-top: 27px;
@@ -535,7 +528,61 @@ body {
     color: #152935;
 }
 
-#step3BluemixRightBlockItem2Line3 {
+#step3BluemixRightBlockItem3 {
+    margin-top: 13px;
+    background-color: #F0F0F0;
+    width: 534px;
+    padding-top: 27px;
+    padding-bottom: 27px;
+    padding-left: 25px;
+}
+
+#step3BluemixRightBlockItem3Line1 {
+    font-family: "HelvNeueBold";
+    font-size: 16px;
+    color: #152935;
+    padding-bottom: 16px;
+}
+
+#step3BluemixRightBlockItem3Line2 {
+    font-family: Courier;
+    font-size: 14px;
+    background-color: #282828;
+    color: #BFE6FF;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-left: 10px;
+    padding-right: 10px;
+    width: 480px;
+}
+
+#step3BluemixRightBlockItem3Line2 .purpleCode {
+    color: rgb(246, 144, 203);
+}
+
+#step3BluemixRightBlockItem4 {
+    margin-top: 13px;
+    background-color: #F0F0F0;
+    width: 534px;
+    padding-top: 27px;
+    padding-bottom: 27px;
+    padding-left: 25px;
+}
+
+#step3BluemixRightBlockItem4Line1 {
+    font-family: "HelvNeueBold";
+    font-size: 16px;
+    color: #152935;
+}
+
+#step3BluemixRightBlockItem4Line2 {
+    padding-top: 16px;
+    font-family: "HelvNeueRoman";
+    font-size: 16px;
+    color: #152935;
+}
+
+#step3BluemixRightBlockItem4Line3 {
     padding-top: 16px;
     font-family: "HelvNeueRoman";
     font-size: 16px;
