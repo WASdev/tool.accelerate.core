@@ -436,15 +436,29 @@ body {
 }
 
 #step3LocalRightBlockItem3 {
-    font-family: Courier;
     font-size: 14px;
-    color: #BFE6FF;
     margin-top: 13px;
-    background-color: #282828;
+    background-color: #F0F0F0;
     width: 534px;
     padding-top: 27px;
     padding-bottom: 27px;
     padding-left: 25px;
+}
+
+#step3LocalRightBlockItem3Line1 {
+    font-family: "HelvNeueBold";
+    color: #152935;
+    padding-bottom: 16px;
+}
+
+#step3LocalRightBlockItem3Line2 {
+    background-color: #282828;
+    color: #BFE6FF;
+    font-family: Courier;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-left: 10px;
+    width: 105px;
 }
 
 #step3LocalRightBlockItem4 {
