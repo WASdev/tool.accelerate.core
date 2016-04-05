@@ -28,7 +28,7 @@
             "id": "springboot",
             "name": "Spring Boot with Spring MVC",
             "description": "Spring Boot with Spring MVC",
-            "endpoint" : "/springboot"
+            "endpoint" : "/springbootMVC"
         },
         {
             "id": "watsonsdk",
