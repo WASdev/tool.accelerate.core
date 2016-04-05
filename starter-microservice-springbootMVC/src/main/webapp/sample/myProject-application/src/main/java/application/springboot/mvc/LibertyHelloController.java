@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/ 
-package application.springboot;
+package application.springboot.mvc;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,9 +21,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class LibertyHelloController {
 
-    @RequestMapping("/springBoot")
+    @RequestMapping("/springBootMVC")
     public String hello() {
-        return "Hello from Spring Boot running on Liberty!";
+        return "Hello from Spring Boot MVC running on Liberty!";
     }
 
 }
