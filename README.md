@@ -77,7 +77,7 @@ To see an example of everything you can include in a technology see the starter-
 
 7. Edit **src/main/webapp/WEB-INF/classes/description.html** to tell everyone about how SuperTech works and it's benefits.
 
-8. Put the application sample code into **src/main/webapp/sample/myProject-application**.
+8. (If you don't want to provide sample code for your technology type skip to step 10). Put the application sample code into **src/main/webapp/sample/myProject-application**.
 
 9. Put the Liberty configuration for the sample application into **src/main/webapp/sample/myProject-wlpcfg**.
 
