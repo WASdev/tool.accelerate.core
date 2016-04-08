@@ -70,6 +70,8 @@ To see an example of everything you can include in a technology see the starter-
 4. Change the **GROUP_SUFFIX** constant in the **ProviderEndpoint** class to **supertech**.
 
 5. Change the **src/main/webapp/services.json** file to provide the service information for SuperTech.
+ 1. By convention the id should be **supertech** and the endpoint should be **/supertech**.
+ 1. The name and description are used in the UI to give the user information about the technology type.
 
 6. Change the value of **<context-root>** in **src/main/webapp/WEB-INF/ibm-web-ext.xml** to **supertech**.
 
