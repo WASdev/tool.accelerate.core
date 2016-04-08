@@ -44,7 +44,7 @@ The Watson SDK provides an API for accessing Watson Services. For the complete d
 # Building and adding to the app accelerator
 
 ## Building the Project
-Once you have downloaded the project, to build it you just need to run the command <code>gradle clean build</code> in the top level project. Once the application has been built you can either run <code>gradle :liberty-starter-application:libertyStart</code> to start the application or grab the StarterServer folder that is in liberty-starter-wlpcfg/servers and copy that into an existing Liberty install and run <code>server run StarterServer</code>. The application should be available at <code>localhost:9082</code>.
+Once you have downloaded the project, to build it you just need to run the command <code>gradle clean build</code> in the top level project. Once the application has been built grab the StarterServer folder that is in liberty-starter-wlpcfg/servers and copy that into an existing Liberty install and run <code>server run StarterServer</code>. The application should be available at <code>localhost:9082</code>.
 
 ## Project Structure
 The project is split up into several different pieces.
@@ -53,10 +53,34 @@ The project is split up into several different pieces.
 * <code>liberty-starter-common</code> contains common api code for the projects
 * <code>liberty-filter-application</code> is a simple war that redirects people to the context <code>/start</code>
 * <code>liberty-starter-wlpcfg</code> contains the Liberty usr directory where the logs and apps for the app accelerator will be put after a build
+* <code>liberty-starter-test</code> contains a test microservice used during the testing phase
 
 There are then a set of <code>starter-microservice-techId</code> projects that contain the code for the individual technology types.
 
-## Adding new technologies
+## Deployment Options
+There are two deployment options for the app accelerator: local and Bluemix
+
+### Local Deployment
+
+If you have chosen the local deployment option when you run <code>mvn install</code> the application will be compiled, tested and then the application will start at </code>localhost:9080/mylibertyApp</code>. To stop the application run <code>mvn clean -P stopServer</code>. This will stop the server and clean up the target directories.
+
+### Bluemix Deployment
+
+To deploy an application to Bluemix you first need a <a href="https://console.eu-gb.bluemix.net/">Bluemix account</a>. Once you have created a Bluemix accounted you can build and deploy your application by running <code>mvn install -Dcf.org=[your email address] -Dcf.username=[your username] -Dcf.password=[your password]</code>. Where <code>cf.org</code> is the Bluemix organization you want to deploy to and <code>cf.username</code> and <code>cf.password</code> are your credentials for Bluemix. Once run see your command line output to find the endpoint for your application or look for it in the Bluemix dashboard.
+
+You can optionally supply the following Bluemix configurations in the command line or in the top level pom.xml:
+* <cf.context>eu-gb.mybluemix.net</cf.context>
+* <cf.target>https://api.eu-gb.bluemix.net</cf.target>
+* <cf.space>dev</cf.space>
+* <cf.context.root>${cf.host}.${cf.context}/${warContext}</cf.context.root>
+
+### Changing the deployment type
+
+If you have chosen the local deployment type on the app accelerator you can specify a different deployment type on the command line as follows:
+* <code>mvn install -P localServer</code> for local deployment
+* <code>mvn install -P bluemix</code> for Bluemix deployment
+
+## Adding new technologies to the app accelerator
 To see an example of everything you can include in a technology see the starter-microservice-test project. This is the example project we use to test the main piece of the app against.
 
 ### Create a technology from the template service
