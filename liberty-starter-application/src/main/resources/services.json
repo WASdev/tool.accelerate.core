@@ -25,10 +25,10 @@
             "endpoint" : "/web"
         },
         {
-            "id": "springbootMVC",
+            "id": "springbootmvc",
             "name": "Spring Boot with Spring MVC",
             "description": "Spring Boot with Spring MVC",
-            "endpoint" : "/springbootMVC"
+            "endpoint" : "/springbootmvc"
         },
         {
             "id": "watsonsdk",

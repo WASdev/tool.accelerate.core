@@ -26,7 +26,7 @@ This provides you with a SpringBoot application that will run on WebSphere Liber
 
 Inside the application project there is a application.springboot.mvc package containing two classes:
 * SpringBootLibertyApplication</code>: The entry point for the SpringBoot application.
-* LibertyHelloController</code>: A Spring MVC endpoint which you can access at /springBootMVC.
+* LibertyHelloController</code>: A Spring MVC endpoint which you can access at /springBootmvc.
 
 Inside the wlpcfg project there is the <code>it.springboot.mvc.HelloControllerTest</code> that will test the Spring MVC endpoint to ensure it is working.
 
