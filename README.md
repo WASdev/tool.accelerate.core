@@ -71,7 +71,7 @@ To see an example of everything you can include in a technology see the starter-
 
 4. Change the <code>GROUP_SUFFIX</code> constant in the <code>ProviderEndpoint</code> class to <code>supertech</code>.
 
-6. Change the value of <code><context-root></code> in <code>src/main/webapp/WEB-INF/ibm-web-ext.xml</code> to <code>supertech</code>.
+6. Change the value of <code>context-root</code> in <code>src/main/webapp/WEB-INF/ibm-web-ext.xml</code> to <code>supertech</code>.
 
 7. Edit <code>src/main/webapp/WEB-INF/classes/description.html</code> to tell everyone about how SuperTech works and it's benefits.
 
