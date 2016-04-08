@@ -28,7 +28,7 @@ Inside the application project there is a application.springboot.web package con
 * SpringBootLibertyApplication</code>: The entry point for the SpringBoot application.
 * LibertyHelloController</code>: A Spring MVC endpoint which you can access at /springBootweb.
 
-Inside the wlpcfg project there is the <code>it.springboot.mvc.HelloControllerTest</code> that will test the Spring MVC endpoint to ensure it is working.
+Inside the wlpcfg project there is the <code>it.springboot.web.HelloControllerTest</code> that will test the Spring MVC endpoint to ensure it is working.
 
 ## Websockets
 This provides you with the websocket-1.1 feature.
