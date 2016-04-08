@@ -61,32 +61,32 @@ To see an example of everything you can include in a technology see the starter-
 
 ### Create a technology from the template service
 
-1. Copy the contents of the **starter-microservice-template** directory into a new directory. The convention is that the last part of the name is related to the technology. So, if you were creating a technology based on **SuperTech** then the directory would be **starter-microservice-supertech**. (SuperTech will be the name used for the rest of these instructions).
+1. Copy the contents of the <code>starter-microservice-template</code> directory into a new directory. The convention is that the last part of the name is related to the technology. So, if you were creating a technology based on <code>SuperTech</code> then the directory would be <code>starter-microservice-supertech</code>. (SuperTech will be the name used for the rest of these instructions).
 
-2. Update the id's and context root in the **build.gradle** file. The context root would change to **/supertech**, the id in the **installAllPoms** task would be **supertech** and the id in the **fvt** task would be **starter-microservice-supertech**.
+2. Update the id's and context root in the <code>build.gradle</code> file. The context root would change to <code>/supertech</code>, the id in the <code>installAllPoms</code> task would be <code>supertech</code> and the id in the <code>fvt</code> task would be <code>starter-microservice-supertech</code>.
 
-2. Change the group ID values in the POM files under **starter-microservice-supertech/repository/0.0.1**, compile-pom.xml, provided-pom.xml and runtime-pom.xml. <groupId>net.wasdev.wlp.starters.template</groupId> becomes <groupId>net.wasdev.wlp.starters.supertech</groupId>.
+2. Change the group ID values in the POM files under <code>starter-microservice-supertech/repository/0.0.1</code>, compile-pom.xml, provided-pom.xml and runtime-pom.xml. <groupId>net.wasdev.wlp.starters.template</groupId> becomes <groupId>net.wasdev.wlp.starters.supertech</groupId>.
 
-3. Refactor the packages and classes under src to SuperTech i.e. **starter-microservice-supertech/src/main/java/com/ibm/liberty/starter/service/template** becomes **starter-microservice-supertech/src/main/java/com/ibm/liberty/starter/service/supertech**
+3. Refactor the packages and classes under src to SuperTech i.e. <code>starter-microservice-supertech/src/main/java/com/ibm/liberty/starter/service/template</code> becomes <code>starter-microservice-supertech/src/main/java/com/ibm/liberty/starter/service/supertech</code>
 
-4. Change the **GROUP_SUFFIX** constant in the **ProviderEndpoint** class to **supertech**.
+4. Change the <code>GROUP_SUFFIX</code> constant in the <code>ProviderEndpoint</code> class to <code>supertech</code>.
 
-6. Change the value of **<context-root>** in **src/main/webapp/WEB-INF/ibm-web-ext.xml** to **supertech**.
+6. Change the value of <code><context-root></code> in <code>src/main/webapp/WEB-INF/ibm-web-ext.xml</code> to <code>supertech</code>.
 
-7. Edit **src/main/webapp/WEB-INF/classes/description.html** to tell everyone about how SuperTech works and it's benefits.
+7. Edit <code>src/main/webapp/WEB-INF/classes/description.html</code> to tell everyone about how SuperTech works and it's benefits.
 
-8. (If you don't want to provide sample code for your technology type skip to step 10). Put the application sample code into **src/main/webapp/sample/myProject-application**.
+8. (If you don't want to provide sample code for your technology type skip to step 10). Put the application sample code into <code>src/main/webapp/sample/myProject-application</code>.
 
-9. Put the Liberty configuration for the sample application into **src/main/webapp/sample/myProject-wlpcfg**.
+9. Put the Liberty configuration for the sample application into <code>src/main/webapp/sample/myProject-wlpcfg</code>.
 
-10. Change the tests package to **src/test/java/com/ibm/liberty/starter/service/supertech/api/v1/it** and then the test classes to expect the correct responses for SuperTech.
+10. Change the tests package to <code>src/test/java/com/ibm/liberty/starter/service/supertech/api/v1/it</code> and then the test classes to expect the correct responses for SuperTech.
 
 ### Configuring a new technology
 1. In <code>liberty-starter-application/src/main/resources</code> update the services.json file to add your new technology, including an id, name, description and the endpoint you want to use. This will add your technology as an option on the main page.
- 1. By convention the id should be **supertech** and the endpoint should be **/supertech**.
+ 1. By convention the id should be <code>supertech</code> and the endpoint should be <code>/supertech</code>.
  1. The name and description are used in the UI to give the user information about the technology type.
 
-2. In the settings.gradle file add <code>starter-microservice-supertech</code> to the **include** list. This will add your project into the build lifecycle.
+2. In the settings.gradle file add <code>starter-microservice-supertech</code> to the <code>include</code> list. This will add your project into the build lifecycle.
 
 2. In the build.gradle file in <code>liberty-starter-application</code> in the last set of <code>dependsOn</code> commands add your technology to the <code>war.dependsOn</code> list. You need to add <code>:nameOfYourProject:publishWar</code>. This make sure your project is built before the <code>liberty-starter-application</code> project.
 
