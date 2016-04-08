@@ -32,7 +32,7 @@
         },
         {
             "id": "watsonsdk",
-            "name": "Watson SDK Dependency",
+            "name": "Watson SDK",
             "description": "Adds the Watson SDK dependency to the project, allowing you to integrate Watson services",
             "endpoint" : "/watsonsdk"
         }
