@@ -63,15 +63,13 @@ To see an example of everything you can include in a technology see the starter-
 
 1. Copy the contents of the **starter-microservice-template** directory into a new directory. The convention is that the last part of the name is related to the technology. So, if you were creating a technology based on **SuperTech** then the directory would be **starter-microservice-supertech**. (SuperTech will be the name used for the rest of these instructions).
 
+2. Update the id's and context root in the **build.gradle** file. The context root would change to **/supertech**, the id in the **installAllPoms** task would be **supertech** and the id in the **fvt** task would be **starter-microservice-supertech**.
+
 2. Change the group ID values in the POM files under **starter-microservice-supertech/repository/0.0.1**, compile-pom.xml, provided-pom.xml and runtime-pom.xml. <groupId>net.wasdev.wlp.starters.template</groupId> becomes <groupId>net.wasdev.wlp.starters.supertech</groupId>.
 
 3. Refactor the packages and classes under src to SuperTech i.e. **starter-microservice-supertech/src/main/java/com/ibm/liberty/starter/service/template** becomes **starter-microservice-supertech/src/main/java/com/ibm/liberty/starter/service/supertech**
 
 4. Change the **GROUP_SUFFIX** constant in the **ProviderEndpoint** class to **supertech**.
-
-5. Change the **src/main/webapp/services.json** file to provide the service information for SuperTech.
- 1. By convention the id should be **supertech** and the endpoint should be **/supertech**.
- 1. The name and description are used in the UI to give the user information about the technology type.
 
 6. Change the value of **<context-root>** in **src/main/webapp/WEB-INF/ibm-web-ext.xml** to **supertech**.
 
@@ -85,8 +83,12 @@ To see an example of everything you can include in a technology see the starter-
 
 ### Configuring a new technology
 1. In <code>liberty-starter-application/src/main/resources</code> update the services.json file to add your new technology, including an id, name, description and the endpoint you want to use. This will add your technology as an option on the main page.
+ 1. By convention the id should be **supertech** and the endpoint should be **/supertech**.
+ 1. The name and description are used in the UI to give the user information about the technology type.
 
-2. In the build.gradle file in <code>liberty-starter-application</code> in the last set of <code>dependsOn</code> commands add your technology to the <code>war.dependsOn</code> list. You need to add <code>:nameOfYourProject:publishWar</code>. This will add your project to the build lifecycle.
+2. In the settings.gradle file add <code>starter-microservice-supertech</code> to the **include** list. This will add your project into the build lifecycle.
+
+2. In the build.gradle file in <code>liberty-starter-application</code> in the last set of <code>dependsOn</code> commands add your technology to the <code>war.dependsOn</code> list. You need to add <code>:nameOfYourProject:publishWar</code>. This make sure your project is built before the <code>liberty-starter-application</code> project.
 
 3. In <code>liberty-starter-wlpcfg/servers/StarterServer/server.xml</code> add your application to the list. You need to provide the name of the war file being created in location, the context-root that matches the endpoint specified in the <code>services.json</code> file in step 1 and the id you specified in step 1.
 
