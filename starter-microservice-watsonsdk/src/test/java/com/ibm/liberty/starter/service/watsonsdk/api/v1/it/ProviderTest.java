@@ -57,7 +57,7 @@ public class ProviderTest extends EndpointTest {
     	assertEquals("The first and hopefully only dependency is a compile dependency", Dependency.Scope.COMPILE, compileDependency.getScope());
     	assertEquals("The Group ID should be correct", "net.wasdev.wlp.starters.watsonsdk", compileDependency.getGroupId());
     	assertEquals("The Artifact ID should be correct", "compile-pom", compileDependency.getArtifactId());
-        assertEquals("The Version should be correct.", "0.0.1", compileDependency.getVersion());
+        assertEquals("The Version should be correct.", "0.0.2", compileDependency.getVersion());
     }
     
     @Test
@@ -74,7 +74,7 @@ public class ProviderTest extends EndpointTest {
     	assertNotNull("The provider should return a repo location", repoLocations);
     	String repoURL = repoLocations.getUrl();
     	assertNotNull("The url should not be null", repoURL);
-    	String compilePom = makeRequest(repoURL + "/net/wasdev/wlp/starters/watsonsdk/compile-pom/0.0.1/compile-pom-0.0.1.pom");
+    	String compilePom = makeRequest(repoURL + "/net/wasdev/wlp/starters/watsonsdk/compile-pom/0.0.2/compile-pom-0.0.2.pom");
     	assertTrue("The returned file should contain the group Id", compilePom.contains("<groupId>net.wasdev.wlp.starters.watsonsdk</groupId>"));
     }
 }
