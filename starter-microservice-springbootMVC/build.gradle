@@ -26,18 +26,18 @@ dependencies {
 }
 
 buildutils {
-	contextRoot = '/springboot'
+	contextRoot = '/springbootMVC'
 }
 
 task installAllPOMs(type: MavenTask) {
-	id 'springboot'
+	id 'springbootMVC'
 	hasProvided true
 	hasRuntime true
 	hasCompile true
 }
 
 task fvt(type: FvtTask) {
-	id 'starter-microservice-springboot'
+	id 'starter-microservice-springbootMVC'
 	finalizedBy libertyStop
 }
 

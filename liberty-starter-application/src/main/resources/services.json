@@ -25,7 +25,7 @@
             "endpoint" : "/web"
         },
         {
-            "id": "springboot",
+            "id": "springbootMVC",
             "name": "Spring Boot with Spring MVC",
             "description": "Spring Boot with Spring MVC",
             "endpoint" : "/springbootMVC"
