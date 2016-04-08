@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class LibertyHelloController {
 
-    @RequestMapping("/springBootweb")
+    @RequestMapping("/springbootweb")
     public String hello() {
         return "Hello from Spring Boot MVC running on Liberty!";
     }

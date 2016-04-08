@@ -31,6 +31,6 @@ public class HelloControllerTest extends EndpointTest {
     
     @Test
     public void testDeployment() {
-        testEndpoint("/springBootMVC", "Hello from Spring Boot MVC running on Liberty!");
+        testEndpoint("/springbootweb", "Hello from Spring Boot MVC running on Liberty!");
     }
 }
