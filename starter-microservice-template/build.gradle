@@ -26,11 +26,11 @@ dependencies {
 }
 
 buildutils {
-	contextRoot = '/test'
+	contextRoot = '/template'
 }
 
 task installAllPOMs(type: MavenTask) {
-	id 'test'
+	id 'template'
 	hasProvided true
 	hasRuntime true
 	hasCompile true
@@ -38,13 +38,8 @@ task installAllPOMs(type: MavenTask) {
 }
 
 task fvt(type: FvtTask) {
-	id 'test'
+	id 'starter-microservice-template'
 	finalizedBy libertyStop
-}
-
-task publishTestWar(dependsOn: 'war' , type: Copy) {
-    from(war)
-    into('../liberty-starter-wlpcfg/servers/StarterServer/dropins')
 }
 
 apply from: '../tech-type-task-graph.gradle'
