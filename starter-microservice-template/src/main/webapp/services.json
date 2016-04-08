@@ -1,0 +1,10 @@
+{
+    "services": [
+        {
+            "id" : "template",
+            "name" : "Template",
+            "description" : "Template",
+            "endpoint" : "/template"
+        }
+    ]
+}

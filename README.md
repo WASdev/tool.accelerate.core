@@ -59,8 +59,29 @@ There are then a set of <code>starter-microservice-techId</code> projects that c
 ## Adding new technologies
 To see an example of everything you can include in a technology see the starter-microservice-test project. This is the example project we use to test the main piece of the app against.
 
-To create a new technology you can start by creating a copy of once of the existing technologies. You then need to make a few small changes to make the rest of the app aware of the new technology:
+### Create a technology from the template service
 
+1. Copy the contents of the *starter-microservice-template* directory into a new directory. The convention is that the last part of the name is related to the technology. So, if you were creating a technology based on *SuperTech* then the directory would be *starter-microservice-supertech*. (SuperTech will be the name used for the rest of these instructions).
+
+2. Change the group ID values in the POM files under *starter-microservice-supertech/repository/0.0.1*, compile-pom.xml, provided-pom.xml and runtime-pom.xml. <groupId>net.wasdev.wlp.starters.template</groupId> becomes <groupId>net.wasdev.wlp.starters.supertech</groupId>.
+
+3. Refactor the packages and classes under src to SuperTech i.e. *starter-microservice-supertech/src/main/java/com/ibm/liberty/starter/service/template* becomes *starter-microservice-supertech/src/main/java/com/ibm/liberty/starter/service/supertech*
+
+4. Change the *GROUP_SUFFIX* constant in the *ProviderEndpoint* class to *supertech*.
+
+5. Change the *src/main/webapp/services.json* file to provide the service information for SuperTech.
+
+6. Change the value of *<context-root>* in *src/main/webapp/WEB-INF/ibm-web-ext.xml* to *supertech*.
+
+7. Edit *src/main/webapp/WEB-INF/classes/description.html* to tell everyone about how SuperTech works and it's benefits.
+
+8. Put the application sample code into *src/main/webapp/sample/myProject-application*.
+
+9. Put the Liberty configuration for the sample application into *src/main/webapp/sample/myProject-wlpcfg*.
+
+10. Change the tests package to *src/test/java/com/ibm/liberty/starter/service/supertech/api/v1/it* and then the test classes to expect the correct responses for SuperTech.
+
+### Configuring a new technology
 1. In <code>liberty-starter-application/src/main/resources</code> update the services.json file to add your new technology, including an id, name, description and the endpoint you want to use. This will add your technology as an option on the main page.
 
 2. In the build.gradle file in <code>liberty-starter-application</code> in the last set of <code>dependsOn</code> commands add your technology to the <code>war.dependsOn</code> list. You need to add <code>:nameOfYourProject:publishWar</code>. This will add your project to the build lifecycle.
