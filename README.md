@@ -112,7 +112,7 @@ To see an example of everything you can include in a technology see the starter-
 
 2. In the settings.gradle file add <code>starter-microservice-supertech</code> to the <code>include</code> list. This will add your project into the build lifecycle.
 
-2. In the build.gradle file in <code>liberty-starter-application</code> in the last set of <code>dependsOn</code> commands add your technology to the <code>war.dependsOn</code> list. You need to add <code>:nameOfYourProject:publishWar</code>. This make sure your project is built before the <code>liberty-starter-application</code> project.
+2. In the build.gradle file in <code>liberty-starter-application</code> in the last set of <code>dependsOn</code> commands add your technology to the <code>war.dependsOn</code> list. You need to add <code>:nameOfYourProject:publishWar</code>. This will make sure your project is built before the <code>liberty-starter-application</code> project.
 
 3. In <code>liberty-starter-wlpcfg/servers/StarterServer/server.xml</code> add your application to the list. You need to provide the name of the war file being created in location, the context-root that matches the endpoint specified in the <code>services.json</code> file in step 1 and the id you specified in step 1.
 
