@@ -66,7 +66,7 @@ If you have chosen the local deployment option when you run <code>mvn install</c
 
 ### Bluemix Deployment
 
-To deploy an application to Bluemix you first need a <a href="https://console.eu-gb.bluemix.net/">Bluemix account</a>. Once you have created a Bluemix accounted you can build and deploy your application by running <code>mvn install -Dcf.org=[your email address] -Dcf.username=[your username] -Dcf.password=[your password]</code>. Where <code>cf.org</code> is the Bluemix organization you want to deploy to and <code>cf.username</code> and <code>cf.password</code> are your credentials for Bluemix. Once run see your command line output to find the endpoint for your application or look for it in the Bluemix dashboard.
+To deploy an application to Bluemix you first need a <a href="https://console.eu-gb.bluemix.net/">Bluemix account</a>. Once you have created a Bluemix account you can build and deploy your application by running <code>mvn install -Dcf.org=[your email address] -Dcf.username=[your username] -Dcf.password=[your password]</code>. Where <code>cf.org</code> is the Bluemix organization you want to deploy to and <code>cf.username</code> and <code>cf.password</code> are your credentials for Bluemix. Once the build has been run see your command line output to find the endpoint for your application or look for it in the Bluemix dashboard.
 
 You can optionally supply the following Bluemix configurations in the command line or in the top level pom.xml:
 * <cf.context>eu-gb.mybluemix.net</cf.context>
@@ -76,7 +76,7 @@ You can optionally supply the following Bluemix configurations in the command li
 
 ### Changing the deployment type
 
-If you have chosen the local deployment type on the app accelerator you can specify a different deployment type on the command line as follows:
+If you have chosen the deployment type on the app accelerator you can specify a different deployment type on the command line as follows:
 * <code>mvn install -P localServer</code> for local deployment
 * <code>mvn install -P bluemix</code> for Bluemix deployment
 
