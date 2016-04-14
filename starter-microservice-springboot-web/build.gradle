@@ -26,18 +26,18 @@ dependencies {
 }
 
 buildutils {
-	contextRoot = '/springboot'
+	contextRoot = '/springbootweb'
 }
 
 task installAllPOMs(type: MavenTask) {
-	id 'springboot'
+	id 'springbootweb'
 	hasProvided true
 	hasRuntime true
 	hasCompile true
 }
 
 task fvt(type: FvtTask) {
-	id 'starter-microservice-springboot'
+	id 'starter-microservice-springboot-web'
 	finalizedBy libertyStop
 }
 

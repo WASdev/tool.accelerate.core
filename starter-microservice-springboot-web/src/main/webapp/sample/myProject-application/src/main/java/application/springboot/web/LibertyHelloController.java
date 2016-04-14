@@ -13,19 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/ 
-package application.springboot;
+package application.springboot.web;
 
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.builder.SpringApplicationBuilder;
-import org.springframework.boot.autoconfigure.MessageSourceAutoConfiguration;
-import org.springframework.boot.context.web.SpringBootServletInitializer;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-@SpringBootApplication(exclude = MessageSourceAutoConfiguration.class)
-public class SpringBootLibertyApplication extends SpringBootServletInitializer {
+@RestController
+public class LibertyHelloController {
 
-    @Override
-    protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
-        return application.sources(SpringBootLibertyApplication.class);
+    @RequestMapping("/springbootweb")
+    public String hello() {
+        return "Hello from Spring Boot MVC running on Liberty!";
     }
 
 }

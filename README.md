@@ -24,11 +24,11 @@ For the complete feature documentation, see the <a href="http://www.ibm.com/supp
 ## Spring Boot with Spring MVC
 This provides you with a SpringBoot application that will run on WebSphere Liberty.
 
-Inside the application project there is a application.springboot package containing two classes:
+Inside the application project there is a application.springboot.web package containing two classes:
 * SpringBootLibertyApplication</code>: The entry point for the SpringBoot application.
-* LibertyHelloController</code>: A Spring MVC endpoint which you can access at /springBoot.
+* LibertyHelloController</code>: A Spring MVC endpoint which you can access at /springbootweb.
 
-Inside the wlpcfg project there is the <code>it.springboot.HelloControllerTest</code> that will test the Spring MVC endpoint to ensure it is working.
+Inside the wlpcfg project there is the <code>it.springboot.web.HelloControllerTest</code> that will test the Spring MVC endpoint to ensure it is working.
 
 ## Websockets
 This provides you with the websocket-1.1 feature.

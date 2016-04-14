@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/ 
-package it.springboot;
+package it.springboot.web;
 
 import static org.junit.Assert.assertTrue;
 
@@ -31,6 +31,6 @@ public class HelloControllerTest extends EndpointTest {
     
     @Test
     public void testDeployment() {
-        testEndpoint("/springBoot", "Hello from Spring Boot running on Liberty!");
+        testEndpoint("/springbootweb", "Hello from Spring Boot MVC running on Liberty!");
     }
 }

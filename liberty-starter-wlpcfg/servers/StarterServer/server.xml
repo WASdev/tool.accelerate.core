@@ -38,5 +38,5 @@
     <application location="starter-microservice-rest.war" id="rest" context-root="/rest"></application>
     <application location="starter-microservice-watsonsdk.war" id="watsonsdk" context-root="/watsonsdk"></application>
     <application location="starter-microservice-websocket.war" id="websocket" context-root="/websocket"></application>
-    <application location="starter-microservice-springboot.war" id="springboot" context-root="/springboot"></application>
+    <application location="starter-microservice-springboot-web.war" id="springbootweb" context-root="/springbootweb"></application>
 </server>
