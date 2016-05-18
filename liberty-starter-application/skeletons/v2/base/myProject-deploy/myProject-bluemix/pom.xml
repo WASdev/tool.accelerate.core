@@ -41,7 +41,6 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-dependency-plugin</artifactId>
-                <version>2.10</version>
                 <executions>
                     <execution>
                         <id>copy-server-package</id>
@@ -115,7 +114,6 @@
             <plugin>
                 <groupId>org.cloudfoundry</groupId>
                 <artifactId>cf-maven-plugin</artifactId>
-                <version>1.1.3</version>
                 <configuration>
                     <target>${cf.target}</target>
                     <org>${cf.org}</org>
@@ -141,28 +139,14 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.3</version>
-                <executions>
-                    <execution>
-                        <id>compile-test</id>
-                        <goals>
-                            <goal>testCompile</goal>
-                        </goals>
-                    </execution>
-                </executions>
             </plugin>
             <!-- Plugin to run functional tests -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-failsafe-plugin</artifactId>
-                <version>2.18.1</version>
                 <executions>
                     <execution>
-                        <phase>integration-test</phase>
                         <id>integration-test</id>
-                        <goals>
-                            <goal>integration-test</goal>
-                        </goals>
                         <configuration>
                             <systemPropertyVariables>
                                 <cf.context.root>${cf.context.root}</cf.context.root>
@@ -172,17 +156,7 @@
                             </includes>
                         </configuration>
                     </execution>
-                    <execution>
-                        <id>verify-results</id>
-                        <goals>
-                            <goal>verify</goal>
-                        </goals>
-                    </execution>
                 </executions>
-                <configuration>
-                    <summaryFile>${project.build.directory}/test-reports/fvt/failsafe-summary.xml</summaryFile>
-                    <reportsDirectory>${project.build.directory}/test-reports/fvt</reportsDirectory>
-                </configuration>
             </plugin>
         </plugins>
     </build>
