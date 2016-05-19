@@ -56,13 +56,13 @@ public class ProviderEndpoint {
         providedDependency.setGroupId("net.wasdev.wlp.starters.web");
         providedDependency.setArtifactId("provided-pom");
         providedDependency.setScope(Scope.PROVIDED);
-        providedDependency.setVersion("0.0.1");
+        providedDependency.setVersion("0.0.2");
      
         Dependency runtimeDependency = new Dependency();
         runtimeDependency.setScope(Scope.RUNTIME);
         runtimeDependency.setGroupId("net.wasdev.wlp.starters.web");
         runtimeDependency.setArtifactId("runtime-pom");
-        runtimeDependency.setVersion("0.0.1");
+        runtimeDependency.setVersion("0.0.2");
      
         Dependency[] dependencies = {providedDependency, runtimeDependency};
         details.setDependencies(dependencies);
