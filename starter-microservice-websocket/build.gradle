@@ -26,20 +26,21 @@ dependencies {
 }
 
 buildutils {
-	contextRoot = '/websocket'
+    contextRoot = '/websocket'
 }
 
 task installAllPOMs(type: MavenTask) {
-	id 'websocket'
-	version '0.0.2'
-	hasProvided true
-	hasRuntime true
-	hasServerSnippet true
+    id 'websocket'
+    def String[] localVersion = ['0.0.2']
+    pomVersion localVersion
+    hasProvided true
+    hasRuntime true
+    hasServerSnippet true
 }
 
 task fvt(type: FvtTask) {
-	id 'starter-microservice-websocket'
-	finalizedBy libertyStop
+    id 'starter-microservice-websocket'
+    finalizedBy libertyStop
 }
 
 apply from: '../tech-type-task-graph.gradle'

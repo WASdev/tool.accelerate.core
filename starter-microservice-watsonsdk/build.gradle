@@ -26,18 +26,19 @@ dependencies {
 }
 
 buildutils {
-	contextRoot = '/watsonsdk'
+    contextRoot = '/watsonsdk'
 }
 
 task installAllPOMs(type: MavenTask) {
-	id 'watsonsdk'
-	version '0.0.2'
-	hasCompile true
+    id 'watsonsdk'
+    def String[] localVersion = ['0.0.1', '0.0.2']
+    pomVersion localVersion
+    hasCompile true
 }
 
 task fvt(type: FvtTask) {
-	id 'starter-microservice-watsonsdk'
-	finalizedBy libertyStop
+    id 'starter-microservice-watsonsdk'
+    finalizedBy libertyStop
 }
 
 apply from: '../tech-type-task-graph.gradle'
