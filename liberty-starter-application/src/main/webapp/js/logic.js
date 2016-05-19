@@ -244,12 +244,12 @@ $(document).ready(function() {
 
     $("#helpUsToHelpYouGetInTouchButton").click(function(event) {
         event.preventDefault();
-        window.open("https://github.com/WASdev/tool.artisan.core/issues/", "_blank");
+        window.open("https://github.com/WASdev/tool.accelerate.core/issues/", "_blank");
     });
 
     $("#gitHubLink").click(function(event) {
         event.preventDefault();
-        window.open("https://github.com/WASdev/tool.artisan.core/", "_blank");
+        window.open("https://github.com/WASdev/tool.accelerate.core/", "_blank");
     });
 
     $("#step3NameInput").on("keypress", function(event) {

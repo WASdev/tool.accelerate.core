@@ -12,20 +12,6 @@
     <groupId>myGroupIdDeploy</groupId>
     <artifactId>myArtifactId-localServer</artifactId>
     <packaging>pom</packaging>
-    
-    <licenses>
-        <license>
-            <name>The Apache Software License, Version 2.0</name>
-            <url>https://raw.github.com/WASdev/tool.artisan.core/master/LICENSE</url>
-            <distribution>repo</distribution>
-        </license>
-    </licenses>
-    
-    <scm>
-        <connection>scm:git:git@github.com:WASdev/tool.artisan.core.git</connection>
-        <developerConnection>scm:git@github.com:WASdev/tool.artisan.core.git</developerConnection>
-        <url>git@github.com:WASdev/tool.artisan.core.git</url>
-    </scm>
 
     <dependencies>
         <dependency>

@@ -1,7 +1,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>tool.artisan.core</groupId>
+    <groupId>tool.accelerate.core</groupId>
     <artifactId>liberty-starter-application</artifactId>
     <version>1.0</version>
     <packaging>war</packaging>
@@ -11,7 +11,7 @@
     <licenses>
         <license>
             <name>The Apache Software License, Version 2.0</name>
-            <url>https://raw.github.com/WASdev/tool.artisan.core/master/LICENSE</url>
+            <url>https://raw.github.com/WASdev/tool.accelerate.core/master/LICENSE</url>
             <distribution>repo</distribution>
         </license>
     </licenses>
@@ -23,7 +23,7 @@
 
     <dependencies>
         <dependency>
-            <groupId>tool.artisan.service</groupId>
+            <groupId>tool.accelerate.service</groupId>
             <artifactId>starter-model</artifactId>
             <version>1.0</version>
             <scope>compile</scope>
