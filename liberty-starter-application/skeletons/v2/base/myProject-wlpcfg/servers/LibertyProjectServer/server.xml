@@ -18,5 +18,4 @@
     <httpEndpoint httpPort="${default.http.port}" httpsPort="${default.https.port}"
         id="defaultHttpEndpoint" />
 
-    <applicationMonitor updateTrigger="mbean" />
 </server>
