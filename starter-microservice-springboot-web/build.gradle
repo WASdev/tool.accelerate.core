@@ -26,19 +26,21 @@ dependencies {
 }
 
 buildutils {
-	contextRoot = '/springbootweb'
+    contextRoot = '/springbootweb'
 }
 
 task installAllPOMs(type: MavenTask) {
-	id 'springbootweb'
-	hasProvided true
-	hasRuntime true
-	hasCompile true
+    id 'springbootweb'
+    def String[] localVersion = ['0.0.1', '0.0.2']
+    pomVersion localVersion
+    hasProvided true
+    hasRuntime true
+    hasCompile true
 }
 
 task fvt(type: FvtTask) {
-	id 'starter-microservice-springboot-web'
-	finalizedBy libertyStop
+    id 'starter-microservice-springboot-web'
+    finalizedBy libertyStop
 }
 
 apply from: '../tech-type-task-graph.gradle'

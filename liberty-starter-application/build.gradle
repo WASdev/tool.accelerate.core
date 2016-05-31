@@ -43,7 +43,7 @@ libertyutils {
 
 // Zip up the skeletonBuildImage so it can be included in the war file
 task compressSkeletonBuildImage(type: Jar) {
-    from 'skeletons/base'
+    from 'skeletons/v2/base'
     destinationDir = sourceSets.main.output.resourcesDir
     baseName = '/services/skeletonLibertyBuildImage'
     exclude '**/target'
@@ -53,7 +53,7 @@ task compressSkeletonBuildImage(type: Jar) {
 // Copy the base index.html file and pom.xml into resources so it is included in the war
 // These files are special as they will be munged before being put in the zip 
 task copySpecialFiles(type: Copy) {
-    from 'skeletons/specialFiles'
+    from 'skeletons/v2/specialFiles'
     destinationDir = sourceSets.main.output.resourcesDir
 }
 

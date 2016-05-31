@@ -18,14 +18,10 @@ allprojects {
 
 	buildscript {
 	    repositories {
-	        maven {
-	            name = 'Sonatype Nexus Snapshots'
-	            url = 'https://oss.sonatype.org/content/repositories/snapshots/'
-	        }
 	        mavenCentral()
 	    }
 	    dependencies {
-	        classpath 'net.wasdev.wlp.gradle.plugins:liberty-gradle-plugin:1.1-SNAPSHOT'
+	        classpath 'net.wasdev.wlp.gradle.plugins:liberty-gradle-plugin:1.0'
 	        classpath files('gradle/wlp-anttasks.jar')
 	    }
 	}

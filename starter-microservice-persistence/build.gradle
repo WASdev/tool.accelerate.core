@@ -20,19 +20,21 @@ import com.ibm.liberty.starter.gradle.MavenTask
 import com.ibm.liberty.starter.gradle.FvtTask
 
 buildutils {
-	contextRoot = '/persistence'
+    contextRoot = '/persistence'
 }
 
 task installAllPOMs(type: MavenTask) {
-	id 'persistence'
-	hasProvided true
-	hasRuntime true
-	hasServerSnippet true
+    id 'persistence'
+    def String[] localVersion = ['0.0.1', '0.0.2']
+    pomVersion localVersion
+    hasProvided true
+    hasRuntime true
+    hasServerSnippet true
 }
 
 task fvt(type: FvtTask) {
-	id 'starter-microservice-persistence'
-	finalizedBy libertyStop
+    id 'starter-microservice-persistence'
+    finalizedBy libertyStop
 }
 
 apply from: '../tech-type-task-graph.gradle'
