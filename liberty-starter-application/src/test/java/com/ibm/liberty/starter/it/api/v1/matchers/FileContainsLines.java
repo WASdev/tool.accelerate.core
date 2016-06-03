@@ -42,6 +42,10 @@ public class FileContainsLines extends BaseMatcher<File> implements Matcher<File
         List<String> lines = readLinesSafely(file, description);
         if (lines != null) {
             lineMatchingDelegate.describeMismatch(lines, description);
+            description.appendText(" in file ");
+            description.appendValue(file);
+            description.appendText(" with lines ");
+            description.appendValue(readLinesSafely(file, Description.NONE));
         }
     }
 
