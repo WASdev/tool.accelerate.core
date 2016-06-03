@@ -37,6 +37,11 @@ public class Retry<T> extends BaseMatcher<T> {
         description.appendDescriptionOf(matcher);
     }
     
+    @Override
+    public void describeMismatch(Object item, Description description) {
+        matcher.describeMismatch(item, description);
+    }
+    
     public static <E> Matcher<E> eventually(Matcher<E> matcher) {
         return new Retry<E>(matcher);
     }
