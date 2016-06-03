@@ -77,7 +77,7 @@ public class TechnologyProvider {
     		@ApiResponse(code = 200, message = "The server configuration snippet"),
     		@ApiResponse(code = 404, message = "There is no additional server configuration required")
     })
-    public ServerConfig getServerConfig() throws Exception {
+    public ServerConfig getServerConfig() {
     	ServerConfig config = new ServerConfig();
     	Tag[] tags = new Tag[]{new Tag("featureManager"), new Tag("keyStore")};
     	tags[0].setTags(new Tag[]{new Tag("feature", "apiDiscovery-1.0")});
