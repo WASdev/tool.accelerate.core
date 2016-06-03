@@ -50,6 +50,10 @@ dependencies {
     testRuntime group: 'org.slf4j', name: 'slf4j-simple', version: '1.7.5'
     testRuntime group: 'org.apache.cxf', name: 'cxf-rt-rs-client', version: '3.1.1'
     testRuntime group: 'org.glassfish', name: 'javax.json', version: '1.0.4'
+    testRuntime group: 'org.eclipse.aether', name: 'aether-connector-basic', version: '1.1.0'
+    testRuntime group: 'org.eclipse.aether', name: 'aether-transport-wagon', version: '1.1.0'
+    testRuntime group: 'org.apache.maven.wagon', name: 'wagon-http', version: '2.10'
+    testRuntime group: 'org.apache.maven.wagon', name: 'wagon-provider-api', version: '2.10'
 }
 
 buildutils {
