@@ -1,16 +1,18 @@
 package com.ibm.liberty.starter.it.api.v1;
 
-import static org.junit.Assert.*;
+import static com.ibm.liberty.starter.it.api.v1.matchers.FileContainsLines.containsLinesInRelativeOrder;
+import static com.ibm.liberty.starter.it.api.v1.matchers.Retry.eventually;
+import static org.hamcrest.Matchers.containsString;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 
 import java.io.File;
-import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.io.PrintStream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -20,46 +22,18 @@ import javax.ws.rs.client.Invocation.Builder;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Response;
 
+import org.apache.maven.cli.MavenCli;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 public class RunLocalPayloadTest {
 
     private final static String tempDir = System.getProperty("liberty.temp.dir");
-    private static String osName;
-    private final String extractedZip = tempDir + "/extractedZip";
+    private final static String mvnMultiModuleProjectDirectory = tempDir + "/mvn/multi_module";
+    private final static File extractedZip = new File(tempDir + "/extractedZip");
     private final static String installLog = tempDir + "/mvnLog/log.txt";
-    private final static String cleanLog = tempDir + "/mvnLog/cleanLog.txt";
-
-    @BeforeClass
-    // Check that maven is on the classpath
-    public static void assertMavenPathSet() throws IOException {
-        System.out.println("RunLocalPayloadTest.assertMavenPathSet @BeforeClass entered");
-        osName = System.getProperty("os.name");
-        assertNotNull(osName);
-        File file = new File(tempDir);
-        file.mkdir();
-        System.out.println("RunLocalPayloadTest.assertMavenPathSet System path is:" + System.getenv("PATH"));
-        ProcessBuilder pb = null;
-        if (osName.startsWith("Windows")) {
-            pb = new ProcessBuilder("cmd", "/c", "mvn", "--version");
-        } else {
-            System.out.println("RunLocalPayloadTest.assertMavenPathSet os is not windows.");
-            pb = new ProcessBuilder("mvn", "--version");
-        }
-        pb.directory(file);
-        Process process = pb.start();
-        InputStream is = process.getInputStream();
-        InputStream errorStream = process.getErrorStream();
-        String output = inputStreamToString(is);
-        String error = inputStreamToString(errorStream);
-        is.close();
-        errorStream.close();
-        System.out.println("Output from env is:" + output);
-        assertTrue("Std Out:" + output + "/nStd Error:" + error, output.contains("Apache Maven"));
-    }
+    private final static File stopServerLog = new File(tempDir + "/mvnLog/stopServer.txt");
 
     @Before
     public void downloadZip() throws IOException {
@@ -74,45 +48,52 @@ public class RunLocalPayloadTest {
 
     @Test
     public void testLocalMvnInstallRuns() throws Exception {
-        List<String> installCmd = Arrays.asList("install");
-        testMvnCommand(installCmd, installLog);
+        testMvnCommand(installLog);
         testEndpoint();
     }
-    
+
     @After
-    public void shutdownServer() throws IOException, InterruptedException {
-        List<String> cleanCmd = Arrays.asList("clean", "-P", "stopServer");
-        testMvnCommand(cleanCmd, cleanLog);
+    public void stopServer() throws FileNotFoundException {
+        PrintStream outputStream = printStreamToFile(stopServerLog);
+        
+        int mvnReturnCode = runMvnCommand(outputStream, "liberty:stop-server", "-pl", "myProject-deploy/myProject-localServer");
+        
+        assertEquals(0, mvnReturnCode);
+        assertThat(stopServerLog, containsLinesInRelativeOrder(containsString("BUILD SUCCESS")));
     }
-    
-    private void testMvnCommand(List<String> args, String logFileString) throws IOException, InterruptedException {
-        List<String> logFileList = Arrays.asList("--log-file", logFileString);
+
+    private void testMvnCommand(String logFileString) throws IOException, InterruptedException {
         File logFile = new File(logFileString);
-        logFile.getParentFile().mkdirs();
-        System.out.println("mvn output will go to " + logFileString);
-        File file = new File(extractedZip);
-        List<String> cmd;
-        if (osName.startsWith("Windows")) {
-            cmd = Arrays.asList("cmd", "/c", "mvn");
-        } else {
-            cmd = Arrays.asList("mvn");
-        }
-        List<String> processArgs = new ArrayList<String>();
-        processArgs.addAll(cmd);
-        processArgs.addAll(args);
-        processArgs.addAll(logFileList);
-        ProcessBuilder pb = new ProcessBuilder(processArgs);
-        pb.directory(file);
-        Process process = pb.start();
-        process.waitFor();
-        int exitValue = process.exitValue();
-        System.out.println("Exit value is " + exitValue);
-        assertEquals("Found incorrect exit value running command:" + processArgs, exitValue, 0);
-        FileInputStream fis = new FileInputStream(logFile);
-        String logs = inputStreamToString(fis);
-        assertTrue("Expected message BUILD SUCCESS in logs located in " + logFile.getAbsolutePath(), logs.contains("BUILD SUCCESS"));
+        
+        runMvnInstallOnSeperateThread(logFile);
+        
+        assertThat(logFile, eventually(containsLinesInRelativeOrder(containsString("Building myArtifactId-localServer"), containsString("CWWKF0011I"))));
     }
     
+    private void runMvnInstallOnSeperateThread(File logFile) throws FileNotFoundException {
+        PrintStream outputStream = printStreamToFile(logFile);
+        System.out.println("mvn output will go to " + logFile.getAbsolutePath());
+        
+        Thread threadExecutingInstall = new Thread(() -> {
+            runMvnCommand(outputStream, "install");
+        });
+        
+        threadExecutingInstall.setDaemon(true);
+        threadExecutingInstall.start();
+    }
+    
+    private int runMvnCommand(PrintStream outputStream, String... args) {
+        System.setProperty(MavenCli.MULTIMODULE_PROJECT_DIRECTORY, mvnMultiModuleProjectDirectory);
+        MavenCli cli = new MavenCli();
+        return cli.doMain(args, extractedZip.getAbsolutePath(), outputStream, outputStream);
+    }
+
+    private PrintStream printStreamToFile(File file) throws FileNotFoundException {
+        file.getParentFile().mkdirs();
+        PrintStream outputStream = new PrintStream(new FileOutputStream(file));
+        return outputStream;
+    }
+
     public void testEndpoint() {
         Client client = ClientBuilder.newClient();
         String url = "http://localhost:9080/myLibertyApp/";
@@ -128,13 +109,9 @@ public class RunLocalPayloadTest {
         assertTrue("Endpoint response incorrect, expected it to include:" + expectedStrings[1] + ", found:" + responseString, responseString.contains(expectedStrings[1]));
     }
 
-
-
     private static void extractZip(InputStream entityInputStream) throws IOException {
         // Create a new ZipInputStream from the response InputStream
         ZipInputStream zipIn = new ZipInputStream(entityInputStream);
-        String tempDir = System.getProperty("liberty.temp.dir");
-        File extractedZip = new File(tempDir + "/extractedZip");
         ZipEntry inputEntry = null;
         while ((inputEntry = zipIn.getNextEntry()) != null) {
             if (inputEntry.isDirectory()) {
@@ -149,21 +126,8 @@ public class RunLocalPayloadTest {
             int bytesRead = 0;
             while ((bytesRead = zipIn.read(bytes)) >= 0) {
                 fos.write(bytes, 0, bytesRead);
-            };
+            } ;
             fos.close();
         }
     }
-
-    private static String inputStreamToString(InputStream inputStream) throws IOException {
-        InputStreamReader isr = new InputStreamReader(inputStream);
-        char[] chars = new char[1024];
-        StringBuilder responseBuilder = new StringBuilder();
-
-        int read;
-        while ((read = isr.read(chars)) != -1) {
-            responseBuilder.append(chars, 0, read);
-        }
-        return responseBuilder.toString();
-    }
-
 }
