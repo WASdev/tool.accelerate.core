@@ -38,6 +38,8 @@
         <warVersion>1.0-SNAPSHOT</warVersion>
         <!--This is set in the ibm-web-ext.xml file -->
         <warContext>myLibertyApp</warContext>
+        <package.file>${project.build.directory}/${cf.host}.zip</package.file>
+        <packaging.type>usr</packaging.type>
         
         <!-- Cloud Foundry/Bluemix properties -->
         <cf.context>eu-gb.mybluemix.net</cf.context>
@@ -79,6 +81,13 @@
             <modules>
                 <module>myProject-deploy/myProject-bluemix</module>
             </modules>
+        </profile>
+        <profile>
+            <id>runnable</id>
+            <properties>
+                <package.file>${project.build.directory}/${cf.host}.jar</package.file>
+                <packaging.type>runnable</packaging.type>
+            </properties>
         </profile>
     </profiles>
 

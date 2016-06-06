@@ -61,7 +61,8 @@
                 <configuration>
                     <assemblyInstallDirectory>${project.build.directory}</assemblyInstallDirectory>
                     <configFile>${basedir}/servers/${wlpServerName}/server.xml</configFile>
-                    <include>usr</include>
+                    <packageFile>${package.file}</packageFile>
+                    <include>${packaging.type}</include>
                     <bootstrapProperties>
                         <default.http.port>${testServerHttpPort}</default.http.port>
                         <default.https.port>${testServerHttpsPort}</default.https.port>

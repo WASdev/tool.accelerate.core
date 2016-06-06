@@ -27,13 +27,12 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-public class RunLocalPayloadTest {
+public class RunnableJarTest {
 
-    private final static String tempDir = System.getProperty("liberty.temp.dir") + "/localPayloadTest";
+    private final static String tempDir = System.getProperty("liberty.temp.dir") + "/runnableJarTest";
     private final static String mvnMultiModuleProjectDirectory = tempDir + "/mvn/multi_module";
     private final static File extractedZip = new File(tempDir + "/extractedZip");
     private final static String installLog = tempDir + "/mvnLog/log.txt";
-    private final static File stopServerLog = new File(tempDir + "/mvnLog/stopServer.txt");
 
     @Before
     public void downloadZip() throws IOException {
@@ -49,45 +48,24 @@ public class RunLocalPayloadTest {
     @Test
     public void testLocalMvnInstallRuns() throws Exception {
         testMvnCommand(installLog);
-        testZipHasBeenCreated();
-        testEndpoint();
+        testJarHasBeenCreated();
     }
     
-    public void testZipHasBeenCreated() throws Exception {
+    public void testJarHasBeenCreated() throws Exception {
         String pathToZip = extractedZip + "/myProject-wlpcfg/target";
-        File archive = new File(pathToZip + "/TestApp.zip");
-        assertTrue("The build should have created a zip file called LibertyProject.zip in " + pathToZip,
+        File archive = new File(pathToZip + "/TestApp.jar");
+        assertTrue("The build should have created a jar file called TestApp.jar in " + pathToZip,
                    archive.exists());
-    }
-
-    @After
-    public void stopServer() throws FileNotFoundException {
-        PrintStream outputStream = printStreamToFile(stopServerLog);
-        
-        int mvnReturnCode = runMvnCommand(outputStream, "liberty:stop-server", "-pl", "myProject-deploy/myProject-localServer");
-        
-        assertEquals(0, mvnReturnCode);
-        assertThat(stopServerLog, containsLinesInRelativeOrder(containsString("BUILD SUCCESS")));
     }
 
     private void testMvnCommand(String logFileString) throws IOException, InterruptedException {
         File logFile = new File(logFileString);
-        
-        runMvnInstallOnSeperateThread(logFile);
-        
-        assertThat(logFile, eventually(containsLinesInRelativeOrder(containsString("Building myArtifactId-localServer"), containsString("CWWKF0011I"))));
-    }
-    
-    private void runMvnInstallOnSeperateThread(File logFile) throws FileNotFoundException {
         PrintStream outputStream = printStreamToFile(logFile);
-        System.out.println("mvn output will go to " + logFile.getAbsolutePath());
         
-        Thread threadExecutingInstall = new Thread(() -> {
-            runMvnCommand(outputStream, "install");
-        });
+        int mvnReturnCode = runMvnCommand(outputStream, "install", "-P runnable");
         
-        threadExecutingInstall.setDaemon(true);
-        threadExecutingInstall.start();
+        assertEquals(0, mvnReturnCode);
+        assertThat(logFile, containsLinesInRelativeOrder(containsString("BUILD SUCCESS")));
     }
     
     private int runMvnCommand(PrintStream outputStream, String... args) {
@@ -100,21 +78,6 @@ public class RunLocalPayloadTest {
         file.getParentFile().mkdirs();
         PrintStream outputStream = new PrintStream(new FileOutputStream(file));
         return outputStream;
-    }
-
-    public void testEndpoint() {
-        Client client = ClientBuilder.newClient();
-        String url = "http://localhost:9080/myLibertyApp/";
-        System.out.println("Testing " + url);
-        WebTarget target = client.target(url);
-        Builder builder = target.request();
-        Response response = builder.get();
-        int status = response.getStatus();
-        assertEquals("Endpoint response status was not 200, found:" + status, status, 200);
-        String responseString = response.readEntity(String.class);
-        String[] expectedStrings = { "Welcome to your Liberty Application", "Test" };
-        assertTrue("Endpoint response incorrect, expected it to include:" + expectedStrings[0] + ", found:" + responseString, responseString.contains(expectedStrings[0]));
-        assertTrue("Endpoint response incorrect, expected it to include:" + expectedStrings[1] + ", found:" + responseString, responseString.contains(expectedStrings[1]));
     }
 
     private static void extractZip(InputStream entityInputStream) throws IOException {
