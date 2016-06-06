@@ -51,6 +51,8 @@
         <!-- <cf.username></cf.username> -->
         <!-- <cf.password></cf.password> -->
         <!-- This is the host for your app in Bluemix and what it will be called in the dashboard. -->
+        <cf.host>${app.name}</cf.host>
+        
     </properties>
     
     <repositories>
@@ -79,6 +81,13 @@
             <modules>
                 <module>myProject-deploy/myProject-bluemix</module>
             </modules>
+        </profile>
+        <profile>
+            <id>runnable</id>
+            <properties>
+                <package.file>${project.build.directory}/${app.name}.jar</package.file>
+                <packaging.type>runnable</packaging.type>
+            </properties>
         </profile>
     </profiles>
 

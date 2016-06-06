@@ -161,7 +161,7 @@ public class PomModifier {
     private void appendAppNameProperty(NodeList propertiesNodeList) {
         System.out.println("Setting cf.host node to " + appName);
         Node propertiesNode = propertiesNodeList.item(0);
-        Node appNameNode = doc.createElement("cf.host");
+        Node appNameNode = doc.createElement("app.name");
         appNameNode.setTextContent(appName);
         propertiesNode.appendChild(appNameNode);
     }
