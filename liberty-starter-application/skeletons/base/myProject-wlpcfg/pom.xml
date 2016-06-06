@@ -67,9 +67,26 @@
                         <default.http.port>${testServerHttpPort}</default.http.port>
                         <default.https.port>${testServerHttpsPort}</default.https.port>
                     </bootstrapProperties>
-                    <install />
+                    <assemblyArtifact>
+                        <groupId>com.ibm.websphere.appserver.runtime</groupId>
+                        <artifactId>wlp-kernel</artifactId>
+                        <version>8.5.5.9</version>
+                        <type>zip</type>
+                    </assemblyArtifact>
                 </configuration>
                 <executions>
+                    <execution>
+                        <id>install-features</id>
+                        <phase>pre-integration-test</phase>
+                        <goals>
+                            <goal>install-feature</goal>
+                        </goals>
+                        <configuration>
+                            <features>
+                                <acceptLicense>true</acceptLicense>
+                            </features>
+                        </configuration>
+                    </execution>
                     <execution>
                         <id>start-server</id>
                         <phase>pre-integration-test</phase>
