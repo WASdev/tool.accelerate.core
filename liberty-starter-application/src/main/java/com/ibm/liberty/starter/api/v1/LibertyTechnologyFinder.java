@@ -39,9 +39,6 @@ import io.swagger.annotations.ApiResponses;
 @Api(value = "Technology Finder API v1")
 public class LibertyTechnologyFinder {
 
-	public LibertyTechnologyFinder() {
-	}
-
 	// JAX-RS annotations
 	@GET
 	@Path("/")
@@ -61,7 +58,7 @@ public class LibertyTechnologyFinder {
 	@ApiOperation(value = "Retrieve a specific technology", httpMethod = "GET", notes = "Get the details for a currently registered set of technologies. This should not be cached as it may change at any time.")
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "The technology details"),
 			@ApiResponse(code = 404, message = "The technology could not be found") })
-	public Response getTechnology(@PathParam("tech") String tech, @Context UriInfo info) throws Exception {
+	public Response getTechnology(@PathParam("tech") String tech, @Context UriInfo info) {
 		if (PatternValidation.checkPattern(PatternType.TECH, tech)) {
 			ServiceConnector serviceConnector = new ServiceConnector(info.getBaseUri());
 			Service service = serviceConnector.getServiceObjectFromId(tech);

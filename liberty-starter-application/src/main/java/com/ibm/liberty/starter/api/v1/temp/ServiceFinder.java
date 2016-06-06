@@ -15,8 +15,10 @@
  *******************************************************************************/
 package com.ibm.liberty.starter.api.v1.temp;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.regex.Pattern;
 
 import javax.json.Json;
@@ -39,8 +41,7 @@ public class ServiceFinder {
     @GET
     @Path("/")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getServices() throws Exception {
-        JsonObject jsonData = null;
+    public Response getServices() throws URISyntaxException, IOException {
         String jsonLocation = System.getenv("com_ibm_liberty_starter_servicesJsonLocation");
         if (jsonLocation == null) {
             jsonLocation = "/services.json";
@@ -52,17 +53,11 @@ public class ServiceFinder {
                 throw new ValidationException();
             }
             URI uri = new URI(jsonLocation);
-            InputStream is = null;
-                try {
-                    is = ServiceFinder.class.getResourceAsStream(uri.getPath());
-                    JsonReader reader = Json.createReader(is);
-                    jsonData = reader.readObject();
-                    return Response.ok(jsonData.toString(), MediaType.APPLICATION_JSON_TYPE).build();
-                } finally {
-                    if (is != null) {
-                        is.close();
-                    }
-                }
+            try (InputStream is = ServiceFinder.class.getResourceAsStream(uri.getPath())){
+                JsonReader reader = Json.createReader(is);
+                JsonObject jsonData = reader.readObject();
+                return Response.ok(jsonData.toString(), MediaType.APPLICATION_JSON_TYPE).build();
+            }
         } catch (ValidationException e) {
             return Response.status(Status.BAD_REQUEST).entity("Invalid environment variable com.ibm.liberty.starter.servicesJsonLocation set.").build();
         }
