@@ -38,8 +38,6 @@
         <warVersion>1.0-SNAPSHOT</warVersion>
         <!--This is set in the ibm-web-ext.xml file -->
         <warContext>myLibertyApp</warContext>
-        <package.file>${project.build.directory}/${cf.host}.zip</package.file>
-        <packaging.type>usr</packaging.type>
         
         <!-- Cloud Foundry/Bluemix properties -->
         <cf.context>eu-gb.mybluemix.net</cf.context>
@@ -53,6 +51,8 @@
         <!-- <cf.username></cf.username> -->
         <!-- <cf.password></cf.password> -->
         <!-- This is the host for your app in Bluemix and what it will be called in the dashboard. -->
+        <cf.host>${app.name}</cf.host>
+        
     </properties>
     
     <repositories>
@@ -85,7 +85,7 @@
         <profile>
             <id>runnable</id>
             <properties>
-                <package.file>${project.build.directory}/${cf.host}.jar</package.file>
+                <package.file>${project.build.directory}/${app.name}.jar</package.file>
                 <packaging.type>runnable</packaging.type>
             </properties>
         </profile>

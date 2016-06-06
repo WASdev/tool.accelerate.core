@@ -92,7 +92,7 @@ public class LocalPomModifierTest {
         String outputPom = addTechAndWritePom(depHand);
         String outputPomWithWhitespaceRemoved = outputPom.replaceAll("\\s", "");
         assertTrue("OutputPom should have had the app name added " + outputPom,
-                   outputPomWithWhitespaceRemoved.contains("<!--Testing--><cf.host>TestName</cf.host>"));
+                   outputPomWithWhitespaceRemoved.contains("<!--Testing--><app.name>TestName</app.name>"));
     }
     
     @Test
