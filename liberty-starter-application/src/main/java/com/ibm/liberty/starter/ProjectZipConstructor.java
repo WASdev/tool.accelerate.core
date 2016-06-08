@@ -23,8 +23,11 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
@@ -40,13 +43,15 @@ import com.ibm.liberty.starter.api.v1.model.provider.Location;
 import com.ibm.liberty.starter.api.v1.model.provider.Provider;
 import com.ibm.liberty.starter.api.v1.model.provider.Sample;
 import com.ibm.liberty.starter.api.v1.model.registration.Service;
+import com.ibm.liberty.starter.api.v1.temp.ServiceFinder;
 
 public class ProjectZipConstructor {
     
     private final ServiceConnector serviceConnector;
     
+    private static final Logger log = Logger.getLogger(ServiceFinder.class.getName());
     private Services services;
-    private ConcurrentHashMap<String, byte[]> fileMap = new ConcurrentHashMap<String, byte[]>();
+    private ConcurrentHashMap<String, byte[]> fileMap = new ConcurrentHashMap<>();
     private static final String SKELETON_JAR_FILENAME = "services/skeletonLibertyBuildImage.jar";
     private static final String BASE_INDEX_HTML = "payloadIndex.html";
     private static final String INDEX_HTML_PATH = "myProject-application/src/main/webapp/index.html";
@@ -64,7 +69,7 @@ public class ProjectZipConstructor {
         this.deployType = deployType;
     }
     
-    public ConcurrentHashMap<String, byte[]> getFileMap() {
+    public Map<String, byte[]> getFileMap() {
         return fileMap;
     }
     
@@ -79,7 +84,7 @@ public class ProjectZipConstructor {
     }
     
     public void initializeMap() throws IOException {
-        System.out.println("Entering method ProjectZipConstructor.initializeMap()");
+        log.log(Level.INFO, "Entering method ProjectZipConstructor.initializeMap()");
         InputStream skeletonIS = this.getClass().getClassLoader().getResourceAsStream(SKELETON_JAR_FILENAME);
         ZipInputStream zis = new ZipInputStream(skeletonIS);
         ZipEntry ze;
@@ -97,7 +102,7 @@ public class ProjectZipConstructor {
     }
     
     public void addHtmlToMap() throws IOException {
-        System.out.println("Entering method ProjectZipConstructor.addHtmlToMap()");
+        log.log(Level.INFO, "Entering method ProjectZipConstructor.addHtmlToMap()");
         byte[] html = getHtmlFile();
         putFileInMap(INDEX_HTML_PATH, html);
     }
@@ -115,14 +120,11 @@ public class ProjectZipConstructor {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         final int MAX_SIZE = 200000;
         char[] buffer = new char[MAX_SIZE];
-        BufferedReader reader = null;
-        try {
-            reader = new BufferedReader(new InputStreamReader(htmlIS));
+        
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(htmlIS));) {
             reader.read(buffer, 0, MAX_SIZE);
         } catch (Exception e ){
             return null;
-        } finally {
-            reader.close();
         }
         String contents = new String(buffer);
         int index = contents.indexOf("<div id=\"technologies\">");
@@ -141,7 +143,7 @@ public class ProjectZipConstructor {
     }
     
     public void addTechSamplesToMap() throws IOException {
-        System.out.println("Entering method ProjectZipConstructor.addTechSamplesToMap()");
+        log.log(Level.INFO, "Entering method ProjectZipConstructor.addTechSamplesToMap()");
         for (Service service : services.getServices()) {
             Sample sample = serviceConnector.getSample(service);
             Location[] locations = sample.getLocations();
@@ -163,7 +165,7 @@ public class ProjectZipConstructor {
     }
     
     public void addPomFileToMap() throws SAXException, IOException, ParserConfigurationException, TransformerException {
-        System.out.println("Entering method ProjectZipConstructor.addPomFileToMap()");
+        log.log(Level.INFO, "Entering method ProjectZipConstructor.addPomFileToMap()");
         InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream(POM_FILE);
         PomModifier pomModifier = new PomModifier(deployType);
         pomModifier.setInputStream(inputStream);
@@ -174,7 +176,7 @@ public class ProjectZipConstructor {
     }
     
     public void createZipFromMap(ZipOutputStream zos) throws IOException {
-        System.out.println("Entering method ProjectZipConstructor.createZipFromMap()");
+        log.log(Level.INFO, "Entering method ProjectZipConstructor.createZipFromMap()");
         Enumeration<String> en = fileMap.keys();
         while (en.hasMoreElements()) {
             String path = en.nextElement();
@@ -192,7 +194,7 @@ public class ProjectZipConstructor {
     }
     
     public void putFileInMap(String path, byte[] file) {
-        System.out.println("Inserting file " + path + " into map.");
+        log.log(Level.INFO, "Inserting file " + path + " into map.");
         fileMap.put(path, file);
     }
 

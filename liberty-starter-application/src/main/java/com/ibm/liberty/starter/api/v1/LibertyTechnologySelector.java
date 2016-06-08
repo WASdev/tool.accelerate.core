@@ -82,27 +82,23 @@ public class LibertyTechnologySelector {
                 log.severe("Invalid file name length.");
                 throw new ValidationException();
             }
-            
+
             if (deploy == null) {
                 log.severe("No deploy type specified");
                 throw new ValidationException();
             }
             final DeployType deployType = DeployType.valueOf(deploy.toUpperCase());
-            
+
             final String appName = name;
 
-            StreamingOutput so = new StreamingOutput() {
-
-                @Override
-                public void write(OutputStream os) throws IOException, WebApplicationException {
-                    Services services = new Services();
-                    services.setServices(serviceList);
-                    ProjectZipConstructor projectZipConstructor = new ProjectZipConstructor(serviceConnector, services, appName, deployType);
-                    try {
-                        projectZipConstructor.buildZip(os);
-                    } catch (SAXException | ParserConfigurationException | TransformerException e) {
-                        throw new WebApplicationException(e);
-                    }
+            StreamingOutput so = (OutputStream os) -> {
+                Services services = new Services();
+                services.setServices(serviceList);
+                ProjectZipConstructor projectZipConstructor = new ProjectZipConstructor(serviceConnector, services, appName, deployType);
+                try {
+                    projectZipConstructor.buildZip(os);
+                } catch (SAXException | ParserConfigurationException | TransformerException e) {
+                    throw new WebApplicationException(e);
                 }
             };
             name += ".zip";

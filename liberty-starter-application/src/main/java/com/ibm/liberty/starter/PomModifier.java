@@ -22,6 +22,8 @@ import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -45,6 +47,7 @@ import com.ibm.liberty.starter.api.v1.model.provider.Dependency.Scope;
 
 public class PomModifier {
 
+    private static final Logger log = Logger.getLogger(PomModifier.class.getName());
     private Document doc;
     private Map<String, Dependency> providedPomsToAdd = new HashMap<>();
     private Map<String, Dependency> runtimePomsToAdd = new HashMap<>();
@@ -74,7 +77,7 @@ public class PomModifier {
     }
 
     private void addDependency(Dependency.Scope scope, Map<String, Dependency> mapToAdd) {
-        System.out.println("Setting map for dependencies with scope " + scope + " to " + mapToAdd.toString());
+        log.log(Level.INFO, "Setting map for dependencies with scope " + scope + " to " + mapToAdd.toString());
         switch (scope) {
             case PROVIDED:
                 providedPomsToAdd = mapToAdd;
@@ -96,11 +99,11 @@ public class PomModifier {
 
     private void writeToStream(OutputStream pomOutputStream) throws TransformerException, IOException {
         Node dependenciesNode = doc.getElementsByTagName("dependencies").item(0);
-        System.out.println("Appending dependency nodes for provided poms");
+        log.log(Level.INFO, "Appending dependency nodes for provided poms");
         appendDependencyNodes(dependenciesNode, providedPomsToAdd);
-        System.out.println("Appending dependency nodes for runtime poms");
+        log.log(Level.INFO, "Appending dependency nodes for runtime poms");
         appendDependencyNodes(dependenciesNode, runtimePomsToAdd);
-        System.out.println("Appending dependency nodes for compile poms");
+        log.log(Level.INFO, "Appending dependency nodes for compile poms");
         appendDependencyNodes(dependenciesNode, compilePomsToAdd);
 
         NodeList propertiesNodeList = doc.getElementsByTagName("properties");
@@ -122,7 +125,7 @@ public class PomModifier {
 
     private void appendDependencyNodes(Node dependenciesNode, Map<String, Dependency> dependencies) {
         Set<String> serviceIds = dependencies.keySet();
-        System.out.println("Appending nodes for services " + serviceIds);
+        log.log(Level.INFO, "Appending nodes for services " + serviceIds);
         for (String serviceId : serviceIds) {
             Dependency dependency = dependencies.get(serviceId);
             String groupId = groupIdBase + serviceId;
@@ -131,7 +134,7 @@ public class PomModifier {
     }
 
     private void appendDependencyNode(Node dependenciesNode, String dependencyGroupId, String dependencyArtifactId, Scope dependencyScope, String dependencyVersion) {
-        System.out.println("PomModifier adding dependency with groupId:" + dependencyGroupId
+        log.log(Level.INFO, "PomModifier adding dependency with groupId:" + dependencyGroupId
                            + " artifactId:" + dependencyGroupId + " scope:" + dependencyScope
                            + " dependencyVersion" + dependencyVersion);
         Node newDependency = doc.createElement("dependency");
@@ -159,7 +162,7 @@ public class PomModifier {
     }
     
     private void appendAppNameProperty(NodeList propertiesNodeList) {
-        System.out.println("Setting cf.host node to " + appName);
+        log.log(Level.INFO, "Setting cf.host node to " + appName);
         Node propertiesNode = propertiesNodeList.item(0);
         Node appNameNode = doc.createElement("app.name");
         appNameNode.setTextContent(appName);
@@ -167,31 +170,39 @@ public class PomModifier {
     }
 
     private void appendDeployType() {
-        String nodeValue = null;
+        String profileId = null;
         switch (deployType) {
             case LOCAL:
-                System.out.println("PomModifier adding profile activation for localServer");
-                nodeValue = "localServer";
+                log.log(Level.INFO, "PomModifier adding profile activation for localServer");
+                profileId = "localServer";
                 break;
             case BLUEMIX:
-                System.out.println("PomModifier adding profile activation for bluemix");
-                nodeValue = "bluemix";
+                log.log(Level.INFO, "PomModifier adding profile activation for bluemix");
+                profileId = "bluemix";
                 break;
         }
+        try {
+            Node profileNode = getProfileNodeById(profileId);
+            Node activationNode = doc.createElement("activation");
+            Node activeByDefault = doc.createElement("activeByDefault");
+            activeByDefault.setTextContent("true");
+            activationNode.appendChild(activeByDefault);
+            profileNode.appendChild(activationNode);
+        } catch (UnableToFindNodeExcpetion e) {
+            log.log(Level.SEVERE, "Unable to find the profile for " + deployType + " so not default activation will be set", e);
+        }
+    }
+
+    private Node getProfileNodeById(String nodeId) throws UnableToFindNodeExcpetion {
         NodeList profileNodeList = doc.getElementsByTagName("profile");
         int length = profileNodeList.getLength();
-        Node profileNode = null;
         for (int i = 0; i < length; i++) {
-            profileNode = profileNodeList.item(i);
-            if (nodeHasId(profileNode, nodeValue)) {
-                break;
+            Node profileNode = profileNodeList.item(i);
+            if (nodeHasId(profileNode, nodeId)) {
+                return profileNode;
             }
         }
-        Node activationNode = doc.createElement("activation");
-        Node activeByDefault = doc.createElement("activeByDefault");
-        activeByDefault.setTextContent("true");
-        activationNode.appendChild(activeByDefault);
-        profileNode.appendChild(activationNode);
+        throw new UnableToFindNodeExcpetion(nodeId);
     }
 
     private boolean nodeHasId(Node node, String id) {
@@ -209,7 +220,7 @@ public class PomModifier {
     }
     
     private void appendRepoUrl() throws IOException {
-        System.out.println("Append repo url of " + repoUrl);
+        log.log(Level.INFO, "Append repo url of " + repoUrl);
         NodeList repoNodeList = doc.getElementsByTagName("repository");
         boolean foundRepoNode = false;
         for (int i = 0; i < repoNodeList.getLength(); i++) {
@@ -225,6 +236,16 @@ public class PomModifier {
         if (!foundRepoNode) {
             throw new IOException("Repository url node not found in pom input");
         }
+    }
+
+    private static class UnableToFindNodeExcpetion extends Exception {
+
+        private static final long serialVersionUID = -8095349390659588081L;
+
+        public UnableToFindNodeExcpetion(String message) {
+            super(message);
+        }
+
     }
 
 }
