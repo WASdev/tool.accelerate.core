@@ -188,12 +188,12 @@ public class PomModifier {
             activeByDefault.setTextContent("true");
             activationNode.appendChild(activeByDefault);
             profileNode.appendChild(activationNode);
-        } catch (UnableToFindNodeExcpetion e) {
+        } catch (UnableToFindNodeException e) {
             log.log(Level.SEVERE, "Unable to find the profile for " + deployType + " so not default activation will be set", e);
         }
     }
 
-    private Node getProfileNodeById(String nodeId) throws UnableToFindNodeExcpetion {
+    private Node getProfileNodeById(String nodeId) throws UnableToFindNodeException {
         NodeList profileNodeList = doc.getElementsByTagName("profile");
         int length = profileNodeList.getLength();
         for (int i = 0; i < length; i++) {
@@ -202,7 +202,7 @@ public class PomModifier {
                 return profileNode;
             }
         }
-        throw new UnableToFindNodeExcpetion(nodeId);
+        throw new UnableToFindNodeException(nodeId);
     }
 
     private boolean nodeHasId(Node node, String id) {
@@ -238,11 +238,11 @@ public class PomModifier {
         }
     }
 
-    private static class UnableToFindNodeExcpetion extends Exception {
+    private static class UnableToFindNodeException extends Exception {
 
         private static final long serialVersionUID = -8095349390659588081L;
 
-        public UnableToFindNodeExcpetion(String message) {
+        public UnableToFindNodeException(String message) {
             super(message);
         }
 
