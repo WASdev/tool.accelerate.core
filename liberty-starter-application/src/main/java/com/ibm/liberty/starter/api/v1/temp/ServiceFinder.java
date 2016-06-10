@@ -19,12 +19,13 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.regex.Pattern;
 
 import javax.json.Json;
 import javax.json.JsonObject;
 import javax.json.JsonReader;
-import javax.validation.ValidationException;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -35,40 +36,57 @@ import javax.ws.rs.core.Response.Status;
 //Temporary class until we put services.json into Cloudant
 @Path("v1/services")
 public class ServiceFinder {
-    
-    private Pattern pathPattern = Pattern.compile("[a-zA-Z0-9-_/.:]*");
+
+    private static final Pattern URI_PATH_PATTERN = Pattern.compile("[a-zA-Z0-9-_/.:]*");
+    private static final Logger log = Logger.getLogger(ServiceFinder.class.getName());
 
     @GET
     @Path("/")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getServices() throws URISyntaxException, IOException {
+    public Response getServices() {
+        String jsonLocation = null;
+        try {
+            jsonLocation = getJsonLocation();
+            return readServicesFile(jsonLocation);
+        } catch (URISyntaxException e) {
+            return exceptionToResponse(e, "Unable to parse URI " + jsonLocation);
+        } catch (IOException e) {
+            return exceptionToResponse(e, "Error reading file " + jsonLocation);
+        } catch (IllegalArgumentException e) {
+            return exceptionToResponse(e, "Invalid environment variable com.ibm.liberty.starter.servicesJsonLocation set.");
+        }
+
+    }
+
+    private String getJsonLocation() {
         String jsonLocation = System.getenv("com_ibm_liberty_starter_servicesJsonLocation");
         if (jsonLocation == null) {
             jsonLocation = "/services.json";
         } else {
             jsonLocation = jsonLocation + ".json";
         }
-        try {
-            if (!checkPattern(pathPattern, jsonLocation)) {
-                throw new ValidationException();
-            }
-            URI uri = new URI(jsonLocation);
-            try (InputStream is = ServiceFinder.class.getResourceAsStream(uri.getPath())){
-                JsonReader reader = Json.createReader(is);
-                JsonObject jsonData = reader.readObject();
-                return Response.ok(jsonData.toString(), MediaType.APPLICATION_JSON_TYPE).build();
-            }
-        } catch (ValidationException e) {
-            return Response.status(Status.BAD_REQUEST).entity("Invalid environment variable com.ibm.liberty.starter.servicesJsonLocation set.").build();
+        checkPattern(URI_PATH_PATTERN, jsonLocation);
+        return jsonLocation;
+    }
+
+    private static void checkPattern(Pattern pattern, String toCheck) {
+        if (!pattern.matcher(toCheck).matches()) {
+            throw new IllegalArgumentException("The string " + toCheck + " does not match the pattern " + pattern);
         }
     }
-    
-    public static boolean checkPattern(Pattern pattern, String object) {
-        boolean patternPassed = false;
-        if (pattern.matcher(object).matches()) {
-            patternPassed = true;
+
+    private Response readServicesFile(String jsonLocation) throws URISyntaxException, IOException {
+        URI uri = new URI(jsonLocation);
+        try (InputStream is = ServiceFinder.class.getResourceAsStream(uri.getPath());
+                        JsonReader reader = Json.createReader(is)) {
+            JsonObject jsonData = reader.readObject();
+            return Response.ok(jsonData.toString(), MediaType.APPLICATION_JSON_TYPE).build();
         }
-        return patternPassed;
     }
-    
+
+    private Response exceptionToResponse(Exception e, String message) {
+        log.log(Level.WARNING, message, e);
+        return Response.status(Status.BAD_REQUEST).entity(message).build();
+    }
+
 }

@@ -15,12 +15,15 @@
  *******************************************************************************/
 package com.ibm.liberty.starter.unit;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.hamcrest.Matchers.anEmptyMap;
+import static org.hamcrest.Matchers.greaterThan;
+import static org.hamcrest.Matchers.hasKey;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
+import static org.junit.Assert.assertThat;
 
 import java.io.IOException;
-import java.util.Enumeration;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.Map;
 
 import org.junit.Test;
 
@@ -28,25 +31,17 @@ import com.ibm.liberty.starter.ProjectZipConstructor;
 import com.ibm.liberty.starter.api.v1.model.internal.Services;
 
 public class ZipConstructorTest {
-    
+
     @Test
     public void testMapInitializer() throws IOException {
         Services services = new Services();
         ProjectZipConstructor zipConstructor = new ProjectZipConstructor(null, services, null, null);
         zipConstructor.initializeMap();
-        ConcurrentHashMap<String, byte[]> map = zipConstructor.getFileMap();
-        assertFalse(map.isEmpty());
-        Enumeration<String> en = map.keys();
-        boolean pomExists = false;
-        while (en.hasMoreElements()) {
-            String path = en.nextElement();
-            if ("myProject-application/pom.xml".equals(path)) {
-                pomExists = true;
-                byte[] byteArray = map.get(path);
-                assertTrue(map.toString(), byteArray.length > 0);
-            }
-        }
-        assertTrue(map.toString(), pomExists);
+        Map<String, byte[]> map = zipConstructor.getFileMap();
+        assertThat(map, is(not(anEmptyMap())));
+        assertThat(map, hasKey("myProject-application/pom.xml"));
+        byte[] byteArray = map.get("myProject-application/pom.xml");
+        assertThat(byteArray.length, is(greaterThan(0)));
     }
 
 }
