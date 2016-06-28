@@ -83,6 +83,8 @@ If you have chosen the deployment type on the app accelerator you can specify a 
 ## Adding new technologies to the app accelerator
 To see an example of everything you can include in a technology see the starter-microservice-test project. This is the example project we use to test the main piece of the app against.
 
+If you want to add changes to the app accelerator, create a fork of the project and then once you are happy with the change create a pull request to the "staging" branch. We will use this branch to run some testing before pushing the changes live.
+
 ### Create a technology from the template service
 
 1. Copy the contents of the <code>starter-microservice-template</code> directory into a new directory. The convention is that the last part of the name is related to the technology. So, if you were creating a technology based on <code>SuperTech</code> then the directory would be <code>starter-microservice-supertech</code>. (SuperTech will be the name used for the rest of these instructions).
