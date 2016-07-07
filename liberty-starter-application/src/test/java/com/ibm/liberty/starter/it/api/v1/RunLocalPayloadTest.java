@@ -18,6 +18,7 @@ import javax.ws.rs.client.Invocation.Builder;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Response;
 
+import org.hamcrest.Matcher;
 import org.junit.After;
 import org.junit.Rule;
 import org.junit.Test;
@@ -41,7 +42,9 @@ public class RunLocalPayloadTest {
         
         runMvnInstallOnSeperateThread(logFile);
         
-        assertThat(logFile, eventually(containsLinesInRelativeOrder(containsString("Building myArtifactId-localServer"), containsString("CWWKF0011I"))).butNot(containsLinesInRelativeOrder(containsString("BUILD FAILURE"))));
+        Matcher<File> logContainsServerStartedForLocalServer = containsLinesInRelativeOrder(containsString("Building myArtifactId-localServer"), containsString("CWWKF0011I"));
+        Matcher<File> logContainsBuildFailure = containsLinesInRelativeOrder(containsString("BUILD FAILURE"));
+        assertThat(logFile, eventually(logContainsServerStartedForLocalServer).butNot(logContainsBuildFailure));
         assertThat(new File(pathToOutputZip), is(anExistingFile()));
         testEndpoint();
     }
