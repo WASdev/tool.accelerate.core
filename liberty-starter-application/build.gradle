@@ -54,6 +54,8 @@ dependencies {
     testRuntime group: 'org.eclipse.aether', name: 'aether-transport-wagon', version: '1.1.0'
     testRuntime group: 'org.apache.maven.wagon', name: 'wagon-http', version: '2.10'
     testRuntime group: 'org.apache.maven.wagon', name: 'wagon-provider-api', version: '2.10'
+	// Liberty maven plugin sets a system property to point logger to a class in here
+    testRuntime group: 'org.codehaus.mojo', name: 'plugin-support', version: '1.0-alpha-1'
 }
 
 buildutils {
