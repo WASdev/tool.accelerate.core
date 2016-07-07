@@ -41,7 +41,7 @@ public class RunLocalPayloadTest {
         
         runMvnInstallOnSeperateThread(logFile);
         
-        assertThat(logFile, eventually(containsLinesInRelativeOrder(containsString("Building myArtifactId-localServer"), containsString("CWWKF0011I"))));
+        assertThat(logFile, eventually(containsLinesInRelativeOrder(containsString("Building myArtifactId-localServer"), containsString("CWWKF0011I"))).butNot(containsLinesInRelativeOrder(containsString("BUILD FAILURE"))));
         assertThat(new File(pathToOutputZip), is(anExistingFile()));
         testEndpoint();
     }
