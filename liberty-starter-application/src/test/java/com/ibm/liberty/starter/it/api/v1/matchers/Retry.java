@@ -19,7 +19,7 @@ public class Retry<T> extends BaseMatcher<T> {
     public boolean matches(Object item) {
         int attempts = 0;
         boolean matched = matcher.matches(item);
-        while (!matched && attempts < 18) {
+        while (!matched && attempts < 24) {
             try {
                 Thread.sleep(10000);
             } catch (InterruptedException e) {

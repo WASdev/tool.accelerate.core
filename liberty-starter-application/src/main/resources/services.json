@@ -35,6 +35,12 @@
             "name": "Watson SDK",
             "description": "Adds the Watson SDK dependency to the project, allowing you to integrate Watson services",
             "endpoint" : "/watsonsdk"
+        },
+        {
+            "id": "microprofile",
+            "name": "MicroProfile (BETA)",
+            "description": "Technologies required by the MicroProfile community effort. See microprofile.io.",
+            "endpoint": "/microprofile"
         }
     ]
 }

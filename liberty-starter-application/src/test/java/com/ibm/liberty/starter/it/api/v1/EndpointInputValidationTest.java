@@ -60,7 +60,7 @@ public class EndpointInputValidationTest {
 
     @Test
     public void testRepoInvalidPath() throws Exception {
-        String url = "/start/api/v1/repo/net/wasdev/wlp/starters/test/ABCDEF";
+        String url = "/start/api/v1/repo/net/wasdev/wlp/starters/test/&=";
         Response response = callEndpoint(url);
         int status = response.getStatus();
         assertTrue("Response incorrect, response status was " + status, status == Response.Status.BAD_REQUEST.getStatusCode());
