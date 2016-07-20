@@ -41,6 +41,9 @@ This provides you with jpa-2.1. For the complete feature documentation, see the 
 ## Watson SDK
 The Watson SDK provides an API for accessing Watson Services. For the complete documentation, take a look at <a href="https://developer.ibm.com/watson/">the Watson developer pages</a> and <a href="https://github.com/watson-developer-cloud/java-sdk">the Watson SDK github project</a>.
 
+## MicroProfile (BETA)
+This provides the technologies defined on the <a href="http://microprofile.io/">MicroProfile community</a>. Currently we have includes jaxrs-2.0, jsonp-1.0 and cdi-1.2. However, this list will change as the community evolves so this technology has been marked as BETA.
+
 # Building and adding to the app accelerator
 
 ## Building the Project
