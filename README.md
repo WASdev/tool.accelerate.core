@@ -42,7 +42,17 @@ This provides you with jpa-2.1. For the complete feature documentation, see the 
 The Watson SDK provides an API for accessing Watson Services. For the complete documentation, take a look at <a href="https://developer.ibm.com/watson/">the Watson developer pages</a> and <a href="https://github.com/watson-developer-cloud/java-sdk">the Watson SDK github project</a>.
 
 ## MicroProfile (BETA)
-This provides the technologies defined on the <a href="http://microprofile.io/">MicroProfile community</a>. Currently we have includes jaxrs-2.0, jsonp-1.0 and cdi-1.2. However, this list will change as the community evolves so this technology has been marked as BETA.
+The <a href="http://microprofile.io/">MicroProfile project</a> is an open 
+community with the aim of optimizing Enterprise Java for a microservices 
+architecture. Currently the MicroProfile includes 
+<a href="http://www.ibm.com/support/knowledgecenter/SSAW57_8.5.5/com.ibm.websphere.wlp.nd.multiplatform.doc/ae/rwlp_feat.html#rwlp_feat__jsonp-1.0">JSON-P</a>, 
+<a href="http://www.ibm.com/support/knowledgecenter/SSAW57_8.5.5/com.ibm.websphere.wlp.nd.multiplatform.doc/ae/rwlp_feat.html%23rwlp_feat__jaxrs-2.0">
+JAX-RS</a> and 
+<a href="http://www.ibm.com/support/knowledgecenter/SSAW57_8.5.5/com.ibm.websphere.wlp.nd.multiplatform.doc/ae/rwlp_feat.html#rwlp_feat__cdi-1.2">CDI</a> and 
+will be evolving with guidance from the community.
+
+If you want to share your thoughts you can post straight to the 
+<a href="https://groups.google.com/forum/#!forum/microprofile">MicroProfile Google group</a>.
 
 # Building and adding to the app accelerator
 
