@@ -271,7 +271,7 @@ body {
 }
 
 .state-checkmark {
-    background-image: url("../img/checkmark.jpg");
+    background-image: url("../img/checkmark_square.jpg");
     background-repeat: no-repeat;
     background-size: contain;
     display: none;

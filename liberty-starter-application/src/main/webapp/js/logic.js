@@ -26,7 +26,7 @@ $(document).ready(function() {
         step1TechnologiesContainer.empty();
         for(var i = 0; i < technologies.length; i++) {
             var technology = technologies[i];
-            var technologyTag = $("<a href=\"#\" class=\"step1Technology\" data-technologyname=\""+ technology.name +"\" data-technologyid=\"" + technology.id + "\">" + technology.name + "</a>");
+            var technologyTag = $("<a href=\"#\" class=\"step1Technology\" data-technologyname=\""+ technology.name +"\" data-technologyid=\"" + technology.id + "\" title=\"" + technology.description + "\">" + technology.name + "</a>");
             technologyTag.append('<span class="state-checkmark"></span>');
             step1TechnologiesContainer.append(technologyTag);
         }

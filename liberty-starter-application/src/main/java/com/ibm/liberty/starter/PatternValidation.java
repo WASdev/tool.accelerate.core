@@ -27,7 +27,7 @@ public class PatternValidation {
                 pattern = Pattern.compile("[a-zA-Z0-9_-]*");
                 break;
             case PATH_EXTENSION:
-                pattern = Pattern.compile("[a-z0-9-_/.]*");
+                pattern = Pattern.compile("[a-zA-Z0-9-_/.]*");
                 break;
         }
         return pattern;
