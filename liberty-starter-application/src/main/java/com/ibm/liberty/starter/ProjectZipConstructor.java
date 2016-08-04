@@ -17,13 +17,16 @@ package com.ibm.liberty.starter;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
@@ -34,8 +37,14 @@ import java.util.zip.ZipOutputStream;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactoryConfigurationError;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
 import org.xml.sax.SAXException;
 
 import com.ibm.liberty.starter.api.v1.model.internal.Services;
@@ -56,17 +65,24 @@ public class ProjectZipConstructor {
     private static final String BASE_INDEX_HTML = "payloadIndex.html";
     private static final String INDEX_HTML_PATH = "myProject-application/src/main/webapp/index.html";
     private static final String POM_FILE = "pom.xml";
+    private static final String SWAGGER_STUB_PATH = "myProject-application/src/main/webapp/META-INF/stub/swagger.json";
     private String appName;
     public enum DeployType {
         LOCAL, BLUEMIX
     }
     private DeployType deployType;
+    private String workspace = null;
     
-    public ProjectZipConstructor(ServiceConnector serviceConnector, Services services, String appName, DeployType deployType) {
+    public ProjectZipConstructor(ServiceConnector serviceConnector, Services services, String appName, DeployType deployType, String workspace) {
         this.serviceConnector = serviceConnector;
         this.services = services;
         this.appName = appName;
         this.deployType = deployType;
+        this.workspace = workspace;
+    }
+    
+    public ProjectZipConstructor(ServiceConnector serviceConnector, Services services, String appName, DeployType deployType) {
+    	this(serviceConnector, services, appName, deployType, null);
     }
     
     public Map<String, byte[]> getFileMap() {
@@ -78,12 +94,243 @@ public class ProjectZipConstructor {
         addHtmlToMap();
         addTechSamplesToMap();
         addPomFileToMap();
+        addDynamicPackages();
+        overwriteFiles();
         ZipOutputStream zos = new ZipOutputStream(os);
         createZipFromMap(zos);
         zos.close();
+        cleanup();
     }
     
-    public void initializeMap() throws IOException {
+    private void cleanup() {
+    	cleanUpDynamicPackages();    	
+	}
+    
+    private void cleanUpDynamicPackages(){
+    	// Delete dynamically generated packages as they were already packaged.
+    	// ** Note **: Don't delete these packages prior to this stage as other operations may depend on the existence of these packages to perform certain tasks.
+    	for (Service service : services.getServices()) {
+            String serviceId = service.getId();
+            
+            String packageLocation = workspace + "/" + serviceId + "/" + StarterUtil.PACKAGE_DIR;
+            File packageDir = new File(packageLocation);
+            
+            if(packageDir.exists() && packageDir.isDirectory()){
+            	FileUtils.deleteQuietly(packageDir);
+            	log.log(Level.FINE, "Deleted package directory for " + serviceId + " technology. : " + packageLocation);
+            }
+        }
+    }
+    
+    private void addDynamicPackages() throws IOException {
+    	log.log(Level.FINE, "Entering method ProjectZipConstructor.addDynamicPackages()");
+    	if(workspace == null || workspace.isEmpty() || !(new File(workspace).exists())){
+    		log.log(Level.FINE, "No dynamic packages to add since workspace doesn't exist : " + workspace);
+    		return;
+    	}
+    	
+        for (Service service : services.getServices()) {
+            String serviceId = service.getId();
+            String packageLocation = workspace + "/" + serviceId + "/" + StarterUtil.PACKAGE_DIR;
+            File packageDir = new File(packageLocation);
+            
+            if(packageDir.exists() && packageDir.isDirectory()){
+            	log.log(Level.FINE, "Package directory for " + serviceId + " technology exists : " + packageLocation);
+            	List<File> filesListInDir = new ArrayList<File>();
+            	StarterUtil.populateFilesList(packageDir, filesListInDir);
+            	
+            	for(File aFile : filesListInDir){
+					String path = aFile.getAbsolutePath().replace('\\', '/').replace(packageLocation, "");
+					
+					if(path.startsWith("/")){
+						path = path.substring(1);
+					}
+					putFileInMap(path, FileUtils.readFileToByteArray(aFile));
+					log.log(Level.FINE, "Packaged file " + aFile.getAbsolutePath() + " to " + path);
+            	}
+            }
+        }
+        log.log(Level.FINE, "Exiting method ProjectZipConstructor.addDynamicPackages()");
+	}
+    
+    private void overwriteFiles() throws ParserConfigurationException, SAXException, IOException, TransformerFactoryConfigurationError, TransformerException{
+    	log.log(Level.INFO, "Entering method ProjectZipConstructor.overwriteFiles()");
+    	
+    	boolean restEnabled = false;
+    	boolean servletEnabled = false;
+    	boolean swaggerEnabled = false;
+    	for (Service service : services.getServices()) {
+            switch(service.getId()){
+	            case "rest":
+	            	restEnabled = true;
+	            	break;
+	            case "swagger" :
+	            	swaggerEnabled = true;
+	            	break;
+	            case "web" :
+	            	servletEnabled = true;
+	            	break;
+            }
+    	}
+    	log.log(Level.FINE, "Enabled : Swagger=" + swaggerEnabled + " : REST=" + restEnabled + " : Servlet=" + servletEnabled);
+    	
+    	if(swaggerEnabled){
+    		//Swagger is selected. Add 'apiDiscovery-1.0' feature to myProject-wlpcfg/pom.xml, so the feature can be installed at runtime.
+    		try{
+	    		String pathToPom = "myProject-wlpcfg/pom.xml";
+	    		byte[] currentSource = getFileFromMap(pathToPom);
+	            Document doc = StarterUtil.getDocument(currentSource);
+	    		
+	            Node assemblyInstallDirectory = doc.getElementsByTagName("assemblyInstallDirectory").item(0);
+	            Node configuration = assemblyInstallDirectory.getParentNode();
+	            
+	            if(!StarterUtil.hasNode(configuration, "features")){
+	            	configuration.appendChild(doc.createElement("features"));
+	            }
+	            
+	            Node features =  StarterUtil.getNode(configuration, "features");
+	
+	            if(!StarterUtil.hasNode(features, "acceptLicense")){
+	            	Node acceptLicense = doc.createElement("acceptLicense");
+	                acceptLicense.setTextContent("true");
+	                features.appendChild(acceptLicense);
+	            }
+	
+	            if(!StarterUtil.hasNode(features, "feature", "apiDiscovery-1.0")){
+	            	Node apiDiscovery = doc.createElement("feature");
+	                apiDiscovery.setTextContent("apiDiscovery-1.0");
+	                features.appendChild(apiDiscovery);
+	            }
+	
+	            DOMSource domSource = new DOMSource(doc);
+	            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+	            StarterUtil.identityTransform(domSource, new StreamResult(baos), true, true, "4");
+	            
+	            putFileInMap(pathToPom, baos.toByteArray());
+	            
+	            log.log(Level.INFO, "Added apiDiscovery-1.0 feature to " + pathToPom);
+            
+    		} catch (Exception ex){
+    			log.log(Level.FINE, "Exception occurred while adding apiDiscovery-1.0 feature : " + ex);
+    		}
+    		
+    		if(restEnabled){
+    			// Swagger and REST are selected. Add Swagger annotations to the REST sample application.
+    			try{
+	    			String restSampleAppPath = StarterUtil.getSharedResourceDir() + "/appAccelerator/swagger/samples/rest/LibertyRestEndpoint.java";
+					String targetRestSampleFile = "myProject-application/src/main/java/application/rest/LibertyRestEndpoint.java";
+					File restSampleApp = new File(restSampleAppPath);
+					if(restSampleApp.exists() && getFileFromMap(targetRestSampleFile) != null){
+						putFileInMap(targetRestSampleFile, FileUtils.readFileToByteArray(restSampleApp));
+					}else{
+						log.log(Level.FINE, "No swagger annotations were added : " + restSampleApp.getAbsolutePath() + " : exists=" + restSampleApp.exists());
+					}
+    			} catch (IOException e) {
+    				log.log(Level.FINE, "IOException occurred while overwriting REST sample: " + e);
+    			}
+    		}else{
+    			// If Server code was added and REST is not enabled then add JAX-RS related dependencies to pom.xml and add jaxrs-2.0 feature to server.xml 
+    			String serverCodeGenLocation = workspace + "/swagger/" + StarterUtil.PACKAGE_DIR;
+                File serverCodeGenDir = new File(serverCodeGenLocation);
+                
+                if(serverCodeGenDir.exists() && serverCodeGenDir.isDirectory()){
+                	
+                	//Add JAX-RS related dependencies to pom.xml
+    	    		byte[] currentPOM = getFileFromMap(POM_FILE);
+    	    		
+    	    		if(currentPOM != null){
+        	            Document doc = StarterUtil.getDocument(currentPOM);
+        	            Node dependenciesNode = doc.getElementsByTagName("dependencies").item(0);
+        	            
+        	            Node newDependency = doc.createElement("dependency");
+        	            Node groupId = doc.createElement("groupId");
+        	            groupId.setTextContent("javax.ws.rs");
+
+        	            Node artifactId = doc.createElement("artifactId");
+        	            artifactId.setTextContent("javax.ws.rs-api");
+
+        	            Node version = doc.createElement("version");
+        	            version.setTextContent("2.0.1");
+
+        	            Node scope = doc.createElement("scope");
+        	            scope.setTextContent("provided");
+
+        	            newDependency.appendChild(groupId);
+        	            newDependency.appendChild(artifactId);
+        	            newDependency.appendChild(version);
+        	            newDependency.appendChild(scope);
+        	            dependenciesNode.appendChild(newDependency);
+        	            
+        	            DOMSource domSource = new DOMSource(doc);
+        	            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        	            StarterUtil.identityTransform(domSource, new StreamResult(baos), true, true, "4");
+        	            
+        	            putFileInMap(POM_FILE, baos.toByteArray());
+        	            
+        	            log.log(Level.INFO, "Added jax-rs dependencies to " + POM_FILE);
+    	    		}
+
+    	            //Add jaxrs-2.0 feature to server.xml
+    	            String pathToServerXML = "myProject-wlpcfg/servers/LibertyProjectServer/server.xml";
+    	            
+    	            byte[] currentServerXML = getFileFromMap(pathToServerXML);
+    	            
+    	            if(currentServerXML != null){
+        	            Document doc = StarterUtil.getDocument(currentServerXML);
+        	            Node serverNode = doc.getElementsByTagName("server").item(0);
+        	            
+        	            Node featureManager = StarterUtil.hasNode(serverNode, "featureManager") ? StarterUtil.getNode(serverNode, "featureManager") : doc.createElement("featureManager");
+        	            
+        	            if(!StarterUtil.hasNode(featureManager, "feature", "jaxrs-2.0")){
+        	            	Node jaxrs20 = doc.createElement("feature");
+        	                jaxrs20.setTextContent("jaxrs-2.0");
+        	                featureManager.appendChild(jaxrs20);
+        	            }
+        	            
+        	            if(!StarterUtil.hasNode(serverNode, "featureManager")){
+        	            	serverNode.appendChild(featureManager);
+        	            }
+        	
+        	            DOMSource domSource = new DOMSource(doc);
+        	            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        	            StarterUtil.identityTransform(domSource, new StreamResult(baos), true, true, "4");
+        	            
+        	            putFileInMap(pathToServerXML, baos.toByteArray());
+        	            
+        	            log.log(Level.INFO, "Added jaxrs-2.0 feature to " + pathToServerXML);
+    	            }
+    	            
+    	            //Since REST is not enabled, specify javax.ws.rs.ApplicationPath for the generated server code
+    	            String targetRestApplicationPath = "myProject-application/src/main/java/io/swagger/api/RestApplication.java";
+    	            String restApplicationPath = StarterUtil.getSharedResourceDir() + "/appAccelerator/swagger/codegen/RestApplication.java";
+					File restApplication = new File(restApplicationPath);
+					if(restApplication.exists()){
+						putFileInMap(targetRestApplicationPath, FileUtils.readFileToByteArray(restApplication));
+						log.log(Level.INFO, "Added application path : " + targetRestApplicationPath);
+					}else{
+						log.log(Level.FINE, "Rest application was not found : " + restApplicationPath);
+					}
+                }else{
+                	log.log(Level.FINER, "There is no server code at  " + serverCodeGenLocation);
+                }
+    		}
+    		
+    		if(servletEnabled){
+    			//Swagger and Servlet are selected. Add swagger.json stub that describes the servlet endpoint to META-INF/stub directory.		
+    			String samplesPath = StarterUtil.getSharedResourceDir() + "/appAccelerator/swagger/samples";
+				String swaggerStubPath = samplesPath + "/servlet/swagger.json";
+				
+				File swaggerStub = new File(swaggerStubPath);
+				if(swaggerStub.exists() && getFileFromMap(SWAGGER_STUB_PATH) == null){
+					putFileInMap(SWAGGER_STUB_PATH, FileUtils.readFileToByteArray(swaggerStub));
+				}else{
+					log.log(Level.FINE, "Didn't add swagger.json stub : " + swaggerStub.getAbsolutePath() + " : exists=" + swaggerStub.exists());
+				}
+    		}
+    	}  	
+    }
+
+	public void initializeMap() throws IOException {
         log.log(Level.INFO, "Entering method ProjectZipConstructor.initializeMap()");
         InputStream skeletonIS = this.getClass().getClassLoader().getResourceAsStream(SKELETON_JAR_FILENAME);
         ZipInputStream zis = new ZipInputStream(skeletonIS);
@@ -196,6 +443,11 @@ public class ProjectZipConstructor {
     public void putFileInMap(String path, byte[] file) {
         log.log(Level.INFO, "Inserting file " + path + " into map.");
         fileMap.put(path, file);
+    }
+    
+    public byte[] getFileFromMap(String path) {
+        log.log(Level.INFO, "Getting file " + path + " from map.");
+        return fileMap.get(path);
     }
 
 }

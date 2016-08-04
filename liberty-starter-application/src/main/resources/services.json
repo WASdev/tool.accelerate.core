@@ -41,6 +41,12 @@
             "name": "MicroProfile (BETA)",
             "description": "Technologies required by the MicroProfile community effort. See microprofile.io.",
             "endpoint": "/microprofile"
+        },
+        {
+            "id" : "swagger",
+            "name" : "Swagger",
+            "description" : "A simple yet powerful representation of RESTful APIs",
+            "endpoint" : "/swagger"
         }
     ]
 }

@@ -357,7 +357,92 @@ body {
     margin-top: 36px;
 }
 
-#step3Description2 {
+#step3SwaggerCodeGenSection {
+    font-family: "HelvNeueRoman";
+    font-size: 18px;
+    color: #152935;
+    margin-top: 36px;
+}
+#step3SwaggerServerCodegen {
+    display:none;
+}
+#step3SwaggerServerCodegen + label{
+    background:url('../img/empty_checkmark.jpg') no-repeat;
+    height: 22px;
+    width: 22px;
+    background-size: contain;
+    padding-right: 20px;
+    margin-right: 10px;
+}
+#step3SwaggerServerCodegen:checked + label{
+    background:url('../img/checkmark_square.jpg') no-repeat;
+    height: 22px;
+    width: 22px;
+    background-size: contain;
+    margin-right: 10px;
+}
+#step3SelectFileButton {
+    background: white;
+    display: inline-block;
+    border: solid 1px #4178BE;
+    font-family: "HelvNeueBold";
+    font-size: 15px;
+    color: #4178BE;
+    text-decoration: none;
+    height: 40px;
+    width: 100px;
+    text-align: center;
+    margin-top: 10px;
+}
+#step3SwaggerFileState {
+    font-family: "HelvNeueLight";
+    font-size: 16px;
+    color: grey;
+    margin-top: 10px;
+    margin-left: 40px;
+}
+#step3SwaggerFileButtons {
+    margin-left: 40px;
+}
+.step3SwaggerUploadButtonClass {
+    margin-top: 10px;
+    margin-right: 10px;
+    background: white;
+    display: inline-block;
+    border: solid 1px #4178BE;
+    font-family: "HelvNeueBold";
+    font-size: 15px;
+    color: #4178BE;
+    text-decoration: none;
+    height: 40px;
+    width: 100px;
+    text-align: center;
+}
+#step3SelectDifferentFileButton {
+    background: white;
+    display: inline-block;
+    border: solid 1px #4178BE;
+    font-family: "HelvNeueBold";
+    font-size: 15px;
+    color: #4178BE;
+    text-decoration: none;
+    height: 40px;
+    width: 150px;
+    text-align: center;
+    margin-top: 10px;
+}
+/* STEP FOUR */
+#step4 {
+    padding-top: 167px;
+}
+#step4Description1 {
+    font-family: "HelvNeueLight";
+    font-size: 26px;
+    line-height: 35px;
+    color: #152935;
+    margin-top: 36px;
+}
+#step4Description2 {
     font-family: "HelvNeueRoman";
     font-size: 18px;
     color: #152935;
@@ -365,7 +450,7 @@ body {
     width: 400px;
 }
 
-#step3NameInput {
+#step4NameInput {
     width: 356px;
     color: 8E8E8E;
     border: none;
@@ -375,7 +460,7 @@ body {
     margin-top: 24px;
 }
 
-#step3DownloadButton {
+#step4DownloadButton {
     background: #4178BE;
     display: block;
     border: solid 1px #4178BE;
@@ -390,13 +475,13 @@ body {
     margin-top: 36px;
 }
 
-#step3LocalLeftBlock {
+#step4LocalLeftBlock {
     display: inline-block;
     float: left;
     width: 43%;
 }
 
-#step3LocalRightBlock {
+#step4LocalRightBlock {
     display: inline-block;
     vertical-align: top;
     margin-top: 160px;
@@ -404,17 +489,17 @@ body {
     width: 51%;
 }
 
-#step3LocalRightBlockItem1 {
+#step4LocalRightBlockItem1 {
     font-family: "HelvNeueBold";
     font-size: 16px;
     color: #152935;
 }
 
-#step3LocalRightBlockItem1RightText {
+#step4LocalRightBlockItem1RightText {
     font-family: "HelvNeueRoman";
 }
 
-#step3LocalRightBlockItem2 {
+#step4LocalRightBlockItem2 {
     background-color: #F0F0F0;
     width: 534px;
     padding-top: 27px;
@@ -422,20 +507,20 @@ body {
     padding-left: 25px;
 }
 
-#step3LocalRightBlockItem2Line1 {
+#step4LocalRightBlockItem2Line1 {
     font-family: "HelvNeueBold";
     font-size: 16px;
     color: #152935;
 }
 
-#step3LocalRightBlockItem2Line2 {
+#step4LocalRightBlockItem2Line2 {
     padding-top: 16px;
     font-family: "HelvNeueRoman";
     font-size: 16px;
     color: #152935;
 }
 
-#step3LocalRightBlockItem3 {
+#step4LocalRightBlockItem3 {
     font-size: 14px;
     margin-top: 13px;
     background-color: #F0F0F0;
@@ -445,13 +530,13 @@ body {
     padding-left: 25px;
 }
 
-#step3LocalRightBlockItem3Line1 {
+#step4LocalRightBlockItem3Line1 {
     font-family: "HelvNeueBold";
     color: #152935;
     padding-bottom: 16px;
 }
 
-#step3LocalRightBlockItem3Line2 {
+#step4LocalRightBlockItem3Line2 {
     background-color: #282828;
     color: #BFE6FF;
     font-family: Courier;
@@ -461,7 +546,7 @@ body {
     width: 105px;
 }
 
-#step3LocalRightBlockItem4 {
+#step4LocalRightBlockItem4 {
     margin-top: 13px;
     background-color: #F0F0F0;
     width: 534px;
@@ -470,44 +555,44 @@ body {
     padding-left: 25px;
 }
 
-#step3LocalRightBlockItem4Line1 {
+#step4LocalRightBlockItem4Line1 {
     font-family: "HelvNeueBold";
     font-size: 16px;
     color: #152935;
 }
 
-#step3LocalRightBlockItem4Line2 {
+#step4LocalRightBlockItem4Line2 {
     padding-top: 16px;
     font-family: "HelvNeueRoman";
     font-size: 16px;
     color: #152935;
 }
 
-#step3LocalRightBlockItem4Line3 {
+#step4LocalRightBlockItem4Line3 {
     padding-top: 24px;
     font-family: "HelvNeueBold";
     font-size: 16px;
     color: #152935;
 }
 
-#step3LocalRightBlockItem4Line4 {
+#step4LocalRightBlockItem4Line4 {
     padding-top: 16px;
     font-family: "HelvNeueRoman";
     font-size: 16px;
     color: #152935;
 }
 
-#step3BluemixRightBlockItem1 {
+#step4BluemixRightBlockItem1 {
     font-family: "HelvNeueBold";
     font-size: 16px;
     color: #152935;
 }
 
-#step3BluemixRightBlockItem1RightText {
+#step4BluemixRightBlockItem1RightText {
     font-family: "HelvNeueRoman";
 }
 
-#step3BluemixRightBlockItem2 {
+#step4BluemixRightBlockItem2 {
     background-color: #F0F0F0;
     width: 534px;
     padding-top: 27px;
@@ -515,20 +600,20 @@ body {
     padding-left: 25px;
 }
 
-#step3BluemixRightBlockItem2Line1 {
+#step4BluemixRightBlockItem2Line1 {
     font-family: "HelvNeueBold";
     font-size: 16px;
     color: #152935;
 }
 
-#step3BluemixRightBlockItem2Line2 {
+#step4BluemixRightBlockItem2Line2 {
     padding-top: 16px;
     font-family: "HelvNeueRoman";
     font-size: 16px;
     color: #152935;
 }
 
-#step3BluemixRightBlockItem3 {
+#step4BluemixRightBlockItem3 {
     margin-top: 13px;
     background-color: #F0F0F0;
     width: 534px;
@@ -537,14 +622,14 @@ body {
     padding-left: 25px;
 }
 
-#step3BluemixRightBlockItem3Line1 {
+#step4BluemixRightBlockItem3Line1 {
     font-family: "HelvNeueBold";
     font-size: 16px;
     color: #152935;
     padding-bottom: 16px;
 }
 
-#step3BluemixRightBlockItem3Line2 {
+#step4BluemixRightBlockItem3Line2 {
     font-family: Courier;
     font-size: 14px;
     background-color: #282828;
@@ -556,11 +641,11 @@ body {
     width: 480px;
 }
 
-#step3BluemixRightBlockItem3Line2 .purpleCode {
+#step4BluemixRightBlockItem3Line2 .purpleCode {
     color: rgb(246, 144, 203);
 }
 
-#step3BluemixRightBlockItem4 {
+#step4BluemixRightBlockItem4 {
     margin-top: 13px;
     background-color: #F0F0F0;
     width: 534px;
@@ -569,20 +654,20 @@ body {
     padding-left: 25px;
 }
 
-#step3BluemixRightBlockItem4Line1 {
+#step4BluemixRightBlockItem4Line1 {
     font-family: "HelvNeueBold";
     font-size: 16px;
     color: #152935;
 }
 
-#step3BluemixRightBlockItem4Line2 {
+#step4BluemixRightBlockItem4Line2 {
     padding-top: 16px;
     font-family: "HelvNeueRoman";
     font-size: 16px;
     color: #152935;
 }
 
-#step3BluemixRightBlockItem4Line3 {
+#step4BluemixRightBlockItem4Line3 {
     padding-top: 16px;
     font-family: "HelvNeueRoman";
     font-size: 16px;
@@ -722,7 +807,7 @@ body {
  **/
 
  /* Trigger */
- #step3OptionalWDT {
+ #step4OptionalWDT {
      margin-top: 40px;
      clear: both;
      width: 1100px;
@@ -730,11 +815,11 @@ body {
      margin-right: auto;
  }
 
-#step3OptionalWDTTrigger {
+#step4OptionalWDTTrigger {
     position: relative;
 }
 
-#step3OptionalWDT #step3OptionalWDTTrigger a {
+#step4OptionalWDT #step4OptionalWDTTrigger a {
     background-color: #F0F0F0;
     color: #152935;
     display: block;
@@ -773,21 +858,21 @@ body {
 }
 
 /* Content */
-#step3OptionalWDTContent {
+#step4OptionalWDTContent {
     background: #fff;
 }
 
-#step3OptionalWDTContent.hidden {
+#step4OptionalWDTContent.hidden {
     display: none;
 }
 
-#step3OptionalWDTContent #WDTSteps {
+#step4OptionalWDTContent #WDTSteps {
     margin: 0;
     overflow: hidden;
     padding: 0;
 }
 
-#step3OptionalWDTContent .WDTStep {
+#step4OptionalWDTContent .WDTStep {
     float: left;
     height: 400px;
     list-style: inside none;
@@ -796,11 +881,11 @@ body {
     width: 40%;
 }
 
-#step3OptionalWDTContent .WDTStep p {
+#step4OptionalWDTContent .WDTStep p {
     text-align: left;
 }
 
-#step3OptionalWDTContent .WDTStepImage {
+#step4OptionalWDTContent .WDTStepImage {
     background-color: transparent;
     background-repeat: no-repeat;
     background-size: contain;
@@ -813,27 +898,27 @@ body {
     width: 450px;
 }
 
-#step3OptionalWDTContent #WDTStep1 .WDTStepImage {
+#step4OptionalWDTContent #WDTStep1 .WDTStepImage {
     background-image: url("../img/wdt-step1.png");
 }
 
-#step3OptionalWDTContent #WDTStep2 .WDTStepImage {
+#step4OptionalWDTContent #WDTStep2 .WDTStepImage {
     background-image: url("../img/wdt-step2.png");
 }
 
-#step3OptionalWDTContent #WDTStep3 .WDTStepImage {
+#step4OptionalWDTContent #WDTStep3 .WDTStepImage {
     background-image: url("../img/wdt-step3.png");
 }
 
-#step3OptionalWDTContent #WDTStep4 .WDTStepImage {
+#step4OptionalWDTContent #WDTStep4 .WDTStepImage {
     background-image: url("../img/wdt-step4.png");
 }
 
-#step3OptionalWDTContent #WDTStep5 {
+#step4OptionalWDTContent #WDTStep5 {
     height: 80px;
 }
 
-#step3OptionalWDTContent #WDTStep5 {
+#step4OptionalWDTContent #WDTStep5 {
     /*display: none;*/
     clear: both;
     float: none;
@@ -842,17 +927,17 @@ body {
     width: 100%;
 }
 
-#step3OptionalWDTContent .stepNumber {
+#step4OptionalWDTContent .stepNumber {
     margin: 20px 0px 0 10px;
     width: 100%;
 }
 
-#step3OptionalWDTContent p {
+#step4OptionalWDTContent p {
     line-height: 22px;
     margin: 10px 0px 0 10px;
 }
 
-#step3OptionalWDTContent .WDTStepImage img {
+#step4OptionalWDTContent .WDTStepImage img {
     height: 100%;
     width: 100%;
 }

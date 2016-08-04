@@ -15,6 +15,7 @@
  *******************************************************************************/
 package com.ibm.liberty.starter;
 
+import java.io.File;
 import java.io.InputStream;
 import java.net.URI;
 import java.util.logging.Logger;
@@ -42,6 +43,11 @@ public class ServiceConnector {
         String scheme = uri.getScheme();
         String authority = uri.getAuthority();
         serverHostPort = scheme + "://" + authority;
+        services = parseServicesJson();
+    }
+	
+	public ServiceConnector(String hostPort) {
+        serverHostPort = hostPort;
         services = parseServicesJson();
     }
     
@@ -81,6 +87,26 @@ public class ServiceConnector {
         String url = urlConstructor("/api/v1/provider", service);
         Provider provider = getObjectFromEndpoint(Provider.class, url, MediaType.APPLICATION_JSON_TYPE);
         return provider;
+    }
+    
+    public String processUploadedFiles(Service service, String uploadDirectory) {
+    	log.finer("service=" + service.getId() + " : uploadDirectory=" + uploadDirectory);
+        String url = urlConstructor("/api/v1/provider/uploads/process?path=" + uploadDirectory, service);
+        String response = getObjectFromEndpoint(String.class, url, MediaType.TEXT_PLAIN_TYPE);
+        log.fine("Response of processing uploaded files from " + uploadDirectory + " : " + response);
+        return response;
+    }
+    
+    public String prepareDynamicPackages(Service service, String techWorkspaceDir, String options) {
+    	log.finer("service=" + service.getId() + " : options=" + options + " : techWorkspaceDir=" + techWorkspaceDir);
+    	File techWorkspace = new File(techWorkspaceDir);
+    	if(techWorkspace.exists() && techWorkspace.isDirectory()){
+    		String url = urlConstructor("/api/v1/provider/packages/prepare?path=" + techWorkspaceDir + ((options != null && !options.trim().isEmpty()) ? ("&options=" + options) : ""), service);
+            String response = getObjectFromEndpoint(String.class, url, MediaType.TEXT_PLAIN_TYPE);
+            log.fine("Response of preparing dynamic packages from " + techWorkspaceDir + " : " + response);
+            return response;
+    	}
+        return "";
     }
     
     public Sample getSample(Service service) {
