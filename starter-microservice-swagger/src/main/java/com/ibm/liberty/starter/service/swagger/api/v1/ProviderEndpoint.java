@@ -124,6 +124,7 @@ public class ProviderEndpoint {
         config.setTags(tags);
         return config;
     }
+    
     @GET
     @Path("dependencies")
     @Produces(MediaType.APPLICATION_JSON)
@@ -136,8 +137,15 @@ public class ProviderEndpoint {
     }
     
     @GET
+    @Path("features/install")
+    @Produces(MediaType.TEXT_PLAIN)
+    public String getFeaturesToInstall(){
+        return "apiDiscovery-1.0";
+    }
+    
+    @GET
     @Path("packages/prepare")
-    public String prepareDynamicPackages(@QueryParam("path") String techWorkspaceDir, @QueryParam("options") String options) throws IOException {
+    public String prepareDynamicPackages(@QueryParam("path") String techWorkspaceDir, @QueryParam("options") String options, @QueryParam("techs") String techs) throws IOException {
     	if(techWorkspaceDir != null && !techWorkspaceDir.trim().isEmpty()){
     		FileUtils.deleteQuietly(new File(techWorkspaceDir + "/package"));
     		
@@ -145,7 +153,7 @@ public class ProviderEndpoint {
     			String[] techOptions = options.split(",");
         		String codeGenType = techOptions.length >= 1 ? techOptions[0] : null;
 
-        		if("server".equals(codeGenType) || "client".equals(codeGenType)){
+        		if("server".equals(codeGenType)){
         			String codeGenSrcDirPath = techWorkspaceDir + "/" + codeGenType + "/src";
     				File codeGenSrcDir = new File(codeGenSrcDirPath);
     				
@@ -162,7 +170,64 @@ public class ProviderEndpoint {
         			return "";
         		}
     		}
+    		
+    		if(techs != null && !techs.trim().isEmpty()){
+    			//Perform actions based on other technologies/micro-services that were selected by the user
+    			String[] techList = techs.split(",");
+        		boolean restEnabled = false;
+            	boolean servletEnabled = false;
+            	for (String tech : techList) {
+                    switch(tech){
+        	            case "rest":
+        	            	restEnabled = true;
+        	            	break;
+        	            case "web" :
+        	            	servletEnabled = true;
+        	            	break;
+                    }
+            	}
+            	log.finer("Enabled : REST=" + restEnabled + " : Servlet=" + servletEnabled);
+
+            	String sharedResourceDir = "";
+            	try{
+            		sharedResourceDir =  ((String)(new InitialContext().lookup("sharedResourceDir")));
+            		log.finer("sharedResourceDir=" + sharedResourceDir);
+            	} catch (NamingException ne){
+            		log.info("NamingException occurred: " + ne);
+        			return "Internal error";
+            	}
+    			
+        		if(restEnabled){
+        			// Swagger and REST are selected. Add Swagger annotations to the REST sample application.
+        			String restSampleAppPath = sharedResourceDir + "/appAccelerator/swagger/samples/rest/LibertyRestEndpoint.java";
+    				File restSampleApp = new File(restSampleAppPath);
+    				if(restSampleApp.exists()){
+    					String targetRestSampleFile = techWorkspaceDir + "/package/myProject-application/src/main/java/application/rest/LibertyRestEndpoint.java";
+    					FileUtils.copyFile(restSampleApp, new File(targetRestSampleFile));
+    					log.finer("Successfuly copied " + restSampleAppPath + " to " + targetRestSampleFile);
+    				}else{
+    					log.fine("No swagger annotations were added : " + restSampleApp.getAbsolutePath() + " : exists=" + restSampleApp.exists());
+    				}
+        		}
+        		
+        		if(servletEnabled){
+        			//Swagger and Servlet are selected. Add swagger.json stub that describes the servlet endpoint to META-INF/stub directory.
+    				String swaggerStubPath = sharedResourceDir + "/appAccelerator/swagger/samples/servlet/swagger.json";
+    				File swaggerStub = new File(swaggerStubPath);
+    				if(swaggerStub.exists()){
+    					String targetStubPath = techWorkspaceDir + "/package/myProject-application/src/main/webapp/META-INF/stub/swagger.json";
+    					FileUtils.copyFile(swaggerStub, new File(targetStubPath));
+    					log.finer("Successfuly copied " + swaggerStubPath + " to " + targetStubPath);
+    				}else{
+    					log.fine("Didn't add swagger.json stub : " + swaggerStub.getAbsolutePath() + " : exists=" + swaggerStub.exists());
+    				}
+        		}
+    		}
+    	}else{
+    		log.fine("Invalid path : " + techWorkspaceDir);
+			return "";
     	}
+    	
     	return "success";
     }
     	

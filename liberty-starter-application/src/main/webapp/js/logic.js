@@ -29,7 +29,7 @@ $(document).ready(function() {
         step1TechnologiesContainer.empty();
         for(var i = 0; i < technologies.length; i++) {
             var technology = technologies[i];
-            var technologyTag = $("<a href=\"#\" class=\"step1Technology\" data-technologyname=\""+ technology.name +"\" data-technologyid=\"" + technology.id + "\" title=\"" + technology.description + "\">" + technology.name + "</a>");
+            var technologyTag = $("<a href=\"#\" class=\"step1Technology\" data-technologyname=\""+ technology.name +"\" data-technologyid=\"" + technology.id + "\" title=\"" + technology.description + "\" data-technologyconfiguration=\"" + technology.configuration + "\">" + technology.name + "</a>");
             technologyTag.append('<span class="state-checkmark"></span>');
             step1TechnologiesContainer.append(technologyTag);
         }
@@ -56,10 +56,34 @@ $(document).ready(function() {
 	var checkOptionalConfig = function() {
 	    var selectedTechnologies = $("#step1TechnologiesContainer .step1Technology.selected");
         for(var i = 0; i < selectedTechnologies.size(); i++) {
-			//In the future, we could check for a particular flag in the dataset of the technology.
-			if (selectedTechnologies.get(i).dataset.technologyid == "swagger") {
-					optionalConfigEnabled = true;
-					return;
+        	var optionalConfig = selectedTechnologies.get(i).dataset.technologyconfiguration;
+        	if(optionalConfig == null || optionalConfig.trim().length == 0){
+        		continue;
+        	}else if(optionalConfig == "true") {
+				optionalConfigEnabled = true;
+				return;
+			} else {
+				var optionalConfigArray = optionalConfig.split(",");
+				if(optionalConfigArray.length > 0){
+					for(var j = 0; j < optionalConfigArray.length; j++) {
+						var requiredTechId = optionalConfigArray[j];
+						var techSelected = false;
+						var selectedTechnologiesInner = $("#step1TechnologiesContainer .step1Technology.selected");
+						for(var k = 0; k < selectedTechnologiesInner.size(); k++) {
+							if(requiredTechId == selectedTechnologiesInner.get(k).dataset.technologyid){
+								if(j == (optionalConfigArray.length - 1)){
+									optionalConfigEnabled = true;
+									return;
+								}
+								techSelected = true;
+								break;
+							}
+						}
+						if(techSelected == false){
+							break;
+						}
+					}
+				}
 			}
         }
 		optionalConfigEnabled = false;
@@ -209,14 +233,16 @@ $(document).ready(function() {
     
     var updateSwaggerCodeGen = function() {
         var selectedTechnologies = $("#step1TechnologiesContainer .step1Technology.selected");
-        var swaggerSelected = false;
+        var swagger = false;
+        var rest = false;
         for(var i = 0; i < selectedTechnologies.size(); i++) {
             if(selectedTechnologies.get(i).dataset.technologyid == "swagger") {
-				swaggerSelected = true;
-				break;
+				swagger = true;
+            }else if(selectedTechnologies.get(i).dataset.technologyid == "rest") {
+            	rest = true;
             }
         }
-        if(swaggerSelected == true){
+        if(swagger == true && rest == true){
         	$("#step3SwaggerCodeGenSection").removeClass("hidden");
         }else{
         	$("#step3SwaggerCodeGenSection").addClass("hidden");

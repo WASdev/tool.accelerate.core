@@ -64,8 +64,7 @@ public class LibertyTechnologySelector {
                     Service service = serviceConnector.getServiceObjectFromId(tech);
                     if (service != null) {
                         serviceList.add(service);
-                        String options = getTechOptions(techOptions, tech);
-                        serviceConnector.prepareDynamicPackages(service, StarterUtil.getWorkspaceDir(workspaceId) + "/" + service.getId(), options);
+                        serviceConnector.prepareDynamicPackages(service, StarterUtil.getWorkspaceDir(workspaceId) + "/" + service.getId(), getTechOptions(techOptions, tech), techs);
                     }
                 } else {
 					log.info("Invalid tech type: " + tech);

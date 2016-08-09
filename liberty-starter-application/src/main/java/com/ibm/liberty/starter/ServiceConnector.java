@@ -15,7 +15,6 @@
  *******************************************************************************/
 package com.ibm.liberty.starter;
 
-import java.io.File;
 import java.io.InputStream;
 import java.net.URI;
 import java.util.logging.Logger;
@@ -97,17 +96,33 @@ public class ServiceConnector {
         return response;
     }
     
-    public String prepareDynamicPackages(Service service, String techWorkspaceDir, String options) {
-    	log.finer("service=" + service.getId() + " : options=" + options + " : techWorkspaceDir=" + techWorkspaceDir);
-    	File techWorkspace = new File(techWorkspaceDir);
-    	if(techWorkspace.exists() && techWorkspace.isDirectory()){
-    		String url = urlConstructor("/api/v1/provider/packages/prepare?path=" + techWorkspaceDir + ((options != null && !options.trim().isEmpty()) ? ("&options=" + options) : ""), service);
-            String response = getObjectFromEndpoint(String.class, url, MediaType.TEXT_PLAIN_TYPE);
+    public String prepareDynamicPackages(Service service, String techWorkspaceDir, String options, String[] techs) {
+    	log.finer("service=" + service.getId() + " : options=" + options + " : techWorkspaceDir=" + techWorkspaceDir + " : techs=" + techs);
+		String url = urlConstructor("/api/v1/provider/packages/prepare?path=" + techWorkspaceDir + ((options != null && !options.trim().isEmpty()) ? ("&options=" + options) : "") + "&techs=" + String.join(",", techs), service);
+        try{
+        	String response = getObjectFromEndpoint(String.class, url, MediaType.TEXT_PLAIN_TYPE);
             log.fine("Response of preparing dynamic packages from " + techWorkspaceDir + " : " + response);
             return response;
-    	}
+        }catch(javax.ws.rs.NotFoundException e){
+        	// The service doesn't offer this endpoint, so the exception can be ignored. 
+        	log.finest("Ignore expected exception : The service doesn't offer endpoint " + url + " : " + e);
+        }
         return "";
     }
+    
+	public String getFeaturesToInstall(Service service) {
+		log.finer("service=" + service.getId());
+		String url = urlConstructor("/api/v1/provider/features/install", service);
+        try{
+        	String response = getObjectFromEndpoint(String.class, url, MediaType.TEXT_PLAIN_TYPE);
+            log.fine("Features to install for " + service.getId() + " : " + response);
+            return response;
+        }catch(javax.ws.rs.NotFoundException e){
+        	// The service doesn't offer this endpoint, so the exception can be ignored. 
+        	log.finest("Ignore expected exception : The service doesn't offer endpoint " + url + " : " + e);
+        }
+        return "";
+	}
     
     public Sample getSample(Service service) {
         String url = urlConstructor("/api/v1/provider/samples", service);

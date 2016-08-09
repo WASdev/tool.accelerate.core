@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.logging.Level;
@@ -56,9 +57,14 @@ public class PomModifier {
     private String appName;
     private DeployType deployType;
     private String repoUrl;
+    private FeatureInstallHandler featureInstaller;	//Handles features to be installed during Liberty installation
 
     public PomModifier(DeployType deployType) {
         this.deployType = deployType;
+    }
+    
+    public PomModifier(FeatureInstallHandler featureInstaller) {
+        this.featureInstaller = featureInstaller;
     }
 
     public void setInputStream(InputStream pomInputStream) throws SAXException, IOException, ParserConfigurationException {
@@ -98,19 +104,51 @@ public class PomModifier {
     }
 
     private void writeToStream(OutputStream pomOutputStream) throws TransformerException, IOException {
-        Node dependenciesNode = doc.getElementsByTagName("dependencies").item(0);
-        log.log(Level.INFO, "Appending dependency nodes for provided poms");
-        appendDependencyNodes(dependenciesNode, providedPomsToAdd);
-        log.log(Level.INFO, "Appending dependency nodes for runtime poms");
-        appendDependencyNodes(dependenciesNode, runtimePomsToAdd);
-        log.log(Level.INFO, "Appending dependency nodes for compile poms");
-        appendDependencyNodes(dependenciesNode, compilePomsToAdd);
-
-        NodeList propertiesNodeList = doc.getElementsByTagName("properties");
-        appendAppNameProperty(propertiesNodeList);
-
-        appendDeployType();
-        appendRepoUrl();
+        if(deployType != null){
+        	Node dependenciesNode = doc.getElementsByTagName("dependencies").item(0);
+	        log.log(Level.INFO, "Appending dependency nodes for provided poms");
+	        appendDependencyNodes(dependenciesNode, providedPomsToAdd);
+	        log.log(Level.INFO, "Appending dependency nodes for runtime poms");
+	        appendDependencyNodes(dependenciesNode, runtimePomsToAdd);
+	        log.log(Level.INFO, "Appending dependency nodes for compile poms");
+	        appendDependencyNodes(dependenciesNode, compilePomsToAdd);
+	
+	        NodeList propertiesNodeList = doc.getElementsByTagName("properties");
+	        appendAppNameProperty(propertiesNodeList);
+	
+	        appendDeployType();
+	        appendRepoUrl();
+        }
+        
+        if(featureInstaller != null){
+        	//Add the features returned by FeatureInstallHandler to the wlp config pom.xml to be installed when installing Liberty (using liberty-maven-plugin)
+        	List<String> featuresToInstall = featureInstaller.getFeaturesToInstall();
+        	
+        	if(!featuresToInstall.isEmpty()){
+        		Node assemblyInstallDirectory = doc.getElementsByTagName("assemblyInstallDirectory").item(0);
+        		if(assemblyInstallDirectory != null){
+        			Node configuration = assemblyInstallDirectory.getParentNode();
+    	            
+    	            if(!StarterUtil.hasNode(configuration, "features")){
+    	            	configuration.appendChild(doc.createElement("features"));
+    	            }
+    	            
+    	            Node features =  StarterUtil.getNode(configuration, "features");
+    	
+    	            if(!StarterUtil.hasNode(features, "acceptLicense")){
+    	            	Node acceptLicense = doc.createElement("acceptLicense");
+    	                acceptLicense.setTextContent("true");
+    	                features.appendChild(acceptLicense);
+    	            }
+    	
+    	            for(String feature : featuresToInstall){
+    	            	Node featureNode = doc.createElement("feature");
+    	            	featureNode.setTextContent(feature);
+    	                features.appendChild(featureNode);
+    	            }
+        		}
+        	}
+        }
 
         TransformerFactory transformFactory = TransformerFactory.newInstance();
         Transformer transformer = transformFactory.newTransformer();

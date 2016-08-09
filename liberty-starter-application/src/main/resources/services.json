@@ -46,7 +46,8 @@
             "id" : "swagger",
             "name" : "Swagger",
             "description" : "A simple yet powerful representation of RESTful APIs",
-            "endpoint" : "/swagger"
+            "endpoint" : "/swagger",
+            "configuration" : "rest"
         }
     ]
 }
