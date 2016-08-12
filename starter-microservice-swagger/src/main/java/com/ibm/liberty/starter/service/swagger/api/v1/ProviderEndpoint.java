@@ -145,6 +145,7 @@ public class ProviderEndpoint {
     
     @GET
     @Path("packages/prepare")
+    @Produces(MediaType.TEXT_PLAIN)
     public String prepareDynamicPackages(@QueryParam("path") String techWorkspaceDir, @QueryParam("options") String options, @QueryParam("techs") String techs) throws IOException {
     	if(techWorkspaceDir != null && !techWorkspaceDir.trim().isEmpty()){
     		FileUtils.deleteQuietly(new File(techWorkspaceDir + "/package"));
@@ -167,7 +168,7 @@ public class ProviderEndpoint {
     				}
         		}else{
         			log.fine("Invalid options : " + options);
-        			return "";
+        			return "Invalid options : " + options;
         		}
     		}
     		
@@ -225,7 +226,7 @@ public class ProviderEndpoint {
     		}
     	}else{
     		log.fine("Invalid path : " + techWorkspaceDir);
-			return "";
+			return "Invalid path";
     	}
     	
     	return "success";

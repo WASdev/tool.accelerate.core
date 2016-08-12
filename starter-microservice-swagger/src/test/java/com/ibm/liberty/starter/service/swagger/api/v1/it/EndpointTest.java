@@ -56,6 +56,24 @@ public class EndpointTest {
         return "http://localhost:" + port + "/" + war + endpoint;
 	}
 	
+	@SuppressWarnings("unchecked")
+	public String testEndpoint(String endpoint) throws Exception {
+        String url = getEndPoint(endpoint);
+        System.out.println("Testing " + url);
+        Response response = null;
+        try {
+	        response = sendRequest(url, "GET");
+	        int responseCode = response.getStatus();
+	        assertTrue("Incorrect response code for " + url + ": " + responseCode,
+	                   responseCode == 200);
+	        return response.readEntity(String.class);
+        } finally {
+        	if(response != null) {
+        		response.close();
+        	}
+        }
+    }
+	
     @SuppressWarnings("unchecked")
 	public <T> T testEndpoint(String endpoint, Class<?> entity) throws Exception {
         String url = getEndPoint(endpoint);

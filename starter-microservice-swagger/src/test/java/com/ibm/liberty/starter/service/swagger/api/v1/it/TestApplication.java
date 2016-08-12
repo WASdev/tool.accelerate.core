@@ -78,5 +78,13 @@ public class TestApplication extends EndpointTest {
         assertNotNull("Expected locations", sample.getLocations());
 		assertEquals("Expected no samples.", 0, sample.getLocations().length);
     }
+    
+    @Test
+    public void testFeaturesInstall() throws Exception {
+        String actual = testEndpoint("/api/v1/provider/features/install");
+        assertNotNull("No response from API for features/install", actual);
+        String expected = "apiDiscovery-1.0";
+        assertEquals("Incorrect feature to install was specified : " + actual, expected, actual);
+    }
 
 }

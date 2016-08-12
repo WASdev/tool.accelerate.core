@@ -22,7 +22,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.http.Part;
-import javax.validation.ValidationException;
 
 import java.io.File;
 import java.io.IOException;
@@ -71,7 +70,14 @@ public class LibertyFileUploader extends HttpServlet {
 		
 		if (techService == null) {
 			log.log(Level.INFO, "Invalid tech type: " + tech);
-            throw new ValidationException("Invalid technology type : " + tech);
+			response.sendError(400, "Invalid technology type : " + tech);
+			return;
+		}
+		
+		if (request.getContentType() == null || !request.getContentType().toLowerCase().contains("multipart/form-data") ) {
+			log.log(Level.INFO, "Invalid request type : " + request.getContentType());
+			response.sendError(400, "Invalid request type : " + request.getContentType());
+			return;
 		}
 		
 		Collection<Part> filePartCollection = request.getParts();
@@ -84,7 +90,8 @@ public class LibertyFileUploader extends HttpServlet {
 		String workspaceId = request.getParameter(PARAMETER_WORKSPACE);	//specify the unique workspace directory to upload the file(s) to.	
 		if(workspaceId == null || workspaceId.trim().isEmpty()){
 			log.log(Level.INFO, "Invalid workspace: " + workspaceId);
-            throw new ValidationException("Invalid workspace : " + workspaceId);
+			response.sendError(400, "Invalid workspace : " + workspaceId);
+			return;
 		}
 		
 		String techDirPath = StarterUtil.getWorkspaceDir(workspaceId) + "/" + techService.getId();

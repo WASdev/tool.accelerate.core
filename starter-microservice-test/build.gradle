@@ -21,6 +21,7 @@ import com.ibm.liberty.starter.gradle.MavenTask
 import com.ibm.liberty.starter.gradle.FvtTask
 
 dependencies {
+	compile group: 'commons-io', name: 'commons-io', version: '2.4' 
     providedCompile group:'javax.ws.rs', name:'javax.ws.rs-api', version: '2.0'
     providedCompile group:'javax.json', name:'javax.json-api', version:'1.0'
 }

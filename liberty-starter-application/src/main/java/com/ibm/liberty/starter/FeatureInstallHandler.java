@@ -16,7 +16,6 @@
 package com.ibm.liberty.starter;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -28,20 +27,24 @@ public class FeatureInstallHandler {
 	private static final Logger log = Logger.getLogger(FeatureInstallHandler.class.getName());
 
     private final ServiceConnector serviceConnector;
-    
-    private HashMap<String, String> installFeatures = new HashMap<String, String>();
 	private List<String> listOfFeatures;
 	
     public FeatureInstallHandler(Services services, ServiceConnector serviceConnector) {
         this.serviceConnector = serviceConnector;
+        listOfFeatures = new ArrayList<String>();
         setServices(services);
     }
     
     private void setServices(Services services) {
         for (Service service : services.getServices()) {
             String features = serviceConnector.getFeaturesToInstall(service);
-            if(features != null && !features.trim().isEmpty()){
-            	installFeatures.put(service.getId(), features);
+            if(features != null && !features.trim().isEmpty() && (features.split(",").length > 0)){
+				for(String feature : features.split(",")){
+					if(!listOfFeatures.contains(feature)){
+						listOfFeatures.add(feature);
+						log.finer("Added feature : " + feature);
+					}
+				}
             }
         }
     }
@@ -50,20 +53,6 @@ public class FeatureInstallHandler {
      * Returns a list of features, which are required by the services, that must be installed during Liberty installation 
      */
     public List<String> getFeaturesToInstall(){
-    	if(listOfFeatures == null){
-    		listOfFeatures = new ArrayList<String>();
-    		for(String key : installFeatures.keySet()){
-    			String features = installFeatures.get(key);
-    			if(features.split(",").length > 0){
-    				for(String feature : features.split(",")){
-    					if(!listOfFeatures.contains(feature)){
-    						listOfFeatures.add(feature);
-    					}
-    				}
-    			}
-    		}
-    	}
-    	log.fine("Features to install : " + listOfFeatures);
     	return listOfFeatures;
     }
 }
