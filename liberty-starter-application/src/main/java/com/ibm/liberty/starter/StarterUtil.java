@@ -141,6 +141,96 @@ public class StarterUtil {
     }
     
     /**
+     * Determine if the parent node contains a child node and a grand child node with matching name and value
+     * @param parentNode - the parent node
+     * @param childNodeName - name of child node to match
+     * @param grandChildNodeName - name of grand child node to match 
+     * @param grandChildNodeValue - value of grand child node to match
+     * @return boolean value to indicate whether the parent node contains matching child node and a grand child node
+     */
+    public static boolean hasNode(Node parentNode, String childNodeName, String grandChildNodeName, String grandChildNodeValue){
+    	if(parentNode == null || childNodeName == null || grandChildNodeName == null || grandChildNodeValue == null){
+    		return false;
+    	}
+    	
+    	if (parentNode.getNodeType() == Node.ELEMENT_NODE && parentNode.hasChildNodes()) {
+    		NodeList children = parentNode.getChildNodes();
+        	for(int i=0; i < children.getLength(); i++){
+            	Node child = children.item(i);
+            	if(child != null && childNodeName.equals(child.getNodeName())){
+            		if (child.getNodeType() == Node.ELEMENT_NODE && child.hasChildNodes()) {
+            			NodeList grandChildren = child.getChildNodes();
+                    	for(int j=0; j < grandChildren.getLength(); j++){
+                    		Node grandChild = grandChildren.item(j);
+                    		if(grandChild != null && grandChildNodeName.equals(grandChild.getNodeName()) && grandChildNodeValue.equals(grandChild.getTextContent())){
+                    			return true;
+                    		}
+                    	}
+            		}
+            	}
+            }
+    	}
+    	return false;
+    }
+    
+    /**
+     * Get the matching grand child node
+     * @param parentNode - the parent node
+     * @param childNodeName - name of child node to match
+     * @param grandChildNodeName - name of grand child node to match 
+     * @param grandChildNodeValue - value of grand child node to match
+     * @return the grand child node if a match was found, null otherwise
+     */
+    public static Node getNode(Node parentNode, String childNodeName, String grandChildNodeName, String grandChildNodeValue){
+    	if(parentNode == null || childNodeName == null || grandChildNodeName == null || grandChildNodeValue == null){
+    		return null;
+    	}
+    	
+    	if (parentNode.getNodeType() == Node.ELEMENT_NODE && parentNode.hasChildNodes()) {
+    		NodeList children = parentNode.getChildNodes();
+        	for(int i=0; i < children.getLength(); i++){
+            	Node child = children.item(i);
+            	if(child != null && childNodeName.equals(child.getNodeName())){
+            		if (child.getNodeType() == Node.ELEMENT_NODE && child.hasChildNodes()) {
+            			NodeList grandChildren = child.getChildNodes();
+                    	for(int j=0; j < grandChildren.getLength(); j++){
+                    		Node grandChild = grandChildren.item(j);
+                    		if(grandChild != null && grandChildNodeName.equals(grandChild.getNodeName()) && grandChildNodeValue.equals(grandChild.getTextContent())){
+                    			return grandChild;
+                    		}
+                    	}
+            		}
+            	}
+            }
+    	}
+    	return null;    	
+    }
+    
+    /**
+     * Get the matching child node
+     * @param parentNode - the parent node
+     * @param name - name of child node to match 
+     * @param value - value of child node to match
+     * @return the child node if a match was found, null otherwise
+     */
+    public static Node getNode(Node parentNode, String name, String value){
+    	if(parentNode == null || name == null || value == null){
+    		return null;
+    	}
+    	if (parentNode.getNodeType() == Node.ELEMENT_NODE && parentNode.hasChildNodes()) {
+    		NodeList children = parentNode.getChildNodes();
+        	for(int i=0; i < children.getLength(); i++){
+            	Node child = children.item(i);
+            	if(child != null && name.equals(child.getNodeName()) && value.equals(child.getTextContent())){
+            		return child;
+            	}
+            }
+    	}
+    	
+    	return null;
+    }
+    
+    /**
      * Get the matching child node
      * @param parentNode - the parent node
      * @param name - name of child node to match 

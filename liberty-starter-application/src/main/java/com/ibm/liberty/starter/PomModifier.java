@@ -137,8 +137,108 @@ public class PomModifier {
     	
     	            if(!StarterUtil.hasNode(features, "acceptLicense")){
     	            	Node acceptLicense = doc.createElement("acceptLicense");
-    	                acceptLicense.setTextContent("true");
+    	                acceptLicense.setTextContent("${accept.license}");
     	                features.appendChild(acceptLicense);
+    	                
+    	                //Enforce 'accept.license' property using maven-enforcer-plugin
+    	                Node plugins = configuration.getParentNode().getParentNode();
+    	                Node enforcerPlugin;
+    	                if(!StarterUtil.hasNode(plugins, "plugin", "artifactId", "maven-enforcer-plugin")){
+    	                	enforcerPlugin = doc.createElement("plugin");
+    	                	
+    	                	Node groupId = doc.createElement("groupId");
+    	                	groupId.setTextContent("org.apache.maven.plugins");
+    	                	enforcerPlugin.appendChild(groupId);
+    	                	
+    	                	Node artifactId = doc.createElement("artifactId");
+    	                	artifactId.setTextContent("maven-enforcer-plugin");
+    	                	enforcerPlugin.appendChild(artifactId);
+    	                	
+    	                	Node version = doc.createElement("version");
+    	                	version.setTextContent("1.4.1");
+    	                	enforcerPlugin.appendChild(version);
+    	                	
+    	                	plugins.appendChild(enforcerPlugin);
+    	                }else{
+    	                	Node artifactIdNode = StarterUtil.getNode(plugins, "plugin", "artifactId", "maven-enforcer-plugin");
+    	                	enforcerPlugin = artifactIdNode.getParentNode();
+    	                }
+    	                
+    	                Node executions = StarterUtil.getNode(enforcerPlugin, "executions");
+    	                if(executions == null){
+    	                	executions = doc.createElement("executions");
+    	                	enforcerPlugin.appendChild(executions);
+    	                }
+    	                
+    	                Node execution;
+    	                if(!StarterUtil.hasNode(executions, "execution", "id", "enforce-property")){
+    	                	execution = doc.createElement("execution");
+    	                	executions.appendChild(execution);
+    	                	
+    	                	Node id = doc.createElement("id");
+    	                	id.setTextContent("enforce-property");
+    	                	execution.appendChild(id);
+    	                }else{
+    	                	Node enforceProperty = StarterUtil.getNode(executions, "execution", "id", "enforce-property");
+    	                	execution = enforceProperty.getParentNode();
+    	                }
+    	                
+    	                Node goals = StarterUtil.getNode(execution, "goals");
+    	                if(goals == null){
+    	                	goals = doc.createElement("goals");
+    	                	execution.appendChild(goals);
+    	                }
+    	                
+    	                Node goal = StarterUtil.getNode(goals, "goal", "enforce");
+    	                if(goal == null){
+    	                	goal = doc.createElement("goal");
+    	                	goal.setTextContent("enforce");
+    	                	goals.appendChild(goal);
+    	                }
+    	                
+    	                Node configurationNode = StarterUtil.getNode(execution, "configuration");
+    	                if(configurationNode == null){
+    	                	configurationNode = doc.createElement("configuration");
+    	                	execution.appendChild(configurationNode);
+    	                }
+    	                
+    	                Node rules = StarterUtil.getNode(configurationNode, "rules");
+    	                if(rules == null){
+    	                	rules = doc.createElement("rules");
+    	                	configurationNode.appendChild(rules);
+    	                }
+    	                
+    	                Node requireProperty;
+    	                if(!StarterUtil.hasNode(rules, "requireProperty", "property", "accept.license")){
+    	                	requireProperty = doc.createElement("requireProperty");
+    	                	rules.appendChild(requireProperty);
+    	                	
+    	                	Node property = doc.createElement("property");
+    	                	property.setTextContent("accept.license");
+    	                	requireProperty.appendChild(property);
+    	                	
+    	                	Node message = doc.createElement("message");
+    	                	message.setTextContent("You must set a value for the 'accept.license' property defined in myProject-wlpcfg/pom.xml. Please review the license terms and conditions for additional features to be installed and if you accept the license terms and conditions then run the Maven command with '-Daccept.license=true'.");
+    	                	requireProperty.appendChild(message);
+    	                	
+    	                	Node regex = doc.createElement("regex");
+    	                	regex.setTextContent("true");
+    	                	requireProperty.appendChild(regex);
+    	                	
+    	                	Node regexMessage = doc.createElement("regexMessage");
+    	                	regexMessage.setTextContent("Additional features could not be installed as the license terms and conditions were not accepted. If you accept the license terms and conditions then run the Maven command with '-Daccept.license=true'.");
+    	                	requireProperty.appendChild(regexMessage);
+    	                }else{
+    	                	Node propertyNode = StarterUtil.getNode(rules, "requireProperty", "property", "accept.license");
+    	                	requireProperty = propertyNode.getParentNode();
+    	                }
+    	                
+    	                Node fail = StarterUtil.getNode(configurationNode, "fail");
+    	                if(fail == null){
+    	                	fail = doc.createElement("fail");
+    	                	configurationNode.appendChild(fail);
+    	                }
+    	                fail.setTextContent("true");
     	            }
     	
     	            for(String feature : featuresToInstall){

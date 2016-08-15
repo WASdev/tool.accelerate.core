@@ -184,6 +184,23 @@ public class EndpointInputValidationTest {
 	            assertNotNull("features node was not found within myProject-wlpcfg/pom.xml", features);
 	            assertTrue("Install feature was not found : servlet-3.0", hasNode(features, "feature", "servlet-3.0"));
 	            assertTrue("Install feature was not found : apiDiscovery-1.0", hasNode(features, "feature", "apiDiscovery-1.0"));
+	            assertTrue("acceptLicense node with ${accept.license} property was not found", hasNode(features, "acceptLicense", "${accept.license}"));
+	            
+	            Node plugins = configuration.getParentNode().getParentNode();
+	            Node artifactIdNode = getNode(plugins, "plugin", "artifactId", "maven-enforcer-plugin");
+	            assertNotNull("maven-enforcer-plugin was not found", artifactIdNode);
+	            Node enforcerPlugin = artifactIdNode.getParentNode();
+	            Node executions = getNode(enforcerPlugin, "executions");
+	            assertNotNull("executions node was not found within maven-enforcer-plugin", executions);
+	            Node enforcePropertyNode =  getNode(executions, "execution", "id", "enforce-property");
+	            assertNotNull("enforce-property id was not found within maven-enforcer-plugin", enforcePropertyNode);
+	            Node execution = enforcePropertyNode.getParentNode();
+	            Node configurationNode = getNode(execution, "configuration");
+	            assertNotNull("configuration node was not found within maven-enforcer-plugin", configurationNode);
+	            Node rules = getNode(configurationNode, "rules");
+	            assertNotNull("rules node was not found within maven-enforcer-plugin", rules);
+	            Node acceptLicenseProperty = getNode(rules, "requireProperty", "property", "accept.license");
+	            assertNotNull("requireProperty with accept.license property was not found within maven-enforcer-plugin", acceptLicenseProperty);
 	            foundFeaturesToInstall = true;
 	            break;
             }
@@ -196,7 +213,7 @@ public class EndpointInputValidationTest {
         
     }
     
-    private static Node getNode(Node parentNode, String name){
+    private Node getNode(Node parentNode, String name){
     	if(parentNode == null || name == null){
     		return null;
     	}
@@ -212,7 +229,7 @@ public class EndpointInputValidationTest {
     	return null;
     }
     
-    private static boolean hasNode(Node parentNode, String nodeName, String nodeValue){
+    private boolean hasNode(Node parentNode, String nodeName, String nodeValue){
     	if(parentNode == null || nodeName == null || nodeValue == null){
     		return false;
     	}
@@ -226,6 +243,96 @@ public class EndpointInputValidationTest {
             }
     	}
     	return false;
+    }
+    
+    /**
+     * Determine if the parent node contains a child node and a grand child node with matching name and value
+     * @param parentNode - the parent node
+     * @param childNodeName - name of child node to match
+     * @param grandChildNodeName - name of grand child node to match 
+     * @param grandChildNodeValue - value of grand child node to match
+     * @return boolean value to indicate whether the parent node contains matching child node and a grand child node
+     */
+    private boolean hasNode(Node parentNode, String childNodeName, String grandChildNodeName, String grandChildNodeValue){
+    	if(parentNode == null || childNodeName == null || grandChildNodeName == null || grandChildNodeValue == null){
+    		return false;
+    	}
+    	
+    	if (parentNode.getNodeType() == Node.ELEMENT_NODE && parentNode.hasChildNodes()) {
+    		NodeList children = parentNode.getChildNodes();
+        	for(int i=0; i < children.getLength(); i++){
+            	Node child = children.item(i);
+            	if(child != null && childNodeName.equals(child.getNodeName())){
+            		if (child.getNodeType() == Node.ELEMENT_NODE && child.hasChildNodes()) {
+            			NodeList grandChildren = child.getChildNodes();
+                    	for(int j=0; j < grandChildren.getLength(); j++){
+                    		Node grandChild = grandChildren.item(j);
+                    		if(grandChild != null && grandChildNodeName.equals(grandChild.getNodeName()) && grandChildNodeValue.equals(grandChild.getTextContent())){
+                    			return true;
+                    		}
+                    	}
+            		}
+            	}
+            }
+    	}
+    	return false;
+    }
+    
+    /**
+     * Get the matching grand child node
+     * @param parentNode - the parent node
+     * @param childNodeName - name of child node to match
+     * @param grandChildNodeName - name of grand child node to match 
+     * @param grandChildNodeValue - value of grand child node to match
+     * @return the grand child node if a match was found, null otherwise
+     */
+    private Node getNode(Node parentNode, String childNodeName, String grandChildNodeName, String grandChildNodeValue){
+    	if(parentNode == null || childNodeName == null || grandChildNodeName == null || grandChildNodeValue == null){
+    		return null;
+    	}
+    	
+    	if (parentNode.getNodeType() == Node.ELEMENT_NODE && parentNode.hasChildNodes()) {
+    		NodeList children = parentNode.getChildNodes();
+        	for(int i=0; i < children.getLength(); i++){
+            	Node child = children.item(i);
+            	if(child != null && childNodeName.equals(child.getNodeName())){
+            		if (child.getNodeType() == Node.ELEMENT_NODE && child.hasChildNodes()) {
+            			NodeList grandChildren = child.getChildNodes();
+                    	for(int j=0; j < grandChildren.getLength(); j++){
+                    		Node grandChild = grandChildren.item(j);
+                    		if(grandChild != null && grandChildNodeName.equals(grandChild.getNodeName()) && grandChildNodeValue.equals(grandChild.getTextContent())){
+                    			return grandChild;
+                    		}
+                    	}
+            		}
+            	}
+            }
+    	}
+    	return null;    	
+    }
+    
+    /**
+     * Get the matching child node
+     * @param parentNode - the parent node
+     * @param name - name of child node to match 
+     * @param value - value of child node to match
+     * @return the child node if a match was found, null otherwise
+     */
+    private Node getNode(Node parentNode, String name, String value){
+    	if(parentNode == null || name == null || value == null){
+    		return null;
+    	}
+    	if (parentNode.getNodeType() == Node.ELEMENT_NODE && parentNode.hasChildNodes()) {
+    		NodeList children = parentNode.getChildNodes();
+        	for(int i=0; i < children.getLength(); i++){
+            	Node child = children.item(i);
+            	if(child != null && name.equals(child.getNodeName()) && value.equals(child.getTextContent())){
+            		return child;
+            	}
+            }
+    	}
+    	
+    	return null;
     }
     
     private int invokeUploadEndpoint(String params, String fileName) throws Exception {
