@@ -182,29 +182,29 @@ public class EndpointInputValidationTest {
                 Node assemblyInstallDirectory = doc.getElementsByTagName("assemblyInstallDirectory").item(0);
                 assertNotNull("assemblyInstallDirectory node was not found within myProject-wlpcfg/pom.xml", assemblyInstallDirectory);
                 Node configuration = assemblyInstallDirectory.getParentNode();
-	            Node features =  getChildNode(configuration, "features");
-	            assertNotNull("features node was not found within myProject-wlpcfg/pom.xml", features);
-	            assertTrue("Install feature was not found : servlet-3.1", hasChildNode(features, "feature", "servlet-3.1"));
-	            assertTrue("Install feature was not found : apiDiscovery-1.0", hasChildNode(features, "feature", "apiDiscovery-1.0"));
-	            assertTrue("acceptLicense node with ${accept.features.license} property was not found", hasChildNode(features, "acceptLicense", "${accept.features.license}"));
-	            
-	            Node plugins = configuration.getParentNode().getParentNode();
-	            Node artifactIdNode = getGrandchildNode(plugins, "plugin", "artifactId", "maven-enforcer-plugin");
-	            assertNotNull("maven-enforcer-plugin was not found", artifactIdNode);
-	            Node enforcerPlugin = artifactIdNode.getParentNode();
-	            Node executions = getChildNode(enforcerPlugin, "executions");
-	            assertNotNull("executions node was not found within maven-enforcer-plugin", executions);
-	            Node enforcePropertyNode =  getGrandchildNode(executions, "execution", "id", "enforce-property");
-	            assertNotNull("enforce-property id was not found within maven-enforcer-plugin", enforcePropertyNode);
-	            Node execution = enforcePropertyNode.getParentNode();
-	            Node configurationNode = getChildNode(execution, "configuration");
-	            assertNotNull("configuration node was not found within maven-enforcer-plugin", configurationNode);
-	            Node rules = getChildNode(configurationNode, "rules");
-	            assertNotNull("rules node was not found within maven-enforcer-plugin", rules);
-	            Node acceptLicenseProperty = getGrandchildNode(rules, "requireProperty", "property", "accept.features.license");
-	            assertNotNull("requireProperty with accept.features.license property was not found within maven-enforcer-plugin", acceptLicenseProperty);
-	            foundFeaturesToInstall = true;
-	            break;
+                Node features =  getChildNode(configuration, "features");
+                assertNotNull("features node was not found within myProject-wlpcfg/pom.xml", features);
+                assertTrue("Install feature was not found : servlet-3.1", hasChildNode(features, "feature", "servlet-3.1"));
+                assertTrue("Install feature was not found : apiDiscovery-1.0", hasChildNode(features, "feature", "apiDiscovery-1.0"));
+                assertTrue("acceptLicense node with ${accept.features.license} property was not found", hasChildNode(features, "acceptLicense", "${accept.features.license}"));
+
+                Node plugins = configuration.getParentNode().getParentNode();
+                Node artifactIdNode = getGrandchildNode(plugins, "plugin", "artifactId", "maven-enforcer-plugin");
+                assertNotNull("maven-enforcer-plugin was not found", artifactIdNode);
+                Node enforcerPlugin = artifactIdNode.getParentNode();
+                Node executions = getChildNode(enforcerPlugin, "executions");
+                assertNotNull("executions node was not found within maven-enforcer-plugin", executions);
+                Node enforcePropertyNode =  getGrandchildNode(executions, "execution", "id", "enforce-property");
+                assertNotNull("enforce-property id was not found within maven-enforcer-plugin", enforcePropertyNode);
+                Node execution = enforcePropertyNode.getParentNode();
+                Node configurationNode = getChildNode(execution, "configuration");
+                assertNotNull("configuration node was not found within maven-enforcer-plugin", configurationNode);
+                Node rules = getChildNode(configurationNode, "rules");
+                assertNotNull("rules node was not found within maven-enforcer-plugin", rules);
+                Node acceptLicenseProperty = getGrandchildNode(rules, "requireProperty", "property", "accept.features.license");
+                assertNotNull("requireProperty with accept.features.license property was not found within maven-enforcer-plugin", acceptLicenseProperty);
+                foundFeaturesToInstall = true;
+                break;
             }
             zipIn.closeEntry();
         }
@@ -247,23 +247,23 @@ public class EndpointInputValidationTest {
     	if(parentNode == null || childNodeName == null || grandChildNodeName == null || grandChildNodeValue == null){
     		return null;
     	}
-    	
+
     	if (parentNode.getNodeType() == Node.ELEMENT_NODE && parentNode.hasChildNodes()) {
     		NodeList children = parentNode.getChildNodes();
-        	for(int i=0; i < children.getLength(); i++){
-            	Node child = children.item(i);
-            	if(child != null && childNodeName.equals(child.getNodeName())){
-            		if (child.getNodeType() == Node.ELEMENT_NODE && child.hasChildNodes()) {
-            			NodeList grandChildren = child.getChildNodes();
-                    	for(int j=0; j < grandChildren.getLength(); j++){
-                    		Node grandChild = grandChildren.item(j);
-                    		if(grandChild != null && grandChildNodeName.equals(grandChild.getNodeName()) && grandChildNodeValue.equals(grandChild.getTextContent())){
-                    			return grandChild;
-                    		}
-                    	}
-            		}
-            	}
-            }
+    		for(int i=0; i < children.getLength(); i++){
+    			Node child = children.item(i);
+    			if(child != null && childNodeName.equals(child.getNodeName())){
+    				if (child.getNodeType() == Node.ELEMENT_NODE && child.hasChildNodes()) {
+    					NodeList grandChildren = child.getChildNodes();
+    					for(int j=0; j < grandChildren.getLength(); j++){
+    						Node grandChild = grandChildren.item(j);
+    						if(grandChild != null && grandChildNodeName.equals(grandChild.getNodeName()) && grandChildNodeValue.equals(grandChild.getTextContent())){
+    							return grandChild;
+    						}
+    					}
+    				}
+    			}
+    		}
     	}
     	return null;    	
     }
@@ -281,14 +281,14 @@ public class EndpointInputValidationTest {
     	}
     	if (parentNode.getNodeType() == Node.ELEMENT_NODE && parentNode.hasChildNodes()) {
     		NodeList children = parentNode.getChildNodes();
-        	for(int i=0; i < children.getLength(); i++){
-            	Node child = children.item(i);
-            	if(child != null && name.equals(child.getNodeName()) && value.equals(child.getTextContent())){
-            		return child;
-            	}
-            }
+    		for(int i=0; i < children.getLength(); i++){
+    			Node child = children.item(i);
+    			if(child != null && name.equals(child.getNodeName()) && value.equals(child.getTextContent())){
+    				return child;
+    			}
+    		}
     	}
-    	
+
     	return null;
     }
     

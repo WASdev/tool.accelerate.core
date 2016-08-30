@@ -55,7 +55,7 @@ public class StarterUtil {
 				log.info("serverOutputDir=" + serverOutputDir);
 			}catch (NamingException ne){
 				log.severe("NamingException occurred while retrieving the value of 'serverOutputDir': " + ne);
-	            throw new ValidationException("NamingException occurred while retrieving the value of 'serverOutputDir': " + ne);
+				throw new ValidationException("NamingException occurred while retrieving the value of 'serverOutputDir': " + ne);
 			}
 		}
 		return serverOutputDir;

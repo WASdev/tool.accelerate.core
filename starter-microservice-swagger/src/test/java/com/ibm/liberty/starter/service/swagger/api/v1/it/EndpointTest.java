@@ -55,7 +55,7 @@ public class EndpointTest {
         String war = System.getProperty("war.name");
         return "http://localhost:" + port + "/" + war + endpoint;
 	}
-	
+
 	public String testEndpoint(String endpoint) throws Exception {
         String url = getEndPoint(endpoint);
         System.out.println("Testing " + url);

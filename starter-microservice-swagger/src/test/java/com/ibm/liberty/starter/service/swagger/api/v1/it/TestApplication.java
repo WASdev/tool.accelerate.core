@@ -79,9 +79,9 @@ public class TestApplication extends EndpointTest {
     @Test
     public void testSamples() throws Exception {
         Sample sample = testEndpoint("/api/v1/provider/samples", Sample.class);
-		assertNotNull("No response from API for sample", sample);
+        assertNotNull("No response from API for sample", sample);
         assertNotNull("Expected locations", sample.getLocations());
-		assertEquals("Expected no samples.", 0, sample.getLocations().length);
+        assertEquals("Expected no samples.", 0, sample.getLocations().length);
     }
     
     @Test

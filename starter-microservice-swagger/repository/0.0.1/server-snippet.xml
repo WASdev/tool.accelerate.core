@@ -17,9 +17,9 @@
         <feature>apiDiscovery-1.0</feature>
     </featureManager>
 	
-	<keyStore id="defaultKeyStore" password="Liberty"/>
+    <keyStore id="defaultKeyStore" password="Liberty"/>
 	
-	<basicRegistry id="basic" realm="ibm/api">
+    <basicRegistry id="basic" realm="ibm/api">
         <user name="guest" password="password" />
     </basicRegistry>
 

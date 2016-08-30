@@ -50,9 +50,9 @@ import com.ibm.liberty.starter.api.v1.model.provider.Tag;
 @Path("v1/provider")
 public class ProviderEndpoint {
 	
-	private static final Logger log = Logger.getLogger(ProviderEndpoint.class.getName());
+    private static final Logger log = Logger.getLogger(ProviderEndpoint.class.getName());
 	
-	private static final String GROUP_SUFFIX = "swagger";
+    private static final String GROUP_SUFFIX = "swagger";
 
     @GET
     @Path("/")
@@ -149,19 +149,19 @@ public class ProviderEndpoint {
     public String prepareDynamicPackages(@QueryParam("path") String techWorkspaceDir, @QueryParam("options") String options, @QueryParam("techs") String techs) throws IOException {
     	if(techWorkspaceDir != null && !techWorkspaceDir.trim().isEmpty()){
     		File packageDir = new File(techWorkspaceDir + "/package");
-			if(packageDir.exists() && packageDir.isDirectory()){
-				FileUtils.deleteDirectory(packageDir);
-				log.finer("Deleted package directory : " + techWorkspaceDir + "/package");
-			}
-    		
+    		if(packageDir.exists() && packageDir.isDirectory()){
+    			FileUtils.deleteDirectory(packageDir);
+    			log.finer("Deleted package directory : " + techWorkspaceDir + "/package");
+    		}
+
     		if(options != null && !options.trim().isEmpty()){
     			String[] techOptions = options.split(",");
-        		String codeGenType = techOptions.length >= 1 ? techOptions[0] : null;
+    			String codeGenType = techOptions.length >= 1 ? techOptions[0] : null;
 
-        		if("server".equals(codeGenType)){
-        			String codeGenSrcDirPath = techWorkspaceDir + "/" + codeGenType + "/src";
+    			if("server".equals(codeGenType)){
+    				String codeGenSrcDirPath = techWorkspaceDir + "/" + codeGenType + "/src";
     				File codeGenSrcDir = new File(codeGenSrcDirPath);
-    				
+
     				if(codeGenSrcDir.exists() && codeGenSrcDir.isDirectory()){
     					String packageSrcDirPath = techWorkspaceDir + "/package/myProject-application/src";
     					File packageSrcDir = new File(packageSrcDirPath);
@@ -170,41 +170,41 @@ public class ProviderEndpoint {
     				}else{
     					log.fine("Swagger code gen source directory doesn't exist : " + codeGenSrcDirPath);
     				}
-        		}else{
-        			log.fine("Invalid options : " + options);
-        			return "Invalid options : " + options;
-        		}
+    			}else{
+    				log.fine("Invalid options : " + options);
+    				return "Invalid options : " + options;
+    			}
     		}
-    		
+
     		if(techs != null && !techs.trim().isEmpty()){
     			//Perform actions based on other technologies/micro-services that were selected by the user
     			String[] techList = techs.split(",");
-        		boolean restEnabled = false;
-            	boolean servletEnabled = false;
-            	for (String tech : techList) {
-                    switch(tech){
-        	            case "rest":
-        	            	restEnabled = true;
-        	            	break;
-        	            case "web" :
-        	            	servletEnabled = true;
-        	            	break;
-                    }
-            	}
-            	log.finer("Enabled : REST=" + restEnabled + " : Servlet=" + servletEnabled);
+    			boolean restEnabled = false;
+    			boolean servletEnabled = false;
+    			for (String tech : techList) {
+    				switch(tech){
+    				case "rest":
+    					restEnabled = true;
+    					break;
+    				case "web" :
+    					servletEnabled = true;
+    					break;
+    				}
+    			}
+    			log.finer("Enabled : REST=" + restEnabled + " : Servlet=" + servletEnabled);
 
-            	String sharedResourceDir = "";
-            	try{
-            		sharedResourceDir =  ((String)(new InitialContext().lookup("sharedResourceDir")));
-            		log.finer("sharedResourceDir=" + sharedResourceDir);
-            	} catch (NamingException ne){
-            		log.info("NamingException occurred: " + ne);
-        			return "Internal error";
-            	}
-    			
-        		if(restEnabled){
-        			// Swagger and REST are selected. Add Swagger annotations to the REST sample application.
-        			String restSampleAppPath = sharedResourceDir + "/appAccelerator/swagger/samples/rest/LibertyRestEndpoint.java";
+    			String sharedResourceDir = "";
+    			try{
+    				sharedResourceDir =  ((String)(new InitialContext().lookup("sharedResourceDir")));
+    				log.finer("sharedResourceDir=" + sharedResourceDir);
+    			} catch (NamingException ne){
+    				log.info("NamingException occurred: " + ne);
+    				return "Internal error";
+    			}
+
+    			if(restEnabled){
+    				// Swagger and REST are selected. Add Swagger annotations to the REST sample application.
+    				String restSampleAppPath = sharedResourceDir + "/appAccelerator/swagger/samples/rest/LibertyRestEndpoint.java";
     				File restSampleApp = new File(restSampleAppPath);
     				if(restSampleApp.exists()){
     					String targetRestSampleFile = techWorkspaceDir + "/package/myProject-application/src/main/java/application/rest/LibertyRestEndpoint.java";
@@ -213,10 +213,10 @@ public class ProviderEndpoint {
     				}else{
     					log.fine("No swagger annotations were added : " + restSampleApp.getAbsolutePath() + " : exists=" + restSampleApp.exists());
     				}
-        		}
-        		
-        		if(servletEnabled){
-        			//Swagger and Servlet are selected. Add swagger.json stub that describes the servlet endpoint to META-INF/stub directory.
+    			}
+
+    			if(servletEnabled){
+    				//Swagger and Servlet are selected. Add swagger.json stub that describes the servlet endpoint to META-INF/stub directory.
     				String swaggerStubPath = sharedResourceDir + "/appAccelerator/swagger/samples/servlet/swagger.json";
     				File swaggerStub = new File(swaggerStubPath);
     				if(swaggerStub.exists()){
@@ -226,13 +226,13 @@ public class ProviderEndpoint {
     				}else{
     					log.fine("Didn't add swagger.json stub : " + swaggerStub.getAbsolutePath() + " : exists=" + swaggerStub.exists());
     				}
-        		}
+    			}
     		}
     	}else{
     		log.fine("Invalid path : " + techWorkspaceDir);
-			return "Invalid path";
+    		return "Invalid path";
     	}
-    	
+
     	return "success";
     }
     	
@@ -313,72 +313,72 @@ public class ProviderEndpoint {
     
     private int generateCode(String javaHome, String swaggerCodeGenJarPath, String javaClientTemplates, String codeGenLanguage, String filePath, String outputDir) throws java.io.IOException {
 
-        try {
-            final ArrayList<String> commandList = new ArrayList<String>();
+    	try {
+    		final ArrayList<String> commandList = new ArrayList<String>();
 
-			if(javaHome == null || javaHome.trim().isEmpty()){
-				//Get java home
-	            javaHome = AccessController.doPrivileged(
-	                            new PrivilegedAction<String>() {
-	                                @Override
-	                                public String run() {
-	                                    return System.getProperty("java.home");
-	                                }
-	
-	                            });
-	            log.fine("Retrieved Java home location from System property : " + javaHome);
-			}
-			
-            commandList.add(javaHome + "/bin/java");
-            commandList.add("-jar");
-            commandList.add(swaggerCodeGenJarPath);
-			
-			commandList.add("generate");
-			commandList.add("-l");
-			commandList.add(codeGenLanguage);
-			
-			if(javaClientTemplates != null && !javaClientTemplates.trim().isEmpty()){
-				commandList.add("-t");
-				commandList.add(javaClientTemplates);
-			}
-			
-			commandList.add("-i");
-			commandList.add(filePath);			
-			commandList.add("-o");
-			commandList.add(outputDir);   
+    		if(javaHome == null || javaHome.trim().isEmpty()){
+    			//Get java home
+    			javaHome = AccessController.doPrivileged(
+    					new PrivilegedAction<String>() {
+    						@Override
+    						public String run() {
+    							return System.getProperty("java.home");
+    						}
 
-			StringBuilder sb = new StringBuilder();
-			for (String command : commandList) {
-                    sb.append(command);
-                    sb.append(" ");
-			}
-			
-			log.finer("Swagger code gen commands:\n" + sb.toString());
-				
-            //Run the command
-            ProcessBuilder builder = new ProcessBuilder(commandList);
-            builder.redirectErrorStream(true); //merge error and output together
+    					});
+    			log.fine("Retrieved Java home location from System property : " + javaHome);
+    		}
 
-            Process codeGenProc = builder.start();
-            int exitVal = codeGenProc.waitFor();
+    		commandList.add(javaHome + "/bin/java");
+    		commandList.add("-jar");
+    		commandList.add(swaggerCodeGenJarPath);
 
-            log.finer("Exit values: " + exitVal);
+    		commandList.add("generate");
+    		commandList.add("-l");
+    		commandList.add(codeGenLanguage);
 
-            if (exitVal != 0) {
-            	log.fine("Error : exit value is not 0. exitVal=" + exitVal);
-            	log.finer("output=" + getOutput(codeGenProc));
-            }else{
-            	log.finer("Successfully generated code using SwaggerCodegen");
-            }
-            
+    		if(javaClientTemplates != null && !javaClientTemplates.trim().isEmpty()){
+    			commandList.add("-t");
+    			commandList.add(javaClientTemplates);
+    		}
+
+    		commandList.add("-i");
+    		commandList.add(filePath);			
+    		commandList.add("-o");
+    		commandList.add(outputDir);   
+
+    		StringBuilder sb = new StringBuilder();
+    		for (String command : commandList) {
+    			sb.append(command);
+    			sb.append(" ");
+    		}
+
+    		log.finer("Swagger code gen commands:\n" + sb.toString());
+
+    		//Run the command
+    		ProcessBuilder builder = new ProcessBuilder(commandList);
+    		builder.redirectErrorStream(true); //merge error and output together
+
+    		Process codeGenProc = builder.start();
+    		int exitVal = codeGenProc.waitFor();
+
+    		log.finer("Exit values: " + exitVal);
+
+    		if (exitVal != 0) {
+    			log.fine("Error : exit value is not 0. exitVal=" + exitVal);
+    			log.finer("output=" + getOutput(codeGenProc));
+    		}else{
+    			log.finer("Successfully generated code using SwaggerCodegen");
+    		}
+
     		return exitVal;
-        } catch (Exception e) {
-        	log.fine("Exception occurred while executing SwaggerCodegen : e=" + e);
-			return -1;
-        }
+    	} catch (Exception e) {
+    		log.fine("Exception occurred while executing SwaggerCodegen : e=" + e);
+    		return -1;
+    	}
     }
-	
-	private String getOutput(Process joinProc) throws IOException {
+
+    private String getOutput(Process joinProc) throws IOException {
         InputStream stream = joinProc.getInputStream();
 
         char[] buf = new char[512];

@@ -69,7 +69,7 @@ public class LibertyTechnologySelector {
                         }
                     }
                 } else {
-					log.info("Invalid tech type: " + tech);
+                    log.info("Invalid tech type: " + tech);
                     throw new ValidationException("Invalid technology type.");
                 }
             }

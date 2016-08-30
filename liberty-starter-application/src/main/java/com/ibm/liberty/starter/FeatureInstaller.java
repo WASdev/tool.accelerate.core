@@ -47,7 +47,7 @@ public class FeatureInstaller {
 		this.serviceConnector = serviceConnector;
 		listOfFeatures = new ArrayList<String>();
 		setServices(services);
-	}d
+	}
 
 	private void setServices(Services services) {
 		for (Service service : services.getServices()) {

@@ -44,8 +44,8 @@ public class ServiceConnector {
         serverHostPort = scheme + "://" + authority;
         services = parseServicesJson();
     }
-	
-	public ServiceConnector(String hostPort) {
+
+    public ServiceConnector(String hostPort) {
         serverHostPort = hostPort;
         services = parseServicesJson();
     }
@@ -100,31 +100,31 @@ public class ServiceConnector {
     	log.finer("service=" + service.getId() + " : options=" + options + " : techWorkspaceDir=" + techWorkspaceDir + " : techs=" + techs);
     	String optionsParam = (options != null && !options.trim().isEmpty()) ? ("&options=" + options) : "";
     	String techsParam = "&techs=" + String.join(",", techs);
-		String url = urlConstructor("/api/v1/provider/packages/prepare?path=" + techWorkspaceDir + optionsParam + techsParam, service);
-        try{
-        	String response = getObjectFromEndpoint(String.class, url, MediaType.TEXT_PLAIN_TYPE);
+    	String url = urlConstructor("/api/v1/provider/packages/prepare?path=" + techWorkspaceDir + optionsParam + techsParam, service);
+    	try{
+    		String response = getObjectFromEndpoint(String.class, url, MediaType.TEXT_PLAIN_TYPE);
             log.fine("Response of preparing dynamic packages from " + techWorkspaceDir + " : " + response);
             return response;
-        }catch(javax.ws.rs.NotFoundException e){
-        	// The service doesn't offer this endpoint, so the exception can be ignored. 
-        	log.finest("Ignore expected exception : The service doesn't offer endpoint " + url + " : " + e);
+    	}catch(javax.ws.rs.NotFoundException e){
+    		// The service doesn't offer this endpoint, so the exception can be ignored. 
+    		log.finest("Ignore expected exception : The service doesn't offer endpoint " + url + " : " + e);
         }
         return "";
     }
     
-	public String getFeaturesToInstall(Service service) {
-		log.finer("service=" + service.getId());
-		String url = urlConstructor("/api/v1/provider/features/install", service);
-        try{
-        	String response = getObjectFromEndpoint(String.class, url, MediaType.TEXT_PLAIN_TYPE);
-            log.fine("Features to install for " + service.getId() + " : " + response);
-            return response;
-        }catch(javax.ws.rs.NotFoundException e){
-        	// The service doesn't offer this endpoint, so the exception can be ignored. 
-        	log.finest("Ignore expected exception : The service doesn't offer endpoint " + url + " : " + e);
-        }
-        return "";
-	}
+    public String getFeaturesToInstall(Service service) {
+    	log.finer("service=" + service.getId());
+    	String url = urlConstructor("/api/v1/provider/features/install", service);
+    	try{
+    		String response = getObjectFromEndpoint(String.class, url, MediaType.TEXT_PLAIN_TYPE);
+    		log.fine("Features to install for " + service.getId() + " : " + response);
+    		return response;
+    	}catch(javax.ws.rs.NotFoundException e){
+    		// The service doesn't offer this endpoint, so the exception can be ignored. 
+    		log.finest("Ignore expected exception : The service doesn't offer endpoint " + url + " : " + e);
+    	}
+    	return "";
+    }
     
     public Sample getSample(Service service) {
         String url = urlConstructor("/api/v1/provider/samples", service);

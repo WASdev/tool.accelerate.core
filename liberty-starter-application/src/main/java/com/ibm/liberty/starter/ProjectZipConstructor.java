@@ -100,7 +100,7 @@ public class ProjectZipConstructor {
     
     private void cleanup() throws IOException {
     	cleanUpDynamicPackages();    	
-	}
+    }
     
     private void cleanUpDynamicPackages() throws IOException{
     	// Delete dynamically generated packages as they were already packaged.
@@ -113,7 +113,7 @@ public class ProjectZipConstructor {
             
             if(packageDir.exists() && packageDir.isDirectory()){
             	FileUtils.deleteDirectory(packageDir);
-        		log.log(Level.FINE, "Deleted package directory for " + serviceId + " technology. : " + packageLocation);
+            	log.log(Level.FINE, "Deleted package directory for " + serviceId + " technology. : " + packageLocation);
             }
         }
     }
@@ -136,18 +136,18 @@ public class ProjectZipConstructor {
             	StarterUtil.populateFilesList(packageDir, filesListInDir);
             	
             	for(File aFile : filesListInDir){
-					String path = aFile.getAbsolutePath().replace('\\', '/').replace(packageLocation, "");
-					
-					if(path.startsWith("/")){
-						path = path.substring(1);
-					}
-					putFileInMap(path, FileUtils.readFileToByteArray(aFile));
-					log.log(Level.FINE, "Packaged file " + aFile.getAbsolutePath() + " to " + path);
+            		String path = aFile.getAbsolutePath().replace('\\', '/').replace(packageLocation, "");
+
+            		if(path.startsWith("/")){
+            			path = path.substring(1);
+            		}
+            		putFileInMap(path, FileUtils.readFileToByteArray(aFile));
+            		log.log(Level.FINE, "Packaged file " + aFile.getAbsolutePath() + " to " + path);
             	}
             }
         }
         log.log(Level.FINE, "Exiting method ProjectZipConstructor.addDynamicPackages()");
-	}
+    }
     
     private void addFeaturesToInstall() throws SAXException, IOException, ParserConfigurationException, TransformerException {
         log.log(Level.INFO, "Entering method ProjectZipConstructor.addFeaturesToInstall()");
@@ -159,7 +159,7 @@ public class ProjectZipConstructor {
         putFileInMap(pathToServerXML, featureInstaller.addFeaturesToInstall(serverInputStream, false));
     }
 
-	public void initializeMap() throws IOException {
+    public void initializeMap() throws IOException {
         log.log(Level.INFO, "Entering method ProjectZipConstructor.initializeMap()");
         InputStream skeletonIS = this.getClass().getClassLoader().getResourceAsStream(SKELETON_JAR_FILENAME);
         ZipInputStream zis = new ZipInputStream(skeletonIS);
