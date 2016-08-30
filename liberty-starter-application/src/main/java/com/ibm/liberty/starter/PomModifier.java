@@ -20,19 +20,13 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.OutputKeys;
-import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
@@ -57,20 +51,13 @@ public class PomModifier {
     private String appName;
     private DeployType deployType;
     private String repoUrl;
-    private FeatureInstallHandler featureInstaller;	//Handles features to be installed during Liberty installation
 
     public PomModifier(DeployType deployType) {
         this.deployType = deployType;
     }
-    
-    public PomModifier(FeatureInstallHandler featureInstaller) {
-        this.featureInstaller = featureInstaller;
-    }
 
     public void setInputStream(InputStream pomInputStream) throws SAXException, IOException, ParserConfigurationException {
-        DocumentBuilderFactory domFactory = DocumentBuilderFactory.newInstance();
-        DocumentBuilder db = domFactory.newDocumentBuilder();
-        doc = db.parse(pomInputStream);
+        doc = DomUtil.getDocument(pomInputStream);
     }
 
     public void addStarterPomDependencies(DependencyHandler depHand) {
@@ -104,161 +91,21 @@ public class PomModifier {
     }
 
     private void writeToStream(OutputStream pomOutputStream) throws TransformerException, IOException {
-        if(deployType != null){
-        	Node dependenciesNode = doc.getElementsByTagName("dependencies").item(0);
-	        log.log(Level.INFO, "Appending dependency nodes for provided poms");
-	        appendDependencyNodes(dependenciesNode, providedPomsToAdd);
-	        log.log(Level.INFO, "Appending dependency nodes for runtime poms");
-	        appendDependencyNodes(dependenciesNode, runtimePomsToAdd);
-	        log.log(Level.INFO, "Appending dependency nodes for compile poms");
-	        appendDependencyNodes(dependenciesNode, compilePomsToAdd);
-	
-	        NodeList propertiesNodeList = doc.getElementsByTagName("properties");
-	        appendAppNameProperty(propertiesNodeList);
-	
-	        appendDeployType();
-	        appendRepoUrl();
-        }
-        
-        if(featureInstaller != null){
-        	//Add the features returned by FeatureInstallHandler to the wlp config pom.xml to be installed when installing Liberty (using liberty-maven-plugin)
-        	List<String> featuresToInstall = featureInstaller.getFeaturesToInstall();
-        	
-        	if(!featuresToInstall.isEmpty()){
-        		Node assemblyInstallDirectory = doc.getElementsByTagName("assemblyInstallDirectory").item(0);
-        		if(assemblyInstallDirectory != null){
-        			Node configuration = assemblyInstallDirectory.getParentNode();
-    	            
-    	            if(!StarterUtil.hasNode(configuration, "features")){
-    	            	configuration.appendChild(doc.createElement("features"));
-    	            }
-    	            
-    	            Node features =  StarterUtil.getNode(configuration, "features");
-    	
-    	            if(!StarterUtil.hasNode(features, "acceptLicense")){
-    	            	Node acceptLicense = doc.createElement("acceptLicense");
-    	                acceptLicense.setTextContent("${accept.license}");
-    	                features.appendChild(acceptLicense);
-    	                
-    	                //Enforce 'accept.license' property using maven-enforcer-plugin
-    	                Node plugins = configuration.getParentNode().getParentNode();
-    	                Node enforcerPlugin;
-    	                if(!StarterUtil.hasNode(plugins, "plugin", "artifactId", "maven-enforcer-plugin")){
-    	                	enforcerPlugin = doc.createElement("plugin");
-    	                	
-    	                	Node groupId = doc.createElement("groupId");
-    	                	groupId.setTextContent("org.apache.maven.plugins");
-    	                	enforcerPlugin.appendChild(groupId);
-    	                	
-    	                	Node artifactId = doc.createElement("artifactId");
-    	                	artifactId.setTextContent("maven-enforcer-plugin");
-    	                	enforcerPlugin.appendChild(artifactId);
-    	                	
-    	                	Node version = doc.createElement("version");
-    	                	version.setTextContent("1.4.1");
-    	                	enforcerPlugin.appendChild(version);
-    	                	
-    	                	plugins.appendChild(enforcerPlugin);
-    	                }else{
-    	                	Node artifactIdNode = StarterUtil.getNode(plugins, "plugin", "artifactId", "maven-enforcer-plugin");
-    	                	enforcerPlugin = artifactIdNode.getParentNode();
-    	                }
-    	                
-    	                Node executions = StarterUtil.getNode(enforcerPlugin, "executions");
-    	                if(executions == null){
-    	                	executions = doc.createElement("executions");
-    	                	enforcerPlugin.appendChild(executions);
-    	                }
-    	                
-    	                Node execution;
-    	                if(!StarterUtil.hasNode(executions, "execution", "id", "enforce-property")){
-    	                	execution = doc.createElement("execution");
-    	                	executions.appendChild(execution);
-    	                	
-    	                	Node id = doc.createElement("id");
-    	                	id.setTextContent("enforce-property");
-    	                	execution.appendChild(id);
-    	                }else{
-    	                	Node enforceProperty = StarterUtil.getNode(executions, "execution", "id", "enforce-property");
-    	                	execution = enforceProperty.getParentNode();
-    	                }
-    	                
-    	                Node goals = StarterUtil.getNode(execution, "goals");
-    	                if(goals == null){
-    	                	goals = doc.createElement("goals");
-    	                	execution.appendChild(goals);
-    	                }
-    	                
-    	                Node goal = StarterUtil.getNode(goals, "goal", "enforce");
-    	                if(goal == null){
-    	                	goal = doc.createElement("goal");
-    	                	goal.setTextContent("enforce");
-    	                	goals.appendChild(goal);
-    	                }
-    	                
-    	                Node configurationNode = StarterUtil.getNode(execution, "configuration");
-    	                if(configurationNode == null){
-    	                	configurationNode = doc.createElement("configuration");
-    	                	execution.appendChild(configurationNode);
-    	                }
-    	                
-    	                Node rules = StarterUtil.getNode(configurationNode, "rules");
-    	                if(rules == null){
-    	                	rules = doc.createElement("rules");
-    	                	configurationNode.appendChild(rules);
-    	                }
-    	                
-    	                Node requireProperty;
-    	                if(!StarterUtil.hasNode(rules, "requireProperty", "property", "accept.license")){
-    	                	requireProperty = doc.createElement("requireProperty");
-    	                	rules.appendChild(requireProperty);
-    	                	
-    	                	Node property = doc.createElement("property");
-    	                	property.setTextContent("accept.license");
-    	                	requireProperty.appendChild(property);
-    	                	
-    	                	Node message = doc.createElement("message");
-    	                	message.setTextContent("You must set a value for the 'accept.license' property defined in myProject-wlpcfg/pom.xml. Please review the license terms and conditions for additional features to be installed and if you accept the license terms and conditions then run the Maven command with '-Daccept.license=true'.");
-    	                	requireProperty.appendChild(message);
-    	                	
-    	                	Node regex = doc.createElement("regex");
-    	                	regex.setTextContent("true");
-    	                	requireProperty.appendChild(regex);
-    	                	
-    	                	Node regexMessage = doc.createElement("regexMessage");
-    	                	regexMessage.setTextContent("Additional features could not be installed as the license terms and conditions were not accepted. If you accept the license terms and conditions then run the Maven command with '-Daccept.license=true'.");
-    	                	requireProperty.appendChild(regexMessage);
-    	                }else{
-    	                	Node propertyNode = StarterUtil.getNode(rules, "requireProperty", "property", "accept.license");
-    	                	requireProperty = propertyNode.getParentNode();
-    	                }
-    	                
-    	                Node fail = StarterUtil.getNode(configurationNode, "fail");
-    	                if(fail == null){
-    	                	fail = doc.createElement("fail");
-    	                	configurationNode.appendChild(fail);
-    	                }
-    	                fail.setTextContent("true");
-    	            }
-    	
-    	            for(String feature : featuresToInstall){
-    	            	Node featureNode = doc.createElement("feature");
-    	            	featureNode.setTextContent(feature);
-    	                features.appendChild(featureNode);
-    	            }
-        		}
-        	}
-        }
+    	Node dependenciesNode = doc.getElementsByTagName("dependencies").item(0);
+        log.log(Level.INFO, "Appending dependency nodes for provided poms");
+        appendDependencyNodes(dependenciesNode, providedPomsToAdd);
+        log.log(Level.INFO, "Appending dependency nodes for runtime poms");
+        appendDependencyNodes(dependenciesNode, runtimePomsToAdd);
+        log.log(Level.INFO, "Appending dependency nodes for compile poms");
+        appendDependencyNodes(dependenciesNode, compilePomsToAdd);
 
-        TransformerFactory transformFactory = TransformerFactory.newInstance();
-        Transformer transformer = transformFactory.newTransformer();
-        transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-        transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "4");
+        NodeList propertiesNodeList = doc.getElementsByTagName("properties");
+        appendAppNameProperty(propertiesNodeList);
 
-        DOMSource domSource = new DOMSource(doc);
+        appendDeployType();
+        appendRepoUrl();
 
-        StreamResult streamResult = new StreamResult(pomOutputStream);
-        transformer.transform(domSource, streamResult);
+        StarterUtil.identityTransform(new DOMSource(doc), new StreamResult(pomOutputStream), false, true, "4");
     }
 
     private void appendDependencyNodes(Node dependenciesNode, Map<String, Dependency> dependencies) {

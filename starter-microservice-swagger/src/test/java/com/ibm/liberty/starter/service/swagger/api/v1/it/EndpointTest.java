@@ -56,7 +56,6 @@ public class EndpointTest {
         return "http://localhost:" + port + "/" + war + endpoint;
 	}
 	
-	@SuppressWarnings("unchecked")
 	public String testEndpoint(String endpoint) throws Exception {
         String url = getEndPoint(endpoint);
         System.out.println("Testing " + url);

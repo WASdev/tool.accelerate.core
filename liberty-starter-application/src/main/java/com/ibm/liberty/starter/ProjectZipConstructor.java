@@ -98,11 +98,11 @@ public class ProjectZipConstructor {
         cleanup();
     }
     
-    private void cleanup() {
+    private void cleanup() throws IOException {
     	cleanUpDynamicPackages();    	
 	}
     
-    private void cleanUpDynamicPackages(){
+    private void cleanUpDynamicPackages() throws IOException{
     	// Delete dynamically generated packages as they were already packaged.
     	// ** Note **: Don't delete these packages prior to this stage as other operations may depend on the existence of these packages to perform certain tasks.
     	for (Service service : services.getServices()) {
@@ -112,8 +112,8 @@ public class ProjectZipConstructor {
             File packageDir = new File(packageLocation);
             
             if(packageDir.exists() && packageDir.isDirectory()){
-            	FileUtils.deleteQuietly(packageDir);
-            	log.log(Level.FINE, "Deleted package directory for " + serviceId + " technology. : " + packageLocation);
+            	FileUtils.deleteDirectory(packageDir);
+        		log.log(Level.FINE, "Deleted package directory for " + serviceId + " technology. : " + packageLocation);
             }
         }
     }
@@ -151,12 +151,12 @@ public class ProjectZipConstructor {
     
     private void addFeaturesToInstall() throws SAXException, IOException, ParserConfigurationException, TransformerException {
         log.log(Level.INFO, "Entering method ProjectZipConstructor.addFeaturesToInstall()");
-        InputStream inputStream = new ByteArrayInputStream(getFileFromMap(WLP_CFG_POM_FILE)); 
-        FeatureInstallHandler featureInstaller = new FeatureInstallHandler(services, serviceConnector);
-        PomModifier pomModifier = new PomModifier(featureInstaller);
-        pomModifier.setInputStream(inputStream);
-        byte[] bytes = pomModifier.getBytes();
-        putFileInMap(WLP_CFG_POM_FILE, bytes);
+        InputStream pomInputStream = new ByteArrayInputStream(getFileFromMap(WLP_CFG_POM_FILE)); 
+        FeatureInstaller featureInstaller = new FeatureInstaller(services, serviceConnector);
+        putFileInMap(WLP_CFG_POM_FILE, featureInstaller.addFeaturesToInstall(pomInputStream, true));
+        String pathToServerXML = "myProject-wlpcfg/servers/LibertyProjectServer/server.xml";
+        InputStream serverInputStream = new ByteArrayInputStream(getFileFromMap(pathToServerXML)); 
+        putFileInMap(pathToServerXML, featureInstaller.addFeaturesToInstall(serverInputStream, false));
     }
 
 	public void initializeMap() throws IOException {

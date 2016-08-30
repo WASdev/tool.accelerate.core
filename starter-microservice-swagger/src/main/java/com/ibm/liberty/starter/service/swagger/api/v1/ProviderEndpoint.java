@@ -148,7 +148,11 @@ public class ProviderEndpoint {
     @Produces(MediaType.TEXT_PLAIN)
     public String prepareDynamicPackages(@QueryParam("path") String techWorkspaceDir, @QueryParam("options") String options, @QueryParam("techs") String techs) throws IOException {
     	if(techWorkspaceDir != null && !techWorkspaceDir.trim().isEmpty()){
-    		FileUtils.deleteQuietly(new File(techWorkspaceDir + "/package"));
+    		File packageDir = new File(techWorkspaceDir + "/package");
+			if(packageDir.exists() && packageDir.isDirectory()){
+				FileUtils.deleteDirectory(packageDir);
+				log.finer("Deleted package directory : " + techWorkspaceDir + "/package");
+			}
     		
     		if(options != null && !options.trim().isEmpty()){
     			String[] techOptions = options.split(",");
@@ -240,7 +244,7 @@ public class ProviderEndpoint {
     	File uploadDirectory;
     	if(uploadDirectoryPath == null || !(uploadDirectory = new File(uploadDirectoryPath)).exists()){
     		log.fine("Invalid uploaded directory : " + uploadDirectoryPath);
-    		return "Couldn't fulfill the request due to internal error";
+    		return "One Couldn't fulfill the request due to internal error";
     	}
     	
     	List<File> filesListInDir = new ArrayList<File>();
@@ -265,7 +269,8 @@ public class ProviderEndpoint {
 			File schemaCodeGen = new File(swaggerCodeGenJarPath);
 			if(!schemaCodeGen.exists()){
 				log.info("swagger-codegen-cli.jar doesn't exist: " + schemaCodeGen.getAbsolutePath());
-				return "Couldn't fulfill the request due to internal error";
+				System.out.println("swagger-codegen-cli.jar doesn't exist: " + schemaCodeGen.getAbsolutePath());
+				return "Two Couldn't fulfill the request due to internal error";
 			}
 			
 			String javaHome = ((String)(new InitialContext().lookup("javaHome")));

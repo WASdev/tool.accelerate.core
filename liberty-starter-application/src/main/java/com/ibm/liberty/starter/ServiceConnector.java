@@ -98,7 +98,9 @@ public class ServiceConnector {
     
     public String prepareDynamicPackages(Service service, String techWorkspaceDir, String options, String[] techs) {
     	log.finer("service=" + service.getId() + " : options=" + options + " : techWorkspaceDir=" + techWorkspaceDir + " : techs=" + techs);
-		String url = urlConstructor("/api/v1/provider/packages/prepare?path=" + techWorkspaceDir + ((options != null && !options.trim().isEmpty()) ? ("&options=" + options) : "") + "&techs=" + String.join(",", techs), service);
+    	String optionsParam = (options != null && !options.trim().isEmpty()) ? ("&options=" + options) : "";
+    	String techsParam = "&techs=" + String.join(",", techs);
+		String url = urlConstructor("/api/v1/provider/packages/prepare?path=" + techWorkspaceDir + optionsParam + techsParam, service);
         try{
         	String response = getObjectFromEndpoint(String.class, url, MediaType.TEXT_PLAIN_TYPE);
             log.fine("Response of preparing dynamic packages from " + techWorkspaceDir + " : " + response);

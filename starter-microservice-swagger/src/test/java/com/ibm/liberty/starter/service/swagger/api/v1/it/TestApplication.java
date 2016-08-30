@@ -17,8 +17,13 @@ package com.ibm.liberty.starter.service.swagger.api.v1.it;
 
 import static org.junit.Assert.*;
 
+import java.io.File;
+import java.util.UUID;
+
 import org.junit.Before;
 import org.junit.Test;
+
+import org.apache.commons.io.FileUtils;
 
 import com.ibm.liberty.starter.api.v1.model.provider.Dependency;
 import com.ibm.liberty.starter.api.v1.model.provider.Provider;
@@ -85,6 +90,32 @@ public class TestApplication extends EndpointTest {
         assertNotNull("No response from API for features/install", actual);
         String expected = "apiDiscovery-1.0";
         assertEquals("Incorrect feature to install was specified : " + actual, expected, actual);
+    }
+    
+    @Test
+    public void testPrepareDynamicPackages() throws Exception {
+    	String serverOutputDir = new File("./build/test/wlp/servers/StarterServer").getCanonicalPath().replace('\\', '/');
+    	System.out.println("serverOutputDir=" + serverOutputDir);
+    	String uuid = UUID.randomUUID().toString();
+    	String swaggerTechDirPath = serverOutputDir + "/workarea/appAccelerator/" + uuid + "/swagger";
+    	File swaggerFile = new File(swaggerTechDirPath + "/server/src/sampleSwagger.json");
+    	createSampleSwagger(swaggerFile);
+    	assertTrue("Swagger file doesn't exist : " + swaggerFile.getCanonicalPath(), swaggerFile.exists());
+    	String actual = testEndpoint("/api/v1/provider/packages/prepare?path=" + swaggerTechDirPath + "&options=server");
+    	assertNotNull("No response from API for packages/prepare", actual);
+        assertEquals("Response doesn't match : " + actual, "success", actual);
+        String packagedFilePath = swaggerTechDirPath + "/package/myProject-application/src/sampleSwagger.json";
+        assertTrue("Swagger file was not packaged successfully : " + packagedFilePath, new File(packagedFilePath).exists());
+    }
+    
+    private void createSampleSwagger(File file) throws Exception{
+    	String swaggerContent = "{\"swagger\": \"2.0\",\"info\": {\"description\": \"Info APIs for Collective\",\"version\": \"1.0.0\"},\"basePath\": \"/\","
+        		+ "\"paths\": {\"/ibm/api/root1/v1/info\": {\"get\": {\"summary\": \"Retrieve collective's core information\","
+        		+ "\"description\": \"Returns a JSON with core information about collective\",\"operationId\": \"getInfo\",\"produces\": "
+        		+ "[\"application/json\"],\"responses\": {\"200\": {\"description\": \"successful operation\","
+        		+ "\"schema\": {\"$ref\": \"#/definitions/CollectiveInfo\"}},\"404\": {\"description\": \"Invalid path\"}}}}},\"definitions\": {"
+        		+ "\"CollectiveInfo\": {\"properties\": {\"name\": {\"type\": \"string\",\"description\": \"Name of the collective\"}}}}}";
+    	FileUtils.writeStringToFile(file, swaggerContent);
     }
 
 }

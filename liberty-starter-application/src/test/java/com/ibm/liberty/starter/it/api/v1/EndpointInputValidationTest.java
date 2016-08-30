@@ -1,7 +1,9 @@
 package com.ibm.liberty.starter.it.api.v1;
 
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertEquals;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
@@ -97,7 +99,7 @@ public class EndpointInputValidationTest {
         String endpoint = "/start/api/v1/workspace";
         Response response = callEndpoint(endpoint);
         int status = response.getStatus();
-        assertTrue("Response incorrect, response status was " + status, status == 200);
+        assertEquals("Response incorrect, response status was " + status, 200, status);
         String workspaceId = response.readEntity(String.class);
         assertNotNull("Returned workspace ID was not a valid UUID : " + workspaceId, UUID.fromString(workspaceId));
     }
@@ -105,13 +107,13 @@ public class EndpointInputValidationTest {
     @Test
     public void testUploadInvalidNoTech() throws Exception {
         int response = invokeUploadEndpoint("","sampleFileNoTech.txt");
-        assertTrue("Response incorrect, response was " + response, response == Response.Status.BAD_REQUEST.getStatusCode());
+        assertEquals("Response incorrect, response was " + response, Response.Status.BAD_REQUEST.getStatusCode(), response);
     }
     
     @Test
     public void testUploadInvalidNoWorkspace() throws Exception {
         int response = invokeUploadEndpoint("tech=test", "sampleFileNoWorkspace.txt");
-        assertTrue("Response incorrect, response was " + response, response == Response.Status.BAD_REQUEST.getStatusCode());
+        assertEquals("Response incorrect, response was " + response, Response.Status.BAD_REQUEST.getStatusCode(), response);
     }
     
     /**
@@ -127,7 +129,7 @@ public class EndpointInputValidationTest {
     	
     	// Upload a file
         int responseCode = invokeUploadEndpoint("tech=test&workspace=" + uuid, "sampleUpload.txt");
-        assertTrue("Response 1 was incorrect, response was " + responseCode, responseCode == Response.Status.OK.getStatusCode());
+        assertEquals("Response 1 was incorrect, response was " + responseCode, Response.Status.OK.getStatusCode(), responseCode);
         String uploadedFilePath = serverOutputDir + "/workarea/appAccelerator/" + uuid + "/test/sampleUpload.txt";
         File uploadedFile = new File(uploadedFilePath);
         assertTrue("File was not uploaded : path=" + uploadedFilePath, uploadedFile.exists() && uploadedFile.isFile());
@@ -135,7 +137,7 @@ public class EndpointInputValidationTest {
         
         // Upload second file (without cleaning up)
         responseCode = invokeUploadEndpoint("tech=test&workspace=" + uuid, "sampleUpload2.txt");
-        assertTrue("Response 2 was incorrect, response was " + responseCode, responseCode == Response.Status.OK.getStatusCode());
+        assertEquals ("Response 2 was incorrect, response was " + responseCode, Response.Status.OK.getStatusCode(), responseCode);
         assertTrue("Previously uploaded file was not found : path=" + uploadedFilePath, uploadedFile.exists() && uploadedFile.isFile());
         String uploadedFilePath2 = serverOutputDir + "/workarea/appAccelerator/" + uuid + "/test/sampleUpload2.txt";
         File uploadedFile2 = new File(uploadedFilePath2);
@@ -143,7 +145,7 @@ public class EndpointInputValidationTest {
         
         // Upload third file (after cleaning up existing files) and process the file
         responseCode = invokeUploadEndpoint("tech=test&workspace=" + uuid + "&cleanup=true&process=true", "sampleUpload3.txt");
-        assertTrue("Response 3 was incorrect, response was " + responseCode, responseCode == Response.Status.OK.getStatusCode());
+        assertEquals("Response 3 was incorrect, response was " + responseCode, Response.Status.OK.getStatusCode(), responseCode);
         assertTrue("Previously uploaded files were not cleaned-up : path=" + uploadedFilePath + " : " + uploadedFilePath2, !uploadedFile.exists() && !uploadedFile2.exists() );
         String uploadedFilePath3 = serverOutputDir + "/workarea/appAccelerator/" + uuid + "/test/sampleUpload3.txt";
         File uploadedFile3 = new File(uploadedFilePath3);
@@ -151,7 +153,7 @@ public class EndpointInputValidationTest {
         String processedFilePath = serverOutputDir + "/workarea/appAccelerator/" + uuid + "/test/sampleUpload3.txt_renamed";
         File processedFile = new File(processedFilePath);
         assertTrue("Processed file was not found : path=" + processedFile, processedFile.exists() && processedFile.isFile());
-        assertTrue("Original third file should not exist : path=" + uploadedFilePath3, !uploadedFile3.exists());
+        assertFalse("Original third file should not exist : path=" + uploadedFilePath3, uploadedFile3.exists());
         
         // Invoke the v1/data endpoint to ensure that the packaged files are contained within the zip and the features to 
         // install specified by the 'test' micro-service are present within myProject-wlpcfg/pom.xml
@@ -161,7 +163,7 @@ public class EndpointInputValidationTest {
         System.out.println("Testing " + url);
         Response response = client.target(url).request("application/zip").get();
         int responseStatus = response.getStatus();
-        assertTrue("Incorrect response code. Response status is: " + responseStatus, responseStatus == 200);
+        assertEquals("Incorrect response code. Response status is: " + responseStatus, 200, responseStatus);
         // Read the response into an InputStream
         InputStream entityInputStream = response.readEntity(InputStream.class);
         // Create a new ZipInputStream from the response InputStream
@@ -180,27 +182,27 @@ public class EndpointInputValidationTest {
                 Node assemblyInstallDirectory = doc.getElementsByTagName("assemblyInstallDirectory").item(0);
                 assertNotNull("assemblyInstallDirectory node was not found within myProject-wlpcfg/pom.xml", assemblyInstallDirectory);
                 Node configuration = assemblyInstallDirectory.getParentNode();
-	            Node features =  getNode(configuration, "features");
+	            Node features =  getChildNode(configuration, "features");
 	            assertNotNull("features node was not found within myProject-wlpcfg/pom.xml", features);
-	            assertTrue("Install feature was not found : servlet-3.0", hasNode(features, "feature", "servlet-3.0"));
-	            assertTrue("Install feature was not found : apiDiscovery-1.0", hasNode(features, "feature", "apiDiscovery-1.0"));
-	            assertTrue("acceptLicense node with ${accept.license} property was not found", hasNode(features, "acceptLicense", "${accept.license}"));
+	            assertTrue("Install feature was not found : servlet-3.1", hasChildNode(features, "feature", "servlet-3.1"));
+	            assertTrue("Install feature was not found : apiDiscovery-1.0", hasChildNode(features, "feature", "apiDiscovery-1.0"));
+	            assertTrue("acceptLicense node with ${accept.features.license} property was not found", hasChildNode(features, "acceptLicense", "${accept.features.license}"));
 	            
 	            Node plugins = configuration.getParentNode().getParentNode();
-	            Node artifactIdNode = getNode(plugins, "plugin", "artifactId", "maven-enforcer-plugin");
+	            Node artifactIdNode = getGrandchildNode(plugins, "plugin", "artifactId", "maven-enforcer-plugin");
 	            assertNotNull("maven-enforcer-plugin was not found", artifactIdNode);
 	            Node enforcerPlugin = artifactIdNode.getParentNode();
-	            Node executions = getNode(enforcerPlugin, "executions");
+	            Node executions = getChildNode(enforcerPlugin, "executions");
 	            assertNotNull("executions node was not found within maven-enforcer-plugin", executions);
-	            Node enforcePropertyNode =  getNode(executions, "execution", "id", "enforce-property");
+	            Node enforcePropertyNode =  getGrandchildNode(executions, "execution", "id", "enforce-property");
 	            assertNotNull("enforce-property id was not found within maven-enforcer-plugin", enforcePropertyNode);
 	            Node execution = enforcePropertyNode.getParentNode();
-	            Node configurationNode = getNode(execution, "configuration");
+	            Node configurationNode = getChildNode(execution, "configuration");
 	            assertNotNull("configuration node was not found within maven-enforcer-plugin", configurationNode);
-	            Node rules = getNode(configurationNode, "rules");
+	            Node rules = getChildNode(configurationNode, "rules");
 	            assertNotNull("rules node was not found within maven-enforcer-plugin", rules);
-	            Node acceptLicenseProperty = getNode(rules, "requireProperty", "property", "accept.license");
-	            assertNotNull("requireProperty with accept.license property was not found within maven-enforcer-plugin", acceptLicenseProperty);
+	            Node acceptLicenseProperty = getGrandchildNode(rules, "requireProperty", "property", "accept.features.license");
+	            assertNotNull("requireProperty with accept.features.license property was not found within maven-enforcer-plugin", acceptLicenseProperty);
 	            foundFeaturesToInstall = true;
 	            break;
             }
@@ -213,7 +215,7 @@ public class EndpointInputValidationTest {
         
     }
     
-    private Node getNode(Node parentNode, String name){
+    private Node getChildNode(Node parentNode, String name){
     	if(parentNode == null || name == null){
     		return null;
     	}
@@ -229,53 +231,8 @@ public class EndpointInputValidationTest {
     	return null;
     }
     
-    private boolean hasNode(Node parentNode, String nodeName, String nodeValue){
-    	if(parentNode == null || nodeName == null || nodeValue == null){
-    		return false;
-    	}
-    	if (parentNode.getNodeType() == Node.ELEMENT_NODE && parentNode.hasChildNodes()) {
-    		NodeList children = parentNode.getChildNodes();
-        	for(int i=0; i < children.getLength(); i++){
-            	Node child = children.item(i);
-            	if(child != null && nodeName.equals(child.getNodeName()) && nodeValue.equals(child.getTextContent())){
-            		return true;
-            	}
-            }
-    	}
-    	return false;
-    }
-    
-    /**
-     * Determine if the parent node contains a child node and a grand child node with matching name and value
-     * @param parentNode - the parent node
-     * @param childNodeName - name of child node to match
-     * @param grandChildNodeName - name of grand child node to match 
-     * @param grandChildNodeValue - value of grand child node to match
-     * @return boolean value to indicate whether the parent node contains matching child node and a grand child node
-     */
-    private boolean hasNode(Node parentNode, String childNodeName, String grandChildNodeName, String grandChildNodeValue){
-    	if(parentNode == null || childNodeName == null || grandChildNodeName == null || grandChildNodeValue == null){
-    		return false;
-    	}
-    	
-    	if (parentNode.getNodeType() == Node.ELEMENT_NODE && parentNode.hasChildNodes()) {
-    		NodeList children = parentNode.getChildNodes();
-        	for(int i=0; i < children.getLength(); i++){
-            	Node child = children.item(i);
-            	if(child != null && childNodeName.equals(child.getNodeName())){
-            		if (child.getNodeType() == Node.ELEMENT_NODE && child.hasChildNodes()) {
-            			NodeList grandChildren = child.getChildNodes();
-                    	for(int j=0; j < grandChildren.getLength(); j++){
-                    		Node grandChild = grandChildren.item(j);
-                    		if(grandChild != null && grandChildNodeName.equals(grandChild.getNodeName()) && grandChildNodeValue.equals(grandChild.getTextContent())){
-                    			return true;
-                    		}
-                    	}
-            		}
-            	}
-            }
-    	}
-    	return false;
+    private boolean hasChildNode(Node parentNode, String nodeName, String nodeValue){
+    	return getChildNode(parentNode, nodeName, nodeValue) != null ? true : false;
     }
     
     /**
@@ -286,7 +243,7 @@ public class EndpointInputValidationTest {
      * @param grandChildNodeValue - value of grand child node to match
      * @return the grand child node if a match was found, null otherwise
      */
-    private Node getNode(Node parentNode, String childNodeName, String grandChildNodeName, String grandChildNodeValue){
+    private Node getGrandchildNode(Node parentNode, String childNodeName, String grandChildNodeName, String grandChildNodeValue){
     	if(parentNode == null || childNodeName == null || grandChildNodeName == null || grandChildNodeValue == null){
     		return null;
     	}
@@ -318,7 +275,7 @@ public class EndpointInputValidationTest {
      * @param value - value of child node to match
      * @return the child node if a match was found, null otherwise
      */
-    private Node getNode(Node parentNode, String name, String value){
+    private Node getChildNode(Node parentNode, String name, String value){
     	if(parentNode == null || name == null || value == null){
     		return null;
     	}

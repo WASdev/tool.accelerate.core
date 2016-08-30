@@ -111,7 +111,7 @@ public class ProviderEndpoint {
     @Path("features/install")
     @Produces(MediaType.TEXT_PLAIN)
     public String getFeaturesToInstall(){
-        return "servlet-3.0,apiDiscovery-1.0";
+        return "servlet-3.1,apiDiscovery-1.0";
     }
     
     @GET
