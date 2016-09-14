@@ -67,9 +67,15 @@
                         <default.http.port>${testServerHttpPort}</default.http.port>
                         <default.https.port>${testServerHttpsPort}</default.https.port>
                     </bootstrapProperties>
-                    <install />
                 </configuration>
                 <executions>
+                    <execution>
+                        <id>intall-liberty</id>
+                        <phase>pre-integration-test</phase>
+                        <goals>
+                            <goal>install-server</goal>
+                        </goals>
+                    </execution>
                     <execution>
                         <id>start-server</id>
                         <phase>pre-integration-test</phase>

@@ -21,7 +21,6 @@ libertyStart.dependsOn('installLiberty')
 deploy.dependsOn('libertyStart')
 fvt.dependsOn('deploy')
 check.dependsOn('fvt')
-assemble.dependsOn('check')
 publishWar.dependsOn('assemble')
 
 apply from: rootProject.file('only-run-liberty-start-if-fvt-is-not-up-to-date.gradle')
