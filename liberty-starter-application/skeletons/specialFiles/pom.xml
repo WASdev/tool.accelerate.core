@@ -161,7 +161,7 @@
                         <assemblyArtifact>
                             <groupId>com.ibm.websphere.appserver.runtime</groupId>
                             <artifactId>wlp-webProfile7</artifactId>
-                            <version>16.0.0.2</version>
+                            <version>16.0.0.3</version>
                             <type>zip</type>
                         </assemblyArtifact>
                     </configuration>
