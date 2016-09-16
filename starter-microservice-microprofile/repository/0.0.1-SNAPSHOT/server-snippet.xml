@@ -14,8 +14,6 @@
 <server description="MicroProfile server snippet">
 
     <featureManager>
-        <feature>jaxrs-2.0</feature>
-        <feature>jsonp-1.0</feature>
-        <feature>cdi-1.2</feature>
+        <feature>microProfile-1.0</feature>
     </featureManager>
 </server>
