@@ -36,7 +36,7 @@ war {
 
 liberty {
     install {
-        runtimeUrl = "http://repo1.maven.org/maven2/com/ibm/websphere/appserver/runtime/wlp-javaee7/16.0.0.3/wlp-javaee7-16.0.0.3.zip"
+        runtimeUrl = "http://repo1.maven.org/maven2/com/ibm/websphere/appserver/runtime/wlp-javaee7/16.0.0.2/wlp-javaee7-16.0.0.2.zip"
     }
     serverName = 'StarterServer'
     userDir = "${buildDir}/test/wlp"
