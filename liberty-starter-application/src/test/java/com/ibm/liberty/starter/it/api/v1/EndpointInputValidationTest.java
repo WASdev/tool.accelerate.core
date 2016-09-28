@@ -160,7 +160,7 @@ public class EndpointInputValidationTest {
             String entryName = inputEntry.getName();
             if ("myProject-application/sampleUpload3.txt_renamed".equals(entryName)) {
             	packagedFileExists = true;
-            } else if ("myProject-application/sampleUpload1.txt".equals(entryName) || "myProject-application/sampleUpload2.txt".equals(entryName) || "myProject-application/sampleUpload3.txt".equals(entryName)) {
+            } else if ("myProject-application/sampleUpload.txt".equals(entryName) || "myProject-application/sampleUpload2.txt".equals(entryName) || "myProject-application/sampleUpload3.txt".equals(entryName)) {
             	deletedFileExists = true;
             } else if ("myProject-wlpcfg/pom.xml".equals(entryName)) {
             	DocumentBuilderFactory domFactory = DocumentBuilderFactory.newInstance();
