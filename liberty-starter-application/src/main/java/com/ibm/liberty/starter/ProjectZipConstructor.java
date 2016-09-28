@@ -16,14 +16,18 @@
 package com.ibm.liberty.starter;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
@@ -35,6 +39,7 @@ import java.util.zip.ZipOutputStream;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.xml.sax.SAXException;
 
@@ -56,17 +61,24 @@ public class ProjectZipConstructor {
     private static final String BASE_INDEX_HTML = "payloadIndex.html";
     private static final String INDEX_HTML_PATH = "myProject-application/src/main/webapp/index.html";
     private static final String POM_FILE = "pom.xml";
+    private static final String WLP_CFG_POM_FILE = "myProject-wlpcfg/pom.xml";
     private String appName;
     public enum DeployType {
         LOCAL, BLUEMIX
     }
     private DeployType deployType;
+    private String workspace = null;
     
-    public ProjectZipConstructor(ServiceConnector serviceConnector, Services services, String appName, DeployType deployType) {
+    public ProjectZipConstructor(ServiceConnector serviceConnector, Services services, String appName, DeployType deployType, String workspace) {
         this.serviceConnector = serviceConnector;
         this.services = services;
         this.appName = appName;
         this.deployType = deployType;
+        this.workspace = workspace;
+    }
+    
+    public ProjectZipConstructor(ServiceConnector serviceConnector, Services services, String appName, DeployType deployType) {
+    	this(serviceConnector, services, appName, deployType, null);
     }
     
     public Map<String, byte[]> getFileMap() {
@@ -78,11 +90,75 @@ public class ProjectZipConstructor {
         addHtmlToMap();
         addTechSamplesToMap();
         addPomFileToMap();
+        addDynamicPackages();
+        addFeaturesToInstall();
         ZipOutputStream zos = new ZipOutputStream(os);
         createZipFromMap(zos);
         zos.close();
+        cleanup();
     }
     
+    private void cleanup() throws IOException {
+    	cleanUpDynamicPackages();    	
+    }
+    
+    private void cleanUpDynamicPackages() throws IOException{
+    	// Delete dynamically generated packages as they were already packaged.
+    	// ** Note **: Don't delete these packages prior to this stage as other operations may depend on the existence of these packages to perform certain tasks.
+    	for (Service service : services.getServices()) {
+            String serviceId = service.getId();
+            
+            String packageLocation = workspace + "/" + serviceId + "/" + StarterUtil.PACKAGE_DIR;
+            File packageDir = new File(packageLocation);
+            
+            if(packageDir.exists() && packageDir.isDirectory()){
+            	FileUtils.deleteDirectory(packageDir);
+            	log.log(Level.FINE, "Deleted package directory for " + serviceId + " technology. : " + packageLocation);
+            }
+        }
+    }
+    
+    private void addDynamicPackages() throws IOException {
+    	log.log(Level.FINE, "Entering method ProjectZipConstructor.addDynamicPackages()");
+    	if(workspace == null || workspace.isEmpty() || !(new File(workspace).exists())){
+    		log.log(Level.FINE, "No dynamic packages to add since workspace doesn't exist : " + workspace);
+    		return;
+    	}
+    	
+        for (Service service : services.getServices()) {
+            String serviceId = service.getId();
+            String packageLocation = workspace + "/" + serviceId + "/" + StarterUtil.PACKAGE_DIR;
+            File packageDir = new File(packageLocation);
+            
+            if(packageDir.exists() && packageDir.isDirectory()){
+            	log.log(Level.FINE, "Package directory for " + serviceId + " technology exists : " + packageLocation);
+            	List<File> filesListInDir = new ArrayList<File>();
+            	StarterUtil.populateFilesList(packageDir, filesListInDir);
+            	
+            	for(File aFile : filesListInDir){
+            		String path = aFile.getAbsolutePath().replace('\\', '/').replace(packageLocation, "");
+
+            		if(path.startsWith("/")){
+            			path = path.substring(1);
+            		}
+            		putFileInMap(path, FileUtils.readFileToByteArray(aFile));
+            		log.log(Level.FINE, "Packaged file " + aFile.getAbsolutePath() + " to " + path);
+            	}
+            }
+        }
+        log.log(Level.FINE, "Exiting method ProjectZipConstructor.addDynamicPackages()");
+    }
+    
+    private void addFeaturesToInstall() throws SAXException, IOException, ParserConfigurationException, TransformerException {
+        log.log(Level.INFO, "Entering method ProjectZipConstructor.addFeaturesToInstall()");
+        InputStream pomInputStream = new ByteArrayInputStream(getFileFromMap(WLP_CFG_POM_FILE)); 
+        FeatureInstaller featureInstaller = new FeatureInstaller(services, serviceConnector);
+        putFileInMap(WLP_CFG_POM_FILE, featureInstaller.addFeaturesToInstall(pomInputStream, true));
+        String pathToServerXML = "myProject-wlpcfg/servers/LibertyProjectServer/server.xml";
+        InputStream serverInputStream = new ByteArrayInputStream(getFileFromMap(pathToServerXML)); 
+        putFileInMap(pathToServerXML, featureInstaller.addFeaturesToInstall(serverInputStream, false));
+    }
+
     public void initializeMap() throws IOException {
         log.log(Level.INFO, "Entering method ProjectZipConstructor.initializeMap()");
         InputStream skeletonIS = this.getClass().getClassLoader().getResourceAsStream(SKELETON_JAR_FILENAME);
@@ -196,6 +272,11 @@ public class ProjectZipConstructor {
     public void putFileInMap(String path, byte[] file) {
         log.log(Level.INFO, "Inserting file " + path + " into map.");
         fileMap.put(path, file);
+    }
+    
+    public byte[] getFileFromMap(String path) {
+        log.log(Level.INFO, "Getting file " + path + " from map.");
+        return fileMap.get(path);
     }
 
 }

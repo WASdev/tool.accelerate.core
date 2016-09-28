@@ -42,11 +42,14 @@
 
         <div id="navigationTopContainer" class="hidden">
             <a href="#" id="navigationTop1" class="navigationTop"
-                style="display: none;" data-targetsection="0"> Step 1 / 3:
+                style="display: none;" data-targetsection="0"> Step 1 / <span class="numberOfSteps">4</span>:
                 SELECTED TECHNOLOGIES: <span class="variableContent"></span>
             </a> <a href="#" id="navigationTop2" class="navigationTop"
-                style="display: none;" data-targetsection="1"> Step 2 / 3: DEPLOY
+                style="display: none;" data-targetsection="1"> Step 2 / <span class="numberOfSteps">4</span>: DEPLOY
                 TO: <span class="variableContent"></span>
+            </a> <a href="#" id="navigationTop3" class="navigationTop"
+                style="display: none;" data-targetsection="2"> Step 3 / <span class="numberOfSteps">4</span>:
+                OPTIONAL <span class="variableContent"></span>
             </a>
         </div>
 
@@ -66,7 +69,7 @@
                 <div class="stepContent">
                     <div id="step1Description1">Configure WebSphere Liberty with a set of selected technologies. Then download the project as a zip file.</div>
                     <div class="stepBar"></div>
-                    <div class="stepNumber">STEP 1 / 3</div>
+                    <div class="stepNumber">STEP 1 / <span class="numberOfSteps">4</span></div>
                     <div id="step1Description2">Select one or more technology types:</div>
                     <div id="step1TechnologiesContainer"></div>
                 </div>
@@ -76,7 +79,7 @@
             <div id="step2" class="step hidden">
                 <div class="stepContent">
                     <div class="stepBar"></div>
-                    <div class="stepNumber">STEP 2 / 3</div>
+                    <div class="stepNumber">STEP 2 / <span class="numberOfSteps">4</span></div>
                     <div id="step2Description1">Deploy</div>
                     <div id="step2Description2">Where do you want to deploy your
                         project?</div>
@@ -95,85 +98,107 @@
             <!-- STEP THREE -->
             <div id="step3" class="step hidden">
                 <div class="stepContent">
-                    <div id="step3LocalLeftBlock">
+                    <div class="stepBar"></div>
+                    <div class="stepNumber">STEP 3 / <span class="numberOfSteps">4</span></div>
+                    <div id="step3Description1">Optional</div>
+                    <div id="step3SwaggerCodeGenSection" class="hidden">
+	                   	<input type="checkbox" id="step3SwaggerServerCodegen" name="step3SwaggerServerCodegen" value="serverCodeGen">
+	                   		<label for="step3SwaggerServerCodegen"></label>Generate server code from a Swagger document
+	                   	<div id="step3SwaggerLocalUpload" class="hidden">
+		                    <form id="step3SwaggerFileForm" action="#" method="POST" enctype="multipart/form-data">
+			                    <div id="step3SwaggerFileState" class="hidden"><span class="step3SwaggerFileStatus"> </span></div>
+			                    <input type="file" id="step3SwaggerFileSelect" accept=".json,.yaml" style="display: none;"/>
+			                    <div id="step3SwaggerFileButtons">
+									<input type="button" id="step3SelectFileButton" value="Select file" onclick="document.getElementById('step3SwaggerFileSelect').click();" />
+									<input type="submit" value="Upload" id="step3SwaggerUploadButton" class="hidden step3SwaggerUploadButtonClass"/>
+									<input type="button" id="step3SelectDifferentFileButton" class="hidden" value="Select different file" onclick="document.getElementById('step3SwaggerFileSelect').click();" />
+								</div>
+							</form>
+						</div>
+					</div>
+                </div>
+            </div>
+            <div id="step4" class="step hidden">
+                <div class="stepContent">
+                    <div id="step4LocalLeftBlock">
                         <div class="stepBar"></div>
-                        <div class="stepNumber">STEP 3 / 3</div>
-                        <div id="step3Description1">Download</div>
-                        <div id="step3Description2">Name the project containing your
+                        <div class="stepNumber">STEP <span class="numberOfSteps">4</span> / <span class="numberOfSteps">4</span></div>
+                        <div id="step4Description1">Download</div>
+                        <div id="step4Description2">Name the project containing your
                             selected technologies and download as a ZIP file.</div>
-                        <input id="step3NameInput" type="text"
+                        <input id="step4NameInput" type="text"
                             placeholder="Example name: LibertyProject" autocomplete="off"
-                            maxlength="50"> <a id="step3DownloadButton" href="#">Download
+                            maxlength="50"> <a id="step4DownloadButton" href="#">Download
                             Now</a>
                     </div>
-                    <div id="step3LocalRightBlock">
-                        <div id="step3Local">
-                            <p id="step3LocalRightBlockItem1">
+                    <div id="step4LocalRightBlock">
+                        <div id="step4Local">
+                            <p id="step4LocalRightBlockItem1">
                                 Once the download is complete, <span
-                                    id="step3LocalRightBlockItem1RightText">locate your
+                                    id="step4LocalRightBlockItem1RightText">locate your
                                     project and unzip it.</span>
                             </p>
-                            <div id="step3LocalRightBlockItem2">
-                                <div id="step3LocalRightBlockItem2Line1">Your application
+                            <div id="step4LocalRightBlockItem2">
+                                <div id="step4LocalRightBlockItem2Line1">Your application
                                     code can be found in:</div>
-                                <div id="step3LocalRightBlockItem2Line2">myProject-application/src/main/java</div>
+                                <div id="step4LocalRightBlockItem2Line2">myProject-application/src/main/java</div>
                             </div>
-                            <div id="step3LocalRightBlockItem3">
-                                <div id="step3LocalRightBlockItem3Line1">On the <span class="step3NameOfProject">LibertyProject</span>
+                            <div id="step4LocalRightBlockItem3">
+                                <div id="step4LocalRightBlockItem3Line1">On the <span class="step4NameOfProject">LibertyProject</span>
                                 pom.xml run:</div>
-                                <div id="step3LocalRightBlockItem3Line2">mvn install</div>
+                                <div id="step4LocalRightBlockItem3Line2">mvn install</div>
                             </div>
-                            <div id="step3LocalRightBlockItem4">
-                                <div id="step3LocalRightBlockItem4Line1">Access your
+                            <div id="step4LocalRightBlockItem4">
+                                <div id="step4LocalRightBlockItem4Line1">Access your
                                     application at:</div>
-                                <div id="step3LocalRightBlockItem4Line2"><a href="http://localhost:9080/myLibertyApp/"
+                                <div id="step4LocalRightBlockItem4Line2"><a href="http://localhost:9080/myLibertyApp/"
                                         title="Link to access your application." target="_blank"
                                         onclick="trackOutboundLink('http://localhost:9080/myLibertyApp/', 'localDeploy');">http://localhost:9080/myLibertyApp/</a></div>
-                                <div id="step3LocalRightBlockItem4Line3">Your Liberty
+                                <div id="step4LocalRightBlockItem4Line3">Your Liberty
                                     server can be found in:</div>
-                                <div id="step3LocalRightBlockItem4Line4">myProject-wlpcfg/target/wlp/usr/servers/LibertyProjectServer</div>
+                                <div id="step4LocalRightBlockItem4Line4">myProject-wlpcfg/target/wlp/usr/servers/LibertyProjectServer</div>
                             </div>
                         </div>
-                        <div id="step3Bluemix" class="hidden">
-                            <p id="step3BluemixRightBlockItem1">
+                        <div id="step4Bluemix" class="hidden">
+                            <p id="step4BluemixRightBlockItem1">
                                 Once the download is complete, <span
-                                    id="step3LocalRightBlockItem1RightText">locate your
+                                    id="step4LocalRightBlockItem1RightText">locate your
                                     project and unzip it.</span>
                             </p>
-                            <div id="step3BluemixRightBlockItem2">
-                                <div id="step3BluemixRightBlockItem2Line1">Your application
+                            <div id="step4BluemixRightBlockItem2">
+                                <div id="step4BluemixRightBlockItem2Line1">Your application
                                     code can be found in:</div>
-                                <div id="step3BluemixRightBlockItem2Line2">myProject-application/src/main/java</div>
+                                <div id="step4BluemixRightBlockItem2Line2">myProject-application/src/main/java</div>
                             </div>
-                            <div id="step3BluemixRightBlockItem3">
-                                <div id="step3BluemixRightBlockItem3Line1">
-                                    On the <span class="step3NameOfProject">LibertyProject</span>
+                            <div id="step4BluemixRightBlockItem3">
+                                <div id="step4BluemixRightBlockItem3Line1">
+                                    On the <span class="step4NameOfProject">LibertyProject</span>
                                     pom.xml run:
                                 </div>
-                                <div id="step3BluemixRightBlockItem3Line2">
+                                <div id="step4BluemixRightBlockItem3Line2">
                                 mvn install -Dcf.org=<span
                                         class="purpleCode">[your email address]</span> -Dcf.username=<span
                                         class="purpleCode">[your username]</span> -Dcf.password=<span
                                         class="purpleCode">[your password]</span>
                                 </div>
                             </div>
-                            <div id="step3BluemixRightBlockItem4">
-                                <div id="step3BluemixRightBlockItem4Line1">Access your application at:</div>
-                                <div id="step3BluemixRightBlockItem4Line2"><span class="step3NameOfProject">LibertyProject</span>.eu-gb.mybluemix.net/myLibertyApp/</div>
-                                <div id="step3BluemixRightBlockItem4Line3">To manage your deployed application visit your dashboard on Bluemix.</div>
+                            <div id="step4BluemixRightBlockItem4">
+                                <div id="step4BluemixRightBlockItem4Line1">Access your application at:</div>
+                                <div id="step4BluemixRightBlockItem4Line2"><span class="step4NameOfProject">LibertyProject</span>.eu-gb.mybluemix.net/myLibertyApp/</div>
+                                <div id="step4BluemixRightBlockItem4Line3">To manage your deployed application visit your dashboard on Bluemix.</div>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <div id="step3OptionalWDT">
-                    <div id="step3OptionalWDTTrigger">
+                <div id="step4OptionalWDT">
+                    <div id="step4OptionalWDTTrigger">
                         <a href="#" title="Link to Open WDT Content Instructions"><span>Optional</span>,
                             import downloaded Maven into the WebSphere Developer Tool</a>
                         <div class="wdtContentActive wdtArrowPlacement"></div>
                         <div class="wdtContentDeactive wdtArrowPlacement hidden"></div>
                     </div>
-                    <div id="step3OptionalWDTContent" class="hidden">
+                    <div id="step4OptionalWDTContent" class="hidden">
                         <ul id="WDTSteps">
                             <li id="WDTStep1" class="WDTStep">
                                 <div class="WDTStepImage">
@@ -268,11 +293,15 @@
 
         <a href="#" id="navigationBottomContainer" class="disabled hidden">
             <div id="navigationBottom1" class="navigationBottom">
-                STEP 2 / 3: <span class="highlightedText">DEPLOY</span>
+                STEP 2 / <span class="numberOfSteps">4</span>: <span class="highlightedText">DEPLOY</span>
             </div>
             <div id="navigationBottom2" class="navigationBottom"
                 style="display: none;">
-                STEP 3 / 3: <span class="highlightedText">DOWNLOAD</span>
+                STEP 3 / <span class="numberOfSteps">4</span>: <span class="highlightedText">OPTIONAL</span>
+            </div>
+            <div id="navigationBottom3" class="navigationBottom"
+                style="display: none;">
+                STEP <span class="numberOfSteps">4</span> / <span class="numberOfSteps">4</span>: <span class="highlightedText">DOWNLOAD</span>
             </div>
         </a>
 

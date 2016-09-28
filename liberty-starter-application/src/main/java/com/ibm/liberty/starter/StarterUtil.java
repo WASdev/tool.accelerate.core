@@ -1,0 +1,108 @@
+/*******************************************************************************
+ * Copyright (c) 2016 IBM Corp.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *******************************************************************************/
+
+package com.ibm.liberty.starter;
+
+import java.io.File;
+import java.util.List;
+import java.util.logging.Logger;
+
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+import javax.validation.ValidationException;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Result;
+import javax.xml.transform.Source;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.TransformerFactoryConfigurationError;
+
+public class StarterUtil {
+
+	private static final Logger log = Logger.getLogger(StarterUtil.class.getName());
+
+	private static String serverOutputDir;
+
+	public static final String WORKAREA = "workarea";
+	public static final String APP_ACCELERATOR_WORKAREA = "appAccelerator";
+	public static final String PACKAGE_DIR = "package";
+
+	private static String processPath(String string) {
+		if(string == null){
+			return "";
+		}
+		return string.replace('\\', '/');
+	}
+
+	private static String getServerOutputDir() {
+		if(serverOutputDir == null){
+			try{
+				serverOutputDir = processPath(((String)(new InitialContext().lookup("serverOutputDir"))));
+				log.info("serverOutputDir=" + serverOutputDir);
+			}catch (NamingException ne){
+				log.severe("NamingException occurred while retrieving the value of 'serverOutputDir': " + ne);
+				throw new ValidationException("NamingException occurred while retrieving the value of 'serverOutputDir': " + ne);
+			}
+		}
+		return serverOutputDir;
+	}
+
+	public static String getWorkspaceDir(String workspaceId){
+		return getServerOutputDir() + "/" + WORKAREA + "/" + APP_ACCELERATOR_WORKAREA + "/" + workspaceId;
+	}
+
+	/**
+	 * Generate the list of files in the directory and all of its sub-directories (recursive)
+	 * 
+	 * @param dir - The directory
+	 * @param filesListInDir - List to store the files
+	 */
+	public static void populateFilesList(File dir, List<File> filesListInDir) {
+		File[] files = dir.listFiles();
+		for(File file : files){
+			if(file.isFile()){
+				filesListInDir.add(file);
+			}else{
+				populateFilesList(file, filesListInDir);
+			}
+		}
+	}
+
+	/**
+	 * Perform an identity transformation (no XSL stylesheet)
+	 * 
+	 * @param source - The source
+	 * @param result - The result
+	 * @param omitXmlDeclaration - flag to indicate if the xml declaration should be omitted at the top
+	 * @param indent - flag to indicate if result should be indented
+	 * @param indentAmount - value to indent
+	 * @throws TransformerFactoryConfigurationError
+	 * @throws TransformerException
+	 */
+	public static void identityTransform(Source source, Result result, boolean omitXmlDeclaration, boolean indent, String indentAmount) throws TransformerFactoryConfigurationError, TransformerException{
+		Transformer transformer = TransformerFactory.newInstance().newTransformer();
+		if(indent){
+			transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+			transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", indentAmount);
+		}
+		if(omitXmlDeclaration){
+			transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
+		}
+		transformer.transform(source, result);
+	}
+	
+}

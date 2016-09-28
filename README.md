@@ -54,6 +54,17 @@ will be evolving with guidance from the community.
 If you want to share your thoughts you can post straight to the 
 <a href="https://groups.google.com/forum/#!forum/microprofile">MicroProfile Google group</a>.
 
+## Swagger
+Swagger is a simple yet powerful representation of RESTful APIs.
+
+This provides you with the apiDiscovery-1.0 feature, which allows you to discover REST APIs that are available on the Liberty server and then invoke the found REST endpoints using the Swagger user interface.
+
+You can also easily expose the REST endpoints available from your web modules running on Liberty server by documenting the endpoints using the Swagger 2.0 Specification. 
+
+It is also possible to follow a design-first approach by creating the Swagger documentation first and then generating the server code from it.
+
+For the complete feature documentation, see the <a href="http://www.ibm.com/support/knowledgecenter/en/SSAW57_8.5.5/com.ibm.websphere.wlp.nd.multiplatform.doc/ae/twlp_api_discovery.html?view=kc">apiDiscovery-1.0</a> feature description in IBM Knowledge Center. 
+
 # Building and adding to the app accelerator
 
 ## Building the Project

@@ -44,6 +44,11 @@ public class ServiceConnector {
         serverHostPort = scheme + "://" + authority;
         services = parseServicesJson();
     }
+
+    public ServiceConnector(String hostPort) {
+        serverHostPort = hostPort;
+        services = parseServicesJson();
+    }
     
     public Services parseServicesJson() {
         log.info("Parsing services json file. SERVER_HOST_PORT=" + serverHostPort);
@@ -81,6 +86,44 @@ public class ServiceConnector {
         String url = urlConstructor("/api/v1/provider", service);
         Provider provider = getObjectFromEndpoint(Provider.class, url, MediaType.APPLICATION_JSON_TYPE);
         return provider;
+    }
+    
+    public String processUploadedFiles(Service service, String uploadDirectory) {
+    	log.finer("service=" + service.getId() + " : uploadDirectory=" + uploadDirectory);
+        String url = urlConstructor("/api/v1/provider/uploads/process?path=" + uploadDirectory, service);
+        String response = getObjectFromEndpoint(String.class, url, MediaType.TEXT_PLAIN_TYPE);
+        log.fine("Response of processing uploaded files from " + uploadDirectory + " : " + response);
+        return response;
+    }
+    
+    public String prepareDynamicPackages(Service service, String techWorkspaceDir, String options, String[] techs) {
+    	log.finer("service=" + service.getId() + " : options=" + options + " : techWorkspaceDir=" + techWorkspaceDir + " : techs=" + techs);
+    	String optionsParam = (options != null && !options.trim().isEmpty()) ? ("&options=" + options) : "";
+    	String techsParam = "&techs=" + String.join(",", techs);
+    	String url = urlConstructor("/api/v1/provider/packages/prepare?path=" + techWorkspaceDir + optionsParam + techsParam, service);
+    	try{
+    		String response = getObjectFromEndpoint(String.class, url, MediaType.TEXT_PLAIN_TYPE);
+            log.fine("Response of preparing dynamic packages from " + techWorkspaceDir + " : " + response);
+            return response;
+    	}catch(javax.ws.rs.NotFoundException e){
+    		// The service doesn't offer this endpoint, so the exception can be ignored. 
+    		log.finest("Ignore expected exception : The service doesn't offer endpoint " + url + " : " + e);
+        }
+        return "";
+    }
+    
+    public String getFeaturesToInstall(Service service) {
+    	log.finer("service=" + service.getId());
+    	String url = urlConstructor("/api/v1/provider/features/install", service);
+    	try{
+    		String response = getObjectFromEndpoint(String.class, url, MediaType.TEXT_PLAIN_TYPE);
+    		log.fine("Features to install for " + service.getId() + " : " + response);
+    		return response;
+    	}catch(javax.ws.rs.NotFoundException e){
+    		// The service doesn't offer this endpoint, so the exception can be ignored. 
+    		log.finest("Ignore expected exception : The service doesn't offer endpoint " + url + " : " + e);
+    	}
+    	return "";
     }
     
     public Sample getSample(Service service) {

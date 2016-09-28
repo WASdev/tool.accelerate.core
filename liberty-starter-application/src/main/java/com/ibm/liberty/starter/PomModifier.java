@@ -25,13 +25,8 @@ import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.OutputKeys;
-import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
@@ -62,9 +57,7 @@ public class PomModifier {
     }
 
     public void setInputStream(InputStream pomInputStream) throws SAXException, IOException, ParserConfigurationException {
-        DocumentBuilderFactory domFactory = DocumentBuilderFactory.newInstance();
-        DocumentBuilder db = domFactory.newDocumentBuilder();
-        doc = db.parse(pomInputStream);
+        doc = DomUtil.getDocument(pomInputStream);
     }
 
     public void addStarterPomDependencies(DependencyHandler depHand) {
@@ -98,7 +91,7 @@ public class PomModifier {
     }
 
     private void writeToStream(OutputStream pomOutputStream) throws TransformerException, IOException {
-        Node dependenciesNode = doc.getElementsByTagName("dependencies").item(0);
+    	Node dependenciesNode = doc.getElementsByTagName("dependencies").item(0);
         log.log(Level.INFO, "Appending dependency nodes for provided poms");
         appendDependencyNodes(dependenciesNode, providedPomsToAdd);
         log.log(Level.INFO, "Appending dependency nodes for runtime poms");
@@ -112,15 +105,7 @@ public class PomModifier {
         appendDeployType();
         appendRepoUrl();
 
-        TransformerFactory transformFactory = TransformerFactory.newInstance();
-        Transformer transformer = transformFactory.newTransformer();
-        transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-        transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "4");
-
-        DOMSource domSource = new DOMSource(doc);
-
-        StreamResult streamResult = new StreamResult(pomOutputStream);
-        transformer.transform(domSource, streamResult);
+        StarterUtil.identityTransform(new DOMSource(doc), new StreamResult(pomOutputStream), false, true, "4");
     }
 
     private void appendDependencyNodes(Node dependenciesNode, Map<String, Dependency> dependencies) {

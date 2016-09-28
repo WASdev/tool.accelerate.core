@@ -1,0 +1,47 @@
+{
+	"swagger": "2.0",
+	"info": {
+		"title": "APIs",
+		"description": "Description of APIs",
+		"termsOfService": "",
+		"contact":{
+		   "name": "",
+		   "email": "",
+		   "url": ""
+		},
+		"license":{
+		  "name":"",
+		  "url":""
+		},
+		"version": "1.0.0"		
+	},
+	"paths":{
+		"/servlet": {
+		  "get":  {
+			"summary": "A sample servlet endpoint to retrieve some data from the server",
+			"description": "GET operation of a sample servlet endpoint",
+			"operationId": "servletGet",
+			"produces": [
+			  "text/plain"
+			],
+			"parameters": [],
+			"responses": {
+			  "200": {
+				"description": "successful operation"
+			  }
+			}
+		  },
+		  "post": {
+			"summary": "A sample servlet endpoint to post some data to the server",
+			"description": "POST operation of a sample servlet endpoint",
+			"operationId": "servletPost",
+			"parameters": [],
+			"responses": {
+			  "200": {
+				"description": "successful operation"
+			  }
+			}
+		  }
+		}
+	}
+}

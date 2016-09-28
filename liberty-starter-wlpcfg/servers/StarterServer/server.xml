@@ -20,16 +20,21 @@
         <feature>cdi-1.2</feature>
         <feature>ssl-1.0</feature>
         <feature>apiDiscovery-1.0</feature>
+        <feature>jndi-1.0</feature>
 	</featureManager>
     
     <httpEndpoint httpPort="9082" httpsPort="9445" id="defaultHttpEndpoint" host="*"/>
 
-	<keyStore password="password" />
+    <keyStore password="password" />
     
     <basicRegistry id="basic" realm="ibm/api">
         <user name="guest" password="password" />
     </basicRegistry>
     
+    <jndiEntry jndiName="serverOutputDir" value="${server.output.dir}" />
+    <jndiEntry jndiName="javaHome" value="${java.home}" />
+    <jndiEntry jndiName="sharedResourceDir" value="${shared.resource.dir}" />
+	
     <application location="liberty-starter-application.war"
         id="DevExperience" context-root="/start"></application>
     <application location="liberty-filter-application.war" id="filter" context-root="/"></application>
@@ -40,4 +45,5 @@
     <application location="starter-microservice-websocket.war" id="websocket" context-root="/websocket"></application>
     <application location="starter-microservice-springboot-web.war" id="springbootweb" context-root="/springbootweb"></application>
     <application location="starter-microservice-microprofile.war" id="microprofile" context-root="/microprofile"></application>
+    <application location="starter-microservice-swagger.war" id="swagger" context-root="/swagger"></application>
 </server>

@@ -15,17 +15,23 @@
  *******************************************************************************/ 
 package com.ibm.liberty.starter.service.test.api.v1;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
+
+import org.apache.commons.io.FileUtils;
 
 import com.ibm.liberty.starter.api.v1.model.provider.Dependency;
 import com.ibm.liberty.starter.api.v1.model.provider.Dependency.Scope;
@@ -99,6 +105,60 @@ public class ProviderEndpoint {
     	json.append(getStringResource("/locations.json"));
     	json.append("}\n");
     	return Response.ok(json.toString()).build();
+    }
+    
+    @GET
+    @Path("features/install")
+    @Produces(MediaType.TEXT_PLAIN)
+    public String getFeaturesToInstall(){
+        return "servlet-3.1,apiDiscovery-1.0";
+    }
+    
+    @GET
+    @Path("uploads/process")
+    @Produces(MediaType.TEXT_PLAIN)
+    public String processUploads(@QueryParam("path") String uploadDirectoryPath) throws IOException {
+    	File uploadDirectory;
+    	if(uploadDirectoryPath == null || !(uploadDirectory = new File(uploadDirectoryPath)).exists()){
+    		return "Couldn't fulfill the request due to internal error";
+    	}
+    	
+    	List<File> filesListInDir = new ArrayList<File>();
+    	populateFilesList(uploadDirectory, filesListInDir);
+    	for(File uploadedFile : filesListInDir){
+    		uploadedFile.renameTo(new File(uploadedFile.getParent() + "/" + uploadedFile.getName() + "_renamed"));
+    	}
+    	return "success";
+    }
+    
+    @GET
+    @Path("packages/prepare")
+    public String prepareDynamicPackages(@QueryParam("path") String techWorkspaceDir, @QueryParam("options") String options, @QueryParam("techs") String techs) throws IOException {
+    	if(techWorkspaceDir != null && !techWorkspaceDir.trim().isEmpty()){
+    		FileUtils.deleteQuietly(new File(techWorkspaceDir + "/package"));
+    		
+    		File techWorkspace = new File(techWorkspaceDir);
+    		if(techs != null && options != null && !options.trim().isEmpty()){
+    			String[] techOptions = options.split(",");
+        		String testOptionOne = techOptions.length >= 1 ? techOptions[0] : null;
+
+        		if("testoption1".equals(testOptionOne) && techs.contains("test")){
+        			String packageTargetDirPath = techWorkspaceDir + "/package/myProject-application";
+					File packageTargetDir = new File(packageTargetDirPath);
+					FileUtils.copyDirectory(techWorkspace, packageTargetDir);
+					return "success";
+        		}
+    		}
+		}
+    	return "failure";
+    }
+    
+    private void populateFilesList(File dir, List<File> filesListInDir) {
+        File[] files = dir.listFiles();
+        for(File file : files){
+            if(file.isFile()) filesListInDir.add(file);
+            else populateFilesList(file, filesListInDir);
+        }
     }
     
 }

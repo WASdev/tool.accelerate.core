@@ -23,6 +23,7 @@ public class Service {
     private String name;
     private String description;
     private String endpoint;
+    private String configuration;
     
     @ApiModelProperty(value="Unique ID for this technology", required=true)
     public String getId() {
@@ -54,6 +55,14 @@ public class Service {
     }
     public void setEndpoint(String endpoint) {
             this.endpoint = endpoint;
+    }
+    
+    @ApiModelProperty(value="Specifies whether this technology allows any configuration(s). Value could either be 'yes' or a list of other technologies, seperated by comma. If a list of technologies is specified then the configuration(s) will be enabled only if all technologies on the list are selected by user", required=false)
+    public String getConfiguration() {
+            return configuration;
+    }
+    public void setConfiguration(String configuration) {
+            this.configuration = configuration;
     }
 
     @Override

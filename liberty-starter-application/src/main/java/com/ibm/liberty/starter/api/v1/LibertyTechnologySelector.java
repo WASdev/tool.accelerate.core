@@ -20,7 +20,6 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
-import java.util.regex.Pattern;
 
 import javax.validation.ValidationException;
 import javax.ws.rs.GET;
@@ -38,6 +37,7 @@ import javax.xml.transform.TransformerException;
 
 import org.xml.sax.SAXException;
 
+import com.ibm.liberty.starter.StarterUtil;
 import com.ibm.liberty.starter.PatternValidation;
 import com.ibm.liberty.starter.ProjectZipConstructor;
 import com.ibm.liberty.starter.ServiceConnector;
@@ -53,8 +53,8 @@ public class LibertyTechnologySelector {
 
     @GET
     @Produces("application/zip")
-    public Response getResponse(@QueryParam("tech") String[] techs, @QueryParam("name") String name,
-                                @QueryParam("deploy") final String deploy, @Context UriInfo info) throws NullPointerException, IOException {
+    public Response getResponse(@QueryParam("tech") String[] techs, @QueryParam("techoptions") String[] techOptions, @QueryParam("name") String name,
+                                @QueryParam("deploy") final String deploy, @QueryParam("workspace") final String workspaceId, @Context UriInfo info) throws NullPointerException, IOException {
         log.info("GET request for /data");
         try {
             final ServiceConnector serviceConnector = new ServiceConnector(info.getBaseUri());
@@ -64,8 +64,12 @@ public class LibertyTechnologySelector {
                     Service service = serviceConnector.getServiceObjectFromId(tech);
                     if (service != null) {
                         serviceList.add(service);
+                        if(workspaceId != null && !workspaceId.trim().isEmpty()){
+                        	serviceConnector.prepareDynamicPackages(service, StarterUtil.getWorkspaceDir(workspaceId) + "/" + service.getId(), getTechOptions(techOptions, tech), techs);
+                        }
                     }
                 } else {
+                    log.info("Invalid tech type: " + tech);
                     throw new ValidationException("Invalid technology type.");
                 }
             }
@@ -94,7 +98,7 @@ public class LibertyTechnologySelector {
             StreamingOutput so = (OutputStream os) -> {
                 Services services = new Services();
                 services.setServices(serviceList);
-                ProjectZipConstructor projectZipConstructor = new ProjectZipConstructor(serviceConnector, services, appName, deployType);
+                ProjectZipConstructor projectZipConstructor = new ProjectZipConstructor(serviceConnector, services, appName, deployType, StarterUtil.getWorkspaceDir(workspaceId));
                 try {
                     projectZipConstructor.buildZip(os);
                 } catch (SAXException | ParserConfigurationException | TransformerException e) {
@@ -111,4 +115,16 @@ public class LibertyTechnologySelector {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
         }
     }
+	private String getTechOptions(String[] techOptions, String tech) {
+		if(techOptions != null && tech != null && !tech.trim().isEmpty()){
+			for(String option : techOptions){
+				String[] s = option.split(":");
+				if(s != null && s[0] != null && s[0].equals(tech)){
+					return option.substring(option.indexOf(":") + 1);
+				}
+			}
+		}
+		
+		return "";
+	}
 }
