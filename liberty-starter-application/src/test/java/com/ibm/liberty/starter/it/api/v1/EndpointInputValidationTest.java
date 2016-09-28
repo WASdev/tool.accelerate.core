@@ -11,13 +11,14 @@ import javax.ws.rs.core.Response;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
-import java.io.File;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
@@ -124,36 +125,19 @@ public class EndpointInputValidationTest {
      */
     @Test
     public void testUploadProcessPackage() throws Exception {
-    	String serverOutputDir = System.getProperty("liberty.server.output.dir");
     	String uuid = UUID.randomUUID().toString();
     	
     	// Upload a file
         int responseCode = invokeUploadEndpoint("tech=test&workspace=" + uuid, "sampleUpload.txt");
         assertEquals("Response 1 was incorrect, response was " + responseCode, Response.Status.OK.getStatusCode(), responseCode);
-        String uploadedFilePath = serverOutputDir + "/workarea/appAccelerator/" + uuid + "/test/sampleUpload.txt";
-        File uploadedFile = new File(uploadedFilePath);
-        assertTrue("File was not uploaded : path=" + uploadedFilePath, uploadedFile.exists() && uploadedFile.isFile());
-        System.out.println("uploadedFilePath=" + uploadedFilePath);
         
         // Upload second file (without cleaning up)
         responseCode = invokeUploadEndpoint("tech=test&workspace=" + uuid, "sampleUpload2.txt");
         assertEquals ("Response 2 was incorrect, response was " + responseCode, Response.Status.OK.getStatusCode(), responseCode);
-        assertTrue("Previously uploaded file was not found : path=" + uploadedFilePath, uploadedFile.exists() && uploadedFile.isFile());
-        String uploadedFilePath2 = serverOutputDir + "/workarea/appAccelerator/" + uuid + "/test/sampleUpload2.txt";
-        File uploadedFile2 = new File(uploadedFilePath2);
-        assertTrue("Second file was not uploaded : path=" + uploadedFilePath2, uploadedFile2.exists() && uploadedFile2.isFile());
         
         // Upload third file (after cleaning up existing files) and process the file
         responseCode = invokeUploadEndpoint("tech=test&workspace=" + uuid + "&cleanup=true&process=true", "sampleUpload3.txt");
         assertEquals("Response 3 was incorrect, response was " + responseCode, Response.Status.OK.getStatusCode(), responseCode);
-        assertTrue("Previously uploaded files were not cleaned-up : path=" + uploadedFilePath + " : " + uploadedFilePath2, !uploadedFile.exists() && !uploadedFile2.exists() );
-        String uploadedFilePath3 = serverOutputDir + "/workarea/appAccelerator/" + uuid + "/test/sampleUpload3.txt";
-        File uploadedFile3 = new File(uploadedFilePath3);
-        //check if the file was 'processed' (should have been renamed)
-        String processedFilePath = serverOutputDir + "/workarea/appAccelerator/" + uuid + "/test/sampleUpload3.txt_renamed";
-        File processedFile = new File(processedFilePath);
-        assertTrue("Processed file was not found : path=" + processedFile, processedFile.exists() && processedFile.isFile());
-        assertFalse("Original third file should not exist : path=" + uploadedFilePath3, uploadedFile3.exists());
         
         // Invoke the v1/data endpoint to ensure that the packaged files are contained within the zip and the features to 
         // install specified by the 'test' micro-service are present within myProject-wlpcfg/pom.xml
@@ -170,11 +154,14 @@ public class EndpointInputValidationTest {
         ZipInputStream zipIn = new ZipInputStream(entityInputStream);
         ZipEntry inputEntry = null;
         boolean packagedFileExists = false;
+        boolean deletedFileExists = false;
         boolean foundFeaturesToInstall = false;
         while ((inputEntry = zipIn.getNextEntry()) != null) {
             String entryName = inputEntry.getName();
             if ("myProject-application/sampleUpload3.txt_renamed".equals(entryName)) {
             	packagedFileExists = true;
+            } else if ("myProject-application/sampleUpload1.txt".equals(entryName) || "myProject-application/sampleUpload2.txt".equals(entryName) || "myProject-application/sampleUpload3.txt".equals(entryName)) {
+            	deletedFileExists = true;
             } else if ("myProject-wlpcfg/pom.xml".equals(entryName)) {
             	DocumentBuilderFactory domFactory = DocumentBuilderFactory.newInstance();
                 DocumentBuilder db = domFactory.newDocumentBuilder();
@@ -212,23 +199,7 @@ public class EndpointInputValidationTest {
         
         assertTrue("Packaged file doesn't exist at myProject-application/sampleUpload3.txt_renamed in the zip file", packagedFileExists);
         assertTrue("Features to install were not found in myProject-wlpcfg/pom.xml from the zip file", foundFeaturesToInstall);
-        
-    }
-    
-    private Node getChildNode(Node parentNode, String name){
-    	if(parentNode == null || name == null){
-    		return null;
-    	}
-    	if (parentNode.getNodeType() == Node.ELEMENT_NODE && parentNode.hasChildNodes()) {
-    		NodeList children = parentNode.getChildNodes();
-        	for(int i=0; i < children.getLength(); i++){
-            	Node child = children.item(i);
-            	if(child != null && name.equals(child.getNodeName())){
-            		return child;
-            	}
-            }
-    	}
-    	return null;
+        assertFalse("Deleted file exists in the zip file", deletedFileExists);
     }
     
     private boolean hasChildNode(Node parentNode, String nodeName, String nodeValue){
@@ -244,30 +215,42 @@ public class EndpointInputValidationTest {
      * @return the grand child node if a match was found, null otherwise
      */
     private Node getGrandchildNode(Node parentNode, String childNodeName, String grandChildNodeName, String grandChildNodeValue){
-    	if(parentNode == null || childNodeName == null || grandChildNodeName == null || grandChildNodeValue == null){
-    		return null;
-    	}
-
-    	if (parentNode.getNodeType() == Node.ELEMENT_NODE && parentNode.hasChildNodes()) {
-    		NodeList children = parentNode.getChildNodes();
-    		for(int i=0; i < children.getLength(); i++){
-    			Node child = children.item(i);
-    			if(child != null && childNodeName.equals(child.getNodeName())){
-    				if (child.getNodeType() == Node.ELEMENT_NODE && child.hasChildNodes()) {
-    					NodeList grandChildren = child.getChildNodes();
-    					for(int j=0; j < grandChildren.getLength(); j++){
-    						Node grandChild = grandChildren.item(j);
-    						if(grandChild != null && grandChildNodeName.equals(grandChild.getNodeName()) && grandChildNodeValue.equals(grandChild.getTextContent())){
-    							return grandChild;
-    						}
-    					}
-    				}
-    			}
+    	List<Node> matchingChildren = getChildren(parentNode, childNodeName, null);
+    	for(Node child : matchingChildren){
+    		Node matchingGrandChild = getChildNode(child, grandChildNodeName, grandChildNodeValue);
+    		if(matchingGrandChild != null){
+    			return matchingGrandChild;
     		}
     	}
-    	return null;    	
+    	return null;  	
     }
     
+    /**
+	 * Get all matching child nodes
+	 * @param parentNode - the parent node
+	 * @param name - name of child node to match 
+	 * @param value - value of child node to match, specify null to not match value
+	 * @return matching child nodes
+	 */
+	private static List<Node> getChildren(Node parentNode, String name, String value){
+		List<Node> childNodes = new ArrayList<Node>();
+		if(parentNode == null || name == null){
+			return childNodes;
+		}
+
+		if (parentNode.getNodeType() == Node.ELEMENT_NODE && parentNode.hasChildNodes()) {
+			NodeList children = parentNode.getChildNodes();
+			for(int i=0; i < children.getLength(); i++){
+				Node child = children.item(i);
+				if(child != null && name.equals(child.getNodeName()) && (value == null || value.equals(child.getTextContent()))){
+					childNodes.add(child);
+				}
+			}
+		}
+
+		return childNodes;
+	}
+	
     /**
      * Get the matching child node
      * @param parentNode - the parent node
@@ -276,20 +259,12 @@ public class EndpointInputValidationTest {
      * @return the child node if a match was found, null otherwise
      */
     private Node getChildNode(Node parentNode, String name, String value){
-    	if(parentNode == null || name == null || value == null){
-    		return null;
-    	}
-    	if (parentNode.getNodeType() == Node.ELEMENT_NODE && parentNode.hasChildNodes()) {
-    		NodeList children = parentNode.getChildNodes();
-    		for(int i=0; i < children.getLength(); i++){
-    			Node child = children.item(i);
-    			if(child != null && name.equals(child.getNodeName()) && value.equals(child.getTextContent())){
-    				return child;
-    			}
-    		}
-    	}
-
-    	return null;
+    	List<Node> matchingChildren = getChildren(parentNode, name, value);
+    	return (matchingChildren.size() > 0) ? matchingChildren.get(0) : null;
+    }
+    
+    private Node getChildNode(Node parentNode, String name){
+    	return getChildNode(parentNode, name, null);
     }
     
     private int invokeUploadEndpoint(String params, String fileName) throws Exception {

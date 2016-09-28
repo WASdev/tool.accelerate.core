@@ -18,6 +18,8 @@ package com.ibm.liberty.starter;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -36,32 +38,21 @@ public class DomUtil {
 	 * @return boolean value to indicate whether the parent node contains matching child node
 	 */
 	public static boolean hasChildNode(Node parentNode, String nodeName){
-		return getChildNode(parentNode, nodeName) != null ? true : false;	
+		return getChildNode(parentNode, nodeName, null) != null ? true : false;
 	}
 
 	/**
 	 * Get the matching child node
 	 * @param parentNode - the parent node
 	 * @param name - name of child node to match 
+	 * @param value - value of child node to match, specify null to not match value
 	 * @return the child node if a match was found, null otherwise
 	 */
-	public static Node getChildNode(Node parentNode, String name){
-		if(parentNode == null || name == null){
-			return null;
-		}
-		if (parentNode.getNodeType() == Node.ELEMENT_NODE && parentNode.hasChildNodes()) {
-			NodeList children = parentNode.getChildNodes();
-			for(int i=0; i < children.getLength(); i++){
-				Node child = children.item(i);
-				if(child != null && name.equals(child.getNodeName())){
-					return child;
-				}
-			}
-		}
-
-		return null;
+	public static Node getChildNode(Node parentNode, String name, String value){
+		List<Node> matchingChildren = getChildren(parentNode, name, value);
+		return (matchingChildren.size() > 0) ? matchingChildren.get(0) : null;
 	}
-	
+
 	/**
 	 * Get the matching grand child node
 	 * @param parentNode - the parent node
@@ -71,30 +62,42 @@ public class DomUtil {
 	 * @return the grand child node if a match was found, null otherwise
 	 */
 	public static Node getGrandchildNode(Node parentNode, String childNodeName, String grandChildNodeName, String grandChildNodeValue){
-		if(parentNode == null || childNodeName == null || grandChildNodeName == null || grandChildNodeValue == null){
-			return null;
+		List<Node> matchingChildren = getChildren(parentNode, childNodeName, null);
+		for(Node child : matchingChildren){
+			Node matchingGrandChild = getChildNode(child, grandChildNodeName, grandChildNodeValue);
+			if(matchingGrandChild != null){
+				return matchingGrandChild;
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * Get all matching child nodes
+	 * @param parentNode - the parent node
+	 * @param name - name of child node to match 
+	 * @param value - value of child node to match, specify null to not match value
+	 * @return matching child nodes
+	 */
+	private static List<Node> getChildren(Node parentNode, String name, String value){
+		List<Node> childNodes = new ArrayList<Node>();
+		if(parentNode == null || name == null){
+			return childNodes;
 		}
 
 		if (parentNode.getNodeType() == Node.ELEMENT_NODE && parentNode.hasChildNodes()) {
 			NodeList children = parentNode.getChildNodes();
 			for(int i=0; i < children.getLength(); i++){
 				Node child = children.item(i);
-				if(child != null && childNodeName.equals(child.getNodeName())){
-					if (child.getNodeType() == Node.ELEMENT_NODE && child.hasChildNodes()) {
-						NodeList grandChildren = child.getChildNodes();
-						for(int j=0; j < grandChildren.getLength(); j++){
-							Node grandChild = grandChildren.item(j);
-							if(grandChild != null && grandChildNodeName.equals(grandChild.getNodeName()) && grandChildNodeValue.equals(grandChild.getTextContent())){
-								return grandChild;
-							}
-						}
-					}
+				if(child != null && name.equals(child.getNodeName()) && (value == null || value.equals(child.getTextContent()))){
+					childNodes.add(child);
 				}
 			}
 		}
-		return null;    	
+
+		return childNodes;
 	}
-	
+
 	/**
 	 * Add a child node
 	 * @param parentNode - the parent node
@@ -106,7 +109,6 @@ public class DomUtil {
 		if(doc == null || parentNode == null || childName == null){
 			return null;
 		}
-		
 		Node childNode = doc.createElement(childName);
 		if(childValue != null){
 			childNode.setTextContent(childValue);
@@ -114,7 +116,7 @@ public class DomUtil {
 		parentNode.appendChild(childNode);
 		return childNode;
 	}
-	
+
 	/**
 	 * Get the matching child node. Create a node if it doens't already exist
 	 * @param parentNode - the parent node
@@ -123,22 +125,10 @@ public class DomUtil {
 	 * @return the child node
 	 */
 	public static Node findOrAddChildNode(Document doc, Node parentNode, String childName, String childValue){
-		if(parentNode == null || childName == null){
-			return null;
-		}
-		if (parentNode.getNodeType() == Node.ELEMENT_NODE && parentNode.hasChildNodes()) {
-			NodeList children = parentNode.getChildNodes();
-			for(int i=0; i < children.getLength(); i++){
-				Node child = children.item(i);
-				if(child != null && childName.equals(child.getNodeName()) && (childValue == null || childValue.equals(child.getTextContent()))){
-					return child;
-				}
-			}
-		}
-
-		return addChildNode(doc, parentNode, childName, childValue);
+		Node matchingChild = getChildNode(parentNode, childName, childValue);
+		return matchingChild != null ? matchingChild : addChildNode(doc, parentNode, childName, childValue);
 	}
-	
+
 	public static Document getDocument(InputStream inputStream) throws ParserConfigurationException, SAXException, IOException{
 		DocumentBuilderFactory domFactory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder db = domFactory.newDocumentBuilder();
