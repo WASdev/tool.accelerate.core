@@ -38,7 +38,7 @@
         },
         {
             "id": "microprofile",
-            "name": "MicroProfile (BETA)",
+            "name": "MicroProfile",
             "description": "Technologies required by the MicroProfile community effort. See microprofile.io.",
             "endpoint": "/microprofile"
         },

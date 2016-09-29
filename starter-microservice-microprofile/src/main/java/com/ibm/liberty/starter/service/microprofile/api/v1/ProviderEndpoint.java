@@ -31,14 +31,10 @@ import com.ibm.liberty.starter.api.v1.model.provider.Dependency;
 import com.ibm.liberty.starter.api.v1.model.provider.Dependency.Scope;
 import com.ibm.liberty.starter.api.v1.model.provider.Location;
 import com.ibm.liberty.starter.api.v1.model.provider.Provider;
-import com.ibm.liberty.starter.api.v1.model.provider.ServerConfig;
-import com.ibm.liberty.starter.api.v1.model.provider.Tag;
 
 @Path("v1/provider")
 public class ProviderEndpoint {
     
-    private static final String DEPENDENCY_URL = "http://localhost:9082/microprofile/artifacts/net/wasdev/wlp/starters/microprofile";
-
     @GET
     @Path("/")
     @Produces(MediaType.APPLICATION_JSON)
@@ -51,21 +47,22 @@ public class ProviderEndpoint {
         String url = info.getBaseUri().resolve("../artifacts").toString();
         repoLocation.setUrl(url);
         details.setRepoUrl(repoLocation);
-        Dependency providedDependency = new Dependency();
-        providedDependency.setScope(Scope.PROVIDED);
-        providedDependency.setGroupId("net.wasdev.wlp.starters.microprofile");
-        providedDependency.setArtifactId("provided-pom");
-        providedDependency.setVersion("0.0.1-SNAPSHOT");
 
-        Dependency runtimeDependency = new Dependency();
-        runtimeDependency.setScope(Scope.RUNTIME);
-        runtimeDependency.setGroupId("net.wasdev.wlp.starters.microprofile");
-        runtimeDependency.setArtifactId("runtime-pom");
-        runtimeDependency.setVersion("0.0.1-SNAPSHOT");
-
+        Dependency providedDependency = createDependency(Scope.PROVIDED, "provided-pom");
+        Dependency runtimeDependency = createDependency(Scope.RUNTIME, "runtime-pom");
         Dependency[] dependencies = { providedDependency, runtimeDependency };
         details.setDependencies(dependencies);
+
         return details;
+    }
+
+    private Dependency createDependency(Scope scope, String artifactId) {
+        Dependency runtimeDependency = new Dependency();
+        runtimeDependency.setScope(scope);
+        runtimeDependency.setGroupId("net.wasdev.wlp.starters.microprofile");
+        runtimeDependency.setArtifactId(artifactId);
+        runtimeDependency.setVersion("0.0.1-SNAPSHOT");
+        return runtimeDependency;
     }
 
     //read the description contained in the index.html file
@@ -98,14 +95,4 @@ public class ProviderEndpoint {
         return Response.ok(json.toString()).build();
     }
 
-    @GET
-    @Path("config")
-    @Produces(MediaType.APPLICATION_JSON)
-    public ServerConfig getServerConfig() throws Exception {
-        ServerConfig config = new ServerConfig();
-        Tag[] tags = new Tag[] { new Tag("featureManager") };
-        tags[0].setTags(new Tag[] { new Tag("feature", "jaxrs-2.0") , new Tag("feature", "jsonp-1.0"), new Tag("feature", "cdi-1.2")});
-        config.setTags(tags);
-        return config;
-    }
 }

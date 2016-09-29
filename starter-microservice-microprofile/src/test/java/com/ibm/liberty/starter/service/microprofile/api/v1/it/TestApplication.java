@@ -15,7 +15,9 @@
  *******************************************************************************/
 package com.ibm.liberty.starter.service.microprofile.api.v1.it;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -23,7 +25,6 @@ import org.junit.Test;
 import com.ibm.liberty.starter.api.v1.model.provider.Dependency;
 import com.ibm.liberty.starter.api.v1.model.provider.Provider;
 import com.ibm.liberty.starter.api.v1.model.provider.Sample;
-import com.ibm.liberty.starter.api.v1.model.provider.ServerConfig;
 
 /**
  * Test the deployed service responds as expected
@@ -46,31 +47,20 @@ public class TestApplication extends EndpointTest {
         boolean runtimeDependency = false;
         for (Dependency dependency : dependencies) {
             if (Dependency.Scope.PROVIDED.equals(dependency.getScope())) {
-                assertTrue("groupId incorrect.", "net.wasdev.wlp.starters.microprofile".equals(dependency.getGroupId()));
-                assertTrue("artifactId incorrect.", "provided-pom".equals(dependency.getArtifactId()));
-                assertTrue("version incorrect.", "0.0.1-SNAPSHOT".equals(dependency.getVersion()));
+                assertEquals("groupId incorrect.", "net.wasdev.wlp.starters.microprofile", dependency.getGroupId());
+                assertEquals("artifactId incorrect.", "provided-pom", dependency.getArtifactId());
+                assertEquals("version incorrect.", "0.0.1-SNAPSHOT", dependency.getVersion());
                 providedDependency = true;
             }
             if (Dependency.Scope.RUNTIME.equals(dependency.getScope())) {
-                assertTrue("groupId incorrect.", "net.wasdev.wlp.starters.microprofile".equals(dependency.getGroupId()));
-                assertTrue("artifactId incorrect.", "runtime-pom".equals(dependency.getArtifactId()));
-                assertTrue("version incorrect.", "0.0.1-SNAPSHOT".equals(dependency.getVersion()));
+                assertEquals("groupId incorrect.", "net.wasdev.wlp.starters.microprofile", dependency.getGroupId());
+                assertEquals("artifactId incorrect.", "runtime-pom", dependency.getArtifactId());
+                assertEquals("version incorrect.", "0.0.1-SNAPSHOT", dependency.getVersion());
                 runtimeDependency = true;
             }
         }
         assertTrue("Provided dependencies were specified.", providedDependency);
         assertTrue("Runtime dependencies were specified.", runtimeDependency);
-    }
-
-    @Test
-    public void testConfig() throws Exception {
-        ServerConfig config = testEndpoint("/api/v1/provider/config", ServerConfig.class);
-        assertNotNull("No response from API for configuration", config);
-        String actual = config.getTags()[0].getTags()[0].getValue() + ", "
-                        + config.getTags()[0].getTags()[1].getValue() + ", "
-                        + config.getTags()[0].getTags()[2].getValue();
-        String expected = "jaxrs-2.0, jsonp-1.0, cdi-1.2";
-        assertEquals("Incorrect feature specified", expected, actual);
     }
 
     @Test
