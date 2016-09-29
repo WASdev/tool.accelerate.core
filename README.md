@@ -12,14 +12,14 @@ This provides you with the jaxrs-2.0 feature and the jsonp-1.0 feature.
 
 Inside the application project produced there is a application.rest package containing the <code>LibertyRestEndpoint</code> class. This adds a REST endpoint which you can access at /rest. Inside the wlpcfg project there is the <code>it.rest.LibertyRestEndpointTest</code> that will test the REST endpoint to ensure it is working.
 
-For the complete feature documentation, see the <a href="http://www.ibm.com/support/knowledgecenter/SSAW57_8.5.5/com.ibm.websphere.wlp.nd.multiplatform.doc/ae/rwlp_feat.html%23rwlp_feat__jaxrs-2.0">jaxrs-2.0</a> feature description in IBM Knowledge Center.
+For the complete feature documentation, see the (jaxrs-2.0)[http://www.ibm.com/support/knowledgecenter/en/SSEQTP_liberty/com.ibm.websphere.wlp.nd.multiplatform.doc/ae/rwlp_feature_jaxrs-2.0.html] feature description in IBM Knowledge Center.
 
 ## Servlet
 This provides you with the servlet-3.1 feature.
 
 Inside the application project there is a application.servlet package containing the <code>LibertyServlet</code> class. This adds a servlet with an endpoint which you can access at /servlet. Inside the wlpcfg project there is the <code>it.servlet.LibertyServletTest</code> that will test the servlet's endpoint to ensure it is working.
 
-For the complete feature documentation, see the <a href="http://www.ibm.com/support/knowledgecenter/SSAW57_8.5.5/com.ibm.websphere.wlp.nd.multiplatform.doc/ae/rwlp_feat.html%23rwlp_feat__servlet-3.1">servlet-3.1</a> feature description in IBM Knowledge Center.
+For the complete feature documentation, see the [servlet-3.1](http://www.ibm.com/support/knowledgecenter/en/SSEQTP_liberty/com.ibm.websphere.wlp.nd.multiplatform.doc/ae/rwlp_feature_servlet-3.1.html) feature description in IBM Knowledge Center.
 
 ## Spring Boot with Spring MVC
 This provides you with a SpringBoot application that will run on WebSphere Liberty.
@@ -33,26 +33,23 @@ Inside the wlpcfg project there is the <code>it.springboot.web.HelloControllerTe
 ## Websockets
 This provides you with the websocket-1.1 feature.
 
-For the complete feature documentation, see the <a href="http://www.ibm.com/support/knowledgecenter/SSAW57_8.5.5/com.ibm.websphere.wlp.nd.multiplatform.doc/ae/rwlp_feat.html%23rwlp_feat__websocket-1.0">websocket-1.1</a> feature description in IBM Knowledge Center.
+For the complete feature documentation, see the [websocket-1.1](http://www.ibm.com/support/knowledgecenter/en/SSEQTP_liberty/com.ibm.websphere.wlp.nd.multiplatform.doc/ae/rwlp_feature_websocket-1.1.html) feature description in IBM Knowledge Center.
 
 ## Persistence
-This provides you with jpa-2.1. For the complete feature documentation, see the <a href="http://www.ibm.com/support/knowledgecenter/SSAW57_8.5.5/com.ibm.websphere.wlp.nd.multiplatform.doc/ae/rwlp_feat.html%23rwlp_feat__jpa-2.1">jpa-2.1</a> feature description in IBM Knowledge Center.
+This provides you with jpa-2.1. For the complete feature documentation, see the [jpa-2.1](http://www.ibm.com/support/knowledgecenter/en/SSEQTP_liberty/com.ibm.websphere.wlp.nd.multiplatform.doc/ae/rwlp_feature_jpa-2.1.html) feature description in IBM Knowledge Center.
 
 ## Watson SDK
 The Watson SDK provides an API for accessing Watson Services. For the complete documentation, take a look at <a href="https://developer.ibm.com/watson/">the Watson developer pages</a> and <a href="https://github.com/watson-developer-cloud/java-sdk">the Watson SDK github project</a>.
 
-## MicroProfile (BETA)
+## MicroProfile
 The <a href="http://microprofile.io/">MicroProfile project</a> is an open 
 community with the aim of optimizing Enterprise Java for a microservices 
-architecture. Currently the MicroProfile includes 
-<a href="http://www.ibm.com/support/knowledgecenter/SSAW57_8.5.5/com.ibm.websphere.wlp.nd.multiplatform.doc/ae/rwlp_feat.html#rwlp_feat__jsonp-1.0">JSON-P</a>, 
-<a href="http://www.ibm.com/support/knowledgecenter/SSAW57_8.5.5/com.ibm.websphere.wlp.nd.multiplatform.doc/ae/rwlp_feat.html%23rwlp_feat__jaxrs-2.0">
-JAX-RS</a> and 
-<a href="http://www.ibm.com/support/knowledgecenter/SSAW57_8.5.5/com.ibm.websphere.wlp.nd.multiplatform.doc/ae/rwlp_feat.html#rwlp_feat__cdi-1.2">CDI</a> and 
-will be evolving with guidance from the community.
+architecture.  MicroProfile will be evolving with guidance from the community.
 
 If you want to share your thoughts you can post straight to the 
 <a href="https://groups.google.com/forum/#!forum/microprofile">MicroProfile Google group</a>.
+
+For the complete feature documentation, see the [microProfile-1.0 feature](http://www.ibm.com/support/knowledgecenter/en/SSEQTP_liberty/com.ibm.websphere.wlp.nd.multiplatform.doc/ae/rwlp_feature_microProfile-1.0.html) feature description in IBM Knowledge Center.
 
 ## Swagger
 Swagger is a simple yet powerful representation of RESTful APIs.
@@ -63,7 +60,7 @@ You can also easily expose the REST endpoints available from your web modules ru
 
 It is also possible to follow a design-first approach by creating the Swagger documentation first and then generating the server code from it.
 
-For the complete feature documentation, see the <a href="http://www.ibm.com/support/knowledgecenter/en/SSAW57_8.5.5/com.ibm.websphere.wlp.nd.multiplatform.doc/ae/twlp_api_discovery.html?view=kc">apiDiscovery-1.0</a> feature description in IBM Knowledge Center. 
+For the complete feature documentation, see the [apiDiscovery-1.0](http://www.ibm.com/support/knowledgecenter/en/SSEQTP_liberty/com.ibm.websphere.wlp.nd.multiplatform.doc/ae/rwlp_feature_apiDiscovery-1.0.html) feature description in IBM Knowledge Center. 
 
 # Building and adding to the app accelerator
 
