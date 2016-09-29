@@ -27,6 +27,7 @@ import java.util.logging.Logger;
 
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
+import javax.validation.ValidationException;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -53,6 +54,8 @@ public class ProviderEndpoint {
     private static final Logger log = Logger.getLogger(ProviderEndpoint.class.getName());
 	
     private static final String GROUP_SUFFIX = "swagger";
+    
+    private static String sharedResourceDir, javaHomeDir;
 
     @GET
     @Path("/")
@@ -193,18 +196,9 @@ public class ProviderEndpoint {
     			}
     			log.finer("Enabled : REST=" + restEnabled + " : Servlet=" + servletEnabled);
 
-    			String sharedResourceDir = "";
-    			try{
-    				sharedResourceDir =  ((String)(new InitialContext().lookup("sharedResourceDir")));
-    				log.finer("sharedResourceDir=" + sharedResourceDir);
-    			} catch (NamingException ne){
-    				log.info("NamingException occurred: " + ne);
-    				return "Internal error";
-    			}
-
     			if(restEnabled){
     				// Swagger and REST are selected. Add Swagger annotations to the REST sample application.
-    				String restSampleAppPath = sharedResourceDir + "/appAccelerator/swagger/samples/rest/LibertyRestEndpoint.java";
+    				String restSampleAppPath = getSharedResourceDir() + "appAccelerator/swagger/samples/rest/LibertyRestEndpoint.java";
     				File restSampleApp = new File(restSampleAppPath);
     				if(restSampleApp.exists()){
     					String targetRestSampleFile = techWorkspaceDir + "/package/myProject-application/src/main/java/application/rest/LibertyRestEndpoint.java";
@@ -217,7 +211,7 @@ public class ProviderEndpoint {
 
     			if(servletEnabled){
     				//Swagger and Servlet are selected. Add swagger.json stub that describes the servlet endpoint to META-INF/stub directory.
-    				String swaggerStubPath = sharedResourceDir + "/appAccelerator/swagger/samples/servlet/swagger.json";
+    				String swaggerStubPath = getSharedResourceDir() + "appAccelerator/swagger/samples/servlet/swagger.json";
     				File swaggerStub = new File(swaggerStubPath);
     				if(swaggerStub.exists()){
     					String targetStubPath = techWorkspaceDir + "/package/myProject-application/src/main/webapp/META-INF/stub/swagger.json";
@@ -256,37 +250,29 @@ public class ProviderEndpoint {
     	}
     	
     	File uploadedFile = filesListInDir.get(0);
-    	
-    	try{
-			
-			String sharedResourceDir =  ((String)(new InitialContext().lookup("sharedResourceDir")));
-			log.finer("sharedResourceDir=" + sharedResourceDir);
-			
-			String codeGenPath = sharedResourceDir + "/appAccelerator/swagger/codegen";
-			String swaggerCodeGenJarPath = codeGenPath + "/swagger-codegen-cli.jar";
-			log.finer("swaggerCodeGenJarPath=" + swaggerCodeGenJarPath);
-					
-			File schemaCodeGen = new File(swaggerCodeGenJarPath);
-			if(!schemaCodeGen.exists()){
-				log.info("swagger-codegen-cli.jar doesn't exist: " + schemaCodeGen.getAbsolutePath());
-				System.out.println("swagger-codegen-cli.jar doesn't exist: " + schemaCodeGen.getAbsolutePath());
-				return "Two Couldn't fulfill the request due to internal error";
-			}
-			
-			String javaHome = ((String)(new InitialContext().lookup("javaHome")));
-			log.finer("javaHome=" + javaHome);
-			
-			//server codegen
-			String codeGenType = "server";
-			String codeGenLanguage = "jaxrs-spec";
-			int returnCode = generateCode(javaHome, swaggerCodeGenJarPath, null, codeGenLanguage, uploadedFile.getAbsolutePath(), uploadDirectoryPath + "/" + codeGenType);
-			if(returnCode != 0){
-				log.info("Couldn't generate server code using the swagger file : " + uploadedFile.getAbsolutePath());
-				return "Couldn't generate server code using the specified swagger file";
-			}
-			
-			//client codegen - disable for now
-			/*
+
+    	String codeGenPath = getSharedResourceDir() + "appAccelerator/swagger/codegen";
+    	String swaggerCodeGenJarPath = codeGenPath + "/swagger-codegen-cli.jar";
+    	log.finer("swaggerCodeGenJarPath=" + swaggerCodeGenJarPath);
+
+    	File schemaCodeGen = new File(swaggerCodeGenJarPath);
+    	if(!schemaCodeGen.exists()){
+    		log.info("swagger-codegen-cli.jar doesn't exist: " + schemaCodeGen.getAbsolutePath());
+    		System.out.println("swagger-codegen-cli.jar doesn't exist: " + schemaCodeGen.getAbsolutePath());
+    		return "Two Couldn't fulfill the request due to internal error";
+    	}
+
+    	//server codegen
+    	String codeGenType = "server";
+    	String codeGenLanguage = "jaxrs-spec";
+    	int returnCode = generateCode(getJavaHome(), swaggerCodeGenJarPath, null, codeGenLanguage, uploadedFile.getAbsolutePath(), uploadDirectoryPath + "/" + codeGenType);
+    	if(returnCode != 0){
+    		log.info("Couldn't generate server code using the swagger file : " + uploadedFile.getAbsolutePath());
+    		return "Couldn't generate server code using the specified swagger file";
+    	}
+
+    	//client codegen - disable for now
+    	/*
 			String javaClientTemplates = codeGenPath + "/javaClientTemplates";
 			codeGenType = "client";
 			codeGenLanguage = "java";
@@ -295,10 +281,6 @@ public class ProviderEndpoint {
 				System.out.println("Couldn't generate client code using the swagger file : " + uploadedFile.getAbsolutePath());
 				return "Couldn't generate client code using the specified swagger file";	
 			}*/
-		}catch (NamingException ne){
-			log.info("NamingException occurred: " + ne);
-			return "Internal error";
-		}
     	
     	return "success";
     }
@@ -326,10 +308,13 @@ public class ProviderEndpoint {
     						}
 
     					});
+    			if(!javaHome.endsWith("/")){
+        			javaHome += "/";
+        		}
     			log.fine("Retrieved Java home location from System property : " + javaHome);
     		}
-
-    		commandList.add(javaHome + "/bin/java");
+    		
+    		commandList.add(javaHome + "bin/java");
     		commandList.add("-jar");
     		commandList.add(swaggerCodeGenJarPath);
 
@@ -397,6 +382,45 @@ public class ProviderEndpoint {
         }
 
         return sb.toString();
+    }
+    
+    private static String processPath(String string) {
+    	if(string == null){
+    		return "";
+    	}
+    	return string.replace('\\', '/');
+    }
+
+    private static String getSharedResourceDir() {
+    	if(sharedResourceDir == null){
+    		try{
+    			sharedResourceDir = processPath(((String)(new InitialContext().lookup("sharedResourceDir"))));
+    			if(!sharedResourceDir.endsWith("/")){
+    				sharedResourceDir += "/";
+    			}
+    			log.info("sharedResourceDir=" + sharedResourceDir);
+    		}catch (NamingException ne){
+    			log.severe("NamingException occurred while retrieving the value of 'sharedResourceDir': " + ne);
+    			throw new ValidationException("NamingException occurred while retrieving the value of 'sharedResourceDir': " + ne);
+    		}
+    	}
+    	return sharedResourceDir;
+    }
+
+    private static String getJavaHome() {
+    	if(javaHomeDir == null){
+    		try{
+    			javaHomeDir = processPath(((String)(new InitialContext().lookup("javaHome"))));
+    			if(!javaHomeDir.endsWith("/")){
+    				javaHomeDir += "/";
+    			}
+    			log.info("javaHomeDir=" + javaHomeDir);
+    		}catch (NamingException ne){
+    			log.severe("NamingException occurred while retrieving the value of 'javaHomeDir': " + ne);
+    			throw new ValidationException("NamingException occurred while retrieving the value of 'javaHomeDir': " + ne);
+    		}
+    	}
+    	return javaHomeDir;
     }
 	
 }

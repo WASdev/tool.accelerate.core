@@ -52,6 +52,9 @@ public class StarterUtil {
 		if(serverOutputDir == null){
 			try{
 				serverOutputDir = processPath(((String)(new InitialContext().lookup("serverOutputDir"))));
+				if(!serverOutputDir.endsWith("/")){
+					serverOutputDir += "/";
+				}
 				log.info("serverOutputDir=" + serverOutputDir);
 			}catch (NamingException ne){
 				log.severe("NamingException occurred while retrieving the value of 'serverOutputDir': " + ne);
@@ -62,7 +65,7 @@ public class StarterUtil {
 	}
 
 	public static String getWorkspaceDir(String workspaceId){
-		return getServerOutputDir() + "/" + WORKAREA + "/" + APP_ACCELERATOR_WORKAREA + "/" + workspaceId;
+		return getServerOutputDir() + WORKAREA + "/" + APP_ACCELERATOR_WORKAREA + "/" + workspaceId;
 	}
 
 	/**
