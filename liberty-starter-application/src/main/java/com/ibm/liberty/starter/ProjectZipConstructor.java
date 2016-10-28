@@ -153,10 +153,7 @@ public class ProjectZipConstructor {
         log.log(Level.INFO, "Entering method ProjectZipConstructor.addFeaturesToInstall()");
         InputStream pomInputStream = new ByteArrayInputStream(getFileFromMap(WLP_CFG_POM_FILE)); 
         FeatureInstaller featureInstaller = new FeatureInstaller(services, serviceConnector);
-        putFileInMap(WLP_CFG_POM_FILE, featureInstaller.addFeaturesToInstall(pomInputStream, true));
-        String pathToServerXML = "myProject-wlpcfg/servers/LibertyProjectServer/server.xml";
-        InputStream serverInputStream = new ByteArrayInputStream(getFileFromMap(pathToServerXML)); 
-        putFileInMap(pathToServerXML, featureInstaller.addFeaturesToInstall(serverInputStream, false));
+        putFileInMap(WLP_CFG_POM_FILE, featureInstaller.addFeaturesToInstall(pomInputStream));
     }
 
     public void initializeMap() throws IOException {
