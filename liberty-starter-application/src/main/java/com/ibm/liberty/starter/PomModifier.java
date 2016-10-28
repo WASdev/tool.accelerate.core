@@ -105,7 +105,7 @@ public class PomModifier {
         appendDeployType();
         appendRepoUrl();
 
-        StarterUtil.identityTransform(new DOMSource(doc), new StreamResult(pomOutputStream), false, true, "4");
+        StarterUtil.identityTransform(new DOMSource(doc), new StreamResult(pomOutputStream));
     }
 
     private void appendDependencyNodes(Node dependenciesNode, Map<String, Dependency> dependencies) {
