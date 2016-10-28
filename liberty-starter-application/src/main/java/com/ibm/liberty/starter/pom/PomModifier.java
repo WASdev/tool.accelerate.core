@@ -3,7 +3,7 @@ package com.ibm.liberty.starter.pom;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
+import java.util.Set;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
@@ -19,21 +19,30 @@ import com.ibm.liberty.starter.StarterUtil;
 public class PomModifier {
 
     private final Document pom;
+    private Set<PomModifierCommand> commands;
 
-    public PomModifier(InputStream inputStream) throws ParserConfigurationException, SAXException, IOException {
-        pom = DomUtil.getDocument(inputStream);
+    public PomModifier(InputStream inputStream, Set<PomModifierCommand> commands) throws ParserConfigurationException, SAXException, IOException {
+        this.pom = DomUtil.getDocument(inputStream);
+        this.commands = commands;
     }
 
     public byte[] getPomBytes() throws TransformerException, IOException {
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        writeToStream(baos);
-        return baos.toByteArray();
+        processCommands();
+        return convertToBytes();
     }
 
-    private void writeToStream(OutputStream pomOutputStream) throws TransformerException, IOException {
+    private void processCommands() {
+        for (PomModifierCommand command : commands) {
+            command.modifyPom(pom);
+        }
+    }
+
+    private byte[] convertToBytes() throws TransformerException, IOException {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
         DOMSource domSource = new DOMSource(pom);
-        StreamResult streamResult = new StreamResult(pomOutputStream);
-        StarterUtil.identityTransform(domSource, streamResult, false, true, "4");
+        StreamResult streamResult = new StreamResult(baos);
+        StarterUtil.identityTransform(domSource, streamResult);
+        return baos.toByteArray();
     }
 
 }
