@@ -96,15 +96,10 @@ public class StarterUtil {
 	 * @throws TransformerFactoryConfigurationError
 	 * @throws TransformerException
 	 */
-	public static void identityTransform(Source source, Result result, boolean omitXmlDeclaration, boolean indent, String indentAmount) throws TransformerFactoryConfigurationError, TransformerException{
+	public static void identityTransform(Source source, Result result) throws TransformerFactoryConfigurationError, TransformerException{
 		Transformer transformer = TransformerFactory.newInstance().newTransformer();
-		if(indent){
-			transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-			transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", indentAmount);
-		}
-		if(omitXmlDeclaration){
-			transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
-		}
+		transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+		transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "4");
 		transformer.transform(source, result);
 	}
 	

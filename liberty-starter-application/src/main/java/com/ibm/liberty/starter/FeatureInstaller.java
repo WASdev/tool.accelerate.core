@@ -87,7 +87,7 @@ public class FeatureInstaller {
             }
         }
 
-        StarterUtil.identityTransform(new DOMSource(doc), new StreamResult(outputStream), true, true, "4");
+        StarterUtil.identityTransform(new DOMSource(doc), new StreamResult(outputStream));
     }
 
     private Node getLibertyMavenPluginConfiguration(Document doc) {
