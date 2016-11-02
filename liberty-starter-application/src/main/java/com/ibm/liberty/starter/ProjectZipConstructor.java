@@ -24,6 +24,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -51,6 +52,7 @@ import com.ibm.liberty.starter.api.v1.model.provider.Sample;
 import com.ibm.liberty.starter.api.v1.model.registration.Service;
 import com.ibm.liberty.starter.api.v1.temp.ServiceFinder;
 import com.ibm.liberty.starter.pom.AddDependenciesCommand;
+import com.ibm.liberty.starter.pom.AddFeaturesCommand;
 import com.ibm.liberty.starter.pom.AppNameCommand;
 import com.ibm.liberty.starter.pom.PomModifierCommand;
 import com.ibm.liberty.starter.pom.SetDefaultProfileCommand;
@@ -159,8 +161,9 @@ public class ProjectZipConstructor {
     private void addFeaturesToInstall() throws SAXException, IOException, ParserConfigurationException, TransformerException {
         log.log(Level.INFO, "Entering method ProjectZipConstructor.addFeaturesToInstall()");
         InputStream pomInputStream = new ByteArrayInputStream(getFileFromMap(WLP_CFG_POM_FILE)); 
-        FeatureInstaller featureInstaller = new FeatureInstaller(services, serviceConnector);
-        putFileInMap(WLP_CFG_POM_FILE, featureInstaller.addFeaturesToInstall(pomInputStream));
+        AddFeaturesCommand command = new AddFeaturesCommand(services, serviceConnector);
+        PomModifier pomModifier = new PomModifier(pomInputStream, Collections.singleton(command));
+        putFileInMap(WLP_CFG_POM_FILE, pomModifier.getPomBytes());
     }
 
     public void initializeMap() throws IOException {
