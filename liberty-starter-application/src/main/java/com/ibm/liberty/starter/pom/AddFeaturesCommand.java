@@ -8,7 +8,6 @@ import java.util.logging.Logger;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 
-import com.ibm.liberty.starter.DomUtil;
 import com.ibm.liberty.starter.ServiceConnector;
 import com.ibm.liberty.starter.api.v1.model.internal.Services;
 import com.ibm.liberty.starter.api.v1.model.registration.Service;

@@ -10,7 +10,6 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import com.ibm.liberty.starter.DependencyHandler;
-import com.ibm.liberty.starter.DomUtil;
 
 public class SetRepositoryCommand implements PomModifierCommand {
 

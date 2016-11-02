@@ -12,8 +12,8 @@ import org.junit.Test;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 
-import com.ibm.liberty.starter.DomUtil;
 import com.ibm.liberty.starter.ProjectZipConstructor.DeployType;
+import com.ibm.liberty.starter.pom.DomUtil;
 import com.ibm.liberty.starter.pom.SetDefaultProfileCommand;
 
 public class SetDefaultProfileCommandTest {

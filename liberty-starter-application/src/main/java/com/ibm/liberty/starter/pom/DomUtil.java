@@ -14,7 +14,7 @@
  * limitations under the License.
  *******************************************************************************/
 
-package com.ibm.liberty.starter;
+package com.ibm.liberty.starter.pom;
 
 import java.io.IOException;
 import java.io.InputStream;

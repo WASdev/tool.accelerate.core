@@ -16,8 +16,8 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import com.ibm.liberty.starter.DependencyHandler;
-import com.ibm.liberty.starter.DomUtil;
 import com.ibm.liberty.starter.pom.AddDependenciesCommand;
+import com.ibm.liberty.starter.pom.DomUtil;
 import com.ibm.liberty.starter.unit.MockDependencyHandler;
 
 public class AddDependenciesCommandTest {

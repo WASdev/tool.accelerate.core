@@ -13,7 +13,6 @@ import javax.xml.transform.stream.StreamResult;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
-import com.ibm.liberty.starter.DomUtil;
 import com.ibm.liberty.starter.StarterUtil;
 
 public class PomModifier {

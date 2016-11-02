@@ -12,11 +12,11 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import com.ibm.liberty.starter.DomUtil;
 import com.ibm.liberty.starter.ServiceConnector;
 import com.ibm.liberty.starter.api.v1.model.internal.Services;
 import com.ibm.liberty.starter.api.v1.model.registration.Service;
 import com.ibm.liberty.starter.pom.AddFeaturesCommand;
+import com.ibm.liberty.starter.pom.DomUtil;
 
 public class AddFeaturesCommandTest {
 

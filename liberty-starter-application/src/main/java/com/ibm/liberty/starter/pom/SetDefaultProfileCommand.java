@@ -7,7 +7,6 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import com.ibm.liberty.starter.DomUtil;
 import com.ibm.liberty.starter.ProjectZipConstructor.DeployType;
 
 public class SetDefaultProfileCommand implements PomModifierCommand {

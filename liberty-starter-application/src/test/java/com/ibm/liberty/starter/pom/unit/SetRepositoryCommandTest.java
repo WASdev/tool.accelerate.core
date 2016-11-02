@@ -8,7 +8,7 @@ import static org.hamcrest.Matchers.*;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 
-import com.ibm.liberty.starter.DomUtil;
+import com.ibm.liberty.starter.pom.DomUtil;
 import com.ibm.liberty.starter.pom.SetRepositoryCommand;
 import com.ibm.liberty.starter.unit.MockDependencyHandler;
 
