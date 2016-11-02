@@ -42,7 +42,7 @@ public class BluemixPomModifierTest {
                    outputPomWithWhitespaceRemoved.contains("<id>bluemix</id><activation><activeByDefault>true</activeByDefault></activation>"));
     }
 
-    private String addTechAndWritePom(DependencyHandler depHand) throws TransformerException, IOException {
+    private String addTechAndWritePom(DependencyHandler depHand) throws TransformerException, IOException, ParserConfigurationException, SAXException {
         pomModifier.addStarterPomDependencies(depHand);
         byte[] bytes = pomModifier.getBytes();
         String pomContents = new String(bytes, StandardCharsets.UTF_8);
