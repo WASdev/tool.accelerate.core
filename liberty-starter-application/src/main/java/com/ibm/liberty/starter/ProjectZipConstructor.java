@@ -26,8 +26,9 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
-import java.util.Map;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
@@ -49,6 +50,12 @@ import com.ibm.liberty.starter.api.v1.model.provider.Provider;
 import com.ibm.liberty.starter.api.v1.model.provider.Sample;
 import com.ibm.liberty.starter.api.v1.model.registration.Service;
 import com.ibm.liberty.starter.api.v1.temp.ServiceFinder;
+import com.ibm.liberty.starter.pom.AddDependenciesCommand;
+import com.ibm.liberty.starter.pom.AppNameCommand;
+import com.ibm.liberty.starter.pom.PomModifierCommand;
+import com.ibm.liberty.starter.pom.SetDefaultProfileCommand;
+import com.ibm.liberty.starter.pom.SetRepositoryCommand;
+import com.ibm.liberty.starter.pom.PomModifier;
 
 public class ProjectZipConstructor {
     
@@ -240,11 +247,14 @@ public class ProjectZipConstructor {
     public void addPomFileToMap() throws SAXException, IOException, ParserConfigurationException, TransformerException {
         log.log(Level.INFO, "Entering method ProjectZipConstructor.addPomFileToMap()");
         InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream(POM_FILE);
-        PomModifier pomModifier = new PomModifier(deployType);
-        pomModifier.setInputStream(inputStream);
+        Set<PomModifierCommand> commands = new HashSet<>();
         DependencyHandler depHand = new DependencyHandler(services, serviceConnector, appName);
-        pomModifier.addStarterPomDependencies(depHand);
-        byte[] bytes = pomModifier.getBytes();
+        commands.add(new AddDependenciesCommand(depHand));
+        commands.add(new AppNameCommand(depHand));
+        commands.add(new SetDefaultProfileCommand(deployType));
+        commands.add(new SetRepositoryCommand(depHand));
+        PomModifier pomModifier = new PomModifier(inputStream, commands);
+        byte[] bytes = pomModifier.getPomBytes();
         putFileInMap("pom.xml", bytes);
     }
     
