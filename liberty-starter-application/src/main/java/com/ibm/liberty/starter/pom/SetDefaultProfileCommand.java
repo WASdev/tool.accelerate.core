@@ -7,13 +7,14 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import com.ibm.liberty.starter.DomUtil;
 import com.ibm.liberty.starter.ProjectZipConstructor.DeployType;
 
 public class SetDefaultProfileCommand implements PomModifierCommand {
 
     private final DeployType deployType;
     private static final Logger log = Logger.getLogger(SetDefaultProfileCommand.class.getName());
-    
+
     public SetDefaultProfileCommand(DeployType deployType) {
         this.deployType = deployType;
     }
@@ -39,7 +40,7 @@ public class SetDefaultProfileCommand implements PomModifierCommand {
             activationNode.appendChild(activeByDefault);
             profileNode.appendChild(activationNode);
         } catch (UnableToFindNodeException e) {
-            log .log(Level.SEVERE, "Unable to find the profile for " + deployType + " so not default activation will be set", e);
+            log.log(Level.SEVERE, "Unable to find the profile for " + deployType + " so not default activation will be set", e);
         }
     }
 
@@ -48,27 +49,13 @@ public class SetDefaultProfileCommand implements PomModifierCommand {
         int length = profileNodeList.getLength();
         for (int i = 0; i < length; i++) {
             Node profileNode = profileNodeList.item(i);
-            if (nodeHasId(profileNode, nodeId)) {
+            if (DomUtil.nodeHasId(profileNode, nodeId)) {
                 return profileNode;
             }
         }
         throw new UnableToFindNodeException(nodeId);
     }
-    
-    private boolean nodeHasId(Node node, String id) {
-        // This will ignore white space nodes
-        if (node.getNodeType() == Node.ELEMENT_NODE && node.hasChildNodes()) {
-            NodeList nodeList = node.getChildNodes();
-            int length = nodeList.getLength();
-            for (int i = 0; i < length; i++) {
-                if (id.equals(nodeList.item(i).getTextContent())) {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-    
+
     private static class UnableToFindNodeException extends Exception {
 
         private static final long serialVersionUID = -8095349390659588081L;

@@ -31,7 +31,7 @@ public class PomModifier {
         return convertToBytes();
     }
 
-    private void processCommands() {
+    private void processCommands() throws IOException {
         for (PomModifierCommand command : commands) {
             command.modifyPom(pom);
         }

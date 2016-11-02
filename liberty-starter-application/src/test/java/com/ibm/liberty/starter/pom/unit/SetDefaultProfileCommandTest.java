@@ -16,7 +16,7 @@ import com.ibm.liberty.starter.DomUtil;
 import com.ibm.liberty.starter.ProjectZipConstructor.DeployType;
 import com.ibm.liberty.starter.pom.SetDefaultProfileCommand;
 
-public class SetDefaultProfileTest {
+public class SetDefaultProfileCommandTest {
 
     private Document pom;
     private Node localServerProfile;
