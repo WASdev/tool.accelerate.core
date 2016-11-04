@@ -6,7 +6,13 @@ import java.io.InputStream;
 import java.util.Set;
 
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Result;
+import javax.xml.transform.Source;
+import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.TransformerFactoryConfigurationError;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
@@ -40,8 +46,11 @@ public class PomModifier {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         DOMSource domSource = new DOMSource(pom);
         StreamResult streamResult = new StreamResult(baos);
-        StarterUtil.identityTransform(domSource, streamResult);
+        Transformer transformer = TransformerFactory.newInstance().newTransformer();
+        transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+        transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "4");
+        transformer.transform(domSource, streamResult);
         return baos.toByteArray();
     }
-
+    
 }
