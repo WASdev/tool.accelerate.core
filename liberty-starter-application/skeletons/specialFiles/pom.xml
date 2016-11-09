@@ -63,20 +63,7 @@
         </repository>
     </repositories>
 
-    <modules>
-        <module>myProject-application</module>
-        <module>myProject-wlpcfg</module>
-        <module>myProject-deploy</module>
-    </modules>
-    
-    
     <profiles>
-        <profile>
-            <id>localServer</id>
-            <modules>
-                <module>myProject-deploy/myProject-localServer</module>
-            </modules>
-        </profile>
         <profile>
             <id>bluemix</id>
             <modules>
@@ -148,7 +135,9 @@
                         <phase>test</phase>
                         <id>default-test</id>
                         <configuration>
-                            <excludes>**/it/**</excludes>
+                            <excludes>
+                                <exclude>**/it/**</exclude>
+                            </excludes>
                             <reportsDirectory>${project.build.directory}/test-reports/unit</reportsDirectory>
                         </configuration>
                     </execution>

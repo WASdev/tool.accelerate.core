@@ -100,7 +100,6 @@ public class ProjectZipConstructor {
         addTechSamplesToMap();
         addPomFileToMap();
         addDynamicPackages();
-        addFeaturesToInstall();
         ZipOutputStream zos = new ZipOutputStream(os);
         createZipFromMap(zos);
         zos.close();
@@ -158,14 +157,6 @@ public class ProjectZipConstructor {
         log.log(Level.FINE, "Exiting method ProjectZipConstructor.addDynamicPackages()");
     }
     
-    private void addFeaturesToInstall() throws SAXException, IOException, ParserConfigurationException, TransformerException {
-        log.log(Level.INFO, "Entering method ProjectZipConstructor.addFeaturesToInstall()");
-        InputStream pomInputStream = new ByteArrayInputStream(getFileFromMap(WLP_CFG_POM_FILE)); 
-        AddFeaturesCommand command = new AddFeaturesCommand(services, serviceConnector);
-        PomModifier pomModifier = new PomModifier(pomInputStream, Collections.singleton(command));
-        putFileInMap(WLP_CFG_POM_FILE, pomModifier.getPomBytes());
-    }
-
     public void initializeMap() throws IOException {
         log.log(Level.INFO, "Entering method ProjectZipConstructor.initializeMap()");
         InputStream skeletonIS = this.getClass().getClassLoader().getResourceAsStream(SKELETON_JAR_FILENAME);
@@ -256,6 +247,7 @@ public class ProjectZipConstructor {
         commands.add(new AppNameCommand(depHand));
         commands.add(new SetDefaultProfileCommand(deployType));
         commands.add(new SetRepositoryCommand(depHand));
+        commands.add(new AddFeaturesCommand(services, serviceConnector));
         PomModifier pomModifier = new PomModifier(inputStream, commands);
         byte[] bytes = pomModifier.getPomBytes();
         putFileInMap("pom.xml", bytes);
@@ -282,11 +274,6 @@ public class ProjectZipConstructor {
     public void putFileInMap(String path, byte[] file) {
         log.log(Level.INFO, "Inserting file " + path + " into map.");
         fileMap.put(path, file);
-    }
-    
-    public byte[] getFileFromMap(String path) {
-        log.log(Level.INFO, "Getting file " + path + " from map.");
-        return fileMap.get(path);
     }
 
 }
