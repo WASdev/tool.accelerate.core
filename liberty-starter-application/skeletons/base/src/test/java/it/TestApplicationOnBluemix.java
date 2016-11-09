@@ -16,6 +16,7 @@
 package fvt;
 
 import org.junit.Test;
+import static org.junit.Assume.assumeNotNull;
 import static org.junit.Assert.assertTrue;
 
 import javax.ws.rs.client.Client;
@@ -24,11 +25,12 @@ import javax.ws.rs.client.Invocation;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Response;
 
-public class TestApplication {
+public class TestApplicationOnBluemix {
 
     @Test
     public void testDeployment() {
         String context = System.getProperty("cf.context.root");
+        assumeNotNull(context);
         String url = "http://" + context + "/index.html";
         System.out.println("Testing " + url);
         Response response = sendRequest(url, "GET");
