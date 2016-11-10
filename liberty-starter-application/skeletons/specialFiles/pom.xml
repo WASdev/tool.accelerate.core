@@ -33,8 +33,6 @@
         <wlpServerName>LibertyProjectServer</wlpServerName>
         <testServerHttpPort>9080</testServerHttpPort>
         <testServerHttpsPort>9443</testServerHttpsPort>
-        <warName>myArtifactId-application</warName>
-        <warVersion>1.0-SNAPSHOT</warVersion>
         <!--This is set in the ibm-web-ext.xml file -->
         <warContext>myLibertyApp</warContext>
         <package.file>${project.build.directory}/${app.name}.zip</package.file>
@@ -150,7 +148,7 @@
                 <executions>
                     <execution>
                         <id>copy-server-files</id>
-                        <phase>process-resources</phase>
+                        <phase>package</phase>
                         <goals>
                             <goal>copy-dependencies</goal>
                         </goals>
@@ -158,6 +156,30 @@
                             <includeArtifactIds>server-snippet</includeArtifactIds>
                             <prependGroupId>true</prependGroupId>
                             <outputDirectory>${project.build.directory}/wlp/usr/servers/${wlpServerName}/configDropins/defaults</outputDirectory>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>copy-app</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                          <outputDirectory>${project.build.directory}/wlp/usr/servers/${wlpServerName}/dropins</outputDirectory>
+                          <resources>
+                            <resource>
+                              <directory>${project.build.directory}</directory>
+                              <includes>
+                                <include>${project.artifactId}-${project.version}.war</include>
+                              </includes>
+                            </resource>
+                          </resources>
                         </configuration>
                     </execution>
                 </executions>
@@ -177,7 +199,7 @@
                         <type>zip</type>
                     </assemblyArtifact>
                     <assemblyInstallDirectory>${project.build.directory}</assemblyInstallDirectory>
-                    <configFile>${basedir}/servers/${wlpServerName}/server.xml</configFile>
+                    <configFile>src/main/liberty/config/server.xml</configFile>
                     <packageFile>${package.file}</packageFile>
                     <include>${packaging.type}</include>
                     <bootstrapProperties>
@@ -205,6 +227,13 @@
                         <phase>post-integration-test</phase>
                         <goals>
                             <goal>stop-server</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>package-app</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>package-server</goal>
                         </goals>
                     </execution>
                 </executions>

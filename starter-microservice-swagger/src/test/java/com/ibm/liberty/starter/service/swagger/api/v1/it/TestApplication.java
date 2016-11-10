@@ -104,7 +104,7 @@ public class TestApplication extends EndpointTest {
     	String actual = testEndpoint("/api/v1/provider/packages/prepare?path=" + swaggerTechDirPath + "&options=server");
     	assertNotNull("No response from API for packages/prepare", actual);
         assertEquals("Response doesn't match : " + actual, "success", actual);
-        String packagedFilePath = swaggerTechDirPath + "/package/myProject-application/src/sampleSwagger.json";
+        String packagedFilePath = swaggerTechDirPath + "/package/src/sampleSwagger.json";
         assertTrue("Swagger file was not packaged successfully : " + packagedFilePath, new File(packagedFilePath).exists());
     }
     

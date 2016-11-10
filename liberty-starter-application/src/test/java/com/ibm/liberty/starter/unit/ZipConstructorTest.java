@@ -39,8 +39,8 @@ public class ZipConstructorTest {
         zipConstructor.initializeMap();
         Map<String, byte[]> map = zipConstructor.getFileMap();
         assertThat(map, is(not(anEmptyMap())));
-        assertThat(map, hasKey("myProject-application/pom.xml"));
-        byte[] byteArray = map.get("myProject-application/pom.xml");
+        assertThat(map, hasKey("src/main/liberty/config/server.xml"));
+        byte[] byteArray = map.get("src/main/liberty/config/server.xml");
         assertThat(byteArray.length, is(greaterThan(0)));
     }
 

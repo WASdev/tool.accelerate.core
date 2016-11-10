@@ -68,9 +68,8 @@ public class ProjectZipConstructor {
     private ConcurrentHashMap<String, byte[]> fileMap = new ConcurrentHashMap<>();
     private static final String SKELETON_JAR_FILENAME = "services/skeletonLibertyBuildImage.jar";
     private static final String BASE_INDEX_HTML = "payloadIndex.html";
-    private static final String INDEX_HTML_PATH = "myProject-application/src/main/webapp/index.html";
+    private static final String INDEX_HTML_PATH = "src/main/webapp/index.html";
     private static final String POM_FILE = "pom.xml";
-    private static final String WLP_CFG_POM_FILE = "myProject-wlpcfg/pom.xml";
     private String appName;
     public enum DeployType {
         LOCAL, BLUEMIX

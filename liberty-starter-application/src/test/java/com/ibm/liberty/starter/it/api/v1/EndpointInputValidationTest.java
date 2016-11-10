@@ -11,6 +11,8 @@ import javax.ws.rs.core.Response;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
@@ -18,8 +20,10 @@ import java.io.PrintWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -140,7 +144,7 @@ public class EndpointInputValidationTest {
         assertEquals("Response 3 was incorrect, response was " + responseCode, Response.Status.OK.getStatusCode(), responseCode);
         
         // Invoke the v1/data endpoint to ensure that the packaged files are contained within the zip and the features to 
-        // install specified by the 'test' micro-service are present within myProject-wlpcfg/pom.xml
+        // install specified by the 'test' micro-service are present within pom.xml
         Client client = ClientBuilder.newClient();
         String port = System.getProperty("liberty.test.port");
         String url = "http://localhost:" + port + "/start/api/v1/data?tech=test&name=Test&deploy=local&techoptions=test:testoption1&workspace=" + uuid;
@@ -158,14 +162,22 @@ public class EndpointInputValidationTest {
         boolean foundFeaturesToInstall = false;
         while ((inputEntry = zipIn.getNextEntry()) != null) {
             String entryName = inputEntry.getName();
-            if ("myProject-application/sampleUpload3.txt_renamed".equals(entryName)) {
+            if ("sampleUpload3.txt_renamed".equals(entryName)) {
             	packagedFileExists = true;
-            } else if ("myProject-application/sampleUpload.txt".equals(entryName) || "myProject-application/sampleUpload2.txt".equals(entryName) || "myProject-application/sampleUpload3.txt".equals(entryName)) {
+            } else if ("sampleUpload.txt".equals(entryName) || "sampleUpload2.txt".equals(entryName) || "sampleUpload3.txt".equals(entryName)) {
             	deletedFileExists = true;
-            } else if ("myProject-wlpcfg/pom.xml".equals(entryName)) {
+            } else if ("pom.xml".equals(entryName)) {
             	DocumentBuilderFactory domFactory = DocumentBuilderFactory.newInstance();
                 DocumentBuilder db = domFactory.newDocumentBuilder();
-                Document doc = db.parse(zipIn);
+                // Use an annonomous inner class to delegate to the zip input stream as db.parse closes the stream
+                Document doc = db.parse(new InputStream() {
+
+                    @Override
+                    public int read() throws IOException {
+                        return zipIn.read();
+                    }
+                    
+                });
                 Node assemblyInstallDirectory = doc.getElementsByTagName("assemblyInstallDirectory").item(0);
                 assertNotNull("assemblyInstallDirectory node was not found within myProject-wlpcfg/pom.xml", assemblyInstallDirectory);
                 Node configuration = assemblyInstallDirectory.getParentNode();
@@ -191,13 +203,12 @@ public class EndpointInputValidationTest {
                 Node acceptLicenseProperty = getGrandchildNode(rules, "requireProperty", "property", "accept.features.license");
                 assertNotNull("requireProperty with accept.features.license property was not found within maven-enforcer-plugin", acceptLicenseProperty);
                 foundFeaturesToInstall = true;
-                break;
             }
             zipIn.closeEntry();
         }
         zipIn.close();
         
-        assertTrue("Packaged file doesn't exist at myProject-application/sampleUpload3.txt_renamed in the zip file", packagedFileExists);
+        assertTrue("Packaged file doesn't exist at sampleUpload3.txt_renamed in the zip file", packagedFileExists);
         assertTrue("Features to install were not found in myProject-wlpcfg/pom.xml from the zip file", foundFeaturesToInstall);
         assertFalse("Deleted file exists in the zip file", deletedFileExists);
     }

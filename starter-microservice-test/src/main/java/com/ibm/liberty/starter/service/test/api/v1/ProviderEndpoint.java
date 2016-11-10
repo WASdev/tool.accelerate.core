@@ -134,23 +134,23 @@ public class ProviderEndpoint {
     @GET
     @Path("packages/prepare")
     public String prepareDynamicPackages(@QueryParam("path") String techWorkspaceDir, @QueryParam("options") String options, @QueryParam("techs") String techs) throws IOException {
-    	if(techWorkspaceDir != null && !techWorkspaceDir.trim().isEmpty()){
-    		FileUtils.deleteQuietly(new File(techWorkspaceDir + "/package"));
-    		
-    		File techWorkspace = new File(techWorkspaceDir);
-    		if(techs != null && options != null && !options.trim().isEmpty()){
-    			String[] techOptions = options.split(",");
-        		String testOptionOne = techOptions.length >= 1 ? techOptions[0] : null;
+        if (techWorkspaceDir != null && !techWorkspaceDir.trim().isEmpty()) {
+            FileUtils.deleteQuietly(new File(techWorkspaceDir + "/package"));
 
-        		if("testoption1".equals(testOptionOne) && techs.contains("test")){
-        			String packageTargetDirPath = techWorkspaceDir + "/package/myProject-application";
-					File packageTargetDir = new File(packageTargetDirPath);
-					FileUtils.copyDirectory(techWorkspace, packageTargetDir);
-					return "success";
-        		}
-    		}
-		}
-    	return "failure";
+            File techWorkspace = new File(techWorkspaceDir);
+            if (techs != null && options != null && !options.trim().isEmpty()) {
+                String[] techOptions = options.split(",");
+                String testOptionOne = techOptions.length >= 1 ? techOptions[0] : null;
+
+                if ("testoption1".equals(testOptionOne) && techs.contains("test")) {
+                    String packageTargetDirPath = techWorkspaceDir + "/package";
+                    File packageTargetDir = new File(packageTargetDirPath);
+                    FileUtils.copyDirectory(techWorkspace, packageTargetDir);
+                    return "success";
+                }
+            }
+        }
+        return "failure";
     }
     
     private void populateFilesList(File dir, List<File> filesListInDir) {
