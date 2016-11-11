@@ -13,10 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/ 
-package fvt;
+package it;
 
 import org.junit.Test;
 import static org.junit.Assume.assumeNotNull;
+import static org.junit.Assume.assumeTrue;
 import static org.junit.Assert.assertTrue;
 
 import javax.ws.rs.client.Client;
@@ -29,8 +30,10 @@ public class TestApplicationOnBluemix {
 
     @Test
     public void testDeployment() {
+        String runningInBluemix = System.getProperty("running.bluemix");
+        assumeNotNull(runningInBluemix);
+        assumeTrue(Boolean.valueOf(runningInBluemix));
         String context = System.getProperty("cf.context.root");
-        assumeNotNull(context);
         String url = "http://" + context + "/index.html";
         System.out.println("Testing " + url);
         Response response = sendRequest(url, "GET");
