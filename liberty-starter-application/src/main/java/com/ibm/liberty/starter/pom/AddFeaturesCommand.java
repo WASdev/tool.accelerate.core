@@ -93,7 +93,7 @@ public class AddFeaturesCommand implements PomModifierCommand {
             Node requireProperty = DomUtil.addChildNode(doc, rules, "requireProperty", null);
             DomUtil.addChildNode(doc, requireProperty, "property", "accept.features.license");
             DomUtil.addChildNode(doc, requireProperty, "message",
-                                 "You must set a value for the 'accept.features.license' property defined in myProject-wlpcfg/pom.xml. Please review the license terms and conditions for additional features to be installed and if you accept the license terms and conditions then run the Maven command with '-Daccept.features.license=true'.");
+                                 "You must set a value for the 'accept.features.license' property defined in pom.xml. Please review the license terms and conditions for additional features to be installed and if you accept the license terms and conditions then run the Maven command with '-Daccept.features.license=true'.");
             DomUtil.addChildNode(doc, requireProperty, "regex", "true");
             DomUtil.addChildNode(doc, requireProperty, "regexMessage",
                                  "Additional features could not be installed as the license terms and conditions were not accepted. If you accept the license terms and conditions then run the Maven command with '-Daccept.features.license=true'.");

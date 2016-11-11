@@ -10,14 +10,14 @@ The current technologies we have are:
 ## Rest
 This provides you with the jaxrs-2.0 feature and the jsonp-1.0 feature.
 
-Inside the application project produced there is a application.rest package containing the <code>LibertyRestEndpoint</code> class. This adds a REST endpoint which you can access at /rest. Inside the wlpcfg project there is the <code>it.rest.LibertyRestEndpointTest</code> that will test the REST endpoint to ensure it is working.
+Inside the project produced there is a application.rest package containing the <code>LibertyRestEndpoint</code> class. This adds a REST endpoint which you can access at /rest. There is also a test class named <code>it.rest.LibertyRestEndpointTest</code> that will test the REST endpoint to ensure it is working.
 
 For the complete feature documentation, see the (jaxrs-2.0)[http://www.ibm.com/support/knowledgecenter/en/SSEQTP_liberty/com.ibm.websphere.wlp.nd.multiplatform.doc/ae/rwlp_feature_jaxrs-2.0.html] feature description in IBM Knowledge Center.
 
 ## Servlet
 This provides you with the servlet-3.1 feature.
 
-Inside the application project there is a application.servlet package containing the <code>LibertyServlet</code> class. This adds a servlet with an endpoint which you can access at /servlet. Inside the wlpcfg project there is the <code>it.servlet.LibertyServletTest</code> that will test the servlet's endpoint to ensure it is working.
+Inside the project there is a application.servlet package containing the <code>LibertyServlet</code> class. This adds a servlet with an endpoint which you can access at /servlet. There is also a test class named <code>it.servlet.LibertyServletTest</code> that will test the servlet's endpoint to ensure it is working.
 
 For the complete feature documentation, see the [servlet-3.1](http://www.ibm.com/support/knowledgecenter/en/SSEQTP_liberty/com.ibm.websphere.wlp.nd.multiplatform.doc/ae/rwlp_feature_servlet-3.1.html) feature description in IBM Knowledge Center.
 
@@ -28,7 +28,7 @@ Inside the application project there is a application.springboot.web package con
 * SpringBootLibertyApplication</code>: The entry point for the SpringBoot application.
 * LibertyHelloController</code>: A Spring MVC endpoint which you can access at /springbootweb.
 
-Inside the wlpcfg project there is the <code>it.springboot.web.HelloControllerTest</code> that will test the Spring MVC endpoint to ensure it is working.
+There is also a test class named <code>it.springboot.web.HelloControllerTest</code> that will test the Spring MVC endpoint to ensure it is working.
 
 ## Websockets
 This provides you with the websocket-1.1 feature.
@@ -122,9 +122,9 @@ If you want to add changes to the app accelerator, create a fork of the project 
 
 7. Edit <code>src/main/webapp/WEB-INF/classes/description.html</code> to tell everyone about how SuperTech works and it's benefits.
 
-8. (If you don't want to provide sample code for your technology type skip to step 10). Put the application sample code into <code>src/main/webapp/sample/myProject-application</code>.
+8. (If you don't want to provide sample code for your technology type skip to step 10). Put the application sample code into <code>src/main/webapp/sample</code>.
 
-9. Put the Liberty configuration for the sample application into <code>src/main/webapp/sample/myProject-wlpcfg</code>.
+9. Put the Liberty configuration for the sample application into <code>src/main/webapp/sample</code>.
 
 10. Change the tests package to <code>src/test/java/com/ibm/liberty/starter/service/supertech/api/v1/it</code> and then the test classes to expect the correct responses for SuperTech.
 

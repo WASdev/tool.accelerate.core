@@ -179,10 +179,10 @@ public class EndpointInputValidationTest {
                     
                 });
                 Node assemblyInstallDirectory = doc.getElementsByTagName("assemblyInstallDirectory").item(0);
-                assertNotNull("assemblyInstallDirectory node was not found within myProject-wlpcfg/pom.xml", assemblyInstallDirectory);
+                assertNotNull("assemblyInstallDirectory node was not found within pom.xml", assemblyInstallDirectory);
                 Node configuration = assemblyInstallDirectory.getParentNode();
                 Node features =  getChildNode(configuration, "features");
-                assertNotNull("features node was not found within myProject-wlpcfg/pom.xml", features);
+                assertNotNull("features node was not found within pom.xml", features);
                 assertTrue("Install feature was not found : servlet-3.1", hasChildNode(features, "feature", "servlet-3.1"));
                 assertTrue("Install feature was not found : apiDiscovery-1.0", hasChildNode(features, "feature", "apiDiscovery-1.0"));
                 assertTrue("acceptLicense node with ${accept.features.license} property was not found", hasChildNode(features, "acceptLicense", "${accept.features.license}"));
@@ -209,7 +209,7 @@ public class EndpointInputValidationTest {
         zipIn.close();
         
         assertTrue("Packaged file doesn't exist at sampleUpload3.txt_renamed in the zip file", packagedFileExists);
-        assertTrue("Features to install were not found in myProject-wlpcfg/pom.xml from the zip file", foundFeaturesToInstall);
+        assertTrue("Features to install were not found in pom.xml from the zip file", foundFeaturesToInstall);
         assertFalse("Deleted file exists in the zip file", deletedFileExists);
     }
     
