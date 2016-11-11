@@ -116,20 +116,24 @@ task cleanDropins (type: Delete){
 
 liberty {
     install {
-          type = "javaee7"
+        type = "javaee7"
     }
     serverName = 'StarterServer'
     userDir = '../liberty-starter-wlpcfg'
-    
+
     features {
         name = ['apiDiscovery-1.0']
         acceptLicense = true
     }
-    
+
     packageLiberty {
         include = 'usr'
         archive = 'build/libs/WebSphereArtisanLiberty.zip'
     }
+}
+
+task forceRunLibertyStart << {
+    file("${buildDir}/fvtRanSuccessfullyTrigger") << new Date()
 }
 
 clean.dependsOn(':liberty-starter-wlpcfg:cleanServer')
