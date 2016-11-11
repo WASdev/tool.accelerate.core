@@ -40,6 +40,8 @@ public class AddFeaturesCommand implements PomModifierCommand {
             Node configuration = getLibertyMavenPluginConfiguration(doc);
             features = DomUtil.findOrAddChildNode(doc, configuration, "features", null);
 
+            addInstallFeatureExecution(doc, configuration.getParentNode());
+
             if (!DomUtil.hasChildNode(features, "acceptLicense")) {
                 DomUtil.addChildNode(doc, features, "acceptLicense", "${accept.features.license}");
                 enforceAcceptLicenseProperty(doc, configuration.getParentNode().getParentNode());
@@ -50,6 +52,15 @@ public class AddFeaturesCommand implements PomModifierCommand {
                 DomUtil.findOrAddChildNode(doc, features, "feature", feature);
             }
         }
+    }
+
+    private void addInstallFeatureExecution(Document doc, Node libertyPluginNode) {
+        Node executions = DomUtil.findOrAddChildNode(doc, libertyPluginNode, "executions", null);
+        Node execution = DomUtil.addChildNode(doc, executions, "execution", null);
+        DomUtil.addChildNode(doc, execution, "id", "install-feature");
+        DomUtil.addChildNode(doc, execution, "phase", "prepare-package");
+        Node goals = DomUtil.addChildNode(doc, execution, "goals", null);
+        DomUtil.addChildNode(doc, goals, "goal", "install-feature");
     }
 
     private Node getLibertyMavenPluginConfiguration(Document doc) {
