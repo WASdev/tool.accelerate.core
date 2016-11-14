@@ -84,23 +84,5 @@ public class StarterUtil {
 			}
 		}
 	}
-
-	/**
-	 * Perform an identity transformation (no XSL stylesheet)
-	 * 
-	 * @param source - The source
-	 * @param result - The result
-	 * @param omitXmlDeclaration - flag to indicate if the xml declaration should be omitted at the top
-	 * @param indent - flag to indicate if result should be indented
-	 * @param indentAmount - value to indent
-	 * @throws TransformerFactoryConfigurationError
-	 * @throws TransformerException
-	 */
-	public static void identityTransform(Source source, Result result) throws TransformerFactoryConfigurationError, TransformerException{
-		Transformer transformer = TransformerFactory.newInstance().newTransformer();
-		transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-		transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "4");
-		transformer.transform(source, result);
-	}
 	
 }

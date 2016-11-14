@@ -59,7 +59,7 @@ public class MockDependencyHandler extends DependencyHandler {
     }
     
     public static DependencyHandler getDefaultInstance() throws URISyntaxException {
-        URI uri = new URI("");
+        URI uri = new URI("http://mock");
         Dependency[] dependencies = new Dependency[2];
         dependencies[0] = createDependency(Dependency.Scope.PROVIDED);
         dependencies[1] = createDependency(Dependency.Scope.RUNTIME);
