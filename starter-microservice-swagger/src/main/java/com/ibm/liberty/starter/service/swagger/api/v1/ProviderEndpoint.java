@@ -166,7 +166,7 @@ public class ProviderEndpoint {
     				File codeGenSrcDir = new File(codeGenSrcDirPath);
 
     				if(codeGenSrcDir.exists() && codeGenSrcDir.isDirectory()){
-    					String packageSrcDirPath = techWorkspaceDir + "/package/myProject-application/src";
+    					String packageSrcDirPath = techWorkspaceDir + "/package/src";
     					File packageSrcDir = new File(packageSrcDirPath);
     					FileUtils.copyDirectory(codeGenSrcDir, packageSrcDir, FileFilterUtils.notFileFilter(new NameFileFilter(new String[]{"RestApplication.java", "AndroidManifest.xml"})));
     					log.fine("Copied files from " + codeGenSrcDirPath + " to " + packageSrcDirPath);
@@ -201,7 +201,7 @@ public class ProviderEndpoint {
     				String restSampleAppPath = getSharedResourceDir() + "appAccelerator/swagger/samples/rest/LibertyRestEndpoint.java";
     				File restSampleApp = new File(restSampleAppPath);
     				if(restSampleApp.exists()){
-    					String targetRestSampleFile = techWorkspaceDir + "/package/myProject-application/src/main/java/application/rest/LibertyRestEndpoint.java";
+    					String targetRestSampleFile = techWorkspaceDir + "/package/src/main/java/application/rest/LibertyRestEndpoint.java";
     					FileUtils.copyFile(restSampleApp, new File(targetRestSampleFile));
     					log.finer("Successfuly copied " + restSampleAppPath + " to " + targetRestSampleFile);
     				}else{
@@ -214,7 +214,7 @@ public class ProviderEndpoint {
     				String swaggerStubPath = getSharedResourceDir() + "appAccelerator/swagger/samples/servlet/swagger.json";
     				File swaggerStub = new File(swaggerStubPath);
     				if(swaggerStub.exists()){
-    					String targetStubPath = techWorkspaceDir + "/package/myProject-application/src/main/webapp/META-INF/stub/swagger.json";
+    					String targetStubPath = techWorkspaceDir + "/package/src/main/webapp/META-INF/stub/swagger.json";
     					FileUtils.copyFile(swaggerStub, new File(targetStubPath));
     					log.finer("Successfuly copied " + swaggerStubPath + " to " + targetStubPath);
     				}else{

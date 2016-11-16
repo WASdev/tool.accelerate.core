@@ -40,6 +40,8 @@ public class AddFeaturesCommand implements PomModifierCommand {
             Node configuration = getLibertyMavenPluginConfiguration(doc);
             features = DomUtil.findOrAddChildNode(doc, configuration, "features", null);
 
+            addInstallFeatureExecution(doc, configuration.getParentNode());
+
             if (!DomUtil.hasChildNode(features, "acceptLicense")) {
                 DomUtil.addChildNode(doc, features, "acceptLicense", "${accept.features.license}");
                 enforceAcceptLicenseProperty(doc, configuration.getParentNode().getParentNode());
@@ -50,6 +52,15 @@ public class AddFeaturesCommand implements PomModifierCommand {
                 DomUtil.findOrAddChildNode(doc, features, "feature", feature);
             }
         }
+    }
+
+    private void addInstallFeatureExecution(Document doc, Node libertyPluginNode) {
+        Node executions = DomUtil.findOrAddChildNode(doc, libertyPluginNode, "executions", null);
+        Node execution = DomUtil.addChildNode(doc, executions, "execution", null);
+        DomUtil.addChildNode(doc, execution, "id", "install-feature");
+        DomUtil.addChildNode(doc, execution, "phase", "prepare-package");
+        Node goals = DomUtil.addChildNode(doc, execution, "goals", null);
+        DomUtil.addChildNode(doc, goals, "goal", "install-feature");
     }
 
     private Node getLibertyMavenPluginConfiguration(Document doc) {
@@ -93,7 +104,7 @@ public class AddFeaturesCommand implements PomModifierCommand {
             Node requireProperty = DomUtil.addChildNode(doc, rules, "requireProperty", null);
             DomUtil.addChildNode(doc, requireProperty, "property", "accept.features.license");
             DomUtil.addChildNode(doc, requireProperty, "message",
-                                 "You must set a value for the 'accept.features.license' property defined in myProject-wlpcfg/pom.xml. Please review the license terms and conditions for additional features to be installed and if you accept the license terms and conditions then run the Maven command with '-Daccept.features.license=true'.");
+                                 "You must set a value for the 'accept.features.license' property defined in pom.xml. Please review the license terms and conditions for additional features to be installed and if you accept the license terms and conditions then run the Maven command with '-Daccept.features.license=true'.");
             DomUtil.addChildNode(doc, requireProperty, "regex", "true");
             DomUtil.addChildNode(doc, requireProperty, "regexMessage",
                                  "Additional features could not be installed as the license terms and conditions were not accepted. If you accept the license terms and conditions then run the Maven command with '-Daccept.features.license=true'.");

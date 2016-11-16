@@ -27,7 +27,7 @@ public class RunnableJarTest {
     @Test
     public void testLocalMvnInstallRuns() throws Exception {
         PrintStream logFilePrintStream = MvnUtils.printStreamForFilePath(installLog);
-        String pathToOutputJar = downloadedZip.getLocation() + "/myProject-wlpcfg/target/TestApp.jar";
+        String pathToOutputJar = downloadedZip.getLocation() + "/target/TestApp.jar";
 
         int mvnReturnCode = MvnUtils.runMvnCommand(logFilePrintStream, tempDir, downloadedZip, "install", "-P runnable", "-Daccept.features.license=true");
 

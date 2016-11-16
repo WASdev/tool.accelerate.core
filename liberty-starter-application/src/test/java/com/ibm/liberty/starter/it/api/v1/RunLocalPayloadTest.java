@@ -38,11 +38,11 @@ public class RunLocalPayloadTest {
     @Test
     public void testLocalMvnInstallRuns() throws Exception {
         File logFile = new File(installLog);
-        String pathToOutputZip = zip.getLocation() + "/myProject-wlpcfg/target/TestApp.zip";
+        String pathToOutputZip = zip.getLocation() + "/target/TestApp.zip";
         
-        runMvnInstallOnSeperateThread(logFile);
+        runMvnInstallLibertyRunOnSeperateThread(logFile);
         
-        Matcher<File> logContainsServerStartedForLocalServer = containsLinesInRelativeOrder(containsString("Building myArtifactId-localServer"), containsString("CWWKF0011I"));
+        Matcher<File> logContainsServerStartedForLocalServer = containsLinesInRelativeOrder(containsString("run-server"), containsString("CWWKF0011I"));
         Matcher<File> logContainsBuildFailure = containsLinesInRelativeOrder(containsString("BUILD FAILURE"));
         assertThat(logFile, eventually(logContainsServerStartedForLocalServer).butNot(logContainsBuildFailure));
         assertThat(new File(pathToOutputZip), is(anExistingFile()));
@@ -53,18 +53,18 @@ public class RunLocalPayloadTest {
     public void stopServer() throws FileNotFoundException {
         PrintStream outputStream = MvnUtils.printStreamForFile(stopServerLog);
         
-        int mvnReturnCode = MvnUtils.runMvnCommand(outputStream, tempDir, zip, "liberty:stop-server", "-pl", "myProject-deploy/myProject-localServer");
+        int mvnReturnCode = MvnUtils.runMvnCommand(outputStream, tempDir, zip, "liberty:stop-server");
         
         assertEquals(0, mvnReturnCode);
         assertThat(stopServerLog, containsLinesInRelativeOrder(containsString("BUILD SUCCESS")));
     }
 
-    private void runMvnInstallOnSeperateThread(File logFile) throws FileNotFoundException {
+    private void runMvnInstallLibertyRunOnSeperateThread(File logFile) throws FileNotFoundException {
         PrintStream outputStream = MvnUtils.printStreamForFile(logFile);
         System.out.println("mvn output will go to " + logFile.getAbsolutePath());
         
         Thread threadExecutingInstall = new Thread(() -> {
-            MvnUtils.runMvnCommand(outputStream, tempDir, zip, "install", "-Daccept.features.license=true");
+            MvnUtils.runMvnCommand(outputStream, tempDir, zip, "install", "liberty:run-server", "-Daccept.features.license=true");
         });
         
         threadExecutingInstall.setDaemon(true);

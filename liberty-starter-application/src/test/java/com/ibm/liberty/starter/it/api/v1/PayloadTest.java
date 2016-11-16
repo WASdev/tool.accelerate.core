@@ -15,6 +15,7 @@
  *******************************************************************************/
 package com.ibm.liberty.starter.it.api.v1;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
@@ -56,7 +57,10 @@ public class PayloadTest {
         assertTrue("Expected provided-pom artifact. Found " + artifacts, artifacts.contains("provided-pom"));
         assertTrue("Expected runtime-pom artifact. Found " + artifacts, artifacts.contains("runtime-pom"));
         assertTrue("Expected compile-pom artifact. Found " + artifacts, artifacts.contains("compile-pom"));
-        assertTrue("Expected dependency size of 3. Found " + dependencySize, dependencySize == 3);
+        assertTrue("Expected junit artifact. Found " + artifacts, artifacts.contains("junit"));
+        assertTrue("Expected CXF artifact. Found " + artifacts, artifacts.contains("cxf-rt-rs-client"));
+        assertTrue("Expected glassfish artifact. Found " + artifacts, artifacts.contains("javax.json"));
+        assertEquals(6, dependencySize);
     }
 
     @Test
@@ -135,7 +139,7 @@ public class PayloadTest {
         while ((inputEntry = zipIn.getNextEntry()) != null) {
             String entryName = inputEntry.getName();
             zipOut.putNextEntry(new ZipEntry(entryName));
-            if ("myProject-application/pom.xml".equals(entryName)) {
+            if ("pom.xml".equals(entryName)) {
                 pomExists = true;
             }
         }

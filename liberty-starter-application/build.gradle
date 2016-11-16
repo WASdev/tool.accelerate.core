@@ -116,26 +116,32 @@ task cleanDropins (type: Delete){
 
 liberty {
     install {
-          type = "javaee7"
+        type = "javaee7"
     }
     serverName = 'StarterServer'
     userDir = '../liberty-starter-wlpcfg'
-    
+
     features {
         name = ['apiDiscovery-1.0']
         acceptLicense = true
     }
-    
+
     packageLiberty {
         include = 'usr'
         archive = 'build/libs/WebSphereArtisanLiberty.zip'
     }
 }
 
+task localRun (type: net.wasdev.wlp.gradle.plugins.tasks.StartTask){
+    description 'Starts the WebSphere Liberty Profile server without the test WAR.'
+    logging.level = LogLevel.INFO
+}
+
 clean.dependsOn(':liberty-starter-wlpcfg:cleanServer')
-war.dependsOn(':liberty-filter-application:publishWar', ':starter-microservice-test:publishTestWar', ':starter-microservice-web:publishWar', ':starter-microservice-persistence:publishWar', ':starter-microservice-rest:publishWar', ':starter-microservice-websocket:publishWar', ':starter-microservice-springboot-web:publishWar', ':starter-microservice-watsonsdk:publishWar', ':starter-microservice-microprofile:publishWar', ':starter-microservice-swagger:publishWar', 'compressSkeletonBuildImage', 'copySpecialFiles', 'createSwaggerJSON')
+war.dependsOn(':liberty-filter-application:publishWar', ':starter-microservice-web:publishWar', ':starter-microservice-persistence:publishWar', ':starter-microservice-rest:publishWar', ':starter-microservice-websocket:publishWar', ':starter-microservice-springboot-web:publishWar', ':starter-microservice-watsonsdk:publishWar', ':starter-microservice-microprofile:publishWar', ':starter-microservice-swagger:publishWar', 'compressSkeletonBuildImage', 'copySpecialFiles', 'createSwaggerJSON')
 installFeature.dependsOn('installLiberty')
-libertyStart.dependsOn('installFeature', 'addServerEnv', 'publishWar')
+libertyStart.dependsOn('installFeature', 'addServerEnv', ':starter-microservice-test:publishTestWar', 'publishWar')
+localRun.dependsOn('installFeature', 'publishWar')
 fvt.dependsOn('libertyStart', 'testClasses')
 fvt.finalizedBy('libertyStop', 'removeServerEnv')
 check.dependsOn('fvt')
