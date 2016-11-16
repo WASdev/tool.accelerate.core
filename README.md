@@ -24,7 +24,7 @@ For the complete feature documentation, see the [servlet-3.1](http://www.ibm.com
 ## Spring Boot with Spring MVC
 This provides you with a SpringBoot application that will run on WebSphere Liberty.
 
-Inside the application project there is a application.springboot.web package containing two classes:
+Inside the project there is a application.springboot.web package containing two classes:
 * SpringBootLibertyApplication</code>: The entry point for the SpringBoot application.
 * LibertyHelloController</code>: A Spring MVC endpoint which you can access at /springbootweb.
 
