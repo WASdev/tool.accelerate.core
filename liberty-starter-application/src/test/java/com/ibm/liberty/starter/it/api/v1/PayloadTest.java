@@ -57,6 +57,9 @@ public class PayloadTest {
         assertTrue("Expected provided-pom artifact. Found " + artifacts, artifacts.contains("provided-pom"));
         assertTrue("Expected runtime-pom artifact. Found " + artifacts, artifacts.contains("runtime-pom"));
         assertTrue("Expected compile-pom artifact. Found " + artifacts, artifacts.contains("compile-pom"));
+        assertTrue("Expected junit artifact. Found " + artifacts, artifacts.contains("junit"));
+        assertTrue("Expected CXF artifact. Found " + artifacts, artifacts.contains("cxf-rt-rs-client"));
+        assertTrue("Expected glassfish artifact. Found " + artifacts, artifacts.contains("javax.json"));
         assertEquals(6, dependencySize);
     }
 
