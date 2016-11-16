@@ -15,7 +15,7 @@
 
 <!-- The features installed by the Liberty application accelerator will not appear here.
   Once the application is built the configured features can be found in the
-  configDropins/defaults folder. -->
+  configDropins/defaults folder in the target/wlp folder. -->
 
 <!-- To extend the feature list either add the app accelerator Maven dependencies, add the features
  below or put a server.xml file in configDropins/overrides. Note: you may need to add Maven provided
