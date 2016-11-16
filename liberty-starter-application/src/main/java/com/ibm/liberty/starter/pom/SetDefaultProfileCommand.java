@@ -20,26 +20,18 @@ public class SetDefaultProfileCommand implements PomModifierCommand {
 
     @Override
     public void modifyPom(Document pom) {
-        String profileId = null;
-        switch (deployType) {
-            case LOCAL:
-                log.log(Level.INFO, "PomModifier adding profile activation for localServer");
-                profileId = "localServer";
-                break;
-            case BLUEMIX:
-                log.log(Level.INFO, "PomModifier adding profile activation for bluemix");
-                profileId = "bluemix";
-                break;
-        }
-        try {
-            Node profileNode = getProfileNodeById(profileId, pom);
-            Node activationNode = pom.createElement("activation");
-            Node activeByDefault = pom.createElement("activeByDefault");
-            activeByDefault.setTextContent("true");
-            activationNode.appendChild(activeByDefault);
-            profileNode.appendChild(activationNode);
-        } catch (UnableToFindNodeException e) {
-            log.log(Level.SEVERE, "Unable to find the profile for " + deployType + " so not default activation will be set", e);
+        if (DeployType.BLUEMIX.equals(deployType)) {
+            log.log(Level.INFO, "PomModifier adding profile activation for bluemix");
+            try {
+                Node profileNode = getProfileNodeById("bluemix", pom);
+                Node activationNode = pom.createElement("activation");
+                Node activeByDefault = pom.createElement("activeByDefault");
+                activeByDefault.setTextContent("true");
+                activationNode.appendChild(activeByDefault);
+                profileNode.appendChild(activationNode);
+            } catch (UnableToFindNodeException e) {
+                log.log(Level.SEVERE, "Unable to find the profile for " + deployType + " so not default activation will be set", e);
+            }
         }
     }
 

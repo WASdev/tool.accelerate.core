@@ -19,7 +19,6 @@ import com.ibm.liberty.starter.pom.SetDefaultProfileCommand;
 public class SetDefaultProfileCommandTest {
 
     private Document pom;
-    private Node localServerProfile;
     private Node bluemixProfile;
 
     @Before
@@ -27,17 +26,15 @@ public class SetDefaultProfileCommandTest {
         pom = DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument();
         Node project = DomUtil.addChildNode(pom, pom, "project", null);
         Node profiles = DomUtil.addChildNode(pom, project, "profiles", null);
-        localServerProfile = addProfile(pom, profiles, "localServer");
         bluemixProfile = addProfile(pom, profiles, "bluemix");
     }
 
     @Test
-    public void canSetLocalAsDefaultProfile() throws Exception {
+    public void settingDeployTypeToLocalDoesntBreakAnything() throws Exception {
         SetDefaultProfileCommand testObject = new SetDefaultProfileCommand(DeployType.LOCAL);
 
         testObject.modifyPom(pom);
 
-        assertProfileIsActiveByDefault(localServerProfile);
         assertProfileIsNotActiveByDefault(bluemixProfile);
     }
 
@@ -48,7 +45,6 @@ public class SetDefaultProfileCommandTest {
         testObject.modifyPom(pom);
         
         assertProfileIsActiveByDefault(bluemixProfile);
-        assertProfileIsNotActiveByDefault(localServerProfile);
     }
 
     private void assertProfileIsNotActiveByDefault(Node profile) {
