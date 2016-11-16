@@ -65,7 +65,7 @@ For the complete feature documentation, see the [apiDiscovery-1.0](http://www.ib
 # Building and adding to the app accelerator
 
 ## Building the Project
-Once you have downloaded the project, to build it you just need to run the command `gradle clean build` in the top level project. To run the application locally from the root project run `liberty-starter-application:forceRunLibertyStart liberty-starter-application:libertyStart -x check -x publishTestWar -x addServerEnv`. The application should be available at http://localhost:9082/start.
+Once you have downloaded the project, to build it you just need to run the command `gradle clean build` in the top level project. To run the application locally from the root project run `liberty-starter-application:localRun`. The application should be available at http://localhost:9082/start.
 
 ## Project Structure
 The project is split up into several different pieces.
