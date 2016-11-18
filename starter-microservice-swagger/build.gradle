@@ -32,6 +32,8 @@ buildutils {
 
 task installAllPOMs(type: MavenTask) {
 	id 'swagger'
+	def String[] localVersion = ['0.0.1', '0.0.2']
+	pomVersion localVersion
 	hasProvided true
 	hasRuntime true
 	hasServerSnippet true

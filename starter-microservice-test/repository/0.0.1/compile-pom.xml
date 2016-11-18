@@ -5,6 +5,7 @@
     <groupId>net.wasdev.wlp.starters.test</groupId>
     <artifactId>compile-pom</artifactId>
     <version>0.0.1</version>
+    <packaging>pom</packaging>
 
     <name>compile-pom</name>
     

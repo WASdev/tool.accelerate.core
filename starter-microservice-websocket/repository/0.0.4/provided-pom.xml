@@ -2,17 +2,17 @@
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>net.wasdev.wlp.starters.template</groupId>
-    <artifactId>compile-pom</artifactId>
-    <version>0.0.1</version>
+    <groupId>net.wasdev.wlp.starters.websocket</groupId>
+    <artifactId>provided-pom</artifactId>
+    <version>0.0.4</version>
     <packaging>pom</packaging>
 
-    <name>compile-pom</name>
+    <name>provided-pom</name>
     
     <licenses>
         <license>
             <name>The Apache Software License, Version 2.0</name>
-            <url>https://raw.githubusercontent.com/WASdev/tool.accelerate.core/master/LICENSE</url>
+            <url>https://raw.github.com/WASdev/tool.accelerate.core/master/LICENSE</url>
             <distribution>repo</distribution>
         </license>
     </licenses>
@@ -22,5 +22,13 @@
         <developerConnection>scm:git@github.com:WASdev/tool.accelerate.core.git</developerConnection>
         <url>git@github.com:WASdev/tool.accelerate.core.git</url>
     </scm>
+
+    <dependencies>
+        <dependency>
+            <groupId>javax.websocket</groupId>
+            <artifactId>javax.websocket-api</artifactId>
+            <version>1.1</version>
+        </dependency>
+    </dependencies>
 
 </project>
