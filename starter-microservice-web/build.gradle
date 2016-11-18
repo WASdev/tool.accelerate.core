@@ -34,7 +34,7 @@ dependencies {
 
 task installAllPOMs(type: MavenTask) {
 	id 'web'
-    def String[] localVersion = ['0.0.1', '0.0.2']
+    def String[] localVersion = ['0.0.1', '0.0.2', '0.0.3']
     pomVersion localVersion
 	hasProvided true
 	hasRuntime true
