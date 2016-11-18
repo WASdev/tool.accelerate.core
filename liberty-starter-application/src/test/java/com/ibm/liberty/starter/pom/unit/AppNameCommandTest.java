@@ -23,17 +23,17 @@ public class AppNameCommandTest {
     @Test
     public void appNameIsSet() throws ParserConfigurationException, URISyntaxException {
         String appName = "TestAppName";
-        DependencyHandler fakeDepdendencyHandler = MockDependencyHandler.getDependencyHandlerWithName(appName);
+        DependencyHandler fakeDependencyHandler = MockDependencyHandler.getDependencyHandlerWithName(appName);
         
-        runTestOnAppName(appName, fakeDepdendencyHandler);
+        runTestOnAppName(appName, fakeDependencyHandler);
     }
     
     @Test
     public void appNameDefaultsToLibertyProject() throws Exception {
         String appName = "LibertyProject";
-        DependencyHandler fakeDepdendencyHandler = MockDependencyHandler.getDefaultInstance();
+        DependencyHandler fakeDependencyHandler = MockDependencyHandler.getDefaultInstance();
         
-        runTestOnAppName(appName, fakeDepdendencyHandler);
+        runTestOnAppName(appName, fakeDependencyHandler);
     }
     
     private void runTestOnAppName(String expectedName, DependencyHandler dependencyHandler) throws ParserConfigurationException {
