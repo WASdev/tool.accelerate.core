@@ -1,4 +1,4 @@
-# Welcome to the Liberty app accelerator
+# Welcome to the Liberty app accelerator [![Build Status](https://travis-ci.org/WASdev/tool.accelerate.core.svg?branch=master)](https://travis-ci.org/WASdev/tool.accelerate.core)
 An application builder to allow you to construct starter applications for building your projects with Liberty.
 
 Liberty app accelerator is still in its early stages so we will be adding new technologies and capabilities to the page over time. For now, feel free to <a href="http://liberty-starter.wasdev.developer.ibm.com/start/">try it out</a> and see how quickly you can have a fully fledged application. If you have any questions, comments or suggestions please raise an <a href="https://github.com/WASdev/tool.accelerate.core/issues">issue</a> on our GitHub repository.
