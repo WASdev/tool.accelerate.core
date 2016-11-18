@@ -6,7 +6,7 @@
     <groupId>net.wasdev.wlp.starters.springbootweb</groupId>
     <artifactId>provided-pom</artifactId>
     <version>0.0.3</version>
-    <type>pom</type>
+    <packaging>pom</packaging>
 
     <name>provided-pom</name>
     
