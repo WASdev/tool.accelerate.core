@@ -8,11 +8,13 @@ buildscript {
     dependencies {
         classpath 'net.wasdev.wlp.gradle.plugins:liberty-gradle-plugin:1.0'
         classpath files('gradle/wlp-anttasks.jar')
+        classpath 'org.cloudfoundry:cf-gradle-plugin:1.1.2'
     }
 }
 
 apply plugin: 'war'
 apply plugin: 'liberty'
+apply plugin: 'cloudfoundry'
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
@@ -169,6 +171,42 @@ task libertyStartTestServer(type: net.wasdev.wlp.gradle.plugins.tasks.StartTask)
     logging.level = LogLevel.INFO
 }
 
+task checkBluemixPropertiesSet() {
+    doLast {
+        checkPropertySet('cfOrg')
+        checkPropertySet('cfUsername')
+        checkPropertySet('cfPassword')
+    }
+}
+
+task printBluemixProperties(dependsOn: 'checkBluemixPropertiesSet') {
+    doLast {
+        println "Running bluemix profile with the following properties:\n" +
+                "\tcf.target=${cfTarget}\n" +
+                "\tcf.space=${cfSpace}\n" +
+                "\tcf.org=${cfOrg}\n" +
+                "\tcf.username=${cfUsername}\n" +
+                "The application will be accessed at context root ${cfContextRoot}"
+    }
+}
+
+def checkPropertySet(propertyName) {
+    if (!project.hasProperty(propertyName)) {
+        throw new GradleException("The ${propertyName} property must be provided to run the cfPush task, this can be supplied on the command line with -P${propertyName}=<value>.")
+    }
+}
+
+cloudfoundry {
+    target = cfTarget
+    if (project.hasProperty('cfOrg')) {
+        organization = cfOrg
+    }
+    space = cfSpace
+    file = file(packageFile)
+    memory = 512
+    appName = cfHost
+}
+
 tasks.create('setupServer')
 check.dependsOn 'integrationTest'
 installFeature.dependsOn 'installLiberty'
@@ -180,3 +218,4 @@ integrationTest.finalizedBy 'libertyStop'
 libertyStartTestServer.dependsOn 'setupServer'
 assemble.dependsOn 'libertyPackage'
 libertyPackage.dependsOn 'setupServer'
+cfPush.dependsOn 'printBluemixProperties'
