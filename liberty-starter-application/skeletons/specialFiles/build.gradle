@@ -61,24 +61,7 @@ dependencies {
     testCompile 'org.apache.cxf:cxf-rt-rs-client:3.1.1'
     testCompile 'org.glassfish:javax.json:1.0.4'
 
-    providedCompile 'net.wasdev.wlp.starters.rest:provided-pom:0.0.3'
-    providedCompile 'net.wasdev.wlp.starters.microprofile:provided-pom:0.0.2'
-    providedCompile 'net.wasdev.wlp.starters.web:provided-pom:0.0.3'
-    providedCompile 'net.wasdev.wlp.starters.websocket:provided-pom:0.0.4'
-    providedCompile 'net.wasdev.wlp.starters.persistence:provided-pom:0.0.3'
-    providedCompile 'net.wasdev.wlp.starters.springbootweb:provided-pom:0.0.3'
-    providedCompile 'net.wasdev.wlp.starters.swagger:provided-pom:0.0.2'
-
-    runtime 'net.wasdev.wlp.starters.rest:runtime-pom:0.0.3'
-    runtime 'net.wasdev.wlp.starters.microprofile:runtime-pom:0.0.2'
-    runtime 'net.wasdev.wlp.starters.web:runtime-pom:0.0.3'
-    runtime 'net.wasdev.wlp.starters.websocket:runtime-pom:0.0.4'
-    runtime 'net.wasdev.wlp.starters.persistence:runtime-pom:0.0.3'
-    runtime 'net.wasdev.wlp.starters.springbootweb:runtime-pom:0.0.3'
-    runtime 'net.wasdev.wlp.starters.swagger:runtime-pom:0.0.2'
-
-    compile group: 'net.wasdev.wlp.starters.springbootweb', name: 'compile-pom', version: '0.0.3'
-    compile 'net.wasdev.wlp.starters.watsonsdk:compile-pom:0.0.4'
+%DEPENDENCIES%
 }
 
 test {
