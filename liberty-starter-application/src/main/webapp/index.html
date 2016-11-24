@@ -15,13 +15,14 @@
 -->
 
 <!DOCTYPE html>
-<html>
+<html ng-app="appAccelerator">
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>Liberty app accelerator</title>
         <link href="css/style.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
         <script>
             (function(i, s, o, g, r, a, m) {
                 i['GoogleAnalyticsObject'] = r;
@@ -71,7 +72,12 @@
                     <div class="stepBar"></div>
                     <div class="stepNumber">STEP 1 / <span class="numberOfSteps">4</span></div>
                     <div id="step1Description2">Select one or more technology types:</div>
-                    <div id="step1TechnologiesContainer"></div>
+                    <div id="step1TechnologiesContainer" ng-controller="appCtrl">
+                      <div ng-repeat="technology in technolgies">
+                        <span class="state-checkmark">
+                          <a href="#" class="step1Technology" data-technologyname="{{name}}" data-technologyid="{{id}}" title="{{description}}" data-technologyconfiguration="{{configuration}}">{{name}}</a>
+                        </span>
+                    </div>
                 </div>
             </div>
 
@@ -309,7 +315,14 @@
             src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
         <script type="text/javascript"
             src="https://cdnjs.cloudflare.com/ajax/libs/scrollify/0.1.12/jquery.scrollify.min.js"></script>
+        <script type="text/javascript"
+            src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+        <script type="text/javascript"
+            src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular.min.js"></script>
         <script type="text/javascript" src="js/logic.js"></script>
+        <script type="text/javascript" src="js/app.js"></script>
+        <script type="text/javascript" src="js/services/appacc.js"></script>
+        <script type="text/javascript" src="js/controllers/appCtrl.js"></script>
 
     </body>
 </html>

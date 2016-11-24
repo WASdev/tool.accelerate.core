@@ -34,7 +34,7 @@ $(document).ready(function() {
             step1TechnologiesContainer.append(technologyTag);
         }
     };
-    
+
 	var toggleOptionalStep = function(on) {
 		if (on == true) {
 			if($("#step2DeployLocationsContainer .step2DeployLocation.selected").size() > 0){
@@ -47,12 +47,12 @@ $(document).ready(function() {
 		} else {
 		    $("#step3").addClass("hidden");
 			$("#navigationBottom2").addClass("hidden");
-			$("#navigationTop3").addClass("hidden");			
+			$("#navigationTop3").addClass("hidden");
 			$(".numberOfSteps").html("3");
 			document.querySelector("#step4").style.paddingTop = "111px";
 		}
 	};
-	
+
 	var checkOptionalConfig = function() {
 	    var selectedTechnologies = $("#step1TechnologiesContainer .step1Technology.selected");
         for(var i = 0; i < selectedTechnologies.size(); i++) {
@@ -88,7 +88,7 @@ $(document).ready(function() {
         }
 		optionalConfigEnabled = false;
 	};
-	
+
 	var updateStepNumbers = function() {
 		checkOptionalConfig();
 		if(optionalConfigEnabled){
@@ -230,7 +230,7 @@ $(document).ready(function() {
         }
         $("#navigationTop1 .variableContent").text(selectedTechnologiesText);
     };
-    
+
     var updateSwaggerCodeGen = function() {
         var selectedTechnologies = $("#step1TechnologiesContainer .step1Technology.selected");
         var swagger = false;
@@ -248,7 +248,7 @@ $(document).ready(function() {
         	$("#step3SwaggerCodeGenSection").addClass("hidden");
         }
     };
-    
+
     $("#step3SwaggerServerCodegen").on("click", function(event) {
         if (this.checked) {
         	$("#step3SwaggerLocalUpload").removeClass("hidden");
@@ -259,13 +259,13 @@ $(document).ready(function() {
         	$("#step3SwaggerLocalUpload").addClass("hidden");
         }
     });
-    
+
     var isSwaggerCodeGenerated = function() {
     	if($("#step3SwaggerLocalUpload").is(':visible') && uploadedSwaggerFile){
     		return true;
     	}
     	return false;
-    };    
+    };
 
     var refreshSectionVisibility = function() {
         var currentlyVisibleSections = $(".step:not(.hidden)").size();
@@ -300,14 +300,14 @@ $(document).ready(function() {
     	if(currentStep == 2 && optionalConfigEnabled == false){
     		stepIncrement = 2;
     	}
-    	
+
         if($("#step" + (currentStep + stepIncrement)).hasClass("hidden")) {
             $("#navigationBottomContainer").addClass("disabled");
         } else {
             $("#navigationBottomContainer").removeClass("disabled");
         }
     };
-    
+
     document.getElementById('step3SwaggerFileSelect').onchange = function() {
     	uploadedSwaggerFile = false;
     	swaggerUploadButton.value = 'Upload';
@@ -326,7 +326,7 @@ $(document).ready(function() {
         	$("#step3SelectDifferentFileButton").addClass("hidden");
     	}
     };
-    
+
 	var swaggerForm = document.getElementById('step3SwaggerFileForm');
 	var swaggerFileSelect = document.getElementById('step3SwaggerFileSelect');
 	var swaggerUploadButton = document.getElementById('step3SwaggerUploadButton');
@@ -370,7 +370,7 @@ $(document).ready(function() {
             }
         });
     };
-    
+
     var retrieveWorkspaceId = function() {
         return $.ajax({
             url: serviceURL + "/workspace",
@@ -409,7 +409,7 @@ $(document).ready(function() {
 		}
         window.location.assign(url);
     };
-    
+
     var trackOutboundLink = function(url, linkLocation) {
         if (googleAnalytics) {
             // Google analytics event
@@ -484,12 +484,12 @@ $(document).ready(function() {
 
     $("#step4OptionalWDTTrigger a").click(function(event){
         event.preventDefault();
-        
+
         if (googleAnalytics) {
             // Google analytics
             ga('send', 'event', 'Page assistance', 'clicked', 'WDT Section');
         }
-        
+
         var container = $(this).parent().parent();
         var headerSection = container.find("#step4OptionalWDTTrigger");
         var openArrow = container.find(".wdtContentActive");
@@ -521,7 +521,7 @@ $(document).ready(function() {
         var value = $(this).val();
         reflectChangedAppName.text(value);
     });
-
+/*
     retrieveTechnologiesFromServer().done(function() {
     	retrieveWorkspaceId();
         populateTechnologies();
@@ -539,5 +539,5 @@ $(document).ready(function() {
     }).fail(function() {
         $("#serviceError").fadeIn();
     });
-
+*/
 });
