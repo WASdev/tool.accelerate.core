@@ -115,7 +115,6 @@ $(document).ready(function() {
 
 		checkOptionalConfig();
         var step = getCurrentStep();
-		console.log("current step: " + step);
         if(step != currentStep) {
             if (googleAnalytics) {
                 if (step > currentStep) {

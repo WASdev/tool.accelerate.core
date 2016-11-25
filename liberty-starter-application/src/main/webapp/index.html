@@ -23,6 +23,8 @@
         <title>Liberty app accelerator</title>
         <link href="css/style.css" rel="stylesheet">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
         <script>
             (function(i, s, o, g, r, a, m) {
                 i['GoogleAnalyticsObject'] = r;
@@ -39,9 +41,8 @@
             ga('send', 'pageview');
         </script>
     </head>
-    <body>
-
-        <div id="navigationTopContainer" class="hidden">
+    <body ng-controller="appCtrl">
+        <div id="navigationTopContainer">
             <a href="#" id="navigationTop1" class="navigationTop"
                 style="display: none;" data-targetsection="0"> Step 1 / <span class="numberOfSteps">4</span>:
                 SELECTED TECHNOLOGIES: <span class="variableContent"></span>
@@ -54,7 +55,7 @@
             </a>
         </div>
 
-        <div id="mainContent" class="hidden">
+        <div id="mainContent">
 
             <!-- STEP ONE -->
             <div id="step1" class="step">
@@ -67,17 +68,47 @@
                         <div id="bannerLine2">Easily start building apps for WebSphere<br />Liberty, a Java EE application server</div>
                     </div>
                 </div>
+
                 <div class="stepContent">
                     <div id="step1Description1">Configure WebSphere Liberty with a set of selected technologies. Then download the project as a zip file.</div>
                     <div class="stepBar"></div>
                     <div class="stepNumber">STEP 1 / <span class="numberOfSteps">4</span></div>
                     <div id="step1Description2">Select one or more technology types:</div>
-                    <div id="step1TechnologiesContainer" ng-controller="appCtrl">
-                      <div ng-repeat="technology in technolgies">
-                        <span class="state-checkmark">
-                          <a href="#" class="step1Technology" data-technologyname="{{name}}" data-technologyid="{{id}}" title="{{description}}" data-technologyconfiguration="{{configuration}}">{{name}}</a>
-                        </span>
+                    <div class="alert alert-info" ng-show="!hasTechnologies && !serverError">
+                        Getting list of technologies, please wait ...
                     </div>
+                    <div class="alert alert-warning" ng-show="hasTechnologies && serverError">Unfortunately the
+                        Liberty app accelerator service appears to be down at the moment.
+                        Please try again later.</div>
+                    <div id="step1TechnologiesContainer" ng-show="hasTechnologies">
+                      <div ng-repeat="techrow in technologies" class="row">
+                        <div ng-repeat="technology in techrow">
+                          <div class="panel panel-info col-md-4">
+                              <div class="panel-heading">
+                                <div class="row">
+                                  <div class="col-md-8" ng-click="toggleSelected(technology)" role="button">{{technology.name}}</div>
+                                  <div class="col-md-4 text-right">
+                                    <span ng-click="toggleSelected(technology)" role="button">
+                                      <i class="fa fa-square-o" aria-hidden="true" ng-show="!technology.selected"></i>
+                                      <i class="fa fa-check-square-o" aria-hidden="true" ng-show="technology.selected"></i>
+                                    </span>
+                                    <span ng-click="toggleInfo(technology)" role="button">
+                                      <i class="fa fa-info" aria-hidden="true" ng-show="!technology.info"></i>
+                                      <i class="fa fa-info-circle" aria-hidden="true" ng-show="technology.info"></i>
+                                    </span>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="panel-body" ng-show="technology.info">{{technology.description}}</div>
+                                                    <!--
+                                                    <a href="#" class="step1Technology" data-technologyname="{{technology.name}}" data-technologyid="{{technology.id}}"
+                                                      title="{{technology.description}}" data-technologyconfiguration="{{technology.configuration}}">{{technology.name}}</a>
+                                                    <span class="state-checkmark"></span>
+                                                  -->
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
             </div>
 
@@ -293,11 +324,7 @@
             </div>
         </div>
 
-        <div id="serviceError" style="display: none;">Unfortunately the
-            Liberty app accelerator service appears to be down at the moment.
-            Please try again later.</div>
-
-        <a href="#" id="navigationBottomContainer" class="disabled hidden">
+        <a href="#" id="navigationBottomContainer" class="disabled">
             <div id="navigationBottom1" class="navigationBottom">
                 STEP 2 / <span class="numberOfSteps">4</span>: <span class="highlightedText">DEPLOY</span>
             </div>

@@ -193,7 +193,7 @@ body {
     padding-left: 88px;
     position: relative;
     z-index: 8;
-    width: 500px;
+    width: 550px;
 }
 
 #bannerTriangle {
@@ -226,66 +226,7 @@ body {
     margin-top: 52px;
 }
 
-#step1TechnologiesContainer {
-    margin-top: 30px;
-    border-bottom: solid 1px #BEBEBE;
-    padding-bottom: 8px;
-}
 
-#step1TechnologiesContainer .step1Technology {
-    height: 80px;
-    width: 297px;
-    padding-left: 26px;
-    color: #152935;
-    font-size: 18px;
-    border: solid 1px #BEBEBE;
-    line-height: 80px;
-    display: inline-block;
-    margin-right: 40px;
-    text-decoration: none;
-    margin-bottom: 34px;
-    position: relative;
-}
-
-#step1TechnologiesContainer .step1Technology:nth-child(3n+3) {
-    margin-right: 0;
-}
-
-#step1TechnologiesContainer .step1Technology.selected {
-    background-color: #F2CC12;
-    border-color: #F2CC12;
-    font-weight: bold;
-}
-
-#step1TechnologiesContainer .step1Technology:active {
-    background-color: #F0F0F0;
-    border-color: #4A4A4A;
-}
-
-#step1TechnologiesContainer .step1Technology.selected:active {
-    background-color: white;
-}
-
-#step1TechnologiesContainer .step1Technology:hover {
-    border-color: #4A4A4A;
-}
-
-.state-checkmark {
-    background-image: url("../img/checkmark_square.jpg");
-    background-repeat: no-repeat;
-    background-size: contain;
-    display: none;
-    height: 38px;
-    position: absolute;
-    right: 26px;
-    top: 24px;
-    width: 38px;
-}
-
-#step1TechnologiesContainer .step1Technology.selected .state-checkmark,
-#step2DeployLocationsContainer .step2DeployLocation.selected .state-checkmark {
-    display: block;
-}
 
 /* STEP TWO */
 

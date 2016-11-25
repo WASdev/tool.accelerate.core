@@ -39,13 +39,13 @@ angular.module('appAccelerator')
             if ( response.status === 200 ) {
               data = angular.fromJson(response.data);
             }
-            $log.debug("getTechnologies returing %o", data);
+            $log.debug("getTechnologies returning %o", data);
             q.resolve(data);
           }, function(response) {
             $log.debug(response.status + ' ' + response.statusText + " %o - FAILED", response.data);
             // TODO: Alert -- problem occurred
             // return empty set for decent experience, or could insert some default values here ...
-            q.resolve([]);
+            q.reject([]);
           });
 
           return q.promise;
