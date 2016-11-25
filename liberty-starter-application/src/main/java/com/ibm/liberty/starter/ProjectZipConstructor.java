@@ -40,6 +40,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 
 import com.ibm.liberty.starter.build.FeaturesToInstallProvider;
+import com.ibm.liberty.starter.build.gradle.*;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.xml.sax.SAXException;
@@ -69,23 +70,25 @@ public class ProjectZipConstructor {
     private static final String BASE_INDEX_HTML = "payloadIndex.html";
     private static final String INDEX_HTML_PATH = "src/main/webapp/index.html";
     private static final String POM_FILE = "pom.xml";
+    private static final String GRADLE_BUILD_FILE = "build.gradle";
     private String appName;
     public enum DeployType {
         LOCAL, BLUEMIX
     }
+    public enum BuildType {
+        MAVEN, GRADLE
+    }
     private DeployType deployType;
     private String workspace = null;
+    private BuildType buildType;
     
-    public ProjectZipConstructor(ServiceConnector serviceConnector, Services services, String appName, DeployType deployType, String workspace) {
+    public ProjectZipConstructor(ServiceConnector serviceConnector, Services services, String appName, DeployType deployType, BuildType buildType, String workspace) {
         this.serviceConnector = serviceConnector;
         this.services = services;
         this.appName = appName;
         this.deployType = deployType;
         this.workspace = workspace;
-    }
-    
-    public ProjectZipConstructor(ServiceConnector serviceConnector, Services services, String appName, DeployType deployType) {
-    	this(serviceConnector, services, appName, deployType, null);
+        this.buildType = buildType;
     }
     
     public Map<String, byte[]> getFileMap() {
@@ -96,14 +99,14 @@ public class ProjectZipConstructor {
         initializeMap();
         addHtmlToMap();
         addTechSamplesToMap();
-        addPomFileToMap();
+        addBuildFilesToMap();
         addDynamicPackages();
         ZipOutputStream zos = new ZipOutputStream(os);
         createZipFromMap(zos);
         zos.close();
         cleanup();
     }
-    
+
     private void cleanup() throws IOException {
     	cleanUpDynamicPackages();    	
     }
@@ -234,6 +237,31 @@ public class ProjectZipConstructor {
                 putFileInMap(fileUrl, bytes);
             }
         }
+    }
+
+    private void addBuildFilesToMap() throws SAXException, TransformerException, ParserConfigurationException, IOException {
+        if (BuildType.GRADLE.equals(buildType)) {
+            addGradleFilesToMap();
+        } else {
+            addPomFileToMap();
+        }
+    }
+
+    private void addGradleFilesToMap() throws IOException {
+        Map<String, String> buildTags = new HashMap<>();
+        DependencyHandler depHand = new DependencyHandler(services, serviceConnector, appName);
+        buildTags.putAll(new CreateAppNameTags(depHand).getTags());
+        buildTags.putAll(new CreateDependencyTags(depHand).getTags());
+        buildTags.putAll(new CreateFeaturesTags(new FeaturesToInstallProvider(services, serviceConnector)).getTags());
+        buildTags.putAll(new CreateRepositoryTags(depHand).getTags());
+        TemplatedFileToBytesConverter fileConverter = new TemplatedFileToBytesConverter(this.getClass().getClassLoader().getResourceAsStream(GRADLE_BUILD_FILE), buildTags);
+        putFileInMap("build.gradle", fileConverter.getBytes());
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        InputStream settingsStream = this.getClass().getClassLoader().getResourceAsStream("settings.gradle");
+        IOUtils.copy(settingsStream, baos);
+        settingsStream.close();
+        putFileInMap("settings.gradle", baos.toByteArray());
     }
     
     public void addPomFileToMap() throws SAXException, IOException, ParserConfigurationException, TransformerException {

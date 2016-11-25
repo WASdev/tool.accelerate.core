@@ -95,7 +95,7 @@ task fvt(type: Test) {
     include '**/it/**'
     exclude '**/unit/**'
 
-    systemProperties = ['liberty.test.port': "${libertyApplicationTestPort}", 'liberty.temp.dir': "${buildDir}/temp" ]
+    systemProperties = ['liberty.test.port': "${libertyApplicationTestPort}", 'liberty.temp.dir': "${buildDir}/temp", 'gradleCommand': System.getProperty('gradleCommand') ]
   
 }
 

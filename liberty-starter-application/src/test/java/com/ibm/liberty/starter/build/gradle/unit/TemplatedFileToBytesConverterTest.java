@@ -6,6 +6,7 @@ import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 import org.junit.rules.TestName;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -17,12 +18,6 @@ import static com.ibm.liberty.starter.ByteMatcher.isByteArrayIncludingSpacesFor;
 import static org.junit.Assert.assertThat;
 
 public class TemplatedFileToBytesConverterTest {
-
-    @Rule
-    public TestName name = new TestName();
-
-    @Rule
-    public TemporaryFolder temporaryFolder = new TemporaryFolder();
 
     @Test
     public void templatedFileWithNoTagsUnchanged() throws IOException {
@@ -67,9 +62,8 @@ public class TemplatedFileToBytesConverterTest {
     }
 
     private TemplatedFileToBytesConverter createTestObject(String fileContents, Map<String, String> tags) throws IOException {
-        File inputFile = temporaryFolder.newFile(name.getMethodName() + ".txt");
-        Files.write(inputFile.toPath(), fileContents.getBytes());
-        return new TemplatedFileToBytesConverter(inputFile, tags);
+        ByteArrayInputStream inputStream = new ByteArrayInputStream(fileContents.getBytes());
+        return new TemplatedFileToBytesConverter(inputStream, tags);
     }
 
 }

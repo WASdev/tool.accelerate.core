@@ -1,7 +1,6 @@
 package com.ibm.liberty.starter.build.gradle;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.Files;
 import java.util.Map;
 import java.util.Objects;
@@ -12,17 +11,17 @@ import java.util.stream.Collectors;
 public class TemplatedFileToBytesConverter {
 
     private final Pattern tagPattern = Pattern.compile("(%(.*)%)");
-    private final File inputFile;
+    private final InputStream inputStream;
     private final Map<String, String> tags;
 
-    public TemplatedFileToBytesConverter(File inputFile, Map<String, String> tags) {
-        this.inputFile = inputFile;
+    public TemplatedFileToBytesConverter(InputStream inputStream, Map<String, String> tags) {
+        this.inputStream = inputStream;
         this.tags = tags;
     }
 
     public byte[] getBytes() throws IOException {
-        return Files.readAllLines(inputFile.toPath())
-                .stream()
+        BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+        return reader.lines()
                 .map(this::replaceTags)
                 .filter(Objects::nonNull)
                 .collect(Collectors.joining("\n")).getBytes();

@@ -30,7 +30,7 @@ ext {
 
     // This is set in the ibm-web-ext.xml file
     warContext = 'myLibertyApp'
-    appName=%APP_NAME%
+    appName = '%APP_NAME%'
     packageFile = "${project.buildDir}/${appName}.zip"
     packagingType = 'usr'
 
@@ -187,6 +187,10 @@ tasks.create('setupServer')
 check.dependsOn 'integrationTest'
 %LIBERTY_FEATURE_TASK_SETUP%
 setupServer.dependsOn 'createServerBootstrap', 'publishServerConfig', 'copyConfigSnippetsToServer', 'publishWar'
+createServerBootstrap.mustRunAfter 'installLiberty'
+publishServerConfig.mustRunAfter 'installLiberty'
+copyConfigSnippetsToServer.mustRunAfter 'installLiberty'
+publishWar.mustRunAfter 'installLiberty'
 publishWar.dependsOn 'war'
 libertyStart.dependsOn 'setupServer'
 integrationTest.dependsOn 'libertyStartTestServer', 'testClasses'
