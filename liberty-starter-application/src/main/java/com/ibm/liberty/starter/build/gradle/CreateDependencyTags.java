@@ -1,9 +1,8 @@
-package com.ibm.liberty.starter.gradle;
+package com.ibm.liberty.starter.build.gradle;
 
 import com.ibm.liberty.starter.DependencyHandler;
 import com.ibm.liberty.starter.api.v1.model.provider.Dependency;
 
-import java.text.MessageFormat;
 import java.util.Collections;
 import java.util.Map;
 import java.util.stream.Collectors;

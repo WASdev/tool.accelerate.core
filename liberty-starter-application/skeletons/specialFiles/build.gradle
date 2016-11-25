@@ -139,14 +139,7 @@ liberty {
         archive = packageFile
         include = packagingType
     }
-    features {
-        name = ['apiDiscovery-1.0']
-        if (project.hasProperty('acceptFeaturesLicense') && acceptFeaturesLicense) {
-            acceptLicense = true
-        } else {
-            throw new GradleException("You must set a value for the 'acceptFeaturesLicense' property. Please review the license terms and conditions for additional features to be installed and if you accept the license terms and conditions then run the Gradle command with '-PacceptFeaturesLicense=true'.")
-        }
-    }
+%LIBERTY_FEATURE_CONFIG%
 }
 
 task libertyStartTestServer(type: net.wasdev.wlp.gradle.plugins.tasks.StartTask){
@@ -192,8 +185,8 @@ cloudfoundry {
 
 tasks.create('setupServer')
 check.dependsOn 'integrationTest'
-installFeature.dependsOn 'installLiberty'
-setupServer.dependsOn 'createServerBootstrap', 'publishServerConfig', 'copyConfigSnippetsToServer', 'installFeature', 'publishWar'
+%LIBERTY_FEATURE_TASK_SETUP%
+setupServer.dependsOn 'createServerBootstrap', 'publishServerConfig', 'copyConfigSnippetsToServer', 'publishWar'
 publishWar.dependsOn 'war'
 libertyStart.dependsOn 'setupServer'
 integrationTest.dependsOn 'libertyStartTestServer', 'testClasses'

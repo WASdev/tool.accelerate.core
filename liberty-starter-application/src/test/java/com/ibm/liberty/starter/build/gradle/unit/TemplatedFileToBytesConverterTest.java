@@ -1,12 +1,10 @@
-package com.ibm.liberty.starter.gradle.unit;
+package com.ibm.liberty.starter.build.gradle.unit;
 
-import com.ibm.liberty.starter.gradle.TemplatedFileToBytesConverter;
+import com.ibm.liberty.starter.build.gradle.TemplatedFileToBytesConverter;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 import org.junit.rules.TestName;
-import static com.ibm.liberty.starter.ByteMatcher.isByteArrayIncludingSpacesFor;
-import static org.junit.Assert.assertThat;
 
 import java.io.File;
 import java.io.IOException;
@@ -14,6 +12,9 @@ import java.nio.file.Files;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+
+import static com.ibm.liberty.starter.ByteMatcher.isByteArrayIncludingSpacesFor;
+import static org.junit.Assert.assertThat;
 
 public class TemplatedFileToBytesConverterTest {
 

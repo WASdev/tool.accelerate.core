@@ -1,4 +1,4 @@
-package com.ibm.liberty.starter.gradle;
+package com.ibm.liberty.starter.build.gradle;
 
 import java.io.File;
 import java.io.IOException;

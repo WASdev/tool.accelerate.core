@@ -16,7 +16,6 @@
 package com.ibm.liberty.starter;
 
 import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
@@ -24,7 +23,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -41,6 +39,7 @@ import java.util.zip.ZipOutputStream;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 
+import com.ibm.liberty.starter.build.FeaturesToInstallProvider;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.xml.sax.SAXException;
@@ -51,13 +50,13 @@ import com.ibm.liberty.starter.api.v1.model.provider.Provider;
 import com.ibm.liberty.starter.api.v1.model.provider.Sample;
 import com.ibm.liberty.starter.api.v1.model.registration.Service;
 import com.ibm.liberty.starter.api.v1.temp.ServiceFinder;
-import com.ibm.liberty.starter.pom.AddDependenciesCommand;
-import com.ibm.liberty.starter.pom.AddFeaturesCommand;
-import com.ibm.liberty.starter.pom.AppNameCommand;
-import com.ibm.liberty.starter.pom.PomModifierCommand;
-import com.ibm.liberty.starter.pom.SetDefaultProfileCommand;
-import com.ibm.liberty.starter.pom.SetRepositoryCommand;
-import com.ibm.liberty.starter.pom.PomModifier;
+import com.ibm.liberty.starter.build.maven.AddDependenciesCommand;
+import com.ibm.liberty.starter.build.maven.AddFeaturesCommand;
+import com.ibm.liberty.starter.build.maven.AppNameCommand;
+import com.ibm.liberty.starter.build.maven.PomModifierCommand;
+import com.ibm.liberty.starter.build.maven.SetDefaultProfileCommand;
+import com.ibm.liberty.starter.build.maven.SetRepositoryCommand;
+import com.ibm.liberty.starter.build.maven.PomModifier;
 
 public class ProjectZipConstructor {
     
@@ -246,7 +245,7 @@ public class ProjectZipConstructor {
         commands.add(new AppNameCommand(depHand));
         commands.add(new SetDefaultProfileCommand(deployType));
         commands.add(new SetRepositoryCommand(depHand));
-        commands.add(new AddFeaturesCommand(services, serviceConnector));
+        commands.add(new AddFeaturesCommand(new FeaturesToInstallProvider(services, serviceConnector)));
         PomModifier pomModifier = new PomModifier(inputStream, commands);
         byte[] bytes = pomModifier.getPomBytes();
         putFileInMap("pom.xml", bytes);

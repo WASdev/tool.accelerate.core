@@ -1,16 +1,16 @@
-package com.ibm.liberty.starter.gradle.unit;
+package com.ibm.liberty.starter.build.gradle.unit;
 
 import com.ibm.liberty.starter.DependencyHandler;
-import com.ibm.liberty.starter.gradle.CreateDependencyTags;
+import com.ibm.liberty.starter.build.gradle.CreateDependencyTags;
 import com.ibm.liberty.starter.unit.MockDependencyHandler;
-import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.hasEntry;
-import static org.junit.Assert.assertThat;
-
 import org.junit.Test;
 
 import java.net.URISyntaxException;
 import java.util.Map;
+
+import static org.hamcrest.Matchers.hasEntry;
+import static org.hamcrest.Matchers.hasSize;
+import static org.junit.Assert.assertThat;
 
 public class CreateDependencyTagsTest {
 
