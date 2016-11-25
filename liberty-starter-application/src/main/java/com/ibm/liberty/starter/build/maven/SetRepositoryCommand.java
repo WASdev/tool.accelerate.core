@@ -16,7 +16,7 @@ public class SetRepositoryCommand implements PomModifierCommand {
     private Logger log = Logger.getLogger(SetRepositoryCommand.class.getName());
 
     public SetRepositoryCommand(DependencyHandler dependencyHandler) {
-        this.repoUrl = dependencyHandler.getServerHostPort() + "/start/api/v1/repo";
+        this.repoUrl = dependencyHandler.getRepositoryUrl();
     }
 
     @Override

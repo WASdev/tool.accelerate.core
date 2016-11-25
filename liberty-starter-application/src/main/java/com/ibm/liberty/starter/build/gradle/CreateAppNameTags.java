@@ -11,6 +11,6 @@ public class CreateAppNameTags {
         appName = dependencyHandler.getAppName();
     }
     public Map<String, String> getTags() {
-        return Collections.singletonMap("APP_NAME", "appName=" + appName);
+        return Collections.singletonMap("APP_NAME", appName);
     }
 }

@@ -24,7 +24,7 @@ public class CreateAppNameTagsTest {
         Map<String, String> tags = testObject.getTags();
 
         assertThat(tags.size(), is(1));
-        assertThat(tags, hasEntry("APP_NAME", "appName=" + appName));
+        assertThat(tags, hasEntry("APP_NAME", appName));
     }
 
     @Test
@@ -36,7 +36,7 @@ public class CreateAppNameTagsTest {
         Map<String, String> tags = testObject.getTags();
 
         assertThat(tags.size(), is(1));
-        assertThat(tags, hasEntry("APP_NAME", "appName=" + appName));
+        assertThat(tags, hasEntry("APP_NAME", appName));
     }
 
 }

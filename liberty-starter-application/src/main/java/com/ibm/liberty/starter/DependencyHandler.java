@@ -84,4 +84,8 @@ public class DependencyHandler {
         return serverHostPort;
     }
 
+    public String getRepositoryUrl() {
+        return getServerHostPort() + "/start/api/v1/repo";
+    }
+
 }
