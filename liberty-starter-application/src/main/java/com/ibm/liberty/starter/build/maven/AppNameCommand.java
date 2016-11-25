@@ -14,7 +14,7 @@ public class AppNameCommand implements PomModifierCommand {
     private static final Logger log = Logger.getLogger(AppNameCommand.class.getName());
     
     public AppNameCommand(DependencyHandler dependencyHandler) {
-        appName = dependencyHandler.getAppName() != null ? dependencyHandler.getAppName() : "LibertyProject";
+        appName = dependencyHandler.getAppName();
     }
 
     @Override

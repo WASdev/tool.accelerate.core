@@ -30,7 +30,7 @@ ext {
 
     // This is set in the ibm-web-ext.xml file
     warContext = 'myLibertyApp'
-    appName = 'IainsProject'
+    %APP_NAME%
     packageFile = "${project.buildDir}/${appName}.zip"
     packagingType = 'usr'
 

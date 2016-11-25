@@ -77,7 +77,7 @@ public class DependencyHandler {
     }
     
     public String getAppName() {
-        return appName;
+        return appName != null ? appName : "LibertyProject";
     }
     
     public String getServerHostPort() {
