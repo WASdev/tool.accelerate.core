@@ -24,6 +24,7 @@ angular.module('appAccelerator')
 
      var serviceURL = "/start/api/v1";
      var techURL = serviceURL + "/tech";  //where to get the technology types from
+     var dataURL = "/data?";              //tech=rest&deploy=local&name=libertyProject&workspace=642f3151-c9b6-4d5c-b185-4c29b8
 
      var getTechnologies = function() {
         $log.debug("AppAccelerator : GET : available technology list");
@@ -51,7 +52,54 @@ angular.module('appAccelerator')
           return q.promise;
       };
 
+      var download = function(technologies) {
+
+        var selected = undefined;   //the list of slected technologies
+        for(var tech in technologies) {
+          if(tech.selected) {
+            if(selected) selected += "&";
+            selected += ("tech=" + tech.id);
+          }
+        }
+        if(selected) {
+          //something has been selected, so proceed
+          var url = serviceURL + selected;
+          $log.debug("Downloading from " + url);
+        } else {
+          //something has gone wrong, nothing has been selected
+        }
+/*
+          // Selected technologies
+          var selectedTechnologies = $("#step1TechnologiesContainer .step1Technology.selected");
+          var url = serviceURL + "/data?tech=";
+          for(var i = 0; i < selectedTechnologies.size(); i++) {
+              url += selectedTechnologies.get(i).dataset.technologyid;
+              if(i + 1 < selectedTechnologies.size()) {
+                  url += "&tech=";
+              }
+          }
+
+          // Deploy location
+          var deployLocation = $("#step2DeployLocationsContainer .step2DeployLocation.selected").data("value");
+          url += "&deploy=" + deployLocation;
+
+          // Project name
+          var projectName = $("#step4NameInput").val();
+          if(projectName != "") {
+              url += "&name=" + projectName;
+          } else {
+              url += "&name=" + "libertyProject";
+          }
+      url += "&workspace=" + workspaceId;
+      if(isSwaggerCodeGenerated()){
+        url += "&techoptions=swagger:server";
+      }
+          window.location.assign(url);
+          */
+      };
+
       return {
-        getTechnologies: getTechnologies
+        getTechnologies: getTechnologies,
+        download : download
       };
   }]);

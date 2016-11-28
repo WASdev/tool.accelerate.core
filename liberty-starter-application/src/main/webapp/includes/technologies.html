@@ -1,0 +1,52 @@
+<!-- STEP ONE -->
+<div id="step1">
+    <div id="bannerContainer">
+        <div id="banner">
+            <div id="bannerImg" class="banner-img layered-bg"></div>
+            <div id="bannerFade" class="banner-fade layered-bg"></div>
+            <div id="bannerTriangle"></div>
+            <div id="bannerLine1"><span>Liberty</span> app accelerator</div>
+            <div id="bannerLine2">Easily start building apps for WebSphere<br />Liberty, a Java EE application server</div>
+        </div>
+    </div>
+
+    <div class="stepContent">
+        <div id="step1Description1">Configure WebSphere Liberty with a set of selected technologies. Then download the project as a zip file.</div>
+        <div class="stepBar"></div>
+        <div class="stepNumber">STEP 1 / <span class="numberOfSteps">{{maxSteps}}</span></div>
+        <div id="step1Description2">Select one or more technology types:</div>
+        <div class="alert alert-info" ng-show="!hasTechnologies && !serverError">
+            Getting list of technologies, please wait ...
+        </div>
+        <div class="alert alert-warning" ng-show="hasTechnologies && serverError">Unfortunately the
+            Liberty app accelerator service appears to be down at the moment.
+            Please try again later.</div>
+        <div id="step1TechnologiesContainer" ng-show="hasTechnologies">
+          <div ng-repeat="techrow in technologies" class="row">
+            <div ng-repeat="technology in techrow">
+              <div class="panel {{technology.panel}} col-md-4">
+                  <div class="panel-heading">
+                    <div class="row">
+                      <div class="col-md-8" ng-click="toggleSelected(technology)" role="button">{{technology.name}}</div>
+                      <div class="col-md-4 text-right">
+                        <span ng-click="toggleSelected(technology)" role="button">
+                          <i class="fa fa-square-o" aria-hidden="true" ng-show="!technology.selected"></i>
+                          <i class="fa fa-check-square-o" aria-hidden="true" ng-show="technology.selected"></i>
+                        </span>
+                        <span ng-click="toggleInfo(technology)" role="button">
+                          <i class="fa fa-info" aria-hidden="true" ng-show="!technology.info"></i>
+                          <i class="fa fa-info-circle" aria-hidden="true" ng-show="technology.info"></i>
+                        </span>
+                        <span ng-click="showOptions(technology)" role="button" ng-show="technology.options">
+                          <i class="fa fa-cog" aria-hidden="true"></i>
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="panel-body" ng-show="technology.info">{{technology.description}}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+</div>

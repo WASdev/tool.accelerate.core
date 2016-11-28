@@ -44,14 +44,6 @@ body {
 
 
 #navigationTopContainer {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    z-index: 2;
-}
-
-#navigationTopContainer .navigationTop {
     display: block;
     text-decoration: none;
     text-align: center;
@@ -60,6 +52,11 @@ body {
     color: #868686;
     line-height: 55px;
     background-color: #F0F0F0;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 2;
 }
 
 #navigationTop2, #navigationTop3 {
@@ -79,6 +76,15 @@ body {
     color: #FFFFFF;
     font-size: 16px;
     background: #4178BE;
+}
+
+.navDisabled {
+  cursor : no-drop;
+  opacity : 5
+}
+
+.navEnabled {
+  cursor : pointer;
 }
 
 #navigationBottomContainer.disabled {

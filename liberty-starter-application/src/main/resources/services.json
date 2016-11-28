@@ -4,50 +4,58 @@
             "id" : "rest",
             "name" : "REST",
             "description" : "JAX-RS implementation",
-            "endpoint" : "/rest"
+            "endpoint" : "/rest",
+            "options" : false
         },
         {
             "id" : "websocket",
             "name" : "Web Sockets",
             "description" : "WebSocket implementation",
-            "endpoint" : "/websocket"
+            "endpoint" : "/websocket",
+            "options" : false
         },
         {
             "id" : "persistence",
             "name" : "Persistence",
             "description" : "JPA data persistence",
-            "endpoint" : "/persistence"
+            "endpoint" : "/persistence",
+            "options" : false
         },
         {
             "id": "web",
             "name" : "Servlet",
             "description": "Servlet 3.1",
-            "endpoint" : "/web"
+            "endpoint" : "/web",
+            "options" : false
         },
         {
             "id": "springbootweb",
             "name": "Spring Boot/MVC",
             "description": "Spring Boot with Spring MVC",
-            "endpoint" : "/springbootweb"
+            "endpoint" : "/springbootweb",
+            "options" : false
         },
         {
             "id": "watsonsdk",
             "name": "Watson SDK",
             "description": "Adds the Watson SDK dependency to the project, allowing you to integrate Watson services",
-            "endpoint" : "/watsonsdk"
+            "endpoint" : "/watsonsdk",
+            "options" : false
         },
         {
             "id": "microprofile",
             "name": "MicroProfile",
             "description": "Technologies required by the MicroProfile community effort. See microprofile.io.",
-            "endpoint": "/microprofile"
+            "endpoint": "/microprofile",
+            "options" : false
         },
         {
             "id" : "swagger",
             "name" : "Swagger",
             "description" : "A simple yet powerful representation of RESTful APIs",
             "endpoint" : "/swagger",
-            "configuration" : "rest"
+            "configuration" : "rest",
+            "options" : true
         }
     ]
 }
