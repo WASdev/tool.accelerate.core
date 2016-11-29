@@ -22,8 +22,9 @@ angular.module('appAccelerator')
 
   $log.debug("AppAccelerator : using controller 'appCtrl'");
 
-  var rowCount = 3;
+  var rowCount = 4;
 
+  $scope.rowCount = 4;
   $scope.hasTechnologies = false;
   $scope.serverError = false;
   $scope.technologies = [];
@@ -38,17 +39,32 @@ angular.module('appAccelerator')
     $scope.selectedCount += (technology.selected ? 1 : -1);
     $log.debug("Selected count " + $scope.selectedCount);
     technology.panel = technology.selected ? "panel-success" : "panel-info";
-    $.scrollify.update();
   }
 
   $scope.toggleInfo = function(technology) {
     technology.info = !technology.info; //toggle selection
+    technology.displayOptions = false;
   }
 
   $scope.showOptions = function(technology) {
-
+    technology.info = false;
+    technology.displayOptions = !technology.displayOptions;
   }
 
+  //get a technology for specific ID
+  $scope.getTechnology = function(id) {
+    $log.debug("AppAccelertor : looking for technology with ID : " + id)
+    for(var i = 0; i < $scope.technologies.length; i++) {
+      var row = $scope.technologies[i];
+      for(var j = 0; j < row.length; j++) {
+        var technology = row[j];
+        if(technology.id == id) {
+          return technology;
+        }
+      }
+    }
+    return undefined;
+  }
 
   //download the project skeleton
   $scope.downloadProject = function() {
@@ -59,17 +75,19 @@ angular.module('appAccelerator')
     return ($scope.selectedCount) ? "navEnabled" : "navDisabled";
   }
 
+  $scope.getFinalClass = function() {
+    return ($scope.selectedCount) ? "finalText2" : "finalText";
+  }
+
   //advance to the next state, will also move to the next step
   $scope.nextState = function() {
     if($scope.state != $scope.states.length) {
       $scope.state++;
     }
-    $.scrollify.next();
   }
 
   //go back to the previous step
   $scope.prevStep = function() {
-    $.scrollify.previous();
   }
 
   //return a list of the selected technologies
@@ -101,9 +119,10 @@ angular.module('appAccelerator')
           }
           row = [];
         }
-        var technology = response[i];   //just make the code a bit more readable
-        technology.selected = false;   //flag to indicate if user has selected this technology
-        technology.info = false;      //do not show the information for this technology
+        var technology = response[i];       //just make the code a bit more readable
+        technology.selected = false;        //flag to indicate if user has selected this technology
+        technology.info = false;            //do not show the information for this technology
+        technology.displayOptions = false;  //dpn't show any options
         technology.panel = "panel-info";
         row.push(technology);
       }
@@ -112,17 +131,6 @@ angular.module('appAccelerator')
       }
       $scope.hasTechnologies = true;
       $log.debug('AppAccelerator : getTechnologies %o', $scope.technologies);
-
-      //enable scroll options on the screen
-      $.scrollify({
-          section: ".step",
-          after: function(index) {
-            $timeout(function() {
-              $scope.step = index + 1;
-            });
-          }
-      });
-
     }, function(error) {
       //error, so mark call as complete but show warning to user
       $scope.serverError = true;

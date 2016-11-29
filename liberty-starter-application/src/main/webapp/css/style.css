@@ -135,13 +135,8 @@ body {
 
 /* STEP ONE */
 
-#step1 {
-    margin-bottom: 120px;
-}
 
-#step1 .stepContent {
-    height: 700px;
-}
+
 
 #banner {
     position: relative;
@@ -222,14 +217,13 @@ body {
     line-height: 35px;
     color: #152935;
     margin-top: 36px;
-    width: 460px;
 }
 
 #step1Description2 {
     font-family: "HelvNeueRoman";
     font-size: 18px;
     color: #152935;
-    margin-top: 52px;
+    margin-top: 18px;
 }
 
 
@@ -379,9 +373,7 @@ body {
     margin-top: 10px;
 }
 /* STEP FOUR */
-#step4 {
-    padding-top: 167px;
-}
+
 #step4Description1 {
     font-family: "HelvNeueLight";
     font-size: 26px;
@@ -683,31 +675,24 @@ body {
     color: #FFFFFF;
 }
 
-#finalText {
-    position: relative;
-    height: 110px;
-    width: 1100px;
+.finalText {
+    position: fixed;
+    bottom: 0;
+    left: 0;
     margin-left: auto;
     margin-right: auto;
-    padding-top: 34px;
-    padding-bottom: 30px;
     font-family: "HelvNeueRoman";
     font-size: 12px;
     color: #9B9B9B;
-    line-height: 16px;
-    background-repeat: no-repeat;
-    background-image: url("../img/logos.png");
-    background-position: left 70px;
 }
 
-#disclaimer {
-    position: absolute;
-    left: 300px;
-    top: 22px;
-}
-
-#disclaimer p {
-    width: 700px;
+.finalText2 {
+    margin-top: 20px;
+    margin-left: auto;
+    margin-right: auto;
+    font-family: "HelvNeueRoman";
+    font-size: 12px;
+    color: #9B9B9B;
 }
 
 #poweredByLiberty {

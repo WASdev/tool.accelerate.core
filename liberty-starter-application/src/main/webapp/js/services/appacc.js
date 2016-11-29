@@ -25,6 +25,7 @@ angular.module('appAccelerator')
      var serviceURL = "/start/api/v1";
      var techURL = serviceURL + "/tech";  //where to get the technology types from
      var dataURL = "/data?";              //tech=rest&deploy=local&name=libertyProject&workspace=642f3151-c9b6-4d5c-b185-4c29b8
+     var optionsURL = "/start/options";
 
      var getTechnologies = function() {
         $log.debug("AppAccelerator : GET : available technology list");
@@ -50,6 +51,31 @@ angular.module('appAccelerator')
           });
 
           return q.promise;
+      };
+
+      //get the technology options for a given technology
+      var getTechOptions = function(technology) {
+        $log.debug("AppAccelerator : GET : technology options");
+        var q = $q.defer();
+        if(!technology.options) {
+          //there are no options so resolve and return immediately
+          q.resolve(undefined);
+        } else {
+          $http({
+            url: optionsURL + '/' + technology.id + '/' + technology.id + '.html',
+            method: 'GET'
+            }).then(function(response) {
+              // 200: the options template was found
+              $log.debug(response.status + ' ' + response.statusText + " %o - OK");
+              q.resolve(response.data);
+            }, function(response) {
+              $log.debug(response.status + ' ' + response.statusText + " %o - FAILED", response.data);
+              // TODO: Alert -- problem occurred
+              // return empty set for decent experience, or could insert some default values here ...
+              q.reject(undefined);
+            });
+        }
+        return q.promise;
       };
 
       var download = function(technologies) {
@@ -100,6 +126,7 @@ angular.module('appAccelerator')
 
       return {
         getTechnologies: getTechnologies,
-        download : download
+        download : download,
+        getTechOptions : getTechOptions
       };
   }]);
