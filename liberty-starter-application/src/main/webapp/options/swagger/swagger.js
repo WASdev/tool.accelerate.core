@@ -23,5 +23,6 @@ angular.module('appAccelerator')
   $log.debug("Swagger : using controller 'swagCtrl'");
 
   $scope.useSwaggerDoc = false;
+  $scope.allowConfig = false;
 
 }]);

@@ -78,10 +78,10 @@ angular.module('appAccelerator')
         return q.promise;
       };
 
-      var download = function(technologies) {
+      var download = function() {
 
         var selected = undefined;   //the list of slected technologies
-        for(var tech in technologies) {
+        for(var tech in selectedTechnologies) {
           if(tech.selected) {
             if(selected) selected += "&";
             selected += ("tech=" + tech.id);
@@ -124,9 +124,52 @@ angular.module('appAccelerator')
           */
       };
 
+      //put the selected technologies here so that it can seen by multiple controllers
+      var selectedTechnologies = [];  //list of technologies currrently selected by the user
+
+      //how many technologies have currently been selected
+      var getSelectedCount = function() {
+        return selectedTechnologies.length;
+      }
+
+      var addTechnology = function(technology) {
+        technology.selected = true;
+        for(var existing in selectedTechnologies) {
+          if(existing.id == technology.id) {
+            //already added, so ignore and return
+          }
+        }
+        selectedTechnologies.push(technology);
+      }
+
+      var removeTechnology = function(technology) {
+        technology.selected = false;
+        for(var i = 0; i < selectedTechnologies.length; i++) {
+          if(selectedTechnologies[i].id == technology.id) {
+            //id's match so remove from the list
+            selectedTechnologies.splice(i, 1);
+            return;
+          }
+        }
+      }
+
+      //true if a technology has been selected, false if not
+      var isSelected = function(id) {
+        for(var i = 0; i < selectedTechnologies.length; i++) {
+          if(selectedTechnologies[i].id == id) {
+            return true;
+          }
+        }
+        return false;
+      }
+
       return {
         getTechnologies: getTechnologies,
         download : download,
-        getTechOptions : getTechOptions
+        getTechOptions : getTechOptions,
+        getSelectedCount : getSelectedCount,
+        addTechnology : addTechnology,
+        removeTechnology : removeTechnology,
+        isSelected : isSelected
       };
   }]);

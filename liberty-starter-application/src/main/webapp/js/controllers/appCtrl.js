@@ -17,26 +17,34 @@
 'use strict';
 
 angular.module('appAccelerator')
-.controller('appCtrl', ['$scope', '$log', '$timeout', 'appacc',
-                function($scope,   $log,   $timeout,   appacc) {
+.controller('appCtrl', ['$scope', '$log', '$timeout', 'appacc', '$window',
+                function($scope,   $log,   $timeout,   appacc,   $window) {
 
   $log.debug("AppAccelerator : using controller 'appCtrl'");
+  //only turn on analytics for live site
+  var googleAnalytics = window.location.hostname == 'liberty-starter.wasdev.developer.ibm.com';
+  $log.debug("Google Analytics is currently set to  : " + googleAnalytics);
 
-  var rowCount = 4;
-
-  $scope.rowCount = 4;
+  $scope.rowCount = 4;    //used by angular to layout rows correctly
   $scope.hasTechnologies = false;
   $scope.serverError = false;
-  $scope.technologies = [];
+  $scope.technologies = [];   //this controls the layout of the technologies, the service has the list of selected ones
   $scope.states = ['SELECTED TECHNOLOGIES', 'DOWNLOAD'];
   $scope.state = 0;         //the state of the application e.g. have you selected a technology, not what step you are on
   $scope.step = 1;   //the current step that is being configured by the user
   $scope.maxSteps = 2;
   $scope.selectedCount = 0;
 
+  var currentWindowSize = $(window).height();
+
+  angular.element($window).bind('resize', function () {
+    currentWindowSize = $(window).height();
+    $scope.$apply();    //use this to ensure that any corrrect decisions as made based on the new window size
+  });
+
   $scope.toggleSelected = function(technology) {
-    technology.selected = !technology.selected; //toggle selection
-    $scope.selectedCount += (technology.selected ? 1 : -1);
+    (technology.selected) ? appacc.removeTechnology(technology) : appacc.addTechnology(technology);
+    $scope.selectedCount = appacc.getSelectedCount();
     $log.debug("Selected count " + $scope.selectedCount);
     technology.panel = technology.selected ? "panel-success" : "panel-info";
   }
@@ -76,7 +84,8 @@ angular.module('appAccelerator')
   }
 
   $scope.getFinalClass = function() {
-    return ($scope.selectedCount) ? "finalText2" : "finalText";
+    //if a technology has been selected or the window is too small put text at end of doc
+    return ($scope.selectedCount || currentWindowSize < 700) ? "finalText2" : "finalText";
   }
 
   //advance to the next state, will also move to the next step
@@ -113,7 +122,7 @@ angular.module('appAccelerator')
       //split the returned technologies into rows of X elements
       var row = undefined;
       for(var i = 0; i < response.length; i++) {
-        if(!(i % rowCount)) {
+        if(!(i % $scope.rowCount)) {
           if(row) {
             $scope.technologies.push(row);
           }
