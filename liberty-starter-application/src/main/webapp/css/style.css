@@ -37,11 +37,6 @@ html {
     overflow-y: scroll;
 }
 
-body {
-    font-family: "HelvNeueRoman", Helvetica, Arial, sans-serif;
-    margin: 0;
-}
-
 
 #navigationTopContainer {
     display: block;
@@ -131,6 +126,7 @@ body {
     font-size: 16px;
     color: #152935;
     width: 87px;
+    margin-bottom: 18px;
 }
 
 /* STEP ONE */
@@ -210,23 +206,6 @@ body {
     width: 104%;
     height: 160px;
 }
-
-#step1Description1 {
-    font-family: "HelvNeueLight";
-    font-size: 26px;
-    line-height: 35px;
-    color: #152935;
-    margin-top: 36px;
-}
-
-#step1Description2 {
-    font-family: "HelvNeueRoman";
-    font-size: 18px;
-    color: #152935;
-    margin-top: 18px;
-}
-
-
 
 /* STEP TWO */
 
@@ -373,31 +352,6 @@ body {
     margin-top: 10px;
 }
 /* STEP FOUR */
-
-#step4Description1 {
-    font-family: "HelvNeueLight";
-    font-size: 26px;
-    line-height: 35px;
-    color: #152935;
-    margin-top: 36px;
-}
-#step4Description2 {
-    font-family: "HelvNeueRoman";
-    font-size: 18px;
-    color: #152935;
-    margin-top: 36px;
-    width: 400px;
-}
-
-#step4NameInput {
-    width: 356px;
-    color: 8E8E8E;
-    border: none;
-    border-bottom: solid 1px #182C38;
-    font-family: "HelvNeueRoman";
-    font-size: 16px;
-    margin-top: 24px;
-}
 
 #step4DownloadButton {
     background: #4178BE;

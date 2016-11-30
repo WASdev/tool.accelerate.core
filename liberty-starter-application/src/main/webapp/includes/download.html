@@ -1,75 +1,83 @@
 <div id="step4">
     <div class="stepContent">
-        <div id="step4LocalLeftBlock">
             <div class="stepBar"></div>
             <div class="stepNumber">STEP <span class="numberOfSteps">2</span> / <span class="numberOfSteps">2</span></div>
-            <div id="step4Description1">Download</div>
-            <div id="step4Description2">Name the project containing your
-                selected technologies and download as a ZIP file.</div>
-            <input id="step4NameInput" type="text"
-                placeholder="Example name: LibertyProject" autocomplete="off"
-                maxlength="50">
-                <!--
-                <a id="step4DownloadButton" href="#">Download
-                Now</a>
-              -->
-                <a ng-click="downloadProject">Download</a>
-        </div>
-        <div id="step4LocalRightBlock">
-            <div id="step4Local">
-                <p id="step4LocalRightBlockItem1">
-                    Once the download is complete, <span
-                        id="step4LocalRightBlockItem1RightText">locate your
-                        project and unzip it.</span>
-                </p>
-                <div id="step4LocalRightBlockItem2">
-                    <div id="step4LocalRightBlockItem2Line1">Your application
-                        code can be found in:</div>
-                    <div id="step4LocalRightBlockItem2Line2">src/main/java</div>
+        <div class="row">
+            <div class="col-md-6 col-sm-6">
+                <div class="stepHeading">Configure your project and download as a ZIP file.</div>
+                <div class="disclaimer">By clicking Download you agree to the Liberty licenses.</div>
+                <div><a ng-click="downloadProject" class="btn btn-primary" role="button">Accept and Download</a></div>
+                <div>
+                    <h4 class="optionalHeading">Optional configuration:</h4>
                 </div>
-                <div id="step4LocalRightBlockItem3">
-                    <div id="step4LocalRightBlockItem3Line1">On the <span class="step4NameOfProject">LibertyProject</span>
-                    pom.xml run:</div>
-                    <span id="step4LocalRightBlockItem3Line2">mvn install liberty:run-server</span>
+                <div class="options">
+                    <span>Name the file:</span>
+                    <input type="text"
+                        placeholder="LibertyProject" autocomplete="off"
+                        maxlength="50">
                 </div>
-                <div id="step4LocalRightBlockItem4">
-                    <div id="step4LocalRightBlockItem4Line1">Access your
-                        application at:</div>
-                    <div id="step4LocalRightBlockItem4Line2"><a href="http://localhost:9080/myLibertyApp/"
-                            title="Link to access your application." target="_blank"
-                            onclick="trackOutboundLink('http://localhost:9080/myLibertyApp/', 'localDeploy');">http://localhost:9080/myLibertyApp/</a></div>
-                    <div id="step4LocalRightBlockItem4Line3">Your Liberty
-                        server can be found in:</div>
-                    <div id="step4LocalRightBlockItem4Line4">target/wlp/usr/servers/LibertyProjectServer</div>
+                <div class="options">
+                    <label class="checkbox-inline">
+                        <input type="checkbox">Bluemix default deployment
+                    </label>
                 </div>
             </div>
-            <div id="step4Bluemix" class="hidden">
-                <p id="step4BluemixRightBlockItem1">
-                    Once the download is complete, <span
-                        id="step4LocalRightBlockItem1RightText">locate your
-                        project and unzip it.</span>
-                </p>
-                <div id="step4BluemixRightBlockItem2">
-                    <div id="step4BluemixRightBlockItem2Line1">Your application
-                        code can be found in:</div>
-                    <div id="step4BluemixRightBlockItem2Line2">src/main/java</div>
-                </div>
-                <div id="step4BluemixRightBlockItem3">
-                    <div id="step4BluemixRightBlockItem3Line1">
-                        On the <span class="step4NameOfProject">LibertyProject</span>
-                        pom.xml run:
+            <div class="col-md-6 col-sm-6">
+                <div id="step4Local">
+                    <p id="step4LocalRightBlockItem1">
+                            Once the download is complete, <span
+                            id="step4LocalRightBlockItem1RightText">locate your
+                            project and unzip it.</span>
+                    </p>
+                    <div id="step4LocalRightBlockItem2">
+                        <div id="step4LocalRightBlockItem2Line1">Your application
+                            code can be found in:</div>
+                        <div id="step4LocalRightBlockItem2Line2">src/main/java</div>
                     </div>
-                    <div id="step4BluemixRightBlockItem3Line2">
-                    mvn install -Dcf.org=<span
-                            class="purpleCode">[your email address]</span> -Dcf.username=<span
-                            class="purpleCode">[your username]</span> -Dcf.password=<span
-                            class="purpleCode">[your password]</span>
+                    <div id="step4LocalRightBlockItem3">
+                        <div id="step4LocalRightBlockItem3Line1">On the <span class="step4NameOfProject">LibertyProject</span>
+                        pom.xml run:</div>
+                        <span id="step4LocalRightBlockItem3Line2">mvn install liberty:run-server</span>
+                    </div>
+                    <div id="step4LocalRightBlockItem4">
+                        <div id="step4LocalRightBlockItem4Line1">Access your
+                            application at:</div>
+                        <div id="step4LocalRightBlockItem4Line2"><a href="http://localhost:9080/myLibertyApp/"
+                                title="Link to access your application." target="_blank"
+                                onclick="trackOutboundLink('http://localhost:9080/myLibertyApp/', 'localDeploy');">http://localhost:9080/myLibertyApp/</a></div>
+                        <div id="step4LocalRightBlockItem4Line3">Your Liberty
+                            server can be found in:</div>
+                        <div id="step4LocalRightBlockItem4Line4">target/wlp/usr/servers/LibertyProjectServer</div>
                     </div>
                 </div>
-                <div id="step4BluemixRightBlockItem4">
-                    <div id="step4BluemixRightBlockItem4Line1">Access your application at:</div>
-                    <div id="step4BluemixRightBlockItem4Line2"><span class="step4NameOfProject">LibertyProject</span>.eu-gb.mybluemix.net/myLibertyApp/</div>
-                    <div id="step4BluemixRightBlockItem4Line3">To manage your deployed application visit your dashboard on Bluemix.</div>
+                <div id="step4Bluemix" class="hidden">
+                    <p id="step4BluemixRightBlockItem1">
+                        Once the download is complete, <span
+                            id="step4LocalRightBlockItem1RightText">locate your
+                            project and unzip it.</span>
+                    </p>
+                    <div id="step4BluemixRightBlockItem2">
+                            <div id="step4BluemixRightBlockItem2Line1">Your application
+                            code can be found in:</div>
+                        <div id="step4BluemixRightBlockItem2Line2">src/main/java</div>
+                    </div>
+                    <div id="step4BluemixRightBlockItem3">
+                        <div id="step4BluemixRightBlockItem3Line1">
+                            On the <span class="step4NameOfProject">LibertyProject</span>
+                            pom.xml run:
+                        </div>
+                        <div id="step4BluemixRightBlockItem3Line2">
+                        mvn install -Dcf.org=<span
+                                class="purpleCode">[your email address]</span> -Dcf.username=<span
+                                class="purpleCode">[your username]</span> -Dcf.password=<span
+                                class="purpleCode">[your password]</span>
+                        </div>
+                    </div>
+                    <div id="step4BluemixRightBlockItem4">
+                        <div id="step4BluemixRightBlockItem4Line1">Access your application at:</div>
+                        <div id="step4BluemixRightBlockItem4Line2"><span class="step4NameOfProject">LibertyProject</span>.eu-gb.mybluemix.net/myLibertyApp/</div>
+                        <div id="step4BluemixRightBlockItem4Line3">To manage your deployed application visit your dashboard on Bluemix.</div>
+                    </div>
                 </div>
             </div>
         </div>
