@@ -140,13 +140,26 @@ task localRun (type: net.wasdev.wlp.gradle.plugins.tasks.StartTask){
 gradle.taskGraph.afterTask { Task task, TaskState state ->
     if (task.name == "fvt" && state.failure) {
         println '***FVT JUNIT LOGS***'
-        task.reports.junitXml.destination.eachFile {child ->
-            printFile(child)
-        }
+        printDirectory(task.reports.junitXml.destination)
         println '***FVT JUNIT LOGS END***'
+        println '***SERVER LOGS***'
+        printDirectory('../liberty-starter-wlpcfg/servers/StarterServer/logs')
+        println '***SERVER LOGS END***'
         printFile(file("${buildDir}/temp/localGradlePayloadTest/gradleLog/log.txt"))
         printFile(file("${buildDir}/temp/localPayloadTest/mvnLog/log.txt"))
         printFile(file("${buildDir}/temp/localPayloadTest/mvnLog/stopServer.txt"))
+    }
+}
+
+def printDirectory(dir) {
+    if (dir.exists()) {
+        dir.eachFile {child ->
+            if (child.isDirectory()) {
+                printDirectory(child)
+            } else {
+                printFile(child)
+            }
+        }
     }
 }
 
