@@ -143,7 +143,7 @@ gradle.taskGraph.afterTask { Task task, TaskState state ->
         printDirectory(task.reports.junitXml.destination)
         println '***FVT JUNIT LOGS END***'
         println '***SERVER LOGS***'
-        printDirectory('../liberty-starter-wlpcfg/servers/StarterServer/logs')
+        printDirectory(file('../liberty-starter-wlpcfg/servers/StarterServer/logs'))
         println '***SERVER LOGS END***'
         printFile(file("${buildDir}/temp/localGradlePayloadTest/gradleLog/log.txt"))
         printFile(file("${buildDir}/temp/localPayloadTest/mvnLog/log.txt"))

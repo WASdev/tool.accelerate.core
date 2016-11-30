@@ -49,6 +49,8 @@ public class DownloadedZip extends ExternalResource {
         Response response = client.target(url).request("application/zip").get();
         InputStream entityInputStream = response.readEntity(InputStream.class);
         extractZip(entityInputStream);
+        entityInputStream.close();
+        response.close();
     }
 
     private void extractZip(InputStream entityInputStream) throws IOException {
