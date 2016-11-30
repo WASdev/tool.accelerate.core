@@ -34,6 +34,7 @@ angular.module('appAccelerator')
   $scope.step = 1;   //the current step that is being configured by the user
   $scope.maxSteps = 2;
   $scope.selectedCount = 0;
+  $scope.deploy = {bluemix : appacc.deployToBluemix()};
 
   var currentWindowSize = $(window).height();
 
@@ -72,6 +73,11 @@ angular.module('appAccelerator')
       }
     }
     return undefined;
+  }
+  
+  $scope.updateService = function() {
+    appacc.deployToBluemix($scope.deploy.bluemix);
+    $log.debug("DeployToBluemix has value:" + appacc.deployToBluemix());
   }
 
   //download the project skeleton

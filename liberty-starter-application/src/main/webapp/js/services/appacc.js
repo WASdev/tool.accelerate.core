@@ -26,6 +26,7 @@ angular.module('appAccelerator')
      var techURL = serviceURL + "/tech";  //where to get the technology types from
      var dataURL = "/data?";              //tech=rest&deploy=local&name=libertyProject&workspace=642f3151-c9b6-4d5c-b185-4c29b8
      var optionsURL = "/start/options";
+     var bluemix = false;
 
      var getTechnologies = function() {
         $log.debug("AppAccelerator : GET : available technology list");
@@ -162,6 +163,13 @@ angular.module('appAccelerator')
         }
         return false;
       }
+      
+      var deployToBluemix = function(bool) {
+        if (bool != undefined) {
+          bluemix = bool;
+        }
+        return bluemix;
+      }
 
       return {
         getTechnologies: getTechnologies,
@@ -170,6 +178,7 @@ angular.module('appAccelerator')
         getSelectedCount : getSelectedCount,
         addTechnology : addTechnology,
         removeTechnology : removeTechnology,
-        isSelected : isSelected
+        isSelected : isSelected,
+        deployToBluemix : deployToBluemix
       };
   }]);
