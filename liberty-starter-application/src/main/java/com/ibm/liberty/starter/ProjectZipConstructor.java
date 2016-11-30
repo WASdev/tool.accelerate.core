@@ -240,6 +240,7 @@ public class ProjectZipConstructor {
     }
 
     private void addBuildFilesToMap() throws SAXException, TransformerException, ParserConfigurationException, IOException {
+        log.log(Level.INFO, "Entering method ProjectZipConstructor.addBuildFilesToMap()");
         if (BuildType.GRADLE.equals(buildType)) {
             addGradleFilesToMap();
         } else {
@@ -248,6 +249,7 @@ public class ProjectZipConstructor {
     }
 
     private void addGradleFilesToMap() throws IOException {
+        log.log(Level.INFO, "Entering method ProjectZipConstructor.addGradleFilesToMap()");
         Map<String, String> buildTags = new HashMap<>();
         DependencyHandler depHand = new DependencyHandler(services, serviceConnector, appName);
         buildTags.putAll(new CreateAppNameTags(depHand).getTags());

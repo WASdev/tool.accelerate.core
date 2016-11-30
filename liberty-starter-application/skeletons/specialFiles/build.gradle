@@ -37,8 +37,8 @@ ext {
     // Cloud Foundry/Bluemix properties
     // This is the host for your app in Bluemix and what it will be called in the dashboard. -->
     cfHost = appName
-    cfContext = 'eu-gb.mybluemix.net'
-    cfTarget = 'https://api.eu-gb.bluemix.net'
+    cfContext = 'ng.mybluemix.net'
+    cfTarget = 'https://api.ng.bluemix.net'
     cfSpace = 'dev'
     cfContextRoot = "${cfHost}.${cfContext}/${warContext}"
 
