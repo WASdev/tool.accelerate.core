@@ -137,6 +137,29 @@ task localRun (type: net.wasdev.wlp.gradle.plugins.tasks.StartTask){
     logging.level = LogLevel.INFO
 }
 
+gradle.taskGraph.afterTask { Task task, TaskState state ->
+    if (task.name == "fvt" && state.failure) {
+        println '***FVT JUNIT LOGS***'
+        task.reports.junitXml.destination.eachFile {child ->
+            printFile(child)
+        }
+        println '***FVT JUNIT LOGS END***'
+        printFile(file("${buildDir}/temp/localGradlePayloadTest/gradleLog/log.txt"))
+        printFile(file("${buildDir}/temp/localPayloadTest/mvnLog/log.txt"))
+        printFile(file("${buildDir}/temp/localPayloadTest/mvnLog/stopServer.txt"))
+    }
+}
+
+def printFile(file) {
+    println "***PRINTING FILE: ${file.getAbsolutePath()}"
+    if (file.exists()) {
+        println file.text
+    } else {
+        println 'File does not exist'
+    }
+    println '***END OF FILE'
+}
+
 clean.dependsOn(':liberty-starter-wlpcfg:cleanServer')
 war.dependsOn(':liberty-filter-application:publishWar', ':starter-microservice-web:publishWar', ':starter-microservice-persistence:publishWar', ':starter-microservice-rest:publishWar', ':starter-microservice-websocket:publishWar', ':starter-microservice-springboot-web:publishWar', ':starter-microservice-watsonsdk:publishWar', ':starter-microservice-microprofile:publishWar', ':starter-microservice-swagger:publishWar', 'compressSkeletonBuildImage', 'copySpecialFiles', 'createSwaggerJSON')
 installFeature.dependsOn('installLiberty')
