@@ -66,7 +66,7 @@ public class ProjectZipConstructor {
     private static final Logger log = Logger.getLogger(ServiceFinder.class.getName());
     private Services services;
     private ConcurrentHashMap<String, byte[]> fileMap = new ConcurrentHashMap<>();
-    private static final String SKELETON_JAR_FILENAME = "services/skeletonLibertyBuildImage.jar";
+    private static final String SKELETON_FILENAME = "services/skeletonLibertyBuildImage.zip";
     private static final String BASE_INDEX_HTML = "payloadIndex.html";
     private static final String INDEX_HTML_PATH = "src/main/webapp/index.html";
     private static final String POM_FILE = "pom.xml";
@@ -160,7 +160,7 @@ public class ProjectZipConstructor {
     
     public void initializeMap() throws IOException {
         log.log(Level.INFO, "Entering method ProjectZipConstructor.initializeMap()");
-        InputStream skeletonIS = this.getClass().getClassLoader().getResourceAsStream(SKELETON_JAR_FILENAME);
+        InputStream skeletonIS = this.getClass().getClassLoader().getResourceAsStream(SKELETON_FILENAME);
         ZipInputStream zis = new ZipInputStream(skeletonIS);
         ZipEntry ze;
         while ((ze = zis.getNextEntry()) != null) {
