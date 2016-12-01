@@ -77,7 +77,7 @@ angular.module('appAccelerator')
     appacc.updateName($scope.deploy.name);
     $scope.deploy.url = appacc.createDownloadUrl();
     $log.debug("Download url set to:" + $scope.deploy.url);
-    
+    appacc.notifyListeners();
   }
 
   $scope.getNavClass = function() {

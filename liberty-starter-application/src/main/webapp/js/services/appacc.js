@@ -18,8 +18,8 @@
 
 angular.module('appAccelerator')
    .factory('appacc',
-    [      '$log','$q','$http',
-  function ($log,  $q,  $http) {
+    [      '$log','$q','$http', '$timeout',
+  function ($log,  $q,  $http, $timeout) {
      $log.debug("Initialising AppAccelerator service");
 
      var serviceURL = "/start/api/v1";
@@ -158,6 +158,18 @@ angular.module('appAccelerator')
         }
         return projectName;
       }
+      
+      var callbacks = [];
+      var addListener = function(callback) {
+        callbacks.push(callback);
+      }
+      
+      var notifyListeners = function() {
+        $log.debug("Notify listeners");
+        for(var i = 0; i < callbacks.length; i++) {
+          $timeout(callbacks[i]);
+        }
+      }
 
       return {
         getTechnologies: getTechnologies,
@@ -168,6 +180,8 @@ angular.module('appAccelerator')
         removeTechnology : removeTechnology,
         isSelected : isSelected,
         deployToBluemix : deployToBluemix,
-        updateName : updateName
+        updateName : updateName,
+        notifyListeners : notifyListeners,
+        addListener : addListener
       };
   }]);

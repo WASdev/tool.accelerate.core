@@ -24,5 +24,15 @@ angular.module('appAccelerator')
 
   $scope.useSwaggerDoc = false;
   $scope.allowConfig = false;
+  var restId = "rest";
+  
+  function checkRestTechState() {
+    
+  }
+  appacc.addListener(function() {
+    $log.debug("Swagger : checking service state.");
+    $scope.allowConfig = appacc.isSelected(restId);
+    $log.debug("Swagger : allowConfig set to " + $scope.allowConfig);
+  });
 
 }]);
