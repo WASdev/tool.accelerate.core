@@ -6,15 +6,16 @@
             <div class="col-md-6 col-sm-6">
                 <div class="stepHeading">Configure your project and download as a ZIP file.</div>
                 <div class="disclaimer">By clicking Download you agree to the Liberty licenses.</div>
-                <div><a ng-click="downloadProject" class="btn btn-primary" role="button">Accept and Download</a></div>
+                <div ng-show="deploy.name"><a href="{{deploy.url}}" target="#" class="btn btn-primary" role="button">Accept and Download</a></div>
+                <div ng-show="!deploy.name"><a href="{{deploy.url}}" class="btn btn-primary" role="button" ng-disabled="true">Choose a file name</a></div>
                 <div>
                     <h4 class="optionalHeading">Optional configuration:</h4>
                 </div>
                 <div class="options">
                     <span>Name the file:</span>
                     <input type="text"
-                        placeholder="LibertyProject" autocomplete="off"
-                        maxlength="50">
+                        placeholder="Example: LibertyProject" autocomplete="off"
+                        maxlength="50" ng-model="deploy.name" ng-change="updateService()">
                 </div>
                 <div class="options">
                     <label class="checkbox-inline">

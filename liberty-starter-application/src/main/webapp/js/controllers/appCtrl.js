@@ -34,20 +34,16 @@ angular.module('appAccelerator')
   $scope.step = 1;   //the current step that is being configured by the user
   $scope.maxSteps = 2;
   $scope.selectedCount = 0;
-  $scope.deploy = {bluemix : appacc.deployToBluemix()};
-
-  var currentWindowSize = $(window).height();
-
-  angular.element($window).bind('resize', function () {
-    currentWindowSize = $(window).height();
-    $scope.$apply();    //use this to ensure that any corrrect decisions as made based on the new window size
-  });
+  $scope.deploy = {bluemix : appacc.deployToBluemix(),
+    name : "LibertyProject",
+    url : undefined};
 
   $scope.toggleSelected = function(technology) {
     (technology.selected) ? appacc.removeTechnology(technology) : appacc.addTechnology(technology);
     $scope.selectedCount = appacc.getSelectedCount();
     $log.debug("Selected count " + $scope.selectedCount);
     technology.panel = technology.selected ? "panel-success" : "panel-info";
+    $scope.updateService();
   }
 
   $scope.toggleInfo = function(technology) {
@@ -62,7 +58,7 @@ angular.module('appAccelerator')
 
   //get a technology for specific ID
   $scope.getTechnology = function(id) {
-    $log.debug("AppAccelertor : looking for technology with ID : " + id)
+    $log.debug("AppAccelerator : looking for technology with ID : " + id)
     for(var i = 0; i < $scope.technologies.length; i++) {
       var row = $scope.technologies[i];
       for(var j = 0; j < row.length; j++) {
@@ -78,20 +74,14 @@ angular.module('appAccelerator')
   $scope.updateService = function() {
     appacc.deployToBluemix($scope.deploy.bluemix);
     $log.debug("DeployToBluemix has value:" + appacc.deployToBluemix());
-  }
-
-  //download the project skeleton
-  $scope.downloadProject = function() {
-    appacc.download($scope.technologies);
+    appacc.updateName($scope.deploy.name);
+    $scope.deploy.url = appacc.createDownloadUrl();
+    $log.debug("Download url set to:" + $scope.deploy.url);
+    
   }
 
   $scope.getNavClass = function() {
     return ($scope.selectedCount) ? "navEnabled" : "navDisabled";
-  }
-
-  $scope.getFinalClass = function() {
-    //if a technology has been selected or the window is too small put text at end of doc
-    return ($scope.selectedCount || currentWindowSize < 700) ? "finalText2" : "finalText";
   }
 
   //advance to the next state, will also move to the next step

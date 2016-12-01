@@ -24,9 +24,12 @@ angular.module('appAccelerator')
 
      var serviceURL = "/start/api/v1";
      var techURL = serviceURL + "/tech";  //where to get the technology types from
-     var dataURL = "/data?";              //tech=rest&deploy=local&name=libertyProject&workspace=642f3151-c9b6-4d5c-b185-4c29b8
+     var dataURL = serviceURL + "/data?";              //tech=rest&deploy=local&name=libertyProject&workspace=642f3151-c9b6-4d5c-b185-4c29b8
      var optionsURL = "/start/options";
      var bluemix = false;
+     //put the selected technologies here so that it can seen by multiple controllers
+     var selectedTechnologies = [];  //list of technologies currrently selected by the user
+     var projectName = undefined;
 
      var getTechnologies = function() {
         $log.debug("AppAccelerator : GET : available technology list");
@@ -78,55 +81,31 @@ angular.module('appAccelerator')
         }
         return q.promise;
       };
-
-      var download = function() {
-
-        var selected = undefined;   //the list of slected technologies
-        for(var tech in selectedTechnologies) {
-          if(tech.selected) {
-            if(selected) selected += "&";
-            selected += ("tech=" + tech.id);
+      
+      var createDownloadUrl = function() {
+          var url = undefined;
+          var selected = "";   //the list of selected technologies
+          for(var i = 0; i < selectedTechnologies.length; i++) {
+            var tech = selectedTechnologies[i];
+            if(tech.selected) {
+              if(selected != "") selected += "&";
+              selected += ("tech=" + tech.id);
+              $log.debug("selected has value:" + selected);
+            }
+            $log.debug("Technology %o is not selected so not adding.", tech);
           }
-        }
-        if(selected) {
-          //something has been selected, so proceed
-          var url = serviceURL + selected;
-          $log.debug("Downloading from " + url);
-        } else {
-          //something has gone wrong, nothing has been selected
-        }
-/*
-          // Selected technologies
-          var selectedTechnologies = $("#step1TechnologiesContainer .step1Technology.selected");
-          var url = serviceURL + "/data?tech=";
-          for(var i = 0; i < selectedTechnologies.size(); i++) {
-              url += selectedTechnologies.get(i).dataset.technologyid;
-              if(i + 1 < selectedTechnologies.size()) {
-                  url += "&tech=";
-              }
-          }
-
-          // Deploy location
-          var deployLocation = $("#step2DeployLocationsContainer .step2DeployLocation.selected").data("value");
-          url += "&deploy=" + deployLocation;
-
-          // Project name
-          var projectName = $("#step4NameInput").val();
-          if(projectName != "") {
-              url += "&name=" + projectName;
+          if(selected != "") {
+            //something has been selected, so proceed
+            var deployType = bluemix ? "&deploy=bluemix" : "&deploy=local";
+            url = dataURL + selected + deployType + "&name=" + projectName;
+            $log.debug("Constructed " + url);
+            
           } else {
-              url += "&name=" + "libertyProject";
+            //something has gone wrong, nothing has been selected
+            $log.debug("Nothing has been selected.");
           }
-      url += "&workspace=" + workspaceId;
-      if(isSwaggerCodeGenerated()){
-        url += "&techoptions=swagger:server";
+          return url;
       }
-          window.location.assign(url);
-          */
-      };
-
-      //put the selected technologies here so that it can seen by multiple controllers
-      var selectedTechnologies = [];  //list of technologies currrently selected by the user
 
       //how many technologies have currently been selected
       var getSelectedCount = function() {
@@ -134,9 +113,11 @@ angular.module('appAccelerator')
       }
 
       var addTechnology = function(technology) {
+        $log.debug("Adding technology:" + technology.id);
         technology.selected = true;
-        for(var existing in selectedTechnologies) {
-          if(existing.id == technology.id) {
+        $log.debug("technology.selected for technology " + technology.id + " has value:" + technology.selected);
+        for(var i = 0; i < selectedTechnologies.length; i++) {
+          if(selectedTechnologies[i].id == technology.id) {
             //already added, so ignore and return
           }
         }
@@ -170,15 +151,23 @@ angular.module('appAccelerator')
         }
         return bluemix;
       }
+      
+      var updateName = function(name) {
+        if (name != undefined) {
+          projectName = name;
+        }
+        return projectName;
+      }
 
       return {
         getTechnologies: getTechnologies,
-        download : download,
+        createDownloadUrl : createDownloadUrl,
         getTechOptions : getTechOptions,
         getSelectedCount : getSelectedCount,
         addTechnology : addTechnology,
         removeTechnology : removeTechnology,
         isSelected : isSelected,
-        deployToBluemix : deployToBluemix
+        deployToBluemix : deployToBluemix,
+        updateName : updateName
       };
   }]);
