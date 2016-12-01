@@ -12,11 +12,10 @@
             <input type="submit" value="Upload" id="step3SwaggerUploadButton" class="hidden step3SwaggerUploadButtonClass"/>
             <input type="button" id="step3SelectDifferentFileButton" class="hidden" value="Select different file" onclick="document.getElementById('step3SwaggerFileSelect').click();" />
           </div>
-        </div>
       </form>
     </div>
-  </div>
+    </div>
   <div ng-show="!allowConfig">
-    Additional Swagger configuration is only available when you also select the REST technology.
+    <i class="fa fa-exclamation-circle" aria-hidden="true"></i> Additional Swagger configuration is only available when you also select the REST technology.
   </div>
 </div>
