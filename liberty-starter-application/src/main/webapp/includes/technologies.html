@@ -27,32 +27,33 @@
             Liberty app accelerator service appears to be down at the moment.
             Please try again later.
         </div>
-
         <div ng-show="hasTechnologies">
           <div ng-repeat="techrow in technologies" class="row">
             <div ng-repeat="technology in techrow">
-              <div class="panel {{technology.panel}} col-sm-{{12 / rowCount}} col-md-{{12 / rowCount}}">
-                  <div class="panel-heading">
-                    <div class="row">
-                      <div class="col-md-8" ng-click="toggleSelected(technology)" role="button">{{technology.name}}</div>
-                      <div class="col-md-4 text-right">
-                        <span ng-click="toggleSelected(technology)" role="button">
-                          <i class="fa fa-square-o" aria-hidden="true" ng-show="!technology.selected"  data-toggle="tooltip" title="Click to add this technology to your project"></i>
-                          <i class="fa fa-check-square-o" aria-hidden="true" ng-show="technology.selected" data-toggle="tooltip" title="Click to remove this technology from your project"></i>
-                        </span>
-                        <span ng-click="toggleInfo(technology)" role="button">
-                          <i class="fa fa-info" aria-hidden="true" ng-show="!technology.info" data-toggle="tooltip" title="Click to see more information about this technology"></i>
-                          <i class="fa fa-info-circle" aria-hidden="true" ng-show="technology.info" data-toggle="tooltip" title="Click to hide the information"></i>
-                        </span>
-                        <span ng-click="showOptions(technology)" role="button" ng-show="technology.options">
-                          <i class="fa fa-cog" aria-hidden="true" data-toggle="tooltip" title="Click to configure additional options for this technology"></i>
-                        </span>
+              <div class="col-sm-{{12 / rowCount}} col-md-{{12 / rowCount}}">
+                  <div class="panel {{technology.panel}}">
+                      <div class="panel-heading">
+                          <div class="row">
+                              <div class="col-md-8" ng-click="toggleSelected(technology)" role="button">{{technology.name}}</div>
+                              <div class="col-md-4 text-right">
+                                  <span ng-click="toggleSelected(technology)" role="button">
+                                      <i class="fa fa-square-o" aria-hidden="true" ng-show="!technology.selected"  data-toggle="tooltip" title="Click to add this technology to your project"></i>
+                                      <i class="fa fa-check-square-o" aria-hidden="true" ng-show="technology.selected" data-toggle="tooltip" title="Click to remove this technology from your project"></i>
+                                  </span>
+                                  <span ng-click="toggleInfo(technology)" role="button">
+                                      <i class="fa fa-info" aria-hidden="true" ng-show="!technology.info" data-toggle="tooltip" title="Click to see more information about this technology"></i>
+                                      <i class="fa fa-info-circle" aria-hidden="true" ng-show="technology.info" data-toggle="tooltip" title="Click to hide the information"></i>
+                                  </span>
+                                  <span ng-click="showOptions(technology)" role="button" ng-show="technology.options">
+                                      <i class="fa fa-cog" aria-hidden="true" data-toggle="tooltip" title="Click to configure additional options for this technology"></i>
+                                  </span>
+                              </div>
+                          </div>
                       </div>
-                    </div>
-                  </div>
-                  <div class="panel-body" ng-show="technology.info">{{technology.description}}</div>
-                  <div class="panel-body" ng-show="technology.displayOptions">
-                    <techoptions id="{{technology.id}}"></techoptions>
+                      <div class="panel-body" ng-show="technology.info">{{technology.description}}</div>
+                      <div class="panel-body" ng-show="technology.displayOptions">
+                          <techoptions id="{{technology.id}}"></techoptions>
+                      </div>
                   </div>
             </div>
           </div>
