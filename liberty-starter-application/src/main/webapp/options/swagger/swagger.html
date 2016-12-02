@@ -5,13 +5,11 @@
     </div>
     <div id="step3SwaggerLocalUpload" ng-show="useSwaggerDoc">
       <form id="step3SwaggerFileForm" action="#" method="POST" enctype="multipart/form-data">
-        <div id="step3SwaggerFileState" class="hidden"><span class="step3SwaggerFileStatus"> </span></div>
-        <input type="file" id="step3SwaggerFileSelect" accept=".json,.yaml" style="display: none;"/>
-        <div id="step3SwaggerFileButtons">
-          <input type="button" id="step3SelectFileButton" value="Select file" onclick="document.getElementById('step3SwaggerFileSelect').click();" />
-          <input type="submit" value="Upload" id="step3SwaggerUploadButton" class="hidden step3SwaggerUploadButtonClass"/>
-          <input type="button" id="step3SelectDifferentFileButton" class="hidden" value="Select different file" onclick="document.getElementById('step3SwaggerFileSelect').click();" />
-        </div>
+        <div id="step3SwaggerFileState" ng-show="fileStatus"><span class="step3SwaggerFileStatus">{{fileStatus}} </span></div>
+        <input type="file" id="step3SwaggerFileSelect" accept=".json,.yaml" ng-show="false"/>
+        <a onclick="document.getElementById('step3SwaggerFileSelect').click();" class="btn btn-primary" role="button" ng-show="!fileStatus">Select file</a>
+        <a ng-click="upload()" class="btn btn-primary" id="step3SwaggerUploadButton" ng-show="fileStatus">Upload</a>
+        <a onclick="document.getElementById('step3SwaggerFileSelect').click();" class="btn btn-primary" role="button" ng-show="fileStatus">Select different file</a>
       </form>
     </div>
     </div>

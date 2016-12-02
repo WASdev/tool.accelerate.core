@@ -26,10 +26,43 @@ angular.module('appAccelerator')
      var techURL = serviceURL + "/tech";  //where to get the technology types from
      var dataURL = serviceURL + "/data?";              //tech=rest&deploy=local&name=libertyProject&workspace=642f3151-c9b6-4d5c-b185-4c29b8
      var optionsURL = "/start/options";
+     var workspaceURL = serviceURL + "/workspace";
+
      var bluemix = false;
      //put the selected technologies here so that it can seen by multiple controllers
      var selectedTechnologies = [];  //list of technologies currrently selected by the user
      var projectName = undefined;
+     var workspaceID = undefined;
+
+     var retrieveWorkspaceId = function() {
+       $log.debug("AppAccelerator : GET : workspace ID");
+
+       var q = $q.defer();
+       if(workspaceID) {
+         //already have ID from server
+         q.resolve(workspaceID);
+       } else {
+         //need to get ID from server
+         $http({
+           url: workspaceURL,
+           method: 'GET'
+           }).then(function(response) {
+             // 200: technologies discovered
+             $log.debug(response.status + ' ' + response.statusText + " %o - OK", response.data);
+             var data = [];
+             if ( response.status === 200 ) {
+               workspaceID = response.data;
+             }
+             q.resolve(workspaceID);
+           }, function(response) {
+             $log.debug(response.status + ' ' + response.statusText + " %o - FAILED", response.data);
+             // TODO: Alert -- problem occurred
+             // return empty set for decent experience, or could insert some default values here ...
+             q.reject();
+           });
+       }
+       return q.promise;
+     };
 
      var getTechnologies = function() {
         $log.debug("AppAccelerator : GET : available technology list");
@@ -81,7 +114,7 @@ angular.module('appAccelerator')
         }
         return q.promise;
       };
-      
+
       var createDownloadUrl = function() {
           var url = undefined;
           var selected = "";   //the list of selected technologies
@@ -97,9 +130,14 @@ angular.module('appAccelerator')
           if(selected != "") {
             //something has been selected, so proceed
             var deployType = bluemix ? "&deploy=bluemix" : "&deploy=local";
-            url = dataURL + selected + deployType + "&name=" + projectName;
+            url = dataURL + selected + deployType + "&name=" + projectName + "&workspace=";
+            if(workspaceID) {
+              url += workspaceID;
+            } else {
+              url += "unknown";
+            }
             $log.debug("Constructed " + url);
-            
+
           } else {
             //something has gone wrong, nothing has been selected
             $log.debug("Nothing has been selected.");
@@ -144,26 +182,26 @@ angular.module('appAccelerator')
         }
         return false;
       }
-      
+
       var deployToBluemix = function(bool) {
         if (bool != undefined) {
           bluemix = bool;
         }
         return bluemix;
       }
-      
+
       var updateName = function(name) {
         if (name != undefined) {
           projectName = name;
         }
         return projectName;
       }
-      
+
       var callbacks = [];
       var addListener = function(callback) {
         callbacks.push(callback);
       }
-      
+
       var notifyListeners = function() {
         $log.debug("Notify listeners");
         for(var i = 0; i < callbacks.length; i++) {
@@ -182,6 +220,7 @@ angular.module('appAccelerator')
         deployToBluemix : deployToBluemix,
         updateName : updateName,
         notifyListeners : notifyListeners,
-        addListener : addListener
+        addListener : addListener,
+        retrieveWorkspaceId : retrieveWorkspaceId
       };
   }]);
