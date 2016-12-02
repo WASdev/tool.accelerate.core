@@ -34,7 +34,7 @@ angular.module('appAccelerator')
   $scope.deploy = {bluemix : appacc.deployToBluemix(),
     name : "LibertyProject",
     url : undefined};
-  
+
   $scope.sendGAEvent = function(p1, p2, p3) {
 	  ga.report('send', 'event', p1, p2, p3);
   }
@@ -49,12 +49,14 @@ angular.module('appAccelerator')
     $scope.updateService();
   }
 
-  $scope.toggleInfo = function(technology) {
+  $scope.toggleInfo = function(technology, $event) {
+    $event.stopPropagation();
     technology.info = !technology.info; //toggle selection
     technology.displayOptions = false;
   }
 
-  $scope.showOptions = function(technology) {
+  $scope.showOptions = function(technology, $event) {
+    $event.stopPropagation();
     technology.info = false;
     technology.displayOptions = !technology.displayOptions;
   }
@@ -73,7 +75,7 @@ angular.module('appAccelerator')
     }
     return undefined;
   }
-  
+
   $scope.updateService = function() {
     appacc.deployToBluemix($scope.deploy.bluemix);
     $log.debug("DeployToBluemix has value:" + appacc.deployToBluemix());

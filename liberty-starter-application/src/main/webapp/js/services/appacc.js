@@ -138,6 +138,9 @@ angular.module('appAccelerator')
             } else {
               url += "unknown";
             }
+            for(var i = 0; i < techOptions.length; i++) {
+              url += "&techoptions=" + techOptions[i];
+            }
             $log.debug("Constructed " + url);
 
           } else {
@@ -165,6 +168,7 @@ angular.module('appAccelerator')
       }
 
       var removeTechnology = function(technology) {
+        $log.debug("Removing technology:" + technology.id);
         technology.selected = false;
         for(var i = 0; i < selectedTechnologies.length; i++) {
           if(selectedTechnologies[i].id == technology.id) {
@@ -211,6 +215,29 @@ angular.module('appAccelerator')
         }
       }
 
+      var techOptions = [];
+
+      var addTechOption = function(option) {
+        $log.debug("Adding tech option :" + option);
+        for(var i = 0; i < techOptions.length; i++) {
+          if(techOptions[i] == option) {
+            //already added, so ignore and return
+          }
+        }
+        techOptions.push(option);
+      }
+
+      var removeTechOption = function(option) {
+        $log.debug("Removing tech option : " + option);
+        for(var i = 0; i < techOptions.length; i++) {
+          if(techOptions[i] == option) {
+            //id's match so remove from the list
+            techOptions.splice(i, 1);
+            return;
+          }
+        }
+      }
+
       return {
         getTechnologies: getTechnologies,
         createDownloadUrl : createDownloadUrl,
@@ -218,6 +245,8 @@ angular.module('appAccelerator')
         getSelectedCount : getSelectedCount,
         addTechnology : addTechnology,
         removeTechnology : removeTechnology,
+        addTechOption : addTechOption,
+        removeTechOption : removeTechOption,
         isSelected : isSelected,
         deployToBluemix : deployToBluemix,
         updateName : updateName,

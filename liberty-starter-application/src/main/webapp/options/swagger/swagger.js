@@ -29,6 +29,7 @@ angular.module('appAccelerator')
   var restId = "rest";
   var swaggerFileSelect = undefined;
   var file = undefined;
+  var techOptions = "swagger:server";
 
   appacc.addListener(function() {
     $log.debug("Swagger : checking service state.");
@@ -70,6 +71,7 @@ angular.module('appAccelerator')
         data: formData
         }).then(function(response) {
           $scope.fileStatus = "Successfully generated server code from " + file.name;
+          appacc.addTechOption(techOptions);
         }, function(response) {
           $scope.fileStatus = "An error occurred while generating server code from " + file.name + " : " + response.data;
         });
