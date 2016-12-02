@@ -16,10 +16,12 @@
 
  //service for communicating with the app accelerator
 
+'use strict';
+
 angular.module('appAccelerator')
    .factory('appacc',
     [      '$log','$q','$http', '$timeout',
-  function ($log,  $q,  $http, $timeout) {
+  function ($log,  $q,  $http,   $timeout) {
      $log.debug("Initialising AppAccelerator service");
 
      var serviceURL = "/start/api/v1";

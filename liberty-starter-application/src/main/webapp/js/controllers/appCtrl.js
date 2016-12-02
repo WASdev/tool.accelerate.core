@@ -17,13 +17,10 @@
 'use strict';
 
 angular.module('appAccelerator')
-.controller('appCtrl', ['$scope', '$log', '$timeout', 'appacc', '$window',
-                function($scope,   $log,   $timeout,   appacc,   $window) {
+.controller('appCtrl', ['$scope', '$log', '$timeout', 'appacc', '$window', 'ga',
+                function($scope,   $log,   $timeout,   appacc,   $window,   ga) {
 
   $log.debug("AppAccelerator : using controller 'appCtrl'");
-  //only turn on analytics for live site
-  var googleAnalytics = window.location.hostname == 'liberty-starter.wasdev.developer.ibm.com';
-  $log.debug("Google Analytics is currently set to  : " + googleAnalytics);
 
   $scope.rowCount = 4;    //used by angular to layout rows correctly
   $scope.hasTechnologies = false;
@@ -37,8 +34,14 @@ angular.module('appAccelerator')
   $scope.deploy = {bluemix : appacc.deployToBluemix(),
     name : "LibertyProject",
     url : undefined};
+  
+  $scope.sendGAEvent = function(p1, p2, p3) {
+	  ga.report('send', 'event', p1, p2, p3);
+  }
 
   $scope.toggleSelected = function(technology) {
+    var googleEventType = (technology.selected) ? "de-selected" : "selected";
+    $scope.sendGAEvent('Technology', googleEventType, technology.id);
     (technology.selected) ? appacc.removeTechnology(technology) : appacc.addTechnology(technology);
     $scope.selectedCount = appacc.getSelectedCount();
     $log.debug("Selected count " + $scope.selectedCount);
