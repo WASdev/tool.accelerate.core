@@ -42,7 +42,7 @@ angular.module('appAccelerator')
     (technology.selected) ? appacc.removeTechnology(technology) : appacc.addTechnology(technology);
     $scope.selectedCount = appacc.getSelectedCount();
     $log.debug("Selected count " + $scope.selectedCount);
-    technology.panel = technology.selected ? "panel-success" : "panel-info";
+    technology.panel = technology.selected ? "panel-custom" : "panel-primary";
     $scope.updateService();
   }
 
@@ -128,7 +128,7 @@ angular.module('appAccelerator')
         technology.selected = false;        //flag to indicate if user has selected this technology
         technology.info = false;            //do not show the information for this technology
         technology.displayOptions = false;  //dpn't show any options
-        technology.panel = "panel-info";
+        technology.panel = "panel-primary";
         row.push(technology);
       }
       if(row.length) {

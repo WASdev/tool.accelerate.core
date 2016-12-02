@@ -28,10 +28,20 @@
 
 .stepHeading {
     font-size: 18px;
+    margin-bottom: 10px;
 }
 
 .optionalHeading {
     margin-top: 36px;
+}
+
+.panel-custom {
+    border-color: #F2CC12;
+}
+
+.panel-custom .panel-heading {
+    background-color:#F2CC12;
+    color: #000000;
 }
 
 .options {
@@ -54,7 +64,7 @@
 }
 
 .disclaimer {
-    margin-top: 20px;
+    margin-top: 10px;
     margin-left: auto;
     margin-right: auto;
     font-size: 12px;
