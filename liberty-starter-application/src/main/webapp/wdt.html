@@ -25,7 +25,6 @@
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
         <link href="css/wdt.css" rel="stylesheet">
-        <link href="css/style.css" rel="stylesheet">
         <link href="css/appacc.css" rel="stylesheet">
     </head>
     <body>
@@ -76,59 +75,10 @@
           </div>
       </div>
 
-
-      <div>
-          <div id="helpUsToHelpYou">
-              <div id="bannerImgFooter" class="banner-img layered-bg"></div>
-              <div id="bannerFadeFooter" class="banner-fade layered-bg"></div>
-              <div id="helpUsToHelpYouContent">
-                  <div id="helpUsToHelpYouTitle">Help us to help you!</div>
-                  <div id="helpUsToHelpYouDescription">
-                      We will be adding new technologies and capabilities to this page
-                      over time. Get in touch To give us feedback or tell us which
-                      technology types you would like to see please raise an issue on
-                      our <a href="https://github.com/WASdev/tool.accelerate.core/issues" target="_blank"
-                      ng-click="sendGAEvent('Outbound Link', 'GitHub', 'tool.accelerate.core/issues')" title="app accelerator Github">GitHub page</a>.
-                  </div>
-                  <div class="linksForMoreInformation">
-                      <p>Links for more information:</p>
-                      <ul>
-                          <li><a
-                              href="https://developer.ibm.com/wasdev/docs/microservices/?src=accelerator"
-                              target="WASdev" title="Link to WASdev Microservices page"
-                              ng-click="sendGAEvent('Outbound Link', 'WASdev', 'Microservices')">WASdev
-                                  Microservices page</a></li>
-                          <li><a
-                              href="https://developer.ibm.com/wasdev/docs/category/getting-started/?src=accelerator"
-                              target="WASdev" ng-click="sendGAEvent('Outbound Link', 'WASdev', 'Tutorial')"
-                              title="Link to WASdev Tutorial page">WASdev Tutorial page</a></li>
-                          <li><a
-                              href="https://github.com/WASdev/tool.accelerate.core/"
-                              target="_blank" ng-click="sendGAEvent('Outbound Link', 'GitHub', 'tool.accelerate.core')"
-                              title="Link to accelerator GitHub repository">GitHub repository</a></li>
-                      </ul>
-                  </div>
-              </div>
-          </div>
-
-          <div class="row disclaimer">
-              <div  class="col-md-4">
-                <span id="poweredByLiberty">Powered by Liberty, runs on
-                  Bluemix.</span><br/>
-                  <img class="img-responsive" src="img/logos.png" alt="Liberty and Bluemix">
-              </div>
-              <div class="col-md-8">
-                  <p>Copyright (c) 2015 IBM Corp.Licensed under the Apache
-                      License, Version 2.0 (the "License"); you may not use this file
-                      except in compliance with the License. You may obtain a copy of
-                      the License at www.apache.org/licenses/LICENSE-2.0.</p>
-                  <p>Unless required by applicable law or agreed to in writing,
-                      software distributed under the License is distributed on an "AS
-                      IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
-                      express or implied. See the License for the specific language
-                      governing permissions and limitations under the License.</p>
-              </div>
-          </div>
-      </div>
+      <div ng-include="'includes/footer.html'"></div>
+      <script type="text/javascript" src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
+      <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+      <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular.min.js"></script>
+      <script type="text/javascript" src="js/app.js"></script>
     </body>
 </html>

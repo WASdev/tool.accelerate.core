@@ -13,6 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+ 
+@font-face {
+    font-family: "HelvNeueRoman";
+    src: url("../fonts/HelvNeueRomanforIBM.otf");
+}
+
+@font-face {
+    font-family: "HelvNeueBold";
+    src: url("../fonts/HelvNeueBoldforIBM.otf");
+}
+
+@font-face {
+    font-family: "HelvNeueLight";
+    src: url("../fonts/HelvNeueLightforIBM.otf");
+}
 
  body {
     font-family: "HelvNeueRoman";
@@ -20,10 +35,115 @@
     color: #152935;
 }
 
+#banner {
+    position: relative;
+    height: 236px;
+    width: 1280px;
+    margin-left: auto;
+    margin-right: auto;
+    max-height: 330px;
+    overflow: hidden;
+}
+
+#bannerLine1 {
+    font-family: "HelvNeueLight";
+    color: #BCDCFF;
+    font-size: 41px;
+    padding-top: 50px;
+    padding-left: 88px;
+    position: relative;
+    z-index: 8;
+}
+
+#bannerLine1 span {
+    color: #fff;
+    font-family: "HelvNeueBold";
+}
+
+#bannerLine2 {
+    font-family: "HelvNeueLight";
+    font-size: 26px;
+    line-height: 33px;
+    color: #fff;
+    padding-top: 10px;
+    padding-left: 88px;
+    position: relative;
+    z-index: 8;
+    width: 550px;
+}
+
+#bannerTriangle {
+    -webkit-box-shadow: 0px 0px 5px 2px rgba(102,102,102,1);
+    -moz-box-shadow: 0px 0px 5px 2px rgba(102,102,102,1);
+    box-shadow: 0px 0px 5px 2px rgba(102,102,102,1);
+    background: #fff;
+    bottom: -117px;
+    position: absolute;
+    left: 0px;
+    transform: rotate(-3.6deg);
+    z-index: 8;
+    width: 104%;
+    height: 160px;
+}
+
+.layered-bg {
+    height: inherit;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+}
+
+.banner-img {
+    background-image: url("../img/wavelight_unsplash.jpg");
+    background-position: 57.3% 50%;
+    z-index: 3;
+    background-size: 4800px;
+    background-repeat: no-repeat;
+}
+
+.banner-fade {
+    background: #4178BE;
+    opacity: 0.9;
+    z-index: 5;
+}
+
+.banner-footer {
+    margin-top: 63px;
+    height: 195px;
+    position: relative;
+}
+
+.bannerContent {
+    position: relative;
+    width: 1100px;
+    margin-left: auto;
+    margin-right: auto;
+    z-index: 10;
+    color: #ffffff;
+    padding-top: 36px
+}
+
 .blurb {
     font-family: "HelvNeueLight";
     font-size: 26px;
     margin-top: 36px;
+}
+
+.stepBar {
+    margin-top: 36px;
+    height: 5px;
+    width: 87px;
+    background-color: #F2CC12;
+}
+
+.stepNumber {
+    margin-top: 12px;
+    font-family: "HelvNeueBold";
+    font-size: 16px;
+    color: #152935;
+    width: 87px;
+    margin-bottom: 18px;
 }
 
 .stepHeading {
@@ -81,9 +201,22 @@
     font-size: 16px;
 }
 
+.bannerContent .instruction {
+    font-size: 18px;
+}
+
+.bannerContent .instruction a{
+    color: #ffffff;
+    font-family: "HelvNeueBold";
+}
+
 .instructionHeading {
     font-family: "HelvNeueBold";
     font-size: 16px;
+}
+
+.bannerContent .instructionHeading {
+    font-size: 18px;
 }
 
 .instructionRun {
