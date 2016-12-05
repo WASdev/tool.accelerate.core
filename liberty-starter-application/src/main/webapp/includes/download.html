@@ -7,8 +7,8 @@
                 <div class="stepHeading">Configure your project and download as a ZIP file.</div>
                 <div class="disclaimer">By clicking Download you agree to the <a href="https://public.dhe.ibm.com/ibmdl/export/pub/software/websphere/wasdev/license/base_ilan/ilan/16.0.0.3/lafiles/en.html"
                   target="LibertyLicense">Liberty licenses.</a></div>
-                <div ng-show="deploy.name"><a href="{{deploy.url}}" target="#" class="btn btn-primary" role="button">Accept and Download</a></div>
-                <div ng-show="!deploy.name"><a href="{{deploy.url}}" class="btn btn-primary" role="button" ng-disabled="true">Choose a file name</a></div>
+                <div ng-show="deploy.name"><a ng-href="{{createDownloadUrl()}}" target="#" class="btn btn-primary" role="button">Accept and Download</a></div>
+                <div ng-show="!deploy.name"><a ng-href="{{createDownloadUrl()}}" class="btn btn-primary" role="button" ng-disabled="true">Choose a file name</a></div>
                 <div>
                     <h4 class="optionalHeading">Optional configuration:</h4>
                 </div>
@@ -25,116 +25,55 @@
                 </div>
             </div>
             <div class="col-md-6 col-sm-6">
-                <div id="step4Local" ng-show="!deploy.bluemix">
-                    <p id="step4LocalRightBlockItem1">
-                            Once the download is complete, <span
-                            id="step4LocalRightBlockItem1RightText">locate your
-                            project and unzip it.</span>
-                    </p>
-                    <div id="step4LocalRightBlockItem2">
-                        <div id="step4LocalRightBlockItem2Line1">Your application
-                            code can be found in:</div>
-                        <div id="step4LocalRightBlockItem2Line2">src/main/java</div>
-                    </div>
-                    <div id="step4LocalRightBlockItem3">
-                        <div id="step4LocalRightBlockItem3Line1">On the <span class="step4NameOfProject">LibertyProject</span>
-                        pom.xml run:</div>
-                        <span id="step4LocalRightBlockItem3Line2">mvn install liberty:run-server</span>
-                    </div>
-                    <div id="step4LocalRightBlockItem4">
-                        <div id="step4LocalRightBlockItem4Line1">Access your
-                            application at:</div>
-                        <div id="step4LocalRightBlockItem4Line2"><a href="http://localhost:9080/myLibertyApp/"
-                                title="Link to access your application." target="_blank"
-                                onclick="trackOutboundLink('http://localhost:9080/myLibertyApp/', 'localDeploy');">http://localhost:9080/myLibertyApp/</a></div>
-                        <div id="step4LocalRightBlockItem4Line3">Your Liberty
-                            server can be found in:</div>
-                        <div id="step4LocalRightBlockItem4Line4">target/wlp/usr/servers/LibertyProjectServer</div>
-                    </div>
+              <p class="instructionHeading">Once the download is complete, locate your project and unzip it.</p>
+              <div class="panel panel-instruction">
+                <div class="panel-body">
+                  <div ng-show="!deploy.bluemix">
+                    <p class="instruction">Run your application with: </p>
+                    <p class="instructionRun">mvn install liberty:run-server</p>
+                  </div>
+                  <div ng-show="deploy.bluemix">
+                    <p class="instruction">Deploy to Bluemix with: </p>
+                      <p class="instructionRun">mvn install -Dcf.org=<span
+                              class="purpleCode">[your email address]</span> -Dcf.username=<span
+                              class="purpleCode">[your username]</span> -Dcf.password=<span
+                              class="purpleCode">[your password]</span></p>
+                  </div>
                 </div>
-                <div id="step4Bluemix" ng-show="deploy.bluemix">
-                    <p id="step4BluemixRightBlockItem1">
-                        Once the download is complete, <span
-                            id="step4LocalRightBlockItem1RightText">locate your
-                            project and unzip it.</span>
-                    </p>
-                    <div id="step4BluemixRightBlockItem2">
-                            <div id="step4BluemixRightBlockItem2Line1">Your application
-                            code can be found in:</div>
-                        <div id="step4BluemixRightBlockItem2Line2">src/main/java</div>
-                    </div>
-                    <div id="step4BluemixRightBlockItem3">
-                        <div id="step4BluemixRightBlockItem3Line1">
-                            On the <span class="step4NameOfProject">LibertyProject</span>
-                            pom.xml run:
-                        </div>
-                        <div id="step4BluemixRightBlockItem3Line2">
-                        mvn install -Dcf.org=<span
-                                class="purpleCode">[your email address]</span> -Dcf.username=<span
-                                class="purpleCode">[your username]</span> -Dcf.password=<span
-                                class="purpleCode">[your password]</span>
-                        </div>
-                    </div>
-                    <div id="step4BluemixRightBlockItem4">
-                        <div id="step4BluemixRightBlockItem4Line1">Access your application at:</div>
-                        <div id="step4BluemixRightBlockItem4Line2"><span class="step4NameOfProject">LibertyProject</span>.eu-gb.mybluemix.net/myLibertyApp/</div>
-                        <div id="step4BluemixRightBlockItem4Line3">To manage your deployed application visit your dashboard on Bluemix.</div>
-                    </div>
+              </div>
+              <div class="panel panel-instruction">
+                <div class="panel-body">
+                  <p class="instruction">Access your application at: </p>
+                  <div ng-show="!deploy.bluemix">
+                    <p class="instructionRun">http://localhost:9080/myLibertyApp/</p>
+                  </div>
+                  <div ng-show="deploy.bluemix">
+                    <p class="instructionRun">http://{{deploy.name}}.eu-gb.mybluemix.net/myLibertyApp/</p>
+                    <p class="instruction">To manage your deployed application visit your dashboard on Bluemix.</p>
+                  </div>
                 </div>
+              </div>
+              <div class="panel panel-instruction">
+                <div class="panel-body">
+                  <p class="instruction">Your application code can be found in: </p>
+                  <p class="instructionRun">src/main/java</p>
+                  <div ng-show="!deploy.bluemix">
+                    <p class="instruction">Your Liberty server can be found in: </p>
+                    <p class="instructionRun">target/wlp/usr/servers/LibertyProjectServer</p>
+                  </div>
+                  <p class="instruction">Optionally, <a href="wdt.html" targe="_blank">import your project</a> into WebSphere Developer Tool</p>
+                </div>
+              </div>
+
+              <!--
+              <a href="http://localhost:9080/myLibertyApp/"
+                      title="Link to access your application." target="_blank"
+                      onclick="trackOutboundLink('http://localhost:9080/myLibertyApp/', 'localDeploy');">http://localhost:9080/myLibertyApp/</a>
+              -->
+
             </div>
         </div>
     </div>
 
-    <div id="step4OptionalWDT">
-        <div id="step4OptionalWDTTrigger">
-            <a href="#" title="Link to Open WDT Content Instructions"><span>Optional</span>,
-                import downloaded Maven into the WebSphere Developer Tool</a>
-            <div class="wdtContentActive wdtArrowPlacement"></div>
-            <div class="wdtContentDeactive wdtArrowPlacement hidden"></div>
-        </div>
-        <div id="step4OptionalWDTContent" class="hidden">
-            <ul id="WDTSteps">
-                <li id="WDTStep1" class="WDTStep">
-                    <div class="WDTStepImage">
-                        <!-- <img src="img/wdt-step1.png" /> -->
-                    </div>
-                    <div class="stepNumber">Step 1</div>
-                    <p>Go to the WebSphere Development Tool and Import "Existing
-                        Maven Projects".</p>
-                </li>
-                <li id="WDTStep2" class="WDTStep">
-                    <div class="WDTStepImage">
-                        <!-- <img src="img/wdt-step2.png" /> -->
-                    </div>
-                    <div class="stepNumber">Step 2</div>
-                    <p>Select the Maven projects you want to import.</p>
-                </li>
-                <li id="WDTStep3" class="WDTStep">
-                    <div class="WDTStepImage">
-                        <!-- <img src="img/wdt-step3.png" /> -->
-                    </div>
-                    <div class="stepNumber">Step 3</div>
-                    <p>Once the project is imported, make changes to the custom
-                        code and build your app.</p>
-                </li>
-                <li id="WDTStep4" class="WDTStep">
-                    <div class="WDTStepImage">
-                        <!-- <img src="img/wdt-step4.png" /> -->
-                    </div>
-                    <div class="stepNumber">Step 4</div>
-                    <p>Pickup code and run either: Locally or using Bluemix.</p>
-                </li>
-                <li id="WDTStep5" class="WDTStep">
-                    <div class="stepNumber">Step 5</div>
-                    <p>
-                        Lastly, navigate to this URL on your browser to access your app
-                        - <a href="http://localhost:9080/myLibertyApp/"
-                            title="Link to access your application." target="_blank"
-                            onclick="trackOutboundLink('http://localhost:9080/myLibertyApp/', 'WDT');">http://localhost:9080/myLibertyApp/</a>.
-                    </p>
-                </li>
 
-            </ul>
-        </div>
-    </div>
   </div>

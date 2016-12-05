@@ -75,3 +75,38 @@
     font-size: 12px;
     color: #9B9B9B;
 }
+
+.instruction {
+    font-family: "HelvNeueRoman";
+    font-size: 16px;
+}
+
+.instructionHeading {
+    font-family: "HelvNeueBold";
+    font-size: 16px;
+}
+
+.instructionRun {
+    background-color: #282828;
+    color: #BFE6FF;
+    font-family: Courier;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.panel-instruction {
+    background-color: #F0F0F0;
+    border-color: #F0F0F0;
+}
+
+.purpleCode {
+    color: rgb(246, 144, 203);
+}
+
+.alert-primary {
+    background-color: #337ab7;
+    border-color: #337ab7;
+    color: #ffffff;
+}

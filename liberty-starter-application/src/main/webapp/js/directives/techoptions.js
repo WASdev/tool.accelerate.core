@@ -27,11 +27,11 @@ angular.module('appAccelerator')
     link: function(scope, elem, attr, appCtrl) {
       var tech = scope.getTechnology(attr.id);
       if(tech) {
-        $log.debug("AppAccelertor : processing technology options for : %o ", tech);
+        $log.debug("techoptions : processing technology options for : %o ", tech);
         appacc.getTechOptions(tech).then(function(response) {
           //found the template
           if(response) {
-            $log.debug("AppAccelerator : template response : %o",response);
+            $log.debug("techoptions : template response : %o",response);
             var compiled = $compile(response)(scope);
             elem.append(compiled);
           }
@@ -41,7 +41,7 @@ angular.module('appAccelerator')
           $scope.hasTechnologies = true;
         });
       } else {
-        $log.error("AppAccelertor : unable to find technology options for : " + attr.id);
+        $log.error("techoptions : unable to find technology options for : " + attr.id);
       }
     }
   };

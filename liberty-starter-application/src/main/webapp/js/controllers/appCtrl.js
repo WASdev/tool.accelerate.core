@@ -32,8 +32,12 @@ angular.module('appAccelerator')
   $scope.maxSteps = 2;
   $scope.selectedCount = 0;
   $scope.deploy = {bluemix : appacc.deployToBluemix(),
-    name : "LibertyProject",
-    url : undefined};
+    name : "LibertyProject"
+  };
+
+  $scope.createDownloadUrl = function() {
+    return appacc.createDownloadUrl();
+  }
 
   $scope.sendGAEvent = function(p1, p2, p3) {
 	  ga.report('send', 'event', p1, p2, p3);
@@ -44,7 +48,7 @@ angular.module('appAccelerator')
     $scope.sendGAEvent('Technology', googleEventType, technology.id);
     (technology.selected) ? appacc.removeTechnology(technology) : appacc.addTechnology(technology);
     $scope.selectedCount = appacc.getSelectedCount();
-    $log.debug("Selected count " + $scope.selectedCount);
+    $log.debug("AppAccelerator : Selected count " + $scope.selectedCount);
     technology.panel = technology.selected ? "panel-custom" : "panel-primary";
     $scope.updateService();
   }
@@ -78,10 +82,9 @@ angular.module('appAccelerator')
 
   $scope.updateService = function() {
     appacc.deployToBluemix($scope.deploy.bluemix);
-    $log.debug("DeployToBluemix has value:" + appacc.deployToBluemix());
+    $log.debug("AppAccelerator : DeployToBluemix has value:" + appacc.deployToBluemix());
     appacc.updateName($scope.deploy.name);
-    $scope.deploy.url = appacc.createDownloadUrl();
-    $log.debug("Download url set to:" + $scope.deploy.url);
+    $log.debug("AppAccelerator : Download url set to:" + appacc.createDownloadUrl());
     appacc.notifyListeners();
   }
 

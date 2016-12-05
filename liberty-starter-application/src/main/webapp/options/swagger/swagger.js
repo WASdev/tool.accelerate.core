@@ -26,14 +26,20 @@ angular.module('appAccelerator')
   $scope.allowConfig = false;
   $scope.fileStatus = undefined;
 
+  var ctrl = this;    //used for scoping in promises
   var restId = "rest";
+  var swaggerId = "swagger";
   var swaggerFileSelect = undefined;
   var file = undefined;
   var techOptions = "swagger:server";
+  var fileUploadedOK = false;
 
   appacc.addListener(function() {
     $log.debug("Swagger : checking service state.");
     $scope.allowConfig = appacc.isSelected(restId);
+    if(ctrl.fileUploadedOK) {
+      (appacc.isSelected(swaggerId) && appacc.isSelected(restId)) ? appacc.addTechOption(techOptions) : appacc.removeTechOption(techOptions);
+    }
     $log.debug("Swagger : allowConfig set to " + $scope.allowConfig);
     init();
   });
@@ -71,6 +77,7 @@ angular.module('appAccelerator')
         data: formData
         }).then(function(response) {
           $scope.fileStatus = "Successfully generated server code from " + file.name;
+          ctrl.fileUploadedOK = true;
           appacc.addTechOption(techOptions);
         }, function(response) {
           $scope.fileStatus = "An error occurred while generating server code from " + file.name + " : " + response.data;

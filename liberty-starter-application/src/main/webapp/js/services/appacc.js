@@ -22,7 +22,7 @@ angular.module('appAccelerator')
    .factory('appacc',
     [      '$log','$q','$http', '$timeout',
   function ($log,  $q,  $http,   $timeout) {
-     $log.debug("Initialising AppAccelerator service");
+     $log.debug("AppAcc Svc : Initialising AppAccelerator service");
 
      var serviceURL = "/start/api/v1";
      var techURL = serviceURL + "/tech";  //where to get the technology types from
@@ -37,7 +37,7 @@ angular.module('appAccelerator')
      var workspaceID = undefined;
 
      var retrieveWorkspaceId = function() {
-       $log.debug("AppAccelerator : GET : workspace ID");
+       $log.debug("AppAcc Svc : GET : workspace ID");
 
        var q = $q.defer();
        if(workspaceID) {
@@ -50,14 +50,14 @@ angular.module('appAccelerator')
            method: 'GET'
            }).then(function(response) {
              // 200: technologies discovered
-             $log.debug(response.status + ' ' + response.statusText + " %o - OK", response.data);
+             $log.debug("AppAcc Svc : " + response.status + ' ' + response.statusText + " %o - OK", response.data);
              var data = [];
              if ( response.status === 200 ) {
                workspaceID = response.data;
              }
              q.resolve(workspaceID);
            }, function(response) {
-             $log.debug(response.status + ' ' + response.statusText + " %o - FAILED", response.data);
+             $log.debug("AppAcc Svc : " + response.status + ' ' + response.statusText + " %o - FAILED", response.data);
              // TODO: Alert -- problem occurred
              // return empty set for decent experience, or could insert some default values here ...
              q.reject();
@@ -67,7 +67,7 @@ angular.module('appAccelerator')
      };
 
      var getTechnologies = function() {
-        $log.debug("AppAccelerator : GET : available technology list");
+        $log.debug("AppAcc Svc : GET : available technology list");
 
         var q = $q.defer();
         $http({
@@ -75,15 +75,15 @@ angular.module('appAccelerator')
           method: 'GET'
           }).then(function(response) {
             // 200: technologies discovered
-            $log.debug(response.status + ' ' + response.statusText + " %o - OK", response.data);
+            $log.debug("AppAcc Svc : " + response.status + ' ' + response.statusText + " %o - OK", response.data);
             var data = [];
             if ( response.status === 200 ) {
               data = angular.fromJson(response.data);
             }
-            $log.debug("getTechnologies returning %o", data);
+            $log.debug("AppAcc Svc : getTechnologies returning %o", data);
             q.resolve(data);
           }, function(response) {
-            $log.debug(response.status + ' ' + response.statusText + " %o - FAILED", response.data);
+            $log.debug("AppAcc Svc : " + response.status + ' ' + response.statusText + " %o - FAILED", response.data);
             // TODO: Alert -- problem occurred
             // return empty set for decent experience, or could insert some default values here ...
             q.reject([]);
@@ -94,7 +94,7 @@ angular.module('appAccelerator')
 
       //get the technology options for a given technology
       var getTechOptions = function(technology) {
-        $log.debug("AppAccelerator : GET : technology options");
+        $log.debug("AppAcc Svc : GET : technology options");
         var q = $q.defer();
         if(!technology.options) {
           //there are no options so resolve and return immediately
@@ -105,10 +105,10 @@ angular.module('appAccelerator')
             method: 'GET'
             }).then(function(response) {
               // 200: the options template was found
-              $log.debug(response.status + ' ' + response.statusText + " %o - OK");
+              $log.debug("AppAcc Svc : " + response.status + ' ' + response.statusText + " %o - OK");
               q.resolve(response.data);
             }, function(response) {
-              $log.debug(response.status + ' ' + response.statusText + " %o - FAILED", response.data);
+              $log.debug("AppAcc Svc : " + response.status + ' ' + response.statusText + " %o - FAILED", response.data);
               // TODO: Alert -- problem occurred
               // return empty set for decent experience, or could insert some default values here ...
               q.reject(undefined);
@@ -125,9 +125,9 @@ angular.module('appAccelerator')
             if(tech.selected) {
               if(selected != "") selected += "&";
               selected += ("tech=" + tech.id);
-              $log.debug("selected has value:" + selected);
+              $log.debug("AppAcc Svc : selected has value:" + selected);
             }
-            $log.debug("Technology %o is not selected so not adding.", tech);
+            $log.debug("AppAcc Svc : Technology %o is not selected so not adding.", tech);
           }
           if(selected != "") {
             //something has been selected, so proceed
@@ -144,8 +144,10 @@ angular.module('appAccelerator')
             $log.debug("Constructed " + url);
 
           } else {
-            //something has gone wrong, nothing has been selected
-            $log.debug("Nothing has been selected.");
+            if(selectedTechnologies.length) {
+              //something has gone wrong, nothing has been selected
+              $log.debug("AppAcc Svc : Nothing has been selected.");
+            }
           }
           return url;
       }
@@ -156,9 +158,9 @@ angular.module('appAccelerator')
       }
 
       var addTechnology = function(technology) {
-        $log.debug("Adding technology:" + technology.id);
+        $log.debug("AppAcc Svc : Adding technology:" + technology.id);
         technology.selected = true;
-        $log.debug("technology.selected for technology " + technology.id + " has value:" + technology.selected);
+        $log.debug("AppAcc Svc : technology.selected for technology " + technology.id + " has value:" + technology.selected);
         for(var i = 0; i < selectedTechnologies.length; i++) {
           if(selectedTechnologies[i].id == technology.id) {
             //already added, so ignore and return
@@ -168,7 +170,7 @@ angular.module('appAccelerator')
       }
 
       var removeTechnology = function(technology) {
-        $log.debug("Removing technology:" + technology.id);
+        $log.debug("AppAcc Svc : Removing technology:" + technology.id);
         technology.selected = false;
         for(var i = 0; i < selectedTechnologies.length; i++) {
           if(selectedTechnologies[i].id == technology.id) {
@@ -209,7 +211,7 @@ angular.module('appAccelerator')
       }
 
       var notifyListeners = function() {
-        $log.debug("Notify listeners");
+        $log.debug("AppAcc Svc : Notify listeners");
         for(var i = 0; i < callbacks.length; i++) {
           $timeout(callbacks[i]);
         }
@@ -218,7 +220,7 @@ angular.module('appAccelerator')
       var techOptions = [];
 
       var addTechOption = function(option) {
-        $log.debug("Adding tech option :" + option);
+        $log.debug("AppAcc Svc : Adding tech option :" + option);
         for(var i = 0; i < techOptions.length; i++) {
           if(techOptions[i] == option) {
             //already added, so ignore and return
@@ -228,7 +230,7 @@ angular.module('appAccelerator')
       }
 
       var removeTechOption = function(option) {
-        $log.debug("Removing tech option : " + option);
+        $log.debug("AppAcc Svc : Removing tech option : " + option);
         for(var i = 0; i < techOptions.length; i++) {
           if(techOptions[i] == option) {
             //id's match so remove from the list
