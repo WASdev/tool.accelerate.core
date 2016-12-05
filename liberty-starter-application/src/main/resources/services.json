@@ -3,56 +3,56 @@
         {
             "id" : "rest",
             "name" : "REST",
-            "description" : "JAX-RS implementation",
+            "description" : "Support for Java API for RESTful Web Services.",
             "endpoint" : "/rest",
             "options" : false
         },
         {
             "id" : "websocket",
             "name" : "Web Sockets",
-            "description" : "WebSocket implementation",
+            "description" : "Support for WebSocket applications.",
             "endpoint" : "/websocket",
             "options" : false
         },
         {
             "id" : "persistence",
             "name" : "Persistence",
-            "description" : "JPA data persistence",
+            "description" : "Support for applications that use application-managed and container-managed JPA.",
             "endpoint" : "/persistence",
             "options" : false
         },
         {
             "id": "web",
             "name" : "Servlet",
-            "description": "Servlet 3.1",
+            "description": "Support for HTTP Servlets.",
             "endpoint" : "/web",
             "options" : false
         },
         {
             "id": "springbootweb",
             "name": "Spring Boot/MVC",
-            "description": "Spring Boot with Spring MVC",
+            "description": "Support for Spring Boot with Spring MVC applications.",
             "endpoint" : "/springbootweb",
             "options" : false
         },
         {
             "id": "watsonsdk",
             "name": "Watson SDK",
-            "description": "Adds the Watson SDK dependency to the project, allowing you to integrate Watson services",
+            "description": "Adds the Watson SDK dependency to the project, allowing you to integrate Watson services.",
             "endpoint" : "/watsonsdk",
             "options" : false
         },
         {
             "id": "microprofile",
             "name": "MicroProfile",
-            "description": "Technologies required by the MicroProfile community effort. See microprofile.io.",
+            "description": "Support for technologies required by the MicroProfile community effort. See microprofile.io.",
             "endpoint": "/microprofile",
             "options" : false
         },
         {
             "id" : "swagger",
             "name" : "Swagger",
-            "description" : "A simple yet powerful representation of RESTful APIs",
+            "description" : "A simple yet powerful representation of RESTful APIs.",
             "endpoint" : "/swagger",
             "configuration" : "rest",
             "options" : true
