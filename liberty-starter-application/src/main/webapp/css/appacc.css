@@ -152,7 +152,7 @@
 }
 
 .optionalHeading {
-    margin-top: 36px;
+    margin-top: 66px;
 }
 
 .panel-custom {
@@ -180,12 +180,16 @@
 
 .btn {
     margin-top: 6px;
-    margin-bottom: 36px;
+    margin-bottom: 6px;
 }
 
 .input {
     border: solid 1px #F0F0F0;
     font-size: 16px;
+}
+
+.serverResponse {
+    color: #9B9B9B;
 }
 
 .disclaimer {
@@ -227,6 +231,10 @@
     padding-bottom: 5px;
     padding-left: 10px;
     padding-right: 10px;
+}
+
+.instructionRun a{
+    color: #BFE6FF;
 }
 
 .panel-instruction {

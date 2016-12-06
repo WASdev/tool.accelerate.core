@@ -80,7 +80,8 @@ angular.module('appAccelerator')
           ctrl.fileUploadedOK = true;
           appacc.addTechOption(techOptions);
         }, function(response) {
-          $scope.fileStatus = "An error occurred while generating server code from " + file.name + " : " + response.data;
+          $scope.fileStatus = "An error occurred while generating server code from " + file.name + " : " + response.status;
+          $log.debug("Swagger : Error with response: %o", response);
         });
     }, function() {
       $scope.fileStatus = "An error occurred while retrieving the workspace ID";

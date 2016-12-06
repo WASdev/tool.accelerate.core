@@ -7,7 +7,7 @@
                 <div class="stepHeading">Configure your project and download as a ZIP file.</div>
                 <div class="disclaimer">By clicking Download you agree to the <a href="https://public.dhe.ibm.com/ibmdl/export/pub/software/websphere/wasdev/license/base_ilan/ilan/16.0.0.3/lafiles/en.html"
                   target="LibertyLicense">Liberty licenses.</a></div>
-                <div ng-show="deploy.name"><a ng-href="{{createDownloadUrl()}}" target="#" class="btn btn-primary" role="button">Accept and Download</a></div>
+                <div ng-show="deploy.name"><a ng-href="{{createDownloadUrl()}}" target="#" class="btn btn-primary" role="button" ng-click="sendGAEvent('Download', 'Java', 'JEE')">Accept and Download</a></div>
                 <div ng-show="!deploy.name"><a ng-href="{{createDownloadUrl()}}" class="btn btn-primary" role="button" ng-disabled="true">Choose a file name</a></div>
                 <div>
                     <h4 class="optionalHeading">Optional configuration:</h4>
@@ -45,10 +45,10 @@
                 <div class="panel-body">
                   <p class="instruction">Access your application at: </p>
                   <div ng-show="!deploy.bluemix">
-                    <p class="instructionRun">http://localhost:9080/myLibertyApp/</p>
+                    <p class="instructionRun"><a href="http://localhost:9080/myLibertyApp/" target="_blank" ng-click="sendGAEvent('Outbound', 'app endpoint', 'local')">http://localhost:9080/myLibertyApp/</a></p>
                   </div>
                   <div ng-show="deploy.bluemix">
-                    <p class="instructionRun">http://{{deploy.name}}.eu-gb.mybluemix.net/myLibertyApp/</p>
+                    <p class="instructionRun"><a href="http://{{deploy.name}}.eu-gb.mybluemix.net/myLibertyApp/" target="_blank" ng-click="sendGAEvent('Outbound', 'app endpoint', 'bluemix')">http://{{deploy.name}}.eu-gb.mybluemix.net/myLibertyApp/</a></p>
                     <p class="instruction">To manage your deployed application visit your dashboard on Bluemix.</p>
                   </div>
                 </div>
@@ -61,16 +61,9 @@
                     <p class="instruction">Your Liberty server can be found in: </p>
                     <p class="instructionRun">target/wlp/usr/servers/LibertyProjectServer</p>
                   </div>
-                  <p class="instruction">Optionally, <a href="wdt.html" targe="_blank">import your project</a> into WebSphere Developer Tool</p>
+                  <p class="instruction">Optionally, <a href="wdt.html" target="_blank" ng-click="sendGAEvent('Outbound', 'resources', 'WDT')">import your project</a> into WebSphere Developer Tool</p>
                 </div>
               </div>
-
-              <!--
-              <a href="http://localhost:9080/myLibertyApp/"
-                      title="Link to access your application." target="_blank"
-                      onclick="trackOutboundLink('http://localhost:9080/myLibertyApp/', 'localDeploy');">http://localhost:9080/myLibertyApp/</a>
-              -->
-
             </div>
         </div>
     </div>
