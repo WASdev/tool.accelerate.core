@@ -29,7 +29,7 @@ public class RunnableJarTest {
         PrintStream logFilePrintStream = MvnUtils.printStreamForFilePath(installLog);
         String pathToOutputJar = downloadedZip.getLocation() + "/target/TestApp.jar";
 
-        int mvnReturnCode = MvnUtils.runMvnCommand(logFilePrintStream, tempDir, downloadedZip, "install", "-P runnable", "-Daccept.features.license=true");
+        int mvnReturnCode = MvnUtils.runMvnCommand(logFilePrintStream, tempDir, downloadedZip, "install", "-P runnable");
 
         assertEquals(0, mvnReturnCode);
         assertThat(new File(installLog), containsLinesInRelativeOrder(containsString("BUILD SUCCESS")));

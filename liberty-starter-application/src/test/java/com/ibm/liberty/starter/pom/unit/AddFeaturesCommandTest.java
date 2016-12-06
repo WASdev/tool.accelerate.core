@@ -51,8 +51,7 @@ public class AddFeaturesCommandTest {
 
         NodeList acceptLicenseNode = pom.getElementsByTagName("acceptLicense");
         assertThat(acceptLicenseNode.getLength(), is(1));
-        assertThat(acceptLicenseNode.item(0).getTextContent(), is("${accept.features.license}"));
-        assertThat(DomUtil.getGrandchildNode(plugins, "plugin", "artifactId", "maven-enforcer-plugin"), notNullValue());
+        assertThat(acceptLicenseNode.item(0).getTextContent(), is("true"));
         assertThat(DomUtil.getGrandchildNode(configuration, "features", "feature", fakeFeatureName), notNullValue());
         Node executions = DomUtil.getChildNode(plugin, "executions", null);
         assertThat(executions, notNullValue());

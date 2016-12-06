@@ -64,7 +64,7 @@ public class RunLocalPayloadTest {
         System.out.println("mvn output will go to " + logFile.getAbsolutePath());
         
         Thread threadExecutingInstall = new Thread(() -> {
-            MvnUtils.runMvnCommand(outputStream, tempDir, zip, "install", "liberty:run-server", "-Daccept.features.license=true");
+            MvnUtils.runMvnCommand(outputStream, tempDir, zip, "install", "liberty:run-server");
         });
         
         threadExecutingInstall.setDaemon(true);
