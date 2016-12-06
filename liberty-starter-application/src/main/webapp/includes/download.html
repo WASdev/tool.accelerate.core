@@ -5,10 +5,10 @@
         <div class="row">
             <div class="col-md-6 col-sm-6">
                 <div class="stepHeading">Configure your project and download as a ZIP file.</div>
-                <div class="disclaimer">By clicking Download you agree to the <a href="https://public.dhe.ibm.com/ibmdl/export/pub/software/websphere/wasdev/license/base_ilan/ilan/16.0.0.3/lafiles/en.html"
-                  target="LibertyLicense">Liberty licenses.</a></div>
                 <div ng-show="deploy.name"><a ng-href="{{createDownloadUrl()}}" target="#" class="btn btn-primary" role="button" ng-click="sendGAEvent('Download', 'Java', 'JEE')">Accept and Download</a></div>
                 <div ng-show="!deploy.name"><a ng-href="{{createDownloadUrl()}}" class="btn btn-primary" role="button" ng-disabled="true">Choose a file name</a></div>
+                <div class="disclaimer">By clicking the "Accept and Download" button below you agree that you have had the opportunity to review the <a href="http://www.apache.org/licenses/LICENSE-2.0" target="_blank">Apache Version 2.0</a> and <a href="https://public.dhe.ibm.com/ibmdl/export/pub/software/websphere/wasdev/license/base_ilan/ilan/16.0.0.3/lafiles/en.html"
+                  target="LibertyLicense">Liberty</a> licenses and you agree to be bound by their terms.</div>
                 <div>
                     <h4 class="optionalHeading">Optional configuration:</h4>
                 </div>
