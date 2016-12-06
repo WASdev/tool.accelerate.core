@@ -1,6 +1,6 @@
-sudo: false
+sudo: required
 language: java
 jdk:
   - oraclejdk8
 script:
-  - ./gradlew check
+  - ./gradlew clean check

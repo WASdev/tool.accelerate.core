@@ -1,5 +1,16 @@
 package com.ibm.liberty.starter.it.api.v1;
 
+import com.ibm.liberty.starter.it.api.v1.utils.DownloadedZip;
+import com.ibm.liberty.starter.it.api.v1.utils.MvnUtils;
+import org.hamcrest.Matcher;
+import org.junit.After;
+import org.junit.Rule;
+import org.junit.Test;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintStream;
+
 import static com.ibm.liberty.starter.it.api.v1.matchers.FileContainsLines.containsLinesInRelativeOrder;
 import static com.ibm.liberty.starter.it.api.v1.matchers.Retry.eventually;
 import static org.hamcrest.Matchers.containsString;
@@ -8,25 +19,7 @@ import static org.hamcrest.io.FileMatchers.anExistingFile;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.PrintStream;
-
-import javax.ws.rs.client.Client;
-import javax.ws.rs.client.ClientBuilder;
-import javax.ws.rs.client.Invocation.Builder;
-import javax.ws.rs.client.WebTarget;
-import javax.ws.rs.core.Response;
-
-import org.hamcrest.Matcher;
-import org.junit.After;
-import org.junit.Rule;
-import org.junit.Test;
-
-import com.ibm.liberty.starter.it.api.v1.utils.DownloadedZip;
-import com.ibm.liberty.starter.it.api.v1.utils.MvnUtils;
-
-public class RunLocalPayloadTest {
+public class RunLocalMavenPayloadTest {
 
     private final static String tempDir = System.getProperty("liberty.temp.dir") + "/localPayloadTest";
     private final static String installLog = tempDir + "/mvnLog/log.txt";
@@ -46,7 +39,7 @@ public class RunLocalPayloadTest {
         Matcher<File> logContainsBuildFailure = containsLinesInRelativeOrder(containsString("BUILD FAILURE"));
         assertThat(logFile, eventually(logContainsServerStartedForLocalServer).butNot(logContainsBuildFailure));
         assertThat(new File(pathToOutputZip), is(anExistingFile()));
-        testEndpoint();
+        DownloadedZip.testEndpointOnRunningApplication();
     }
 
     @After
@@ -71,18 +64,4 @@ public class RunLocalPayloadTest {
         threadExecutingInstall.start();
     }
     
-    public void testEndpoint() {
-        Client client = ClientBuilder.newClient();
-        String url = "http://localhost:9080/myLibertyApp/";
-        System.out.println("Testing " + url);
-        WebTarget target = client.target(url);
-        Builder builder = target.request();
-        Response response = builder.get();
-        int status = response.getStatus();
-        assertEquals("Endpoint response status was not 200, found:" + status, status, 200);
-        String responseString = response.readEntity(String.class);
-        assertThat(responseString, containsString("Welcome to your Liberty Application"));
-        assertThat(responseString, containsString("Test"));
-    }
-
 }

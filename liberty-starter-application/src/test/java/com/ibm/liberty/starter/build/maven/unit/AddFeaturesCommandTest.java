@@ -1,25 +1,18 @@
-package com.ibm.liberty.starter.pom.unit;
+package com.ibm.liberty.starter.build.maven.unit;
 
-import java.net.URI;
-import java.util.Collections;
-import java.util.List;
-
-import javax.xml.parsers.DocumentBuilderFactory;
-
+import com.ibm.liberty.starter.build.maven.AddFeaturesCommand;
+import com.ibm.liberty.starter.build.maven.DomUtil;
+import com.ibm.liberty.starter.build.unit.FeaturesToInstallProviderTest;
 import org.junit.Test;
-
-import static org.junit.Assert.assertThat;
-import static org.hamcrest.Matchers.*;
-
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import com.ibm.liberty.starter.ServiceConnector;
-import com.ibm.liberty.starter.api.v1.model.internal.Services;
-import com.ibm.liberty.starter.api.v1.model.registration.Service;
-import com.ibm.liberty.starter.pom.AddFeaturesCommand;
-import com.ibm.liberty.starter.pom.DomUtil;
+import javax.xml.parsers.DocumentBuilderFactory;
+
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.junit.Assert.assertThat;
 
 public class AddFeaturesCommandTest {
 
@@ -32,20 +25,8 @@ public class AddFeaturesCommandTest {
         Node plugin = DomUtil.addChildNode(pom, plugins, "plugin", null);
         Node configuration = DomUtil.addChildNode(pom, plugin, "configuration", null);
         DomUtil.addChildNode(pom, configuration, "assemblyInstallDirectory", "${wibble}");
-        Services services = new Services();
-        services.setServices(Collections.singletonList(new Service()));
         final String fakeFeatureName = "Wibble";
-        AddFeaturesCommand testObject = new AddFeaturesCommand(services, new ServiceConnector(new URI("")) {
-            @Override
-            public String getFeaturesToInstall(Service service) {
-                return fakeFeatureName;
-            }
-
-            @Override
-            public Services parseServicesJson() {
-                return services;
-            }
-        });
+        AddFeaturesCommand testObject = new AddFeaturesCommand(FeaturesToInstallProviderTest.createFeaturesToInstallProviderTestObject());
 
         testObject.modifyPom(pom);
 

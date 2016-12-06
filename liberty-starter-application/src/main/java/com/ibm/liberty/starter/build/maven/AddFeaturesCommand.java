@@ -1,36 +1,19 @@
-package com.ibm.liberty.starter.pom;
+package com.ibm.liberty.starter.build.maven;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.logging.Logger;
-
+import com.ibm.liberty.starter.build.FeaturesToInstallProvider;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 
-import com.ibm.liberty.starter.ServiceConnector;
-import com.ibm.liberty.starter.api.v1.model.internal.Services;
-import com.ibm.liberty.starter.api.v1.model.registration.Service;
+import java.io.IOException;
+import java.util.List;
+import java.util.logging.Logger;
 
 public class AddFeaturesCommand implements PomModifierCommand {
 
-    private static final Logger log = Logger.getLogger(AddFeaturesCommand.class.getName());
-
     private final List<String> listOfFeatures;
     
-    public AddFeaturesCommand(Services services, ServiceConnector serviceConnector) {
-        listOfFeatures = new ArrayList<String>();
-        for (Service service : services.getServices()) {
-            String features = serviceConnector.getFeaturesToInstall(service);
-            if (features != null && !features.trim().isEmpty() && (features.split(",").length > 0)) {
-                for (String feature : features.split(",")) {
-                    if (!listOfFeatures.contains(feature)) {
-                        listOfFeatures.add(feature);
-                        log.finer("Added feature : " + feature);
-                    }
-                }
-            }
-        }
+    public AddFeaturesCommand(FeaturesToInstallProvider featureProvider) {
+        listOfFeatures = featureProvider.getFeatures();
     }
 
     @Override
