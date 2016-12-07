@@ -30,6 +30,8 @@
 }
 
  body {
+    /*Make vertical scrollbar appear so page doesn't jump.*/
+    overflow-y: scroll;
     font-family: "HelvNeueRoman";
     margin: 0;
     color: #152935;
