@@ -35,7 +35,6 @@ dependencies {
     testCompile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.4.5'
 }
 
-// Set the Eclipse facets to use 3.0 of the Dynamic Web Module
 eclipse.wtp.facet {
     facets = []
     facet name: 'jst.java', type: 'fixed'

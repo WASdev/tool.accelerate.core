@@ -157,11 +157,11 @@
     margin-top: 66px;
 }
 
-.panel-custom {
+.panel-selected {
     border-color: #F2CC12;
 }
 
-.panel-custom .panel-heading {
+.panel-selected .panel-heading {
     background-color:#F2CC12;
     color: #000000;
 }

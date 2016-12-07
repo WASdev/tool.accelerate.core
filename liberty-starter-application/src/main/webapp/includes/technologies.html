@@ -30,7 +30,7 @@
         <div ng-show="hasTechnologies">
           <div ng-repeat="techrow in technologies" class="row">
             <div ng-repeat="technology in techrow">
-              <div class="col-sm-{{12 / rowCount}} col-md-{{12 / rowCount}}">
+              <div class="col-sm-{{12 / colCount}} col-md-{{12 / colCount}}">
                   <div class="panel {{technology.panel}}">
                       <div class="panel-heading" ng-click="toggleSelected(technology)" role="button">
                           <div class="row">

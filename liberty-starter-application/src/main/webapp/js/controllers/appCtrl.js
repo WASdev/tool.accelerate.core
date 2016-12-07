@@ -22,7 +22,7 @@ angular.module('appAccelerator')
 
   $log.debug("AppAccelerator : using controller 'appCtrl'");
 
-  $scope.rowCount = 4;    //used by angular to layout rows correctly
+  $scope.colCount = 4;    //used by angular to layout rows correctly
   $scope.hasTechnologies = false;
   $scope.serverError = false;
   $scope.technologies = [];   //this controls the layout of the technologies, the service has the list of selected ones
@@ -44,12 +44,12 @@ angular.module('appAccelerator')
   }
 
   $scope.toggleSelected = function(technology) {
-    var googleEventType = (technology.selected) ? "de-selected" : "selected";
+    var googleEventType = (technology.selected) ? "deselected" : "selected";
     $scope.sendGAEvent('Technology', googleEventType, technology.id);
     (technology.selected) ? appacc.removeTechnology(technology) : appacc.addTechnology(technology);
     $scope.selectedCount = appacc.getSelectedCount();
     $log.debug("AppAccelerator : Selected count " + $scope.selectedCount);
-    technology.panel = technology.selected ? "panel-custom" : "panel-primary";
+    technology.panel = technology.selected ? "panel-selected" : "panel-primary";
     $scope.updateService();
   }
 
@@ -120,27 +120,26 @@ angular.module('appAccelerator')
     }
     return selected;
   }
+  
+function newRowNeeded(index) {
+  return (index % $scope.colCount) === 0;
+}
 
   this.getTech = function() {
     appacc.getTechnologies().then(function(response) {
       //split the returned technologies into rows of X elements
       var row = undefined;
       for(var i = 0; i < response.length; i++) {
-        if(!(i % $scope.rowCount)) {
-          if(row) {
-            $scope.technologies.push(row);
-          }
+        if(newRowNeeded(i)) {
           row = [];
+          $scope.technologies.push(row);
         }
         var technology = response[i];       //just make the code a bit more readable
         technology.selected = false;        //flag to indicate if user has selected this technology
         technology.info = false;            //do not show the information for this technology
-        technology.displayOptions = false;  //dpn't show any options
+        technology.displayOptions = false;  //don't show any options
         technology.panel = "panel-primary";
         row.push(technology);
-      }
-      if(row.length) {
-        $scope.technologies.push(row);
       }
       $scope.hasTechnologies = true;
       $log.debug('AppAccelerator : getTechnologies %o', $scope.technologies);
