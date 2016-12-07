@@ -1,4 +1,0 @@
-accelerator:
-  build: /
-  ports:
-   - "9082:9082"
