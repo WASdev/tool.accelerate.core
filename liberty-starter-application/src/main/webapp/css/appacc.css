@@ -14,6 +14,10 @@
  * limitations under the License.
  */
  
+:focus {
+    outline: #9B9B9B dotted thin;
+}
+ 
 @font-face {
     font-family: "HelvNeueRoman";
     src: url("../fonts/HelvNeueRomanforIBM.otf");
