@@ -62,6 +62,10 @@ angular.module('appAccelerator')
     }
   }
 
+  $scope.updateTechOptions = function() {
+    $scope.options.useSwaggerDoc ? appacc.addTechOption(techOptions) : appacc.removeTechOption(techOptions);
+  }
+
   $scope.upload = function() {
     $scope.fileStatus = "Uploading ...";
     $scope.fileOperationsDisabled = true;
