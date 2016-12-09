@@ -43,7 +43,8 @@ angular.module('appAccelerator')
 	  ga.report('send', 'event', p1, p2, p3);
   }
 
-  $scope.toggleSelected = function(technology) {
+  $scope.toggleSelected = function(technology, $event) {
+    $event.stopPropagation();
     var googleEventType = (technology.selected) ? "deselected" : "selected";
     $scope.sendGAEvent('Technology', googleEventType, technology.id);
     (technology.selected) ? appacc.removeTechnology(technology) : appacc.addTechnology(technology);
@@ -121,9 +122,9 @@ angular.module('appAccelerator')
     return selected;
   }
   
-function newRowNeeded(index) {
-  return (index % $scope.colCount) === 0;
-}
+  function newRowNeeded(index) {
+    return (index % $scope.colCount) === 0;
+  }
 
   this.getTech = function() {
     appacc.getTechnologies().then(function(response) {
@@ -139,6 +140,7 @@ function newRowNeeded(index) {
         technology.info = false;            //do not show the information for this technology
         technology.displayOptions = false;  //don't show any options
         technology.panel = "panel-primary";
+        technology.name = technology.name.substring(0,15); //Ensure that panels don't overflow
         row.push(technology);
       }
       $scope.hasTechnologies = true;

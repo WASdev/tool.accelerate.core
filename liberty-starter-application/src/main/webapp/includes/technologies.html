@@ -32,21 +32,21 @@
             <div ng-repeat="technology in techrow">
               <div class="col-sm-{{12 / colCount}} col-md-{{12 / colCount}}">
                   <div class="panel {{technology.panel}}">
-                      <div class="panel-heading" ng-click="toggleSelected(technology)" role="button">
+                      <div class="panel-heading" ng-click="toggleSelected(technology, $event)" role="button">
                           <div class="row">
-                              <div class="col-md-7">{{technology.name}}</div>
-                              <div class="col-md-5 text-right">
-                                  <span>
+                              <div class="col-md-6">{{technology.name}}</div>
+                              <div class="col-md-6 text-right">
+                                  <button class="icon" ng-click="toggleSelected(technology, $event)" role="button">
                                       <i class="fa fa-square-o" aria-hidden="true" ng-show="!technology.selected"  data-toggle="tooltip" title="Click to add this technology to your project"></i>
                                       <i class="fa fa-check-square-o" aria-hidden="true" ng-show="technology.selected" data-toggle="tooltip" title="Click to remove this technology from your project"></i>
-                                  </span>
-                                  <span class="icon" ng-click="toggleInfo(technology, $event)" role="button">
+                                  </button>
+                                  <button class="icon" ng-click="toggleInfo(technology, $event)" role="button">
                                       <i class="fa fa-info" aria-hidden="true" ng-show="!technology.info" data-toggle="tooltip" title="Click to see more information about this technology"></i>
                                       <i class="fa fa-info-circle" aria-hidden="true" ng-show="technology.info" data-toggle="tooltip" title="Click to hide the information"></i>
-                                  </span>
-                                  <span ng-click="showOptions(technology, $event)" role="button" ng-show="technology.options">
+                                  </button>
+                                  <button class="icon" ng-click="showOptions(technology, $event)" role="button" ng-show="technology.options">
                                       <i class="fa fa-cog" aria-hidden="true" data-toggle="tooltip" title="Click to configure additional options for this technology"></i>
-                                  </span>
+                                  </button>
                                 </div>
                           </div>
                       </div>

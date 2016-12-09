@@ -30,7 +30,7 @@
         },
         {
             "id": "springbootweb",
-            "name": "Spring Boot/MVC",
+            "name": "Spring Boot",
             "description": "Support for Spring Boot with Spring MVC applications.",
             "endpoint" : "/springbootweb",
             "options" : false

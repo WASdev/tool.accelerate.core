@@ -176,8 +176,8 @@
 }
 
 .icon {
-    padding-right : 5px;
-    padding-left : 5px;
+    background-color: inherit;
+    border-style: none;
 }
 
 .btn {

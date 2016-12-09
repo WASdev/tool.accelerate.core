@@ -4,12 +4,10 @@
       <label><input type="checkbox" ng-model="useSwaggerDoc" value="serverCodeGen">Generate server code from a Swagger document</label>
     </div>
     <div id="step3SwaggerLocalUpload" ng-show="useSwaggerDoc">
-      <form id="step3SwaggerFileForm" action="#" method="POST" enctype="multipart/form-data">
-        <input type="file" id="step3SwaggerFileSelect" accept=".json,.yaml" ng-show="false"/>
-        <a onclick="document.getElementById('step3SwaggerFileSelect').click();" class="btn btn-primary" role="button" ng-show="!fileStatus">Select file</a>
-        <a ng-click="upload()" class="btn btn-primary" id="step3SwaggerUploadButton" ng-show="fileStatus">Upload</a>
-        <a onclick="document.getElementById('step3SwaggerFileSelect').click();" class="btn btn-primary" role="button" ng-show="fileStatus">Select different file</a>
-      </form>
+      <input type="file" id="step3SwaggerFileSelect" accept=".json,.yaml" ng-show="false"/>
+      <button onclick="document.getElementById('step3SwaggerFileSelect').click();" class="btn btn-primary" role="button" ng-show="!fileStatus">Select file</button>
+      <button ng-click="upload()" class="btn btn-primary" id="step3SwaggerUploadButton" role="button" ng-show="fileStatus">Upload</button>
+      <button onclick="document.getElementById('step3SwaggerFileSelect').click();" class="btn btn-primary" role="button" ng-show="fileStatus">Select different file</button>
       <div class="serverResponse" ng-show="fileStatus"><span class="step3SwaggerFileStatus">{{fileStatus}} </span></div>
     </div>
     </div>
