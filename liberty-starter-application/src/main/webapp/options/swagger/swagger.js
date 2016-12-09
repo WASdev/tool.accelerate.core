@@ -22,7 +22,7 @@ angular.module('appAccelerator')
 
   $log.debug("Swagger : using controller 'swagCtrl'");
 
-  $scope.options.useSwaggerDoc = false;
+  $scope.options = {useSwaggerDoc : false};
   $scope.allowConfig = false;
   $scope.fileStatus = undefined;
   $scope.fileOperationsDisabled = false;
