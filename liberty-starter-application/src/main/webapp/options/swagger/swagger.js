@@ -25,6 +25,7 @@ angular.module('appAccelerator')
   $scope.useSwaggerDoc = false;
   $scope.allowConfig = false;
   $scope.fileStatus = undefined;
+  $scope.fileOperationsDisabled = false;
 
   var ctrl = this;    //used for scoping in promises
   var restId = "rest";
@@ -38,7 +39,7 @@ angular.module('appAccelerator')
     $log.debug("Swagger : checking service state.");
     $scope.allowConfig = appacc.isSelected(restId);
     if(ctrl.fileUploadedOK) {
-      (appacc.isSelected(swaggerId) && appacc.isSelected(restId)) ? appacc.addTechOption(techOptions) : appacc.removeTechOption(techOptions);
+      (appacc.isSelected(swaggerId) && appacc.isSelected(restId) && $scope.useSwaggerDoc) ? appacc.addTechOption(techOptions) : appacc.removeTechOption(techOptions);
     }
     $log.debug("Swagger : allowConfig set to " + $scope.allowConfig);
     init();
@@ -63,6 +64,7 @@ angular.module('appAccelerator')
 
   $scope.upload = function() {
     $scope.fileStatus = "Uploading ...";
+    $scope.fileOperationsDisabled = true;
     appacc.retrieveWorkspaceId().then(function(id) {
       var formData = new FormData();
       // Add the file to the request.
@@ -79,12 +81,15 @@ angular.module('appAccelerator')
           $scope.fileStatus = "Successfully generated server code from " + file.name;
           ctrl.fileUploadedOK = true;
           appacc.addTechOption(techOptions);
+          $scope.fileOperationsDisabled = false;
         }, function(response) {
           $scope.fileStatus = "An error occurred while generating server code from " + file.name + " : " + response.status;
           $log.debug("Swagger : Error with response: %o", response);
+          $scope.fileOperationsDisabled = false;
         });
     }, function() {
       $scope.fileStatus = "An error occurred while retrieving the workspace ID";
+      $scope.fileOperationsDisabled = false;
     });
   }
 

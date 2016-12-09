@@ -164,6 +164,7 @@ angular.module('appAccelerator')
         for(var i = 0; i < selectedTechnologies.length; i++) {
           if(selectedTechnologies[i].id == technology.id) {
             //already added, so ignore and return
+            return;
           }
         }
         selectedTechnologies.push(technology);
@@ -224,6 +225,7 @@ angular.module('appAccelerator')
         for(var i = 0; i < techOptions.length; i++) {
           if(techOptions[i] == option) {
             //already added, so ignore and return
+            return;
           }
         }
         techOptions.push(option);
