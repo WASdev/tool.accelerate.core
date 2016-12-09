@@ -1,0 +1,17 @@
+<div ng-controller="swagCtrl">
+  <div ng-show="allowConfig">
+    <div class="checkbox">
+      <label><input type="checkbox" ng-click="updateTechOptions()" ng-model="options.useSwaggerDoc">Generate server code from a Swagger document</label>
+    </div>
+    <div id="step3SwaggerLocalUpload" ng-show="options.useSwaggerDoc">
+      <input type="file" id="step3SwaggerFileSelect" accept=".json,.yaml" ng-show="false"/>
+      <button onclick="document.getElementById('step3SwaggerFileSelect').click();" class="btn btn-primary" role="button" ng-show="!fileStatus" ng-disabled="fileOperationsDisabled">Select file</button>
+      <button ng-click="upload()" class="btn btn-primary" id="step3SwaggerUploadButton" role="button" ng-show="fileStatus" ng-disabled="fileOperationsDisabled">Upload</button>
+      <button onclick="document.getElementById('step3SwaggerFileSelect').click();" class="btn btn-primary" role="button" ng-show="fileStatus" ng-disabled="fileOperationsDisabled">Select different file</button>
+      <div class="serverResponse" ng-show="fileStatus"><span class="step3SwaggerFileStatus">{{fileStatus}}</span></div>
+    </div>
+    </div>
+  <div ng-show="!allowConfig">
+    <i class="fa fa-exclamation-circle" aria-hidden="true"></i> Additional Swagger configuration is only available when you also select the REST technology.
+  </div>
+</div>
