@@ -172,6 +172,8 @@
 
 .panel-primary .panel-heading {
   font-family: "HelvNeueLight";
+  background-color: #337ab7;
+  background-image: none;
 }
 
 .options {
@@ -180,7 +182,12 @@
 }
 
 .icon {
-    background-color: inherit;
+    background-color: #337ab7;
+    border-style: none;
+}
+
+.icon-selected {
+    background-color: #F2CC12;
     border-style: none;
 }
 

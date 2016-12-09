@@ -162,7 +162,7 @@ angular.module('appAccelerator')
         technology.selected = true;
         $log.debug("AppAcc Svc : technology.selected for technology " + technology.id + " has value:" + technology.selected);
         for(var i = 0; i < selectedTechnologies.length; i++) {
-          if(selectedTechnologies[i].id == technology.id) {
+          if(selectedTechnologies[i].id === technology.id) {
             //already added, so ignore and return
             return;
           }
@@ -174,7 +174,7 @@ angular.module('appAccelerator')
         $log.debug("AppAcc Svc : Removing technology:" + technology.id);
         technology.selected = false;
         for(var i = 0; i < selectedTechnologies.length; i++) {
-          if(selectedTechnologies[i].id == technology.id) {
+          if(selectedTechnologies[i].id === technology.id) {
             //id's match so remove from the list
             selectedTechnologies.splice(i, 1);
             return;
@@ -223,7 +223,7 @@ angular.module('appAccelerator')
       var addTechOption = function(option) {
         $log.debug("AppAcc Svc : Adding tech option :" + option);
         for(var i = 0; i < techOptions.length; i++) {
-          if(techOptions[i] == option) {
+          if(techOptions[i] === option) {
             //already added, so ignore and return
             return;
           }
@@ -234,7 +234,7 @@ angular.module('appAccelerator')
       var removeTechOption = function(option) {
         $log.debug("AppAcc Svc : Removing tech option : " + option);
         for(var i = 0; i < techOptions.length; i++) {
-          if(techOptions[i] == option) {
+          if(techOptions[i] === option) {
             //id's match so remove from the list
             techOptions.splice(i, 1);
             return;

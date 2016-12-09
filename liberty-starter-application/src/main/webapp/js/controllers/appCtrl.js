@@ -51,6 +51,7 @@ angular.module('appAccelerator')
     $scope.selectedCount = appacc.getSelectedCount();
     $log.debug("AppAccelerator : Selected count " + $scope.selectedCount);
     technology.panel = technology.selected ? "panel-selected" : "panel-primary";
+    technology.iconstyle = technology.selected ? "icon-selected" : "icon";
     $scope.updateService();
   }
 
@@ -141,6 +142,7 @@ angular.module('appAccelerator')
         technology.displayOptions = false;  //don't show any options
         technology.panel = "panel-primary";
         technology.name = technology.name.substring(0,15); //Ensure that panels don't overflow
+        technology.iconstyle = "icon";
         row.push(technology);
       }
       $scope.hasTechnologies = true;
