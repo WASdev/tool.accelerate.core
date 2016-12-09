@@ -22,7 +22,7 @@ angular.module('appAccelerator')
 
   $log.debug("Swagger : using controller 'swagCtrl'");
 
-  $scope.useSwaggerDoc = false;
+  $scope.options.useSwaggerDoc = false;
   $scope.allowConfig = false;
   $scope.fileStatus = undefined;
   $scope.fileOperationsDisabled = false;
@@ -39,7 +39,7 @@ angular.module('appAccelerator')
     $log.debug("Swagger : checking service state.");
     $scope.allowConfig = appacc.isSelected(restId);
     if(ctrl.fileUploadedOK) {
-      (appacc.isSelected(swaggerId) && appacc.isSelected(restId) && $scope.useSwaggerDoc) ? appacc.addTechOption(techOptions) : appacc.removeTechOption(techOptions);
+      (appacc.isSelected(swaggerId) && appacc.isSelected(restId) && $scope.options.useSwaggerDoc) ? appacc.addTechOption(techOptions) : appacc.removeTechOption(techOptions);
     }
     $log.debug("Swagger : allowConfig set to " + $scope.allowConfig);
     init();
