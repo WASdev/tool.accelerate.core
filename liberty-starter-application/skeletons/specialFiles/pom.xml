@@ -110,7 +110,6 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-antrun-plugin</artifactId>
-                        <version>1.8</version>
                         <executions>
                             <execution>
                                 <phase>initialize</phase>
@@ -118,14 +117,14 @@
                                     <goal>run</goal>
                                 </goals>
                                 <configuration>
-                                    <tasks>
-                                        <echo>Running bluemix profile with the following properties:
+                                    <target>
+                                        <echo message="Running bluemix profile with the following properties:
                                             cf.target=${cf.target}
                                             cf.space=${cf.space}
                                             cf.org=${cf.org}
                                             cf.username=${cf.username}
-                                            The application will be accessed at context root ${cf.context.root}</echo>
-                                    </tasks>
+                                            The application will be accessed at context root ${cf.context.root}"/>
+                                    </target>
                                 </configuration>
                             </execution>
                         </executions>
@@ -373,6 +372,24 @@
                     <summaryFile>${project.build.directory}/test-reports/it/failsafe-summary.xml</summaryFile>
                     <reportsDirectory>${project.build.directory}/test-reports/it</reportsDirectory>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <version>1.8</version>
+                <executions>
+                    <execution>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <target>
+                                <echo message="By building this project you agree that you have had the opportunity to review the Apache Version 2.0 (http://www.apache.org/licenses/LICENSE-2.0) and Liberty (https://public.dhe.ibm.com/ibmdl/export/pub/software/websphere/wasdev/license/base_ilan/ilan/16.0.0.3/lafiles/en.html) licenses and you agree to be bound by their terms. If you disagree, abort the build."/>
+                            </target>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>

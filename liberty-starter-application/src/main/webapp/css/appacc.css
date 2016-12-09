@@ -1,0 +1,266 @@
+/*
+ * Copyright (c) 2016 IBM Corp.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+ 
+:focus {
+    outline: #9B9B9B dotted thin;
+}
+ 
+@font-face {
+    font-family: "HelvNeueRoman";
+    src: url("../fonts/HelvNeueRomanforIBM.otf");
+}
+
+@font-face {
+    font-family: "HelvNeueBold";
+    src: url("../fonts/HelvNeueBoldforIBM.otf");
+}
+
+@font-face {
+    font-family: "HelvNeueLight";
+    src: url("../fonts/HelvNeueLightforIBM.otf");
+}
+
+ body {
+    /*Make vertical scrollbar appear so page doesn't jump.*/
+    overflow-y: scroll;
+    font-family: "HelvNeueRoman";
+    margin: 0;
+    color: #152935;
+}
+
+#banner {
+    position: relative;
+    height: 236px;
+    width: 1280px;
+    margin-left: auto;
+    margin-right: auto;
+    max-height: 330px;
+    overflow: hidden;
+}
+
+#bannerLine1 {
+    font-family: "HelvNeueLight";
+    color: #BCDCFF;
+    font-size: 41px;
+    padding-top: 50px;
+    padding-left: 88px;
+    position: relative;
+    z-index: 8;
+}
+
+#bannerLine1 span {
+    color: #fff;
+    font-family: "HelvNeueBold";
+}
+
+#bannerLine2 {
+    font-family: "HelvNeueLight";
+    font-size: 26px;
+    line-height: 33px;
+    color: #fff;
+    padding-top: 10px;
+    padding-left: 88px;
+    position: relative;
+    z-index: 8;
+    width: 550px;
+}
+
+#bannerTriangle {
+    -webkit-box-shadow: 0px 0px 5px 2px rgba(102,102,102,1);
+    -moz-box-shadow: 0px 0px 5px 2px rgba(102,102,102,1);
+    box-shadow: 0px 0px 5px 2px rgba(102,102,102,1);
+    background: #fff;
+    bottom: -117px;
+    position: absolute;
+    left: 0px;
+    transform: rotate(-3.6deg);
+    z-index: 8;
+    width: 104%;
+    height: 160px;
+}
+
+.layered-bg {
+    height: inherit;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+}
+
+.banner-img {
+    background-image: url("../img/wavelight_unsplash.jpg");
+    background-position: 57.3% 50%;
+    z-index: 3;
+    background-size: 4800px;
+    background-repeat: no-repeat;
+}
+
+.banner-fade {
+    background: #4178BE;
+    opacity: 0.9;
+    z-index: 5;
+}
+
+.banner-footer {
+    margin-top: 63px;
+    height: 195px;
+    position: relative;
+}
+
+.bannerContent {
+    position: relative;
+    width: 1100px;
+    margin-left: auto;
+    margin-right: auto;
+    z-index: 10;
+    color: #ffffff;
+    padding-top: 36px
+}
+
+.blurb {
+    font-family: "HelvNeueLight";
+    font-size: 26px;
+    margin-top: 36px;
+}
+
+.stepBar {
+    margin-top: 36px;
+    height: 5px;
+    width: 87px;
+    background-color: #F2CC12;
+}
+
+.stepNumber {
+    margin-top: 12px;
+    font-family: "HelvNeueBold";
+    font-size: 16px;
+    color: #152935;
+    width: 87px;
+    margin-bottom: 18px;
+}
+
+.stepHeading {
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+.optionalHeading {
+    margin-top: 66px;
+}
+
+.panel-selected {
+    border-color: #F2CC12;
+}
+
+.panel-selected .panel-heading {
+    background-color:#F2CC12;
+    color: #000000;
+}
+
+.panel-primary .panel-heading {
+  font-family: "HelvNeueLight";
+  background-color: #337ab7;
+  background-image: none;
+}
+
+.options {
+    margin-left: 36px;
+    margin-top: 18px;
+}
+
+.icon {
+    background-color: #337ab7;
+    border-style: none;
+}
+
+.icon-selected {
+    background-color: #F2CC12;
+    border-style: none;
+}
+
+.btn {
+    margin-top: 6px;
+    margin-bottom: 6px;
+}
+
+.input {
+    border: solid 1px #F0F0F0;
+    font-size: 16px;
+}
+
+.serverResponse {
+    color: #9B9B9B;
+}
+
+.disclaimer {
+    margin-top: 10px;
+    margin-left: auto;
+    margin-right: auto;
+    font-size: 12px;
+    color: #9B9B9B;
+}
+
+.instruction {
+    font-family: "HelvNeueRoman";
+    font-size: 16px;
+}
+
+.bannerContent .instruction {
+    font-size: 18px;
+}
+
+.bannerContent .instruction a{
+    color: #ffffff;
+    font-family: "HelvNeueBold";
+}
+
+.instructionHeading {
+    font-family: "HelvNeueBold";
+    font-size: 16px;
+}
+
+.bannerContent .instructionHeading {
+    font-size: 18px;
+}
+
+.instructionRun {
+    background-color: #282828;
+    color: #BFE6FF;
+    font-family: Courier;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.instructionRun a{
+    color: #BFE6FF;
+}
+
+.panel-instruction {
+    background-color: #F0F0F0;
+    border-color: #F0F0F0;
+}
+
+.purpleCode {
+    color: rgb(246, 144, 203);
+}
+
+.alert-primary {
+    background-color: #337ab7;
+    border-color: #337ab7;
+    color: #ffffff;
+}

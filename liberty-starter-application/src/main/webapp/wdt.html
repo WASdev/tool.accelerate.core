@@ -1,0 +1,84 @@
+<!--
+ * Copyright (c) 2016 IBM Corp.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+-->
+
+<!DOCTYPE html>
+<html ng-app="appAccelerator">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Liberty app accelerator</title>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+        <link href="css/wdt.css" rel="stylesheet">
+        <link href="css/appacc.css" rel="stylesheet">
+    </head>
+    <body>
+      <div id="bannerContainer">
+          <div id="banner">
+              <div id="bannerImg" class="banner-img layered-bg"></div>
+              <div id="bannerFade" class="banner-fade layered-bg"></div>
+              <div id="bannerTriangle"></div>
+              <div id="bannerLine1"><span>Liberty</span> app accelerator</div>
+              <div id="bannerLine2">How to import downloaded Maven into the WebSphere Developer Tool</div>
+          </div>
+      </div>
+
+      <div id="step4OptionalWDT">
+          <div id="step4OptionalWDTContent">
+              <ul id="WDTSteps">
+                  <li id="WDTStep1" class="WDTStep">
+                      <div class="WDTStepImage">
+                          <!-- <img src="img/wdt-step1.png" /> -->
+                      </div>
+                      <div class="stepNumber">Step 1</div>
+                      <p>Go to the WebSphere Development Tool and Import "Existing
+                          Maven Projects".</p>
+                  </li>
+                  <li id="WDTStep2" class="WDTStep">
+                      <div class="WDTStepImage">
+                          <!-- <img src="img/wdt-step2.png" /> -->
+                      </div>
+                      <div class="stepNumber">Step 2</div>
+                      <p>Select the Maven projects you want to import.</p>
+                  </li>
+                  <li id="WDTStep3" class="WDTStep">
+                      <div class="WDTStepImage">
+                          <!-- <img src="img/wdt-step3.png" /> -->
+                      </div>
+                      <div class="stepNumber">Step 3</div>
+                      <p>Once the project is imported, make changes to the custom
+                          code and build your app.</p>
+                  </li>
+                  <li id="WDTStep4" class="WDTStep">
+                      <div class="WDTStepImage">
+                          <!-- <img src="img/wdt-step4.png" /> -->
+                      </div>
+                      <div class="stepNumber">Step 4</div>
+                      <p>Pickup code and run either: Locally or using Bluemix.</p>
+                  </li>
+              </ul>
+          </div>
+      </div>
+
+      <div ng-include="'includes/footer.html'"></div>
+      <script type="text/javascript" src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
+      <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+      <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular.min.js"></script>
+      <script type="text/javascript" src="js/app.js"></script>
+    </body>
+</html>

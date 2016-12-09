@@ -1,0 +1,134 @@
+#step4OptionalWDT {
+    margin-top: 40px;
+    clear: both;
+    width: 1100px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#step4OptionalWDTTrigger {
+   position: relative;
+}
+
+#step4OptionalWDT #step4OptionalWDTTrigger a {
+   background-color: #F0F0F0;
+   color: #152935;
+   display: block;
+   padding: 18px 20px 14px 20px;
+   text-decoration: none;
+}
+
+.wdtArrowPlacement {
+   position: absolute;
+   right: 20px;
+   top: 18px;
+}
+
+.wdtContentActive {
+   width: 0;
+   height: 0;
+   border-style: solid;
+   border-width: 15px 15px 0 15px;
+   border-color: #282828 transparent transparent transparent;
+}
+
+.wdtContentActive.hidden {
+   display: none;
+}
+
+.wdtContentDeactive {
+   width: 0;
+   height: 0;
+   border-style: solid;
+   border-width: 0 15px 15px 15px;
+   border-color: transparent transparent #282828 transparent;
+}
+
+.wdtContentDeActive.hidden {
+   display: none;
+}
+
+/* Content */
+#step4OptionalWDTContent {
+   background: #fff;
+}
+
+#step4OptionalWDTContent.hidden {
+   display: none;
+}
+
+#step4OptionalWDTContent #WDTSteps {
+   margin: 0;
+   overflow: hidden;
+   padding: 0;
+}
+
+#step4OptionalWDTContent .WDTStep {
+   float: left;
+   height: 400px;
+   list-style: inside none;
+   margin: 10px 24px 20px;
+   padding: 20px 28px;
+   width: 40%;
+}
+
+#step4OptionalWDTContent .WDTStep p {
+   text-align: left;
+}
+
+#step4OptionalWDTContent .WDTStepImage {
+   background-color: transparent;
+   background-repeat: no-repeat;
+   background-size: contain;
+   background-position: 50% 50%;
+   border: 1px solid #F0F0F0;
+   display: block;
+   height: 302px;
+   margin: 0 auto;
+   overflow: hidden;
+   width: 450px;
+}
+
+#step4OptionalWDTContent #WDTStep1 .WDTStepImage {
+   background-image: url("../img/wdt-step1.png");
+}
+
+#step4OptionalWDTContent #WDTStep2 .WDTStepImage {
+   background-image: url("../img/wdt-step2.png");
+}
+
+#step4OptionalWDTContent #WDTStep3 .WDTStepImage {
+   background-image: url("../img/wdt-step3.png");
+}
+
+#step4OptionalWDTContent #WDTStep4 .WDTStepImage {
+   background-image: url("../img/wdt-step4.png");
+}
+
+#step4OptionalWDTContent #WDTStep5 {
+   height: 80px;
+}
+
+#step4OptionalWDTContent #WDTStep5 {
+   /*display: none;*/
+   clear: both;
+   float: none;
+   margin-top: 0;
+   padding-top: 0;
+   width: 100%;
+}
+
+#step4OptionalWDTContent .stepNumber {
+   margin: 20px 0px 0 10px;
+   width: 100%;
+}
+
+#step4OptionalWDTContent p {
+   line-height: 22px;
+   margin: 10px 0px 0 10px;
+}
+
+#step4OptionalWDTContent .WDTStepImage img {
+   height: 100%;
+   width: 100%;
+}

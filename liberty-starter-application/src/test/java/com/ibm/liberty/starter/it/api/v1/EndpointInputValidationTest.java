@@ -197,23 +197,8 @@ public class EndpointInputValidationTest {
                     assertNotNull("features node was not found within pom.xml", features);
                     assertTrue("Install feature was not found : servlet-3.1", hasChildNode(features, "feature", "servlet-3.1"));
                     assertTrue("Install feature was not found : apiDiscovery-1.0", hasChildNode(features, "feature", "apiDiscovery-1.0"));
-                    assertTrue("acceptLicense node with ${accept.features.license} property was not found", hasChildNode(features, "acceptLicense", "${accept.features.license}"));
+                    assertTrue("acceptLicense node with property true was not found", hasChildNode(features, "acceptLicense", "true"));
 
-                    Node plugins = configuration.getParentNode().getParentNode();
-                    Node artifactIdNode = getGrandchildNode(plugins, "plugin", "artifactId", "maven-enforcer-plugin");
-                    assertNotNull("maven-enforcer-plugin was not found", artifactIdNode);
-                    Node enforcerPlugin = artifactIdNode.getParentNode();
-                    Node executions = getChildNode(enforcerPlugin, "executions");
-                    assertNotNull("executions node was not found within maven-enforcer-plugin", executions);
-                    Node enforcePropertyNode = getGrandchildNode(executions, "execution", "id", "enforce-property");
-                    assertNotNull("enforce-property id was not found within maven-enforcer-plugin", enforcePropertyNode);
-                    Node execution = enforcePropertyNode.getParentNode();
-                    Node configurationNode = getChildNode(execution, "configuration");
-                    assertNotNull("configuration node was not found within maven-enforcer-plugin", configurationNode);
-                    Node rules = getChildNode(configurationNode, "rules");
-                    assertNotNull("rules node was not found within maven-enforcer-plugin", rules);
-                    Node acceptLicenseProperty = getGrandchildNode(rules, "requireProperty", "property", "accept.features.license");
-                    assertNotNull("requireProperty with accept.features.license property was not found within maven-enforcer-plugin", acceptLicenseProperty);
                     foundFeaturesToInstall = true;
                 }
                 zipIn.closeEntry();
