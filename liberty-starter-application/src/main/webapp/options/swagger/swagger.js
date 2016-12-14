@@ -38,9 +38,7 @@ angular.module('appAccelerator')
   appacc.addListener(function() {
     $log.debug("Swagger : checking service state.");
     $scope.allowConfig = appacc.isSelected(restId);
-    if(ctrl.fileUploadedOK) {
-      (appacc.isSelected(swaggerId) && appacc.isSelected(restId) && $scope.options.useSwaggerDoc) ? appacc.addTechOption(techOptions) : appacc.removeTechOption(techOptions);
-    }
+    $scope.updateTechOptions();
     $log.debug("Swagger : allowConfig set to " + $scope.allowConfig);
     init();
   });
@@ -63,7 +61,9 @@ angular.module('appAccelerator')
   }
 
   $scope.updateTechOptions = function() {
-    $scope.options.useSwaggerDoc ? appacc.addTechOption(techOptions) : appacc.removeTechOption(techOptions);
+    if(ctrl.fileUploadedOK) {
+        (appacc.isSelected(swaggerId) && appacc.isSelected(restId) && $scope.options.useSwaggerDoc) ? appacc.addTechOption(techOptions) : appacc.removeTechOption(techOptions);
+      }
   }
 
   $scope.upload = function() {
