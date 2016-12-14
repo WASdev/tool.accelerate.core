@@ -67,7 +67,7 @@ libertyutils {
 }
 
 // Zip up the skeletonBuildImage so it can be included in the war file
-task compressSkeletonBuildImage(type: Jar) {
+task compressSkeletonBuildImage(type: Zip) {
     from 'skeletons/base'
     destinationDir = sourceSets.main.output.resourcesDir
     baseName = '/services/skeletonLibertyBuildImage'
