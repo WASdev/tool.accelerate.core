@@ -1,7 +1,7 @@
 <div ng-controller="swagCtrl">
   <div ng-show="allowConfig">
     <div class="checkbox">
-      <label><input type="checkbox" ng-model="options.useSwaggerDoc">Generate server code from a Swagger document</label>
+      <label><input type="checkbox" ng-click="updateTechOptions()" ng-model="options.useSwaggerDoc">Generate server code from a Swagger document</label>
     </div>
     <div id="step3SwaggerLocalUpload" ng-show="options.useSwaggerDoc">
       <input type="file" id="step3SwaggerFileSelect" accept=".json,.yaml" ng-show="false"/>
