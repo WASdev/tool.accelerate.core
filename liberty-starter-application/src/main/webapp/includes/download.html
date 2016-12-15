@@ -1,72 +1,80 @@
 <div id="step4">
     <div class="container">
-            <div class="stepBar"></div>
-            <div class="stepNumber">STEP <span class="numberOfSteps">2</span> / <span class="numberOfSteps">2</span></div>
+        <div class="stepBar"></div>
+        <div class="stepNumber">STEP <span class="numberOfSteps">2</span> / <span class="numberOfSteps">2</span></div>
         <div class="row">
             <div class="col-md-6 col-sm-6">
                 <div class="stepHeading">Configure your project and download as a ZIP file.</div>
                 <div ng-show="deploy.name"><a ng-href="{{createDownloadUrl()}}" target="#" class="btn btn-primary" role="button" ng-click="sendGAEvent('Download', 'Java', 'JEE')">Accept and Download</a></div>
                 <div ng-show="!deploy.name"><a ng-href="{{createDownloadUrl()}}" class="btn btn-primary" role="button" ng-disabled="true">Choose a file name</a></div>
                 <div class="disclaimer">By clicking the "Accept and Download" button below you agree that you have had the opportunity to review the <a href="http://www.apache.org/licenses/LICENSE-2.0" target="_blank">Apache Version 2.0</a> and <a href="https://public.dhe.ibm.com/ibmdl/export/pub/software/websphere/wasdev/license/base_ilan/ilan/16.0.0.3/lafiles/en.html"
-                  target="LibertyLicense">Liberty</a> licenses and you agree to be bound by their terms.</div>
+                                                                                                                                                                                                                                                        target="LibertyLicense">Liberty</a> licenses and you agree to be bound by their terms.</div>
                 <div>
                     <h4 class="optionalHeading">Optional configuration:</h4>
                 </div>
                 <div class="options">
                     <span>Name the file:</span>
                     <input type="text"
-                        placeholder="Example: LibertyProject" autocomplete="off"
-                        maxlength="50" ng-model="deploy.name" ng-change="updateService()">
+                           placeholder="Example: LibertyProject" autocomplete="off"
+                           maxlength="50" ng-model="deploy.name" ng-change="updateService()">
                 </div>
                 <div class="options">
                     <label class="checkbox-inline">
                         <input type="checkbox" ng-model="deploy.bluemix" ng-click="updateService()">Bluemix default deployment
                     </label>
                 </div>
+                <div class="options">
+                    <label class="radio-inline">
+                        <input type="radio" name="buildRadio" value="{{buildType.MAVEN}}" ng-model="deploy.buildType" ng-click="updateService()">Maven
+                    </label>
+                    <label class="radio-inline">
+                        <input type="radio" name="buildRadio" value="{{buildType.GRADLE}}" ng-model="deploy.buildType" ng-click="updateService()">Gradle
+                    </label>
+                </div>
             </div>
             <div class="col-md-6 col-sm-6">
-              <p class="instructionHeading">Once the download is complete, locate your project and unzip it.</p>
-              <div class="panel panel-instruction">
-                <div class="panel-body">
-                  <div ng-show="!deploy.bluemix">
-                    <p class="instruction">Run your application with: </p>
-                    <p class="instructionRun">mvn install liberty:run-server</p>
-                  </div>
-                  <div ng-show="deploy.bluemix">
-                    <p class="instruction">Deploy to Bluemix with: </p>
-                      <p class="instructionRun">mvn install -Dcf.org=<span
-                              class="purpleCode">[your email address]</span> -Dcf.username=<span
-                              class="purpleCode">[your username]</span> -Dcf.password=<span
-                              class="purpleCode">[your password]</span></p>
-                  </div>
+                <p class="instructionHeading">Once the download is complete, locate your project and unzip it.</p>
+                <div class="panel panel-instruction">
+                    <div class="panel-body">
+                        <div ng-show="!deploy.bluemix">
+                            <p class="instruction">Run your application with: </p>
+                            <p class="instructionRun">mvn install liberty:run-server</p>
+                        </div>
+                        <div ng-show="deploy.bluemix">
+                            <p class="instruction">Deploy to Bluemix with: </p>
+                            <p class="instructionRun">mvn install -Dcf.org=<span
+                                    class="purpleCode">[your email address]</span> -Dcf.username=<span
+                                    class="purpleCode">[your username]</span> -Dcf.password=<span
+                                    class="purpleCode">[your password]</span></p>
+                        </div>
+                    </div>
                 </div>
-              </div>
-              <div class="panel panel-instruction">
-                <div class="panel-body">
-                  <p class="instruction">Access your application at: </p>
-                  <div ng-show="!deploy.bluemix">
-                    <p class="instructionRun"><a href="http://localhost:9080/myLibertyApp/" target="_blank" ng-click="sendGAEvent('Outbound', 'app endpoint', 'local')">http://localhost:9080/myLibertyApp/</a></p>
-                  </div>
-                  <div ng-show="deploy.bluemix">
-                    <p class="instructionRun"><a href="http://{{deploy.name}}.eu-gb.mybluemix.net/myLibertyApp/" target="_blank" ng-click="sendGAEvent('Outbound', 'app endpoint', 'bluemix')">http://{{deploy.name}}.eu-gb.mybluemix.net/myLibertyApp/</a></p>
-                    <p class="instruction">To manage your deployed application visit your dashboard on Bluemix.</p>
-                  </div>
+                <div class="panel panel-instruction">
+                    <div class="panel-body">
+                        <p class="instruction">Access your application at: </p>
+                        <div ng-show="!deploy.bluemix">
+                            <p class="instructionRun"><a href="http://localhost:9080/myLibertyApp/" target="_blank" ng-click="sendGAEvent('Outbound', 'app endpoint', 'local')">http://localhost:9080/myLibertyApp/</a></p>
+                        </div>
+                        <div ng-show="deploy.bluemix">
+                            <p class="instructionRun"><a href="http://{{deploy.name}}.eu-gb.mybluemix.net/myLibertyApp/" target="_blank" ng-click="sendGAEvent('Outbound', 'app endpoint', 'bluemix')">http://{{deploy.name}}.eu-gb.mybluemix.net/myLibertyApp/</a></p>
+                            <p class="instruction">To manage your deployed application visit your dashboard on Bluemix.</p>
+                        </div>
+                    </div>
                 </div>
-              </div>
-              <div class="panel panel-instruction">
-                <div class="panel-body">
-                  <p class="instruction">Your application code can be found in: </p>
-                  <p class="instructionRun">src/main/java</p>
-                  <div ng-show="!deploy.bluemix">
-                    <p class="instruction">Your Liberty server can be found in: </p>
-                    <p class="instructionRun">target/wlp/usr/servers/LibertyProjectServer</p>
-                  </div>
-                  <p class="instruction">Optionally, <a href="wdt.html" target="_blank" ng-click="sendGAEvent('Outbound', 'resources', 'WDT')">import your project</a> into WebSphere Developer Tool</p>
+                <div class="panel panel-instruction">
+                    <div class="panel-body">
+                        <p class="instruction">Your application code can be found in: </p>
+                        <p class="instructionRun">src/main/java</p>
+                        <div ng-show="!deploy.bluemix">
+                            <p class="instruction">Your Liberty server can be found in: </p>
+                            <p class="instructionRun">target/wlp/usr/servers/LibertyProjectServer</p>
+                        </div>
+                        <p class="instruction">Optionally, <a href="wdt.html" target="_blank" ng-click="sendGAEvent('Outbound', 'resources', 'WDT')">import your project</a> into WebSphere Developer Tool</p>
+                    </div>
                 </div>
-              </div>
             </div>
         </div>
     </div>
 
 
-  </div>
+</div>

@@ -32,7 +32,8 @@ angular.module('appAccelerator')
   $scope.maxSteps = 2;
   $scope.selectedCount = 0;
   $scope.deploy = {bluemix : appacc.deployToBluemix(),
-    name : "LibertyProject"
+    name : "LibertyProject",
+    buildType : appacc.updateBuildType()
   };
 
   $scope.createDownloadUrl = function() {
@@ -86,6 +87,8 @@ angular.module('appAccelerator')
     appacc.deployToBluemix($scope.deploy.bluemix);
     $log.debug("AppAccelerator : DeployToBluemix has value:" + appacc.deployToBluemix());
     appacc.updateName($scope.deploy.name);
+    $log.debug("Updating build type to " + $scope.deploy.buildType);
+    appacc.updateBuildType($scope.deploy.buildType);
     $log.debug("AppAccelerator : Download url set to:" + appacc.createDownloadUrl());
     appacc.notifyListeners();
   }
@@ -126,6 +129,8 @@ angular.module('appAccelerator')
   function newRowNeeded(index) {
     return (index % $scope.colCount) === 0;
   }
+
+  $scope.buildType = appacc.buildType;
 
   this.getTech = function() {
     appacc.getTechnologies().then(function(response) {
