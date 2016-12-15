@@ -12,10 +12,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
-*/ 
-apply from: '../common-java.gradle'
-apply from: '../common-war.gradle'
-
+*/
 buildscript {
   repositories {
     maven {
@@ -27,6 +24,12 @@ buildscript {
   }
 }
 
+plugins {
+    id 'com.craigburke.karma' version '1.4.4'
+}
+
+apply from: '../common-java.gradle'
+apply from: '../common-war.gradle'
 apply plugin: "org.sonarqube"
 
 dependencies {
@@ -143,6 +146,10 @@ task localRun (type: net.wasdev.wlp.gradle.plugins.tasks.StartTask){
     logging.level = LogLevel.INFO
 }
 
+// Can't access project properties in the karma configuration so set variables here
+def rootDirectory = project.projectDir.getAbsolutePath()
+def testResultsDir = new File(buildDir, "karmaResults")
+
 gradle.taskGraph.afterTask { Task task, TaskState state ->
     if (task.name == "fvt" && state.failure) {
         println '***FVT JUNIT LOGS***'
@@ -154,6 +161,10 @@ gradle.taskGraph.afterTask { Task task, TaskState state ->
         printFile(file("${buildDir}/temp/localGradlePayloadTest/gradleLog/log.txt"))
         printFile(file("${buildDir}/temp/localPayloadTest/mvnLog/log.txt"))
         printFile(file("${buildDir}/temp/localPayloadTest/mvnLog/stopServer.txt"))
+    }
+    if (task.name == "karmaRun" && state.failure) {
+        println '***KARMA RUN JUNIT REPORT***'
+        printDirectory(testResultsDir)
     }
 }
 
@@ -179,14 +190,29 @@ def printFile(file) {
     println '***END OF FILE'
 }
 
-clean.dependsOn(':liberty-starter-wlpcfg:cleanServer')
+karma {
+    basePath = "$rootDirectory"
+    sourceBases = ['src/main/webapp/js']
+    testBases = ['src/test/js']
+    frameworks = ['jasmine']
+    dependencies(['angular', 'angular-mocks'])
+    reporters = ['junit']
+    files = ['node_modules/angular/angular.min.js',
+             'node_modules/angular-mocks/angular-mocks.js',
+             'src/main/webapp/js/**/*.js',
+             'src/test/js/*.js']
+    logLevel = 'INFO'
+    junitReporter = [ outputDir: "$testResultsDir.absolutePath" ]
+}
+
+clean.dependsOn(':liberty-starter-wlpcfg:cleanServer', 'karmaClean')
 war.dependsOn(':liberty-filter-application:publishWar', ':starter-microservice-web:publishWar', ':starter-microservice-persistence:publishWar', ':starter-microservice-rest:publishWar', ':starter-microservice-websocket:publishWar', ':starter-microservice-springboot-web:publishWar', ':starter-microservice-watsonsdk:publishWar', ':starter-microservice-microprofile:publishWar', ':starter-microservice-swagger:publishWar', 'compressSkeletonBuildImage', 'copySpecialFiles', 'createSwaggerJSON')
 installFeature.dependsOn('installLiberty')
 libertyStart.dependsOn('installFeature', 'addServerEnv', ':starter-microservice-test:publishTestWar', 'publishWar')
 localRun.dependsOn('installFeature', 'publishWar')
 fvt.dependsOn('libertyStart', 'testClasses')
 fvt.finalizedBy('libertyStop', 'removeServerEnv')
-check.dependsOn('fvt')
+check.dependsOn('fvt', 'karmaRun')
 build.dependsOn('libertyPackage')
 libertyPackage.dependsOn('publishWar', 'cleanDropins')
 apply from: rootProject.file('only-run-liberty-start-if-fvt-is-not-up-to-date.gradle')
