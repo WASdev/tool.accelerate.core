@@ -29,6 +29,12 @@ angular.module('appAccelerator')
      var dataURL = serviceURL + "/data?";              //tech=rest&deploy=local&name=libertyProject&workspace=642f3151-c9b6-4d5c-b185-4c29b8
      var optionsURL = "/start/options";
      var workspaceURL = serviceURL + "/workspace";
+     var buildType = {
+        MAVEN: 'MAVEN',
+        GRADLE: 'GRADLE'
+     }
+
+     var buildTypeToUse = buildType.MAVEN;
 
      var bluemix = false;
      //put the selected technologies here so that it can seen by multiple controllers
@@ -132,7 +138,7 @@ angular.module('appAccelerator')
           if(selected != "") {
             //something has been selected, so proceed
             var deployType = bluemix ? "&deploy=bluemix" : "&deploy=local";
-            url = dataURL + selected + deployType + "&name=" + projectName + "&workspace=";
+            url = dataURL + selected + deployType + "&name=" + projectName + "&build=" + buildTypeToUse + "&workspace=";
             if(workspaceID) {
               url += workspaceID;
             } else {
@@ -186,7 +192,7 @@ angular.module('appAccelerator')
       var isSelected = function(id) {
         for(var i = 0; i < selectedTechnologies.length; i++) {
           if(selectedTechnologies[i].id == id) {
-            return true;
+            return selectedTechnologies[i];
           }
         }
         return false;
@@ -204,6 +210,18 @@ angular.module('appAccelerator')
           projectName = name;
         }
         return projectName;
+      }
+
+      var updateBuildType = function(newBuildType) {
+        for (var validBuildType in buildType) {
+          if (buildType.hasOwnProperty(validBuildType)) {
+            if (newBuildType === validBuildType) {
+              buildTypeToUse = newBuildType;
+              break;
+            }
+          }
+        }
+        return buildTypeToUse;
       }
 
       var callbacks = [];
@@ -256,6 +274,8 @@ angular.module('appAccelerator')
         updateName : updateName,
         notifyListeners : notifyListeners,
         addListener : addListener,
-        retrieveWorkspaceId : retrieveWorkspaceId
+        retrieveWorkspaceId : retrieveWorkspaceId,
+        buildType : buildType,
+        updateBuildType : updateBuildType
       };
   }]);
