@@ -38,13 +38,18 @@
                     <div class="panel-body">
                         <div ng-show="!deploy.bluemix">
                             <p class="instruction">Run your application with: </p>
-                            <p class="instructionRun">mvn install liberty:run-server</p>
+                            <p class="instructionRun" ng-show="deploy.buildType == buildType.MAVEN">mvn install liberty:run-server</p>
+                            <p class="instructionRun" ng-show="deploy.buildType == buildType.GRADLE">gradle build libertyStart</p>
                         </div>
                         <div ng-show="deploy.bluemix">
                             <p class="instruction">Deploy to Bluemix with: </p>
-                            <p class="instructionRun">mvn install -Dcf.org=<span
+                            <p class="instructionRun" ng-show="deploy.buildType == buildType.MAVEN">mvn install -Dcf.org=<span
                                     class="purpleCode">[your email address]</span> -Dcf.username=<span
                                     class="purpleCode">[your username]</span> -Dcf.password=<span
+                                    class="purpleCode">[your password]</span></p>
+                            <p class="instructionRun" ng-show="deploy.buildType == buildType.GRADLE">gradle build cfPush -PcfOrg=<span
+                                    class="purpleCode">[your email address]</span> -PcfUsername=<span
+                                    class="purpleCode">[your username]</span> -PcfPassword=<span
                                     class="purpleCode">[your password]</span></p>
                         </div>
                     </div>
