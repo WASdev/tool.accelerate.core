@@ -19,16 +19,16 @@
                            maxlength="50" ng-model="deploy.name" ng-change="updateService()">
                 </div>
                 <div class="options">
-                    <label class="checkbox-inline">
-                        <input type="checkbox" ng-model="deploy.bluemix" ng-click="updateService()">Bluemix default deployment
-                    </label>
-                </div>
-                <div class="options">
                     <label class="radio-inline">
                         <input type="radio" name="buildRadio" value="{{buildType.MAVEN}}" ng-model="deploy.buildType" ng-click="updateService()">Maven
                     </label>
                     <label class="radio-inline">
                         <input type="radio" name="buildRadio" value="{{buildType.GRADLE}}" ng-model="deploy.buildType" ng-click="updateService()">Gradle
+                    </label>
+                </div>
+                <div class="options">
+                    <label class="checkbox-inline">
+                        <input type="checkbox" ng-model="deploy.bluemix" ng-click="updateService()">Bluemix default deployment
                     </label>
                 </div>
             </div>
