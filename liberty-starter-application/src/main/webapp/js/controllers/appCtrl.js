@@ -46,9 +46,10 @@ angular.module('appAccelerator')
 
   $scope.toggleSelected = function(technology, $event) {
     $event.stopPropagation();
-    var googleEventType = (technology.selected) ? "deselected" : "selected";
+    technology.selected = !technology.selected;
+    var googleEventType = (technology.selected) ? "selected" : "deselected";
     $scope.sendGAEvent('Technology', googleEventType, technology.id);
-    (technology.selected) ? appacc.removeSelectedTechnology(technology.id) : appacc.addSelectedTechnology(technology.id);
+    (technology.selected) ? appacc.addSelectedTechnology(technology.id) : appacc.removeSelectedTechnology(technology.id);
     $scope.selectedCount = appacc.getSelectedCount();
     $log.debug("AppAccelerator : Selected count " + $scope.selectedCount);
     technology.panel = technology.selected ? "panel-selected" : "panel-primary";
@@ -89,7 +90,6 @@ angular.module('appAccelerator')
     appacc.updateName($scope.deploy.name);
     $log.debug("Updating build type to " + $scope.deploy.buildType);
     appacc.updateBuildType($scope.deploy.buildType);
-    $log.debug("AppAccelerator : Download url set to:" + appacc.createDownloadUrl());
     appacc.notifyListeners();
   }
 

@@ -16,8 +16,10 @@ public class CreateFeaturesTags {
 
     public Map<String, String> getTags() {
         Map<String, String> tags = new HashMap<>();
-        addFeatureInstallConfig(tags);
-        addTaskSetupTag(tags);
+        if (!featuresToInstall.isEmpty()) {
+            addFeatureInstallConfig(tags);
+            addTaskSetupTag(tags);
+        }
         return tags;
     }
 

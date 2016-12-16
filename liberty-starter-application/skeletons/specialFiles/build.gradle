@@ -35,9 +35,9 @@ ext {
     packagingType = 'usr'
 
     // Cloud Foundry/Bluemix properties
-    // This is the host for your app in Bluemix and what it will be called in the dashboard. -->
+    // This is the host for your app in Bluemix and what it will be called in the dashboard.
     cfHost = appName
-    cfContext = 'ng.mybluemix.net'
+    cfContext = 'mybluemix.net'
     cfTarget = 'https://api.ng.bluemix.net'
     cfSpace = 'dev'
     cfContextRoot = "${cfHost}.${cfContext}/${warContext}"
@@ -79,6 +79,12 @@ task integrationTest(type: Test) {
     exclude '**/unit/**'
 
     systemProperties = ['liberty.test.port': testServerHttpPort, 'war.name': warContext, 'running.bluemix': 'false', 'cf.context.root': cfContextRoot ]
+}
+
+gradle.taskGraph.whenReady { graph ->
+    if (graph.hasTask(cfPush)) {
+        integrationTest.systemProperties['running.bluemix'] = 'true'
+    }
 }
 
 task copyConfigSnippetsToServer {
@@ -186,7 +192,7 @@ cloudfoundry {
 tasks.create('setupServer')
 check.dependsOn 'integrationTest'
 %LIBERTY_FEATURE_TASK_SETUP%
-setupServer.dependsOn 'createServerBootstrap', 'publishServerConfig', 'copyConfigSnippetsToServer', 'publishWar'
+setupServer.dependsOn 'installLiberty', 'createServerBootstrap', 'publishServerConfig', 'copyConfigSnippetsToServer', 'publishWar'
 createServerBootstrap.mustRunAfter 'installLiberty'
 publishServerConfig.mustRunAfter 'installLiberty'
 copyConfigSnippetsToServer.mustRunAfter 'installLiberty'
@@ -199,3 +205,4 @@ libertyStartTestServer.dependsOn 'setupServer'
 assemble.dependsOn 'libertyPackage'
 libertyPackage.dependsOn 'setupServer'
 cfPush.dependsOn 'printBluemixProperties'
+integrationTest.mustRunAfter 'cfPush'
