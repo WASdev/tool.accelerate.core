@@ -100,6 +100,13 @@ task copyConfigSnippetsToServer {
     }
 }
 
+task printMessageAboutRunningServer {
+    doLast {
+        println "The server is now running at http://localhost:${testServerHttpPort}/${warContext}"
+        println "To stop the server run 'gradle libertyStop'"
+    }
+}
+
 def addServerSnippetDependencies(resolvedDependency, copySpecs) {
     if ("server-snippet".equals(resolvedDependency.getModuleName())) {
         resolvedDependency.getModuleArtifacts().each { artifact ->
@@ -206,3 +213,4 @@ assemble.dependsOn 'libertyPackage'
 libertyPackage.dependsOn 'setupServer'
 cfPush.dependsOn 'printBluemixProperties'
 integrationTest.mustRunAfter 'cfPush'
+libertyStart.finalizedBy 'printMessageAboutRunningServer'
