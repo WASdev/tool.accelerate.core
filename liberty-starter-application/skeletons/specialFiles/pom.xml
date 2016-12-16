@@ -39,8 +39,8 @@
         <packaging.type>usr</packaging.type>
         
         <!-- Cloud Foundry/Bluemix properties -->
-        <cf.context>eu-gb.mybluemix.net</cf.context>
-        <cf.target>https://api.eu-gb.bluemix.net</cf.target>
+        <cf.context>mybluemix.net</cf.context>
+        <cf.target>https://api.ng.bluemix.net</cf.target>
         <cf.space>dev</cf.space>
         <cf.context.root>${cf.host}.${cf.context}/${warContext}</cf.context.root>
         

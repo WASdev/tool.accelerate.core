@@ -9,3 +9,4 @@
 /target
 /.factorypath
 /cloudant_config.properties
+/node_modules

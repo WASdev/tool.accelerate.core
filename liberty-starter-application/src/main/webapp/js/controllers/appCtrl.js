@@ -32,7 +32,8 @@ angular.module('appAccelerator')
   $scope.maxSteps = 2;
   $scope.selectedCount = 0;
   $scope.deploy = {bluemix : appacc.deployToBluemix(),
-    name : "LibertyProject"
+    name : "LibertyProject",
+    buildType : appacc.updateBuildType()
   };
 
   $scope.createDownloadUrl = function() {
@@ -45,9 +46,10 @@ angular.module('appAccelerator')
 
   $scope.toggleSelected = function(technology, $event) {
     $event.stopPropagation();
-    var googleEventType = (technology.selected) ? "deselected" : "selected";
+    technology.selected = !technology.selected;
+    var googleEventType = (technology.selected) ? "selected" : "deselected";
     $scope.sendGAEvent('Technology', googleEventType, technology.id);
-    (technology.selected) ? appacc.removeTechnology(technology) : appacc.addTechnology(technology);
+    (technology.selected) ? appacc.addSelectedTechnology(technology.id) : appacc.removeSelectedTechnology(technology.id);
     $scope.selectedCount = appacc.getSelectedCount();
     $log.debug("AppAccelerator : Selected count " + $scope.selectedCount);
     technology.panel = technology.selected ? "panel-selected" : "panel-primary";
@@ -86,7 +88,8 @@ angular.module('appAccelerator')
     appacc.deployToBluemix($scope.deploy.bluemix);
     $log.debug("AppAccelerator : DeployToBluemix has value:" + appacc.deployToBluemix());
     appacc.updateName($scope.deploy.name);
-    $log.debug("AppAccelerator : Download url set to:" + appacc.createDownloadUrl());
+    $log.debug("Updating build type to " + $scope.deploy.buildType);
+    appacc.updateBuildType($scope.deploy.buildType);
     appacc.notifyListeners();
   }
 
@@ -126,6 +129,8 @@ angular.module('appAccelerator')
   function newRowNeeded(index) {
     return (index % $scope.colCount) === 0;
   }
+
+  $scope.buildType = appacc.buildType;
 
   this.getTech = function() {
     appacc.getTechnologies().then(function(response) {

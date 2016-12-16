@@ -60,7 +60,6 @@ public class RunLocalGradlePayloadTest {
         }
         commands.add(gradleCommand);
         commands.addAll(Arrays.asList(gradleTasks));
-        commands.add("-PacceptFeaturesLicense=true");
         logFile.getParentFile().mkdir();
         System.out.println("commands = " + commands);
         final Process gradleProcess = new ProcessBuilder(commands)
