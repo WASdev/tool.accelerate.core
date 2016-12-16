@@ -21,11 +21,7 @@ public class CreateFeaturesTagsTest {
         assertThat(tags.size(), is(2));
         assertThat(tags, hasEntry("LIBERTY_FEATURE_CONFIG", "    features {\n" +
                 "        name = ['Wibble']\n" +
-                "        if (project.hasProperty('acceptFeaturesLicense') && acceptFeaturesLicense) {\n" +
-                "            acceptLicense = true\n" +
-                "        } else {\n" +
-                "            throw new GradleException(\"You must set a value for the 'acceptFeaturesLicense' property. Please review the license terms and conditions for additional features to be installed and if you accept the license terms and conditions then run the Gradle command with '-PacceptFeaturesLicense=true'.\")\n" +
-                "        }\n" +
+                "        acceptLicense = true\n" +
                 "    }"));
         assertThat(tags, hasEntry("LIBERTY_FEATURE_TASK_SETUP", "installFeature.dependsOn 'installLiberty'\n" +
                 "setupServer.dependsOn 'installFeature'"));

@@ -24,11 +24,7 @@ public class CreateFeaturesTags {
     private void addFeatureInstallConfig(Map<String, String> tags) {
         tags.put("LIBERTY_FEATURE_CONFIG", "    features {\n" +
                         "        name = [" + featuresAsCommasSeparatedList() + "]\n" +
-                        "        if (project.hasProperty('acceptFeaturesLicense') && acceptFeaturesLicense) {\n" +
-                        "            acceptLicense = true\n" +
-                        "        } else {\n" +
-                        "            throw new GradleException(\"You must set a value for the 'acceptFeaturesLicense' property. Please review the license terms and conditions for additional features to be installed and if you accept the license terms and conditions then run the Gradle command with '-PacceptFeaturesLicense=true'.\")\n" +
-                        "        }\n" +
+                        "        acceptLicense = true\n" +
                         "    }");
     }
 
