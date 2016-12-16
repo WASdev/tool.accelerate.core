@@ -48,7 +48,7 @@ angular.module('appAccelerator')
     $event.stopPropagation();
     var googleEventType = (technology.selected) ? "deselected" : "selected";
     $scope.sendGAEvent('Technology', googleEventType, technology.id);
-    (technology.selected) ? appacc.removeTechnology(technology) : appacc.addTechnology(technology);
+    (technology.selected) ? appacc.removeSelectedTechnology(technology.id) : appacc.addSelectedTechnology(technology.id);
     $scope.selectedCount = appacc.getSelectedCount();
     $log.debug("AppAccelerator : Selected count " + $scope.selectedCount);
     technology.panel = technology.selected ? "panel-selected" : "panel-primary";

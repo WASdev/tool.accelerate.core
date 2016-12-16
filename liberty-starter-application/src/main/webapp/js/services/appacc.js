@@ -128,12 +128,9 @@ angular.module('appAccelerator')
           var selected = "";   //the list of selected technologies
           for(var i = 0; i < selectedTechnologies.length; i++) {
             var tech = selectedTechnologies[i];
-            if(tech.selected) {
-              if(selected != "") selected += "&";
-              selected += ("tech=" + tech.id);
-              $log.debug("AppAcc Svc : selected has value:" + selected);
-            }
-            $log.debug("AppAcc Svc : Technology %o is not selected so not adding.", tech);
+            if(selected != "") selected += "&";
+            selected += ("tech=" + tech);
+            $log.debug("AppAcc Svc : selected has value:" + selected);
           }
           if(selected != "") {
             //something has been selected, so proceed
@@ -163,36 +160,40 @@ angular.module('appAccelerator')
         return selectedTechnologies.length;
       }
 
-      var addTechnology = function(technology) {
-        $log.debug("AppAcc Svc : Adding technology:" + technology.id);
-        technology.selected = true;
-        $log.debug("AppAcc Svc : technology.selected for technology " + technology.id + " has value:" + technology.selected);
-        for(var i = 0; i < selectedTechnologies.length; i++) {
-          if(selectedTechnologies[i].id === technology.id) {
+      var addIfNotPresent = function(array, value) {
+        for(var i = 0; i < array.length; i++) {
+          if(array[i] === value) {
             //already added, so ignore and return
             return;
           }
         }
-        selectedTechnologies.push(technology);
+        array.push(value);
       }
 
-      var removeTechnology = function(technology) {
-        $log.debug("AppAcc Svc : Removing technology:" + technology.id);
-        technology.selected = false;
-        for(var i = 0; i < selectedTechnologies.length; i++) {
-          if(selectedTechnologies[i].id === technology.id) {
-            //id's match so remove from the list
-            selectedTechnologies.splice(i, 1);
+      var addSelectedTechnology = function(technologyId) {
+        $log.debug("AppAcc Svc : Adding technology:" + technologyId);
+        addIfNotPresent(selectedTechnologies, technologyId);
+      }
+
+      var removeValue = function(array, value) {
+        for(var i = 0; i < array.length; i++) {
+          if(array[i] === value) {
+            array.splice(i, 1);
             return;
           }
         }
+      }
+
+      var removeSelectedTechnology = function(technologyId) {
+        $log.debug("AppAcc Svc : Removing technology:" + technologyId);
+        removeValue(selectedTechnologies, technologyId);
       }
 
       //true if a technology has been selected, false if not
       var isSelected = function(id) {
         for(var i = 0; i < selectedTechnologies.length; i++) {
-          if(selectedTechnologies[i].id == id) {
-            return selectedTechnologies[i];
+          if(selectedTechnologies[i] === id) {
+            return true;
           }
         }
         return false;
@@ -240,24 +241,12 @@ angular.module('appAccelerator')
 
       var addTechOption = function(option) {
         $log.debug("AppAcc Svc : Adding tech option :" + option);
-        for(var i = 0; i < techOptions.length; i++) {
-          if(techOptions[i] === option) {
-            //already added, so ignore and return
-            return;
-          }
-        }
-        techOptions.push(option);
+        addIfNotPresent(techOptions, option);
       }
 
       var removeTechOption = function(option) {
         $log.debug("AppAcc Svc : Removing tech option : " + option);
-        for(var i = 0; i < techOptions.length; i++) {
-          if(techOptions[i] === option) {
-            //id's match so remove from the list
-            techOptions.splice(i, 1);
-            return;
-          }
-        }
+        removeValue(techOptions, option);
       }
 
       return {
@@ -265,8 +254,8 @@ angular.module('appAccelerator')
         createDownloadUrl : createDownloadUrl,
         getTechOptions : getTechOptions,
         getSelectedCount : getSelectedCount,
-        addTechnology : addTechnology,
-        removeTechnology : removeTechnology,
+        addSelectedTechnology : addSelectedTechnology,
+        removeSelectedTechnology : removeSelectedTechnology,
         addTechOption : addTechOption,
         removeTechOption : removeTechOption,
         isSelected : isSelected,
