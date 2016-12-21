@@ -15,19 +15,22 @@
  *******************************************************************************/
 package com.ibm.liberty.starter.unit;
 
-import java.net.URI;
-import java.util.ArrayList;
-import java.util.List;
-
 import com.ibm.liberty.starter.ServiceConnector;
 import com.ibm.liberty.starter.api.v1.model.internal.Services;
 import com.ibm.liberty.starter.api.v1.model.provider.Dependency;
 import com.ibm.liberty.starter.api.v1.model.provider.Provider;
 import com.ibm.liberty.starter.api.v1.model.registration.Service;
 
+import java.net.URI;
+import java.util.ArrayList;
+import java.util.List;
+
 public class MockServiceConnector extends ServiceConnector {
     
     private Dependency[] dependencies;
+    public String capturedTechWorkspaceDir;
+    public String capturedOptions;
+    public String[] capturedTechs;
 
     public MockServiceConnector(URI uri, Dependency[] dependencies) {
         super(uri);
@@ -50,6 +53,14 @@ public class MockServiceConnector extends ServiceConnector {
         Provider provider = new Provider();
         provider.setDependencies(dependencies);
         return provider;
+    }
+
+    @Override
+    public String prepareDynamicPackages(Service service, String techWorkspaceDir, String options, String[] techs) {
+        capturedTechWorkspaceDir = techWorkspaceDir;
+        capturedOptions = options;
+        capturedTechs = techs;
+        return null;
     }
 
 }
