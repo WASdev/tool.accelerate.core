@@ -13,6 +13,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
 import static org.hamcrest.io.FileMatchers.anExistingDirectory;
 import static org.hamcrest.io.FileMatchers.anExistingFile;
 import static org.junit.Assert.assertThat;
@@ -41,6 +42,24 @@ public class GitHubWriterTest {
         assertThat(localGitRepo, is(anExistingDirectory()));
         assertFileExistsWithContent(rootFilePath, rootFileBytes, localGitRepo);
         assertFileExistsWithContent(nestedFilePath, nestedFileBytes, localGitRepo);
+    }
+    
+    @Test
+    public void emptyEntriesAreIgnored() throws Exception {
+        Map<String, byte[]> files = new HashMap<>();
+        String filePath = "emptyFile";
+        files.put(filePath, new byte[]{});
+
+        String repositoryName = "wibble";
+        FakeGitHubConnector fakeConnector = new FakeGitHubConnector();
+        GitHubWriter testObject = new GitHubWriter(files, repositoryName, fakeConnector);
+
+        testObject.createProjectOnGitHub();
+        File localGitRepo = fakeConnector.localGitRepo;
+
+        assertThat(localGitRepo, is(anExistingDirectory()));
+        assertThat(new File(localGitRepo, filePath), is(not(anExistingFile())));
+        assertThat(new File(localGitRepo, filePath), is(not(anExistingDirectory())));
     }
 
     private void assertFileExistsWithContent(String pathToFile, byte[] expectedContents, File localGitRepo) throws IOException {

@@ -5,9 +5,6 @@ import com.ibm.liberty.starter.DependencyHandler;
 import java.util.Collections;
 import java.util.Map;
 
-/**
- * Created by GB031472 on 25/11/2016.
- */
 public class CreateRepositoryTags {
     private final String repositoryUrl;
     public CreateRepositoryTags(DependencyHandler dependencyHandler) {

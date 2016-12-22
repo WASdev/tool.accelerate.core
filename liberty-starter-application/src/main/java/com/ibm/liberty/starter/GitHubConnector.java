@@ -21,6 +21,7 @@ public class GitHubConnector {
     private final String oAuthToken;
     private final File localGitDirectory;
     private Git localRepository;
+    private String repositoryLocation;
 
     public GitHubConnector(String oAuthToken) throws IOException {
         this.oAuthToken = oAuthToken;
@@ -37,6 +38,7 @@ public class GitHubConnector {
         Repository repository = new Repository();
         repository.setName(repositoryName);
         repository = service.createRepository(repository);
+        repositoryLocation = repository.getHtmlUrl();
 
         CloneCommand cloneCommand = Git.cloneRepository()
                 .setURI(repository.getCloneUrl())
@@ -74,5 +76,9 @@ public class GitHubConnector {
 
     public void deleteLocalRepository() throws IOException {
         FileUtils.deleteDirectory(localGitDirectory);
+    }
+
+    public String getRepsoitoryLocation() {
+        return repositoryLocation;
     }
 }

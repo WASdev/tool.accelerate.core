@@ -30,9 +30,12 @@ public class GitHubWriter {
     private void writeFilesToLocalRepository(File localRepository) throws IOException {
         log.log(Level.INFO, "Entering method GitHubWriter.writeFilesToLocalRepository()");
         for (Map.Entry<String, byte[]> fileEntry : fileMap.entrySet()) {
-            File fileToWrite = new File(localRepository, fileEntry.getKey());
-            fileToWrite.getParentFile().mkdirs();
-            Files.write(fileToWrite.toPath(), fileEntry.getValue());
+            byte[] bytes = fileEntry.getValue();
+            if (bytes.length > 0) {
+                File fileToWrite = new File(localRepository, fileEntry.getKey());
+                fileToWrite.getParentFile().mkdirs();
+                Files.write(fileToWrite.toPath(), bytes);
+            }
         }
     }
 }

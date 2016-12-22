@@ -2,9 +2,6 @@ package com.ibm.liberty.starter;
 
 import com.ibm.liberty.starter.api.v1.model.internal.Services;
 
-/**
- * Created by GB031472 on 21/12/2016.
- */
 public class ProjectConstructionInputData {
     public final Services services;
     public final ServiceConnector serviceConnector;
