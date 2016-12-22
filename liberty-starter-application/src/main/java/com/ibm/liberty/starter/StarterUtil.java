@@ -16,20 +16,17 @@
 
 package com.ibm.liberty.starter;
 
-import java.io.File;
-import java.util.List;
-import java.util.logging.Logger;
+import org.apache.commons.io.FileUtils;
 
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.validation.ValidationException;
-import javax.xml.transform.OutputKeys;
-import javax.xml.transform.Result;
-import javax.xml.transform.Source;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.TransformerFactoryConfigurationError;
+import java.io.File;
+import java.io.IOException;
+import java.util.List;
+import java.util.UUID;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class StarterUtil {
 
@@ -83,6 +80,20 @@ public class StarterUtil {
 				populateFilesList(file, filesListInDir);
 			}
 		}
+	}
+
+	public static String createCleanWorkspace() throws IOException {
+		String uuid = UUID.randomUUID().toString();
+
+		//Clean up workspace directory if it already exists (from previous server run)
+		String workspaceDirPath = StarterUtil.getWorkspaceDir(uuid);
+		File workspaceDir = new File(workspaceDirPath);
+		if(workspaceDir.exists()){
+			log.log(Level.FINE, "Workspace directory already exists : " + workspaceDirPath);
+			FileUtils.deleteDirectory(workspaceDir);
+			log.log(Level.FINE, "Deleted workspace directory : " + workspaceDirPath);
+		}
+		return uuid;
 	}
 	
 }

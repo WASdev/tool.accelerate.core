@@ -15,23 +15,18 @@
  *******************************************************************************/
 package com.ibm.liberty.starter.it;
 
-import static org.junit.Assert.assertTrue;
+import com.ibm.liberty.starter.api.v1.model.internal.Services;
+import com.ibm.liberty.starter.api.v1.model.registration.Service;
+import org.junit.Ignore;
+import org.junit.Test;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
-import org.junit.Ignore;
-import org.junit.Test;
-
-import com.ibm.liberty.starter.api.v1.model.internal.Services;
-import com.ibm.liberty.starter.api.v1.model.registration.Service;
+import static org.junit.Assert.assertTrue;
 
 public class ProjectZipBuilderTest {
 
@@ -46,7 +41,7 @@ public class ProjectZipBuilderTest {
         List<Service> serviceList = new ArrayList<Service>();
         serviceList.add(service);
         services.setServices(serviceList);
-//        ProjectZipConstructor testObject = new ProjectZipConstructor();
+//        ProjectConstructor testObject = new ProjectConstructor();
 //        testObject.buildZip(outputStream);
         ByteArrayInputStream inputStream = new ByteArrayInputStream(outputStream.toByteArray());
         ZipInputStream zipIn = new ZipInputStream(inputStream);
@@ -84,7 +79,7 @@ public class ProjectZipBuilderTest {
         List<Service> serviceList = new ArrayList<Service>();
         serviceList.add(service);
         services.setServices(serviceList);
-//        ProjectZipConstructor testObject = new ProjectZipConstructor();
+//        ProjectConstructor testObject = new ProjectConstructor();
 //        testObject.buildZip(outputStream);
         ByteArrayInputStream inputStream = new ByteArrayInputStream(outputStream.toByteArray());
         ZipInputStream zipIn = new ZipInputStream(inputStream);
@@ -119,7 +114,7 @@ public class ProjectZipBuilderTest {
         List<Service> serviceList = new ArrayList<Service>();
         serviceList.add(service);
         services.setServices(serviceList);
-//        ProjectZipConstructor testObject = new ProjectZipConstructor();
+//        ProjectConstructor testObject = new ProjectConstructor();
 //        testObject.buildZip(outputStream);
         
         ByteArrayInputStream inputStream = new ByteArrayInputStream(outputStream.toByteArray());

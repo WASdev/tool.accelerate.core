@@ -1,6 +1,6 @@
 package com.ibm.liberty.starter.build.maven.unit;
 
-import com.ibm.liberty.starter.ProjectZipConstructor.DeployType;
+import com.ibm.liberty.starter.ProjectConstructor.DeployType;
 import com.ibm.liberty.starter.build.maven.DomUtil;
 import com.ibm.liberty.starter.build.maven.SetDefaultProfileCommand;
 import org.junit.Before;
