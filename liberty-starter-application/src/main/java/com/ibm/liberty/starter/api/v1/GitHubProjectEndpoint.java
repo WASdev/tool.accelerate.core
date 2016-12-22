@@ -50,7 +50,7 @@ public class GitHubProjectEndpoint {
             GitHubConnector connector = new GitHubConnector(oAuthToken);
             GitHubWriter writer = new GitHubWriter(constructor.buildFileMap(), inputData.appName, connector);
             writer.createProjectOnGitHub();
-            return Response.seeOther(new URI(connector.getRepsoitoryLocation())).build();
+            return Response.seeOther(new URI(connector.getRepositoryLocation())).build();
         } catch (IllegalArgumentException e) {
             return Response.status(Status.FORBIDDEN).build();
         } catch (ValidationException e) {

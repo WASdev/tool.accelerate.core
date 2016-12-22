@@ -14,8 +14,8 @@ import static org.junit.Assume.assumeTrue;
 /**
  * This class will test the endpoint for creating a project on GitHub. It will only run if you supply it your GitHub
  * OAuth token with the -DgitHubOauth=&lt;TOKEN&gt; flag when running this test. You can create a token by going
- * <a href="https://github.com/settings/tokens">here</a>. You can't already have a repository in GitHub called
- * <code>TestAppAcceleratorProject</code>.
+ * <a href="https://github.com/settings/tokens">here</a>. The token has to have the scope <code>public_repo</code>. You
+ * can't already have a repository in GitHub called <code>TestAppAcceleratorProject</code>.
  */
 public class GitHubRepositoryCreationTest {
 
