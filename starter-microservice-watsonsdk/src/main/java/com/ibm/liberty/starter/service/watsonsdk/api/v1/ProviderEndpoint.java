@@ -54,7 +54,7 @@ public class ProviderEndpoint {
         compileDependency.setScope(Scope.COMPILE);
         compileDependency.setGroupId("net.wasdev.wlp.starters.watsonsdk");
         compileDependency.setArtifactId("compile-pom");
-        compileDependency.setVersion("0.0.4");
+        compileDependency.setVersion("0.0.5");
      
         Dependency[] dependencies = {compileDependency};
         details.setDependencies(dependencies);
