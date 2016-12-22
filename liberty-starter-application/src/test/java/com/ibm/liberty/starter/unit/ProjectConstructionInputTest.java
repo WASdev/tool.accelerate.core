@@ -4,19 +4,13 @@ import com.ibm.liberty.starter.ProjectConstructionInput;
 import com.ibm.liberty.starter.ProjectConstructionInputData;
 import com.ibm.liberty.starter.ProjectConstructor;
 import org.junit.Before;
-import org.junit.BeforeClass;
+import org.junit.ClassRule;
 import org.junit.Test;
 
-import javax.naming.Context;
-import javax.naming.InitialContext;
 import javax.naming.NamingException;
-import javax.naming.spi.InitialContextFactory;
-import javax.naming.spi.InitialContextFactoryBuilder;
-import javax.naming.spi.NamingManager;
 import javax.validation.ValidationException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.Hashtable;
 
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.is;
@@ -34,29 +28,8 @@ public class ProjectConstructionInputTest {
         testObject = new ProjectConstructionInput(serviceConnector);
     }
 
-    @BeforeClass
-    public static void createMockInitialContext() throws NamingException {
-        NamingManager.setInitialContextFactoryBuilder(new InitialContextFactoryBuilder() {
-            @Override
-            public InitialContextFactory createInitialContextFactory(Hashtable<?, ?> environment) throws NamingException {
-                return new InitialContextFactory() {
-                    @Override
-                    public Context getInitialContext(Hashtable<?, ?> environment) throws NamingException {
-                        return new InitialContext(environment) {
-                            @Override
-                            public Object lookup(String name) throws NamingException {
-                                if ("serverOutputDir".equals(name)) {
-                                    return "foo";
-                                } else {
-                                    return super.lookup(name);
-                                }
-                            }
-                        };
-                    }
-                };
-            }
-        });
-    }
+    @ClassRule
+    public static SetupInitialConext setupInitialConext = new SetupInitialConext();
 
     @Test
     public void validInputIsParsedIntoDataObject() throws URISyntaxException, NamingException {
