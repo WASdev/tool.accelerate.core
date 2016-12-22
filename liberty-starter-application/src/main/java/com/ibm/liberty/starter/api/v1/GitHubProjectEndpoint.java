@@ -27,6 +27,8 @@ import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriInfo;
 import java.io.IOException;
 import java.net.URI;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.logging.Logger;
 
 @Path("v1/createGitHubRepository")
@@ -44,6 +46,7 @@ public class GitHubProjectEndpoint {
                 log.severe("No oAuthToken passed in.");
                 throw new ValidationException();
             }
+            oAuthToken = URLEncoder.encode(oAuthToken, StandardCharsets.UTF_8.name());
             ProjectConstructionInput inputProcessor = new ProjectConstructionInput(new ServiceConnector(info.getBaseUri()));
             ProjectConstructionInputData inputData = inputProcessor.processInput(techs, techOptions, name, deploy, workspaceId, build);
             ProjectConstructor constructor = new ProjectConstructor(inputData);
