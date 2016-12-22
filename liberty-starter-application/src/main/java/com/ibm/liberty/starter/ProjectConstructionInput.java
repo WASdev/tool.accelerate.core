@@ -53,12 +53,12 @@ public class ProjectConstructionInput {
             log.severe("No deploy type specified");
             throw new ValidationException();
         }
-        ProjectZipConstructor.DeployType deployType = ProjectZipConstructor.DeployType.valueOf(deploy.toUpperCase());
-        ProjectZipConstructor.BuildType buildType;
+        ProjectConstructor.DeployType deployType = ProjectConstructor.DeployType.valueOf(deploy.toUpperCase());
+        ProjectConstructor.BuildType buildType;
         try {
-            buildType = ProjectZipConstructor.BuildType.valueOf(build.toUpperCase());
+            buildType = ProjectConstructor.BuildType.valueOf(build.toUpperCase());
         } catch (Exception e) {
-            buildType = ProjectZipConstructor.BuildType.MAVEN;
+            buildType = ProjectConstructor.BuildType.MAVEN;
         }
         return new ProjectConstructionInputData(services, serviceConnector, name, deployType, buildType, StarterUtil.getWorkspaceDir(workspaceId));
     }

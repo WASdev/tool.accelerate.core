@@ -15,10 +15,7 @@
  *******************************************************************************/
 package com.ibm.liberty.starter.api.v1;
 
-import com.ibm.liberty.starter.ProjectConstructionInput;
-import com.ibm.liberty.starter.ProjectConstructionInputData;
-import com.ibm.liberty.starter.ProjectZipConstructor;
-import com.ibm.liberty.starter.ServiceConnector;
+import com.ibm.liberty.starter.*;
 import org.xml.sax.SAXException;
 
 import javax.validation.ValidationException;
@@ -32,6 +29,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.Map;
 import java.util.logging.Logger;
 
 @Path("v1/data")
@@ -48,9 +46,11 @@ public class LibertyTechnologySelector {
             ProjectConstructionInput inputProcessor = new ProjectConstructionInput(new ServiceConnector(info.getBaseUri()));
             final ProjectConstructionInputData inputData = inputProcessor.processInput(techs, techOptions, name, deploy, workspaceId, build);
             StreamingOutput so = (OutputStream os) -> {
-                ProjectZipConstructor projectZipConstructor = new ProjectZipConstructor(inputData);
+                ProjectConstructor projectConstructor = new ProjectConstructor(inputData);
                 try {
-                    projectZipConstructor.buildZip(os);
+                    Map<String, byte[]> fileMap = projectConstructor.buildFileMap();
+                    ZipWriter zipConstructor = new ZipWriter(fileMap);
+                    zipConstructor.buildZip(os);
                 } catch (SAXException | ParserConfigurationException | TransformerException e) {
                     throw new WebApplicationException(e);
                 }

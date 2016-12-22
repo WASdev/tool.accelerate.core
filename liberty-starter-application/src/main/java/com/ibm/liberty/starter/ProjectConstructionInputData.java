@@ -9,11 +9,11 @@ public class ProjectConstructionInputData {
     public final Services services;
     public final ServiceConnector serviceConnector;
     public final String appName;
-    public final ProjectZipConstructor.DeployType deployType;
-    public final ProjectZipConstructor.BuildType buildType;
+    public final ProjectConstructor.DeployType deployType;
+    public final ProjectConstructor.BuildType buildType;
     public final String workspaceDirectory;
 
-    public ProjectConstructionInputData(Services services, ServiceConnector serviceConnector, String appName, ProjectZipConstructor.DeployType deployType, ProjectZipConstructor.BuildType buildType, String workspaceDirectory) {
+    public ProjectConstructionInputData(Services services, ServiceConnector serviceConnector, String appName, ProjectConstructor.DeployType deployType, ProjectConstructor.BuildType buildType, String workspaceDirectory) {
         this.services = services;
         this.serviceConnector = serviceConnector;
         this.appName = appName;

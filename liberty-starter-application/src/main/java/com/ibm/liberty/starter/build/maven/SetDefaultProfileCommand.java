@@ -1,6 +1,6 @@
 package com.ibm.liberty.starter.build.maven;
 
-import com.ibm.liberty.starter.ProjectZipConstructor.DeployType;
+import com.ibm.liberty.starter.ProjectConstructor.DeployType;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;

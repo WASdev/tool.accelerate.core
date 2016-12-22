@@ -16,7 +16,7 @@
 package com.ibm.liberty.starter.unit;
 
 import com.ibm.liberty.starter.ProjectConstructionInputData;
-import com.ibm.liberty.starter.ProjectZipConstructor;
+import com.ibm.liberty.starter.ProjectConstructor;
 import com.ibm.liberty.starter.api.v1.model.internal.Services;
 import org.junit.Test;
 
@@ -26,12 +26,12 @@ import java.util.Map;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
 
-public class ZipConstructorTest {
+public class ProjectConstructorTest {
 
     @Test
     public void testMapInitializer() throws IOException {
         Services services = new Services();
-        ProjectZipConstructor zipConstructor = new ProjectZipConstructor(new ProjectConstructionInputData(services, null, null, null, null, null));
+        ProjectConstructor zipConstructor = new ProjectConstructor(new ProjectConstructionInputData(services, null, null, null, null, null));
         zipConstructor.initializeMap();
         Map<String, byte[]> map = zipConstructor.getFileMap();
         assertThat(map, is(not(anEmptyMap())));

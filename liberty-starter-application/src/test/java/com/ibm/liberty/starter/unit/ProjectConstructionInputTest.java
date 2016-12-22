@@ -2,7 +2,7 @@ package com.ibm.liberty.starter.unit;
 
 import com.ibm.liberty.starter.ProjectConstructionInput;
 import com.ibm.liberty.starter.ProjectConstructionInputData;
-import com.ibm.liberty.starter.ProjectZipConstructor;
+import com.ibm.liberty.starter.ProjectConstructor;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -68,8 +68,8 @@ public class ProjectConstructionInputTest {
         ProjectConstructionInputData result = testObject.processInput(new String[] {techName}, new String[] {techName + ":" + techOption}, name, "local", workspaceId, "gradle");
 
         assertThat(result.appName, is(name));
-        assertThat(result.buildType, is(ProjectZipConstructor.BuildType.GRADLE));
-        assertThat(result.deployType, is(ProjectZipConstructor.DeployType.LOCAL));
+        assertThat(result.buildType, is(ProjectConstructor.BuildType.GRADLE));
+        assertThat(result.deployType, is(ProjectConstructor.DeployType.LOCAL));
         assertThat(result.workspaceDirectory, containsString(workspaceId));
         assertThat(result.serviceConnector, is(serviceConnector));
         assertThat(result.services.getServices(), hasSize(1));
@@ -108,13 +108,13 @@ public class ProjectConstructionInputTest {
     public void noBuildDefaultsToMaven() throws Exception {
         ProjectConstructionInputData result = testObject.processInput(new String[]{}, new String[]{}, "wibble", "local", "wibble", null);
 
-        assertThat(result.buildType, is(ProjectZipConstructor.BuildType.MAVEN));
+        assertThat(result.buildType, is(ProjectConstructor.BuildType.MAVEN));
     }
 
     @Test
     public void invalidBuildDefaultsToMaven() throws Exception {
         ProjectConstructionInputData result = testObject.processInput(new String[]{}, new String[]{}, "wibble", "local", "wibble", "wibble");
 
-        assertThat(result.buildType, is(ProjectZipConstructor.BuildType.MAVEN));
+        assertThat(result.buildType, is(ProjectConstructor.BuildType.MAVEN));
     }
 }
