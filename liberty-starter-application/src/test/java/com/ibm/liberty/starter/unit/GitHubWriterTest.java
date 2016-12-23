@@ -17,18 +17,20 @@ package com.ibm.liberty.starter.unit;
 
 import com.ibm.liberty.starter.GitHubConnector;
 import com.ibm.liberty.starter.GitHubWriter;
+import com.ibm.liberty.starter.ProjectConstructor;
 import org.apache.commons.io.FileUtils;
 import org.junit.ClassRule;
 import org.junit.Test;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URI;
 import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.not;
+import static com.ibm.liberty.starter.matchers.FileContainsLines.containsLinesInRelativeOrder;
+import static org.hamcrest.Matchers.*;
 import static org.hamcrest.io.FileMatchers.anExistingDirectory;
 import static org.hamcrest.io.FileMatchers.anExistingFile;
 import static org.junit.Assert.assertThat;
@@ -49,7 +51,8 @@ public class GitHubWriterTest {
         files.put(nestedFilePath, nestedFileBytes);
         String repositoryName = "wibble";
         FakeGitHubConnector fakeConnector = new FakeGitHubConnector();
-        GitHubWriter testObject = new GitHubWriter(files, repositoryName, fakeConnector);
+        String baseUri = "http://wibble.fish";
+        GitHubWriter testObject = new GitHubWriter(files, repositoryName, ProjectConstructor.BuildType.GRADLE, new URI(baseUri), fakeConnector);
 
         testObject.createProjectOnGitHub();
         File localGitRepo = fakeConnector.localGitRepo;
@@ -57,6 +60,11 @@ public class GitHubWriterTest {
         assertThat(localGitRepo, is(anExistingDirectory()));
         assertFileExistsWithContent(rootFilePath, rootFileBytes, localGitRepo);
         assertFileExistsWithContent(nestedFilePath, nestedFileBytes, localGitRepo);
+        File readmeFile = new File(localGitRepo, "README.md");
+        assertThat(readmeFile, is(anExistingFile()));
+        assertThat(readmeFile, containsLinesInRelativeOrder(containsString(repositoryName),
+                containsString(baseUri),
+                containsString(ProjectConstructor.BuildType.GRADLE.runInstruction)));
     }
     
     @Test
@@ -67,7 +75,7 @@ public class GitHubWriterTest {
 
         String repositoryName = "wibble";
         FakeGitHubConnector fakeConnector = new FakeGitHubConnector();
-        GitHubWriter testObject = new GitHubWriter(files, repositoryName, fakeConnector);
+        GitHubWriter testObject = new GitHubWriter(files, repositoryName, ProjectConstructor.BuildType.GRADLE, new URI(""), fakeConnector);
 
         testObject.createProjectOnGitHub();
         File localGitRepo = fakeConnector.localGitRepo;

@@ -23,7 +23,7 @@ import org.junit.Test;
 import java.io.File;
 import java.io.PrintStream;
 
-import static com.ibm.liberty.starter.it.api.v1.matchers.FileContainsLines.containsLinesInRelativeOrder;
+import static com.ibm.liberty.starter.matchers.FileContainsLines.containsLinesInRelativeOrder;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.io.FileMatchers.anExistingFile;

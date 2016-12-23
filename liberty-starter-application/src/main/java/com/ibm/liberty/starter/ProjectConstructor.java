@@ -55,7 +55,12 @@ public class ProjectConstructor {
         LOCAL, BLUEMIX
     }
     public enum BuildType {
-        MAVEN, GRADLE
+        MAVEN("mvn install liberty:run-server"),
+        GRADLE("gradle build libertyStart");
+        public String runInstruction;
+        BuildType(String runInstruction) {
+            this.runInstruction = runInstruction;
+        }
     }
     
     public Map<String, byte[]> getFileMap() {

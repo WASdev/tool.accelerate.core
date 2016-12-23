@@ -15,9 +15,13 @@
  *******************************************************************************/
 package com.ibm.liberty.starter;
 
+import com.ibm.liberty.starter.build.gradle.TemplatedFileToBytesConverter;
+
 import java.io.File;
 import java.io.IOException;
+import java.net.URI;
 import java.nio.file.Files;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -28,18 +32,32 @@ public class GitHubWriter {
     private final Map<String, byte[]> fileMap;
     private final GitHubConnector gitHubConnector;
     private final String projectName;
+    private final ProjectConstructor.BuildType buildType;
+    private final URI baseUri;
 
-    public GitHubWriter(Map<String, byte[]> fileMap, String projectName, GitHubConnector gitHubConnector) {
+    public GitHubWriter(Map<String, byte[]> fileMap, String projectName, ProjectConstructor.BuildType buildType, URI baseUri, GitHubConnector gitHubConnector) {
         this.fileMap = fileMap;
+        this.buildType = buildType;
+        this.baseUri = baseUri;
         this.gitHubConnector = gitHubConnector;
         this.projectName = projectName;
     }
 
     public void createProjectOnGitHub() throws IOException {
         File localRepository = gitHubConnector.createGitRepository(projectName);
+        addReadme();
         writeFilesToLocalRepository(localRepository);
         gitHubConnector.pushAllChangesToGit();
         gitHubConnector.deleteLocalRepository();
+    }
+
+    private void addReadme() throws IOException {
+        Map<String, String> buildTags = new HashMap<>();
+        buildTags.put("NAME", projectName);
+        buildTags.put("GENERATED_FROM", baseUri.toString());
+        buildTags.put("RUN_INSTRUCTION", buildType.runInstruction);
+        TemplatedFileToBytesConverter fileConverter = new TemplatedFileToBytesConverter(this.getClass().getClassLoader().getResourceAsStream("GitHubReadme.md"), buildTags);
+        fileMap.put("README.md", fileConverter.getBytes());
     }
 
     private void writeFilesToLocalRepository(File localRepository) throws IOException {

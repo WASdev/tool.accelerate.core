@@ -47,11 +47,12 @@ public class GitHubProjectEndpoint {
                 throw new ValidationException();
             }
             oAuthToken = URLEncoder.encode(oAuthToken, StandardCharsets.UTF_8.name());
-            ProjectConstructionInput inputProcessor = new ProjectConstructionInput(new ServiceConnector(info.getBaseUri()));
+            URI baseUri = info.getBaseUri();
+            ProjectConstructionInput inputProcessor = new ProjectConstructionInput(new ServiceConnector(baseUri));
             ProjectConstructionInputData inputData = inputProcessor.processInput(techs, techOptions, name, deploy, workspaceId, build);
             ProjectConstructor constructor = new ProjectConstructor(inputData);
             GitHubConnector connector = new GitHubConnector(oAuthToken);
-            GitHubWriter writer = new GitHubWriter(constructor.buildFileMap(), inputData.appName, connector);
+            GitHubWriter writer = new GitHubWriter(constructor.buildFileMap(), inputData.appName, inputData.buildType, baseUri, connector);
             writer.createProjectOnGitHub();
             return Response.seeOther(new URI(connector.getRepositoryLocation())).build();
         } catch (IllegalArgumentException e) {

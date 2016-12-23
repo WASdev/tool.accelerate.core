@@ -15,12 +15,19 @@
  *******************************************************************************/
 package com.ibm.liberty.starter.it.api.v1;
 
+import org.eclipse.egit.github.core.Repository;
+import org.eclipse.egit.github.core.RepositoryContents;
+import org.eclipse.egit.github.core.service.ContentsService;
+import org.eclipse.egit.github.core.service.RepositoryService;
+import org.eclipse.egit.github.core.service.UserService;
 import org.junit.Test;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.core.Response;
+import java.io.IOException;
 import java.net.HttpURLConnection;
+import java.util.List;
 
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
@@ -55,6 +62,22 @@ public class GitHubRepositoryCreationTest {
         } finally {
             response.close();
         }
+
+        RepositoryService repositoryService = new RepositoryService();
+        repositoryService.getClient().setOAuth2Token(oAuthToken);
+        UserService userService = new UserService();
+        userService.getClient().setOAuth2Token(oAuthToken);
+        ContentsService contentsService = new ContentsService();
+        contentsService.getClient().setOAuth2Token(oAuthToken);
+        Repository repository = repositoryService.getRepository(userService.getUser().getLogin(), name);
+        checkFileExists(contentsService, repository, "pom.xml");
+        checkFileExists(contentsService, repository, "README.md");
+    }
+
+    private void checkFileExists(ContentsService contentsService, Repository repository, String path) throws IOException {
+        List<RepositoryContents> file = contentsService.getContents(repository, path);
+        assertThat(file, hasSize(1));
+        assertThat(file.get(0).getSize(), greaterThan(0L));
     }
 
 }
