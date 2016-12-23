@@ -25,6 +25,7 @@ import org.junit.Test;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.core.Response;
+import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.util.List;
 
@@ -69,7 +70,12 @@ public class GitHubRepositoryCreationTest {
         ContentsService contentsService = new ContentsService();
         contentsService.getClient().setOAuth2Token(oAuthToken);
         Repository repository = repositoryService.getRepository(userService.getUser().getLogin(), name);
-        List<RepositoryContents> pomFile = contentsService.getContents(repository, "pom.xml");
+        checkFileExists(contentsService, repository, "pom.xml");
+        checkFileExists(contentsService, repository, "README.md");
+    }
+
+    private void checkFileExists(ContentsService contentsService, Repository repository, String path) throws IOException {
+        List<RepositoryContents> pomFile = contentsService.getContents(repository, path);
         assertThat(pomFile, hasSize(1));
         assertThat(pomFile.get(0).getSize(), greaterThan(0l));
     }
