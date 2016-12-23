@@ -75,9 +75,9 @@ public class GitHubRepositoryCreationTest {
     }
 
     private void checkFileExists(ContentsService contentsService, Repository repository, String path) throws IOException {
-        List<RepositoryContents> pomFile = contentsService.getContents(repository, path);
-        assertThat(pomFile, hasSize(1));
-        assertThat(pomFile.get(0).getSize(), greaterThan(0l));
+        List<RepositoryContents> file = contentsService.getContents(repository, path);
+        assertThat(file, hasSize(1));
+        assertThat(file.get(0).getSize(), greaterThan(0L));
     }
 
 }
