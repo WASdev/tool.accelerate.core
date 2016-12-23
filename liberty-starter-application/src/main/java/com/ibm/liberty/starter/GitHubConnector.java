@@ -83,7 +83,9 @@ public class GitHubConnector {
             String name = user.getLogin();
             String email = user.getEmail();
             if (email == null) {
-                email = "";
+                // This is the e-mail addressed used by GitHub on web commits where the users mail is private. See:
+                // https://github.com/settings/emails
+                email = name + "@users.noreply.github.com";
             }
 
             localRepository.add().addFilepattern(".").call();
