@@ -36,6 +36,8 @@ public class ProjectConstructionInput {
     private static final String WORKSPACE_DIR_KEY = "workspaceDir";
     private static final String DEPLOY_KEY = "deploy";
     private static final String NAME_KEY = "name";
+    private static final String GROUP_ID_KEY = "groupId";
+    private static final String ARTIFACT_ID_KEY = "artifactId";
     private final ServiceConnector serviceConnector;
 
     public ProjectConstructionInput(ServiceConnector serviceConnector) {
@@ -97,14 +99,16 @@ public class ProjectConstructionInput {
         return new ProjectConstructionInputData(services, serviceConnector, name, deployType, buildType, StarterUtil.getWorkspaceDir(workspaceId), artifactId, groupId);
     }
 
-    public String processInputAsJwt(String[] techs, String[] techOptions, String name, String deploy, String workspaceId, String build) throws NamingException {
-        ProjectConstructionInputData inputData = processInput(techs, techOptions, name, deploy, workspaceId, build);
+    public String processInputAsJwt(String[] techs, String[] techOptions, String name, String deploy, String workspaceId, String build, String artifactId, String groupId) throws NamingException {
+        ProjectConstructionInputData inputData = processInput(techs, techOptions, name, deploy, workspaceId, build, artifactId, groupId);
 
         Claims claims = Jwts.claims();
         claims.put(NAME_KEY, inputData.appName);
         claims.put(DEPLOY_KEY, inputData.deployType);
         claims.put(WORKSPACE_DIR_KEY, inputData.workspaceDirectory);
         claims.put(BUILD_KEY, inputData.buildType);
+        claims.put(ARTIFACT_ID_KEY, inputData.artifactId);
+        claims.put(GROUP_ID_KEY, inputData.groupId);
         claims.put(SERVICE_IDS_KEY, inputData.services.getServices().stream().map(service -> service.getId()).collect(Collectors.toList()));
 
         Calendar issuedAt = Calendar.getInstance();
@@ -130,7 +134,14 @@ public class ProjectConstructionInput {
         Services services = new Services();
         services.setServices(serviceList);
 
-        return new ProjectConstructionInputData(services, serviceConnector, (String) claims.get(NAME_KEY), ProjectConstructor.DeployType.valueOf((String) claims.get(DEPLOY_KEY)), ProjectConstructor.BuildType.valueOf((String) claims.get(BUILD_KEY)), (String) claims.get(WORKSPACE_DIR_KEY));
+        return new ProjectConstructionInputData(services,
+                serviceConnector,
+                (String) claims.get(NAME_KEY),
+                ProjectConstructor.DeployType.valueOf((String) claims.get(DEPLOY_KEY)),
+                ProjectConstructor.BuildType.valueOf((String) claims.get(BUILD_KEY)),
+                (String) claims.get(WORKSPACE_DIR_KEY),
+                (String) claims.get(ARTIFACT_ID_KEY),
+                (String) claims.get(GROUP_ID_KEY));
     }
 
     private String getAppAcceleratorSecret() throws NamingException {

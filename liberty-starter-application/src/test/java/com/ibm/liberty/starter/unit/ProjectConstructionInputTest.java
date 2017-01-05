@@ -133,8 +133,10 @@ public class ProjectConstructionInputTest {
         String techOption = "fish";
         String name = "testName";
         String workspaceId = "randomId";
+        String artifactId = "testArtifactId";
+        String groupId = "test.group.id";
 
-        String jwt = testObject.processInputAsJwt(new String[] {techName}, new String[] {techName + ":" + techOption}, name, "local", workspaceId, "gradle");
+        String jwt = testObject.processInputAsJwt(new String[] {techName}, new String[] {techName + ":" + techOption}, name, "local", workspaceId, "gradle", artifactId, groupId);
         ProjectConstructionInputData result = testObject.processJwt(jwt);
 
         assertThat(result.appName, is(name));
@@ -144,5 +146,7 @@ public class ProjectConstructionInputTest {
         assertThat(result.serviceConnector, is(serviceConnector));
         assertThat(result.services.getServices(), hasSize(1));
         assertThat(result.services.getServices().get(0).getId(), is(techName));
+        assertThat(result.artifactId, is(artifactId));
+        assertThat(result.groupId, is(groupId));
     }
 }
