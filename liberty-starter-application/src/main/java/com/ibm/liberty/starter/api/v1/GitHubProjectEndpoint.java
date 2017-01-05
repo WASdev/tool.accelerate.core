@@ -15,8 +15,10 @@
  *******************************************************************************/
 package com.ibm.liberty.starter.api.v1;
 
-import com.ibm.liberty.starter.*;
+import com.ibm.liberty.starter.ProjectConstructionInput;
+import com.ibm.liberty.starter.ServiceConnector;
 
+import javax.naming.InitialContext;
 import javax.validation.ValidationException;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -27,8 +29,6 @@ import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriInfo;
 import java.io.IOException;
 import java.net.URI;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 import java.util.logging.Logger;
 
 @Path("v1/createGitHubRepository")
@@ -43,19 +43,20 @@ public class GitHubProjectEndpoint {
                                 @QueryParam("oAuthToken") String oAuthToken, @Context UriInfo info) throws NullPointerException, IOException {
         log.info("GET request for v1/createGitHubRepository");
         try {
-            if (oAuthToken == null || oAuthToken.length() == 0) {
-                log.severe("No oAuthToken passed in.");
-                throw new ValidationException();
-            }
-            oAuthToken = URLEncoder.encode(oAuthToken, StandardCharsets.UTF_8.name());
             URI baseUri = info.getBaseUri();
             ProjectConstructionInput inputProcessor = new ProjectConstructionInput(new ServiceConnector(baseUri));
-            ProjectConstructionInputData inputData = inputProcessor.processInput(techs, techOptions, name, deploy, workspaceId, build, artifactId, groupId);
-            ProjectConstructor constructor = new ProjectConstructor(inputData);
-            GitHubConnector connector = new GitHubConnector(oAuthToken);
-            GitHubWriter writer = new GitHubWriter(constructor.buildFileMap(), inputData.appName, inputData.buildType, baseUri, connector);
-            writer.createProjectOnGitHub();
-            return Response.seeOther(new URI(connector.getRepositoryLocation())).build();
+
+            // Use a JWT as the "state" object on the GitHub OAuth API. This object allows us to check the validity of
+            // the callback when it comes back. By using a signed JWT we can both store all of the parameters in the
+            // JWT and have an integrity check. Using a JWT means this is all done for us through a 3rd party library
+            // rather than having to encode/decode it ourselves as well as providing checks on expiry times. Also a
+            // JWT means that the callback becomes stateless rather than having to store the state object in the user's
+            // session (although the workspace dir contains some state).
+            String state = inputProcessor.processInputAsJwt(techs, techOptions, name, deploy, workspaceId, build);
+            String clientId = (String) new InitialContext().lookup("gitHubClientId");
+            URI gitHubAuth = new URI("https://github.com/login/oauth/authorize?client_id=" + clientId + "&scope=public_repo&state=" + state);
+            log.info("redirecting to " + gitHubAuth);
+            return Response.seeOther(gitHubAuth).build();
         } catch (IllegalArgumentException e) {
             return Response.status(Status.FORBIDDEN).build();
         } catch (ValidationException e) {

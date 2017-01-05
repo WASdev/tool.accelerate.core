@@ -17,15 +17,25 @@ package com.ibm.liberty.starter;
 
 import com.ibm.liberty.starter.api.v1.model.internal.Services;
 import com.ibm.liberty.starter.api.v1.model.registration.Service;
+import io.jsonwebtoken.*;
 
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
 import javax.validation.ValidationException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 public class ProjectConstructionInput {
 
     private static final Logger log = Logger.getLogger(ProjectConstructionInput.class.getName());
+    private static final String SERVICE_IDS_KEY = "serviceIds";
+    private static final String BUILD_KEY = "build";
+    private static final String WORKSPACE_DIR_KEY = "workspaceDir";
+    private static final String DEPLOY_KEY = "deploy";
+    private static final String NAME_KEY = "name";
     private final ServiceConnector serviceConnector;
 
     public ProjectConstructionInput(ServiceConnector serviceConnector) {
@@ -85,6 +95,46 @@ public class ProjectConstructionInput {
             throw new ValidationException();
         }
         return new ProjectConstructionInputData(services, serviceConnector, name, deployType, buildType, StarterUtil.getWorkspaceDir(workspaceId), artifactId, groupId);
+    }
+
+    public String processInputAsJwt(String[] techs, String[] techOptions, String name, String deploy, String workspaceId, String build) throws NamingException {
+        ProjectConstructionInputData inputData = processInput(techs, techOptions, name, deploy, workspaceId, build);
+
+        Claims claims = Jwts.claims();
+        claims.put(NAME_KEY, inputData.appName);
+        claims.put(DEPLOY_KEY, inputData.deployType);
+        claims.put(WORKSPACE_DIR_KEY, inputData.workspaceDirectory);
+        claims.put(BUILD_KEY, inputData.buildType);
+        claims.put(SERVICE_IDS_KEY, inputData.services.getServices().stream().map(service -> service.getId()).collect(Collectors.toList()));
+
+        Calendar issuedAt = Calendar.getInstance();
+        claims.setIssuedAt(issuedAt.getTime());
+        Calendar expires = Calendar.getInstance();
+        expires.add(Calendar.HOUR, 1);
+        claims.setExpiration(expires.getTime());
+
+        String signingKey = getAppAcceleratorSecret();
+        String jwt = Jwts.builder().setClaims(claims)
+                .signWith(SignatureAlgorithm.HS512, signingKey).compact();
+
+        return jwt;
+    }
+
+    public ProjectConstructionInputData processJwt(String jwt) throws NamingException {
+        JwtParser parser = Jwts.parser().setSigningKey(getAppAcceleratorSecret());
+
+        Jws<Claims> parsed = parser.parseClaimsJws(jwt);
+        Claims claims = parsed.getBody();
+        List<String> serviceIds = (List<String>) claims.get(SERVICE_IDS_KEY);
+        List<Service> serviceList = serviceIds.stream().map(id -> serviceConnector.getServiceObjectFromId(id)).collect(Collectors.toList());
+        Services services = new Services();
+        services.setServices(serviceList);
+
+        return new ProjectConstructionInputData(services, serviceConnector, (String) claims.get(NAME_KEY), ProjectConstructor.DeployType.valueOf((String) claims.get(DEPLOY_KEY)), ProjectConstructor.BuildType.valueOf((String) claims.get(BUILD_KEY)), (String) claims.get(WORKSPACE_DIR_KEY));
+    }
+
+    private String getAppAcceleratorSecret() throws NamingException {
+        return (String) new InitialContext().lookup("appAcceleratorSecret");
     }
 
     private String getTechOptions(String[] techOptions, String tech) {

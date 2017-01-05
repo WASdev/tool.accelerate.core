@@ -205,8 +205,21 @@
 }
 
 .btn {
+    padding: 10px 15px;
     margin-top: 6px;
     margin-bottom: 6px;
+}
+
+.btn-with-image {
+    padding: 4px 15px;
+}
+
+.btn-image {
+    padding-left: 6px;
+}
+
+.btn-separator {
+    padding-left: 7px;
 }
 
 .input {

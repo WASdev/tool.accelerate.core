@@ -26,6 +26,8 @@ import javax.naming.NamingException;
 import javax.validation.ValidationException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.HashMap;
+import java.util.Map;
 
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.is;
@@ -43,8 +45,13 @@ public class ProjectConstructionInputTest {
         testObject = new ProjectConstructionInput(serviceConnector);
     }
 
+    private static Map<String, String> initialContextParams = new HashMap<>();
+    static {
+        initialContextParams.put("serverOutputDir", "foo");
+        initialContextParams.put("appAcceleratorSecret", "secret");
+    }
     @ClassRule
-    public static SetupInitialConext setupInitialConext = new SetupInitialConext();
+    public static SetupInitialContext setupInitialContext = new SetupInitialContext(initialContextParams);
 
     @Test
     public void validInputIsParsedIntoDataObject() throws URISyntaxException, NamingException {
@@ -109,7 +116,7 @@ public class ProjectConstructionInputTest {
 
         assertThat(result.buildType, is(ProjectConstructor.BuildType.MAVEN));
     }
-    
+
     @Test(expected = ValidationException.class)
     public void invalidArtifactIdThrowsIllegalArgumentException() throws Exception {
         testObject.processInput(new String[] {}, new String[] {}, "wibble", "local", "wibble", "gradle", "%wibble", null);
@@ -117,6 +124,25 @@ public class ProjectConstructionInputTest {
     
     @Test(expected = ValidationException.class)
     public void invalidGroupIdThrowsIllegalArgumentException() throws Exception {
-        testObject.processInput(new String[] {}, new String[] {}, "wibble", "local", "wibble", "gradle", null, "%wibble");
+        testObject.processInput(new String[]{}, new String[]{}, "wibble", "local", "wibble", "gradle", null, "%wibble");
+    }
+
+    @Test
+    public void jwtCanBeCreatedAndReadBack() throws Exception {
+        String techName = "wibble";
+        String techOption = "fish";
+        String name = "testName";
+        String workspaceId = "randomId";
+
+        String jwt = testObject.processInputAsJwt(new String[] {techName}, new String[] {techName + ":" + techOption}, name, "local", workspaceId, "gradle");
+        ProjectConstructionInputData result = testObject.processJwt(jwt);
+
+        assertThat(result.appName, is(name));
+        assertThat(result.buildType, is(ProjectConstructor.BuildType.GRADLE));
+        assertThat(result.deployType, is(ProjectConstructor.DeployType.LOCAL));
+        assertThat(result.workspaceDirectory, containsString(workspaceId));
+        assertThat(result.serviceConnector, is(serviceConnector));
+        assertThat(result.services.getServices(), hasSize(1));
+        assertThat(result.services.getServices().get(0).getId(), is(techName));
     }
 }

@@ -27,6 +27,7 @@ angular.module('appAccelerator')
      var serviceURL = "/start/api/v1";
      var techURL = serviceURL + "/tech";  //where to get the technology types from
      var dataURL = serviceURL + "/data?";              //tech=rest&deploy=local&name=libertyProject&workspace=642f3151-c9b6-4d5c-b185-4c29b8
+     var gitHubUrl = serviceURL + "/createGitHubRepository?";              //tech=rest&deploy=local&name=libertyProject&workspace=642f3151-c9b6-4d5c-b185-4c29b8
      var optionsURL = "/start/options";
      var workspaceURL = serviceURL + "/workspace";
      var buildType = {
@@ -125,7 +126,7 @@ angular.module('appAccelerator')
         return q.promise;
       };
 
-      var createDownloadUrl = function() {
+      var createDownloadUrlForBase = function (baseUrl) {
           var url = undefined;
           var selected = "";   //the list of selected technologies
           for(var i = 0; i < selectedTechnologies.length; i++) {
@@ -137,7 +138,7 @@ angular.module('appAccelerator')
           if(selected != "") {
             //something has been selected, so proceed
             var deployType = bluemix ? "&deploy=bluemix" : "&deploy=local";
-            url = dataURL + selected + deployType + "&name=" + projectName + "&build=" + buildTypeToUse + "&workspace=";
+            url = baseUrl + selected + deployType + "&name=" + projectName + "&build=" + buildTypeToUse + "&workspace=";
             if(workspaceID) {
               url += workspaceID;
             } else {
@@ -161,6 +162,14 @@ angular.module('appAccelerator')
             }
           }
           return url;
+      };
+
+      var createDownloadUrl = function() {
+        return createDownloadUrlForBase(dataURL);
+      }
+
+      var createGitHubUrl = function() {
+        return createDownloadUrlForBase(gitHubUrl);
       }
 
       //how many technologies have currently been selected
@@ -274,6 +283,7 @@ angular.module('appAccelerator')
       return {
         getTechnologies: getTechnologies,
         createDownloadUrl : createDownloadUrl,
+        createGitHubUrl : createGitHubUrl,
         getTechOptions : getTechOptions,
         getSelectedCount : getSelectedCount,
         addSelectedTechnology : addSelectedTechnology,
