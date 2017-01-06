@@ -62,8 +62,9 @@ public class GitHubCallback {
             return Response.status(Status.BAD_REQUEST).entity("Validation of the input failed.").build();
         } catch (Exception e) {
             e.printStackTrace(System.err);
-            log.severe(e.getClass().getName() + " occurred processing request: " + e.getMessage());
-            return Response.status(Status.INTERNAL_SERVER_ERROR).build();
+            String errorMessage = e.getClass().getName() + " occurred processing request: " + e.getMessage();
+            log.severe(errorMessage);
+            return Response.status(Status.INTERNAL_SERVER_ERROR).entity("Oops! Looks like something went wrong: " + errorMessage).build();
         }
     }
 
