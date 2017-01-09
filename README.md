@@ -78,6 +78,22 @@ The project is split up into several different pieces.
 
 There are then a set of <code>starter-microservice-techId</code> projects that contain the code for the individual technology types.
 
+## Creating the project on GitHub
+If you are running locally you will be required to register the application with GitHub and provide the client id and secret as well as an extra app accelerator secret (for signing the state sent to GitHub) as environment variables.
+
+To do this go to [GitHub's OAuth applications page](https://github.com/settings/developers). Register your application with the following settings:
+
+ * Application Name: Anything you want
+ * Homepage URL: `http://localhost:9082/start`
+ * Application description: Anything you want
+ * Authorization callback URL: `http://localhost:9082/start/api/v1/github/callback`
+ 
+Once you have done this GitHub will give you a client ID and client secret set the following environment variables prior to starting the server:
+
+ * gitHubClientId
+ * gitHubClientSecret
+ * appAcceleratorSecret (this can be anything you want it to be)
+
 ## Deployment Options
 There are two deployment options for the app accelerator: local and Bluemix
 
@@ -140,3 +156,4 @@ If you want to add changes to the app accelerator, create a fork of the project 
 3. In <code>liberty-starter-wlpcfg/servers/StarterServer/server.xml</code> add your application to the list. You need to provide the name of the war file being created in location, the context-root that matches the endpoint specified in the <code>services.json</code> file in step 1 and the id you specified in step 1.
 
 If you run <code>gradle clean build</code> your new project should now be built and the war should be put into the apps directory of your server.
+

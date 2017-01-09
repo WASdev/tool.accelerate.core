@@ -42,6 +42,10 @@ angular.module('appAccelerator')
     return appacc.createDownloadUrl();
   }
 
+  $scope.createGitHubUrl = function() {
+    return appacc.createGitHubUrl();
+  }
+
   $scope.sendGAEvent = function(p1, p2, p3) {
 	  ga.report('send', 'event', p1, p2, p3);
   }

@@ -23,9 +23,19 @@ import javax.naming.NamingException;
 import javax.naming.spi.InitialContextFactory;
 import javax.naming.spi.InitialContextFactoryBuilder;
 import javax.naming.spi.NamingManager;
+import java.util.HashMap;
 import java.util.Hashtable;
+import java.util.Map;
 
-public class SetupInitialConext extends ExternalResource {
+public class SetupInitialContext extends ExternalResource {
+
+    // Has to be static as only a single initial context factory can be created
+    private static final Map<String, String> properties = new HashMap<>();
+
+    public SetupInitialContext(Map<String, String> entries) {
+        properties.clear();
+        properties.putAll(entries);
+    }
 
     @Override
     protected void before() throws Throwable {
@@ -41,8 +51,8 @@ public class SetupInitialConext extends ExternalResource {
                         return new InitialContext(environment) {
                             @Override
                             public Object lookup(String name) throws NamingException {
-                                if ("serverOutputDir".equals(name)) {
-                                    return "foo";
+                                if (properties.containsKey(name)) {
+                                    return properties.get(name);
                                 } else {
                                     return super.lookup(name);
                                 }

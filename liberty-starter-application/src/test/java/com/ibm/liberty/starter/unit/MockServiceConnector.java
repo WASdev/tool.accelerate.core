@@ -18,7 +18,9 @@ package com.ibm.liberty.starter.unit;
 import com.ibm.liberty.starter.ServiceConnector;
 import com.ibm.liberty.starter.api.v1.model.internal.Services;
 import com.ibm.liberty.starter.api.v1.model.provider.Dependency;
+import com.ibm.liberty.starter.api.v1.model.provider.Location;
 import com.ibm.liberty.starter.api.v1.model.provider.Provider;
+import com.ibm.liberty.starter.api.v1.model.provider.Sample;
 import com.ibm.liberty.starter.api.v1.model.registration.Service;
 
 import java.net.URI;
@@ -51,8 +53,16 @@ public class MockServiceConnector extends ServiceConnector {
     @Override
     public Provider getProvider(Service service) {
         Provider provider = new Provider();
+        provider.setDescription("wibble description");
         provider.setDependencies(dependencies);
         return provider;
+    }
+
+    @Override
+    public Sample getSample(Service service) {
+        Sample sample = new Sample();
+        sample.setLocations(new Location[]{});
+        return sample;
     }
 
     @Override
@@ -63,4 +73,8 @@ public class MockServiceConnector extends ServiceConnector {
         return null;
     }
 
+    @Override
+    public String getFeaturesToInstall(Service service) {
+        return null;
+    }
 }

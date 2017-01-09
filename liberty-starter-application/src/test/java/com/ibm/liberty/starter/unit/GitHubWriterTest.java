@@ -26,6 +26,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.nio.file.Files;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -38,7 +39,7 @@ import static org.junit.Assert.assertThat;
 public class GitHubWriterTest {
 
     @ClassRule
-    public static SetupInitialConext setupInitialConext = new SetupInitialConext();
+    public static SetupInitialContext setupInitialContext = new SetupInitialContext(Collections.singletonMap("serverOutputDir", "foo"));
 
     @Test
     public void createsProjectOnGitHubWithFileContents() throws Exception {
