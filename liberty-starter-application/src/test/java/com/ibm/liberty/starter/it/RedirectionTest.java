@@ -70,10 +70,7 @@ public class RedirectionTest {
         String queryString = "/cheese";
         Response response = getResponse(queryString);
         try {
-            assertEquals(301, response.getStatus());
-            MultivaluedMap<String, Object> headers = response.getHeaders();
-            String location = headers.get("Location").toString();
-            assertTrue("Location should be /start, instead got " + location, location.equals("[/start/]"));
+            assertEquals(404, response.getStatus());
         } finally {
             response.close();
         }
