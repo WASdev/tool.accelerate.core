@@ -71,6 +71,11 @@ public class RedirectionTest {
         Response response = getResponse(queryString);
         try {
             assertEquals(404, response.getStatus());
+            String entityString = response.readEntity(String.class);
+            String port = System.getProperty("liberty.test.port");
+            String expectedUrl = "href=\"http://localhost:" + port + "/start/\"";
+            assertTrue("Expected response object to include html:" + expectedUrl + ", instead found:" + entityString,
+                    entityString.contains(expectedUrl));
         } finally {
             response.close();
         }

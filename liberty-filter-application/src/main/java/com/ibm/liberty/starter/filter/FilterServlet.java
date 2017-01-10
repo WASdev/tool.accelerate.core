@@ -17,6 +17,7 @@ package com.ibm.liberty.starter.filter;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.logging.Logger;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -26,12 +27,13 @@ import javax.servlet.http.HttpServletResponse;
 
 @WebServlet(urlPatterns={"/"})
 public class FilterServlet extends HttpServlet {
+
+    private static final Logger log = Logger.getLogger(FilterServlet.class.getName());
     
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
-        System.out.println("FilterServlet caught request " + req.getRequestURI());
         if ("/".equals(req.getRequestURI())) {
-            System.out.println("Forwarding request");
+            log.info("Forwarding request");
             resp.setStatus(HttpServletResponse.SC_MOVED_PERMANENTLY);
             resp.setHeader("Location", "/start/");
         } else {
