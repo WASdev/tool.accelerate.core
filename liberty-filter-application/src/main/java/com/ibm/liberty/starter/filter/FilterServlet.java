@@ -16,19 +16,32 @@
 package com.ibm.liberty.starter.filter;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 
+import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-@WebServlet(urlPatterns={"/*"})
+@WebServlet(urlPatterns={"/"})
 public class FilterServlet extends HttpServlet {
     
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        resp.setStatus(HttpServletResponse.SC_MOVED_PERMANENTLY);
-        resp.setHeader("Location", "/start/");
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+        System.out.println("FilterServlet caught request " + req.getRequestURI());
+        if ("/".equals(req.getRequestURI())) {
+            System.out.println("Forwarding request");
+            resp.setStatus(HttpServletResponse.SC_MOVED_PERMANENTLY);
+            resp.setHeader("Location", "/start/");
+        } else {
+            resp.setStatus(HttpServletResponse.SC_NOT_FOUND);
+            PrintWriter writer = resp.getWriter();
+            StringBuffer urlBuffer = req.getRequestURL();
+            String appLocation = urlBuffer.toString();
+            String appUrl = appLocation.substring(0, appLocation.indexOf(req.getRequestURI())) + "/start/";
+            writer.println("<html><body>Resource not found, the Liberty app accelerator can be found <a href=\"" + appUrl  + "\">here</a>.</body></head></html>");
+        }
     }
 
 
