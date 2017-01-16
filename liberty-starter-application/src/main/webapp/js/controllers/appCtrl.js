@@ -37,6 +37,9 @@ angular.module('appAccelerator')
     artifactid : null,
     groupid : null
   };
+  $scope.showConfigOptions = false;
+  $scope.angleIconDown = "fa-angle-down";
+  $scope.angleIconUp = "fa-angle-up";
 
   $scope.createDownloadUrl = function() {
     return appacc.createDownloadUrl();
@@ -73,6 +76,11 @@ angular.module('appAccelerator')
     $event.stopPropagation();
     technology.info = false;
     technology.displayOptions = !technology.displayOptions;
+  }
+  
+  $scope.toggleConfigOptions = function($event) {
+    $event.stopPropagation();
+    $scope.showConfigOptions = !$scope.showConfigOptions;
   }
 
   //get a technology for specific ID
