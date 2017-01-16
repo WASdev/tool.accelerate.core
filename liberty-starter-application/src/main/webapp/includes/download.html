@@ -4,54 +4,69 @@
         <div class="stepNumber">STEP <span class="numberOfSteps">2</span> / <span class="numberOfSteps">2</span></div>
         <div class="row">
             <div class="col-md-6 col-sm-6">
-                <div class="stepHeading">Configure your project and download as a ZIP file.</div>
-                <!--<div ng-show="deploy.name"><a ng-href="{{createGitHubUrl()}}" target="#" class="btn-with-image btn btn-primary" role="button" ng-click="sendGAEvent('GitHubCreate', 'Java', 'JEE')">Accept and Create On GitHub<img class="btn-image" src="img/GitHub-Mark-Light-32px.png" alt="GitHub"/></a></div>
-                <div ng-show="!deploy.name"><a class="btn-with-image btn btn-primary" role="button" ng-disabled="true">Choose a project name<img class="btn-image" src="img/GitHub-Mark-Light-32px.png" alt="GitHub"/></a></div>
-                <div class="btn-separator">or</div>-->
-                <div ng-show="deploy.name"><a ng-href="{{createDownloadUrl()}}" target="#" class="btn btn-primary" role="button" ng-click="sendGAEvent('Download', 'Java', 'JEE')">Accept and Download</a></div>
-                <div ng-show="!deploy.name"><a class="btn btn-primary" role="button" ng-disabled="true">Choose a file name</a></div>
-                <div class="disclaimer">By clicking on one of the "Accept" buttons you agree that you have had the opportunity to review the <a href="http://www.apache.org/licenses/LICENSE-2.0" target="_blank">Apache Version 2.0</a> and <a href="https://public.dhe.ibm.com/ibmdl/export/pub/software/websphere/wasdev/license/base_ilan/ilan/16.0.0.3/lafiles/en.html"
-                                                                                                                                                                                                                                                        target="LibertyLicense">Liberty</a> licenses and you agree to be bound by their terms.</div>
-                <div>
-                    <h4 class="optionalHeading">Optional configuration:</h4>
-                </div>
-                <div class="row options">
-                    <label for="nameField"class="textLabel col-md-2 col-sm-2">Name the file:</label>
+                <div class="stepHeading">Configure your project and either create in GitHub or download as a ZIP file.</div>
+                <div class="options">
+                    <label for="nameField"class="textLabel col-md-3 col-sm-3">Name the project:</label>
                     <input id="nameField"
                            type="text"
                            placeholder="Example: LibertyProject" autocomplete="off"
                            maxlength="50" ng-model="deploy.name" ng-change="updateService()">
                 </div>
-                <div class="row options">
-                    <label for="nameField"class="textLabel col-md-2 col-sm-2">Group id:</label>
-                    <input id="nameField"
-                           type="text"
-                           placeholder="Example: test.group.id" autocomplete="off"
-                           maxlength="50" ng-model="deploy.groupid" ng-change="updateService()">
+                <div class="row">
+                    <div class="col-md-10 col-sm-10">
+                        <div class="panel panel-configuration">
+                            <div class="panel-heading" ng-click="toggleConfigOptions($event)" role="button"  data-toggle="tooltip" title="Click to configure additional options for your project">
+                                <div class="row">
+                                    <div class="options col-md-11 col-sm-11">Optional configuration</div>
+                                    <i class="fa {{showConfigOptions ? angleIconUp : angleIconDown}} col-md-1 col-sm-1 h4" aria-hidden="true"></i>
+                                </div>
+                            </div>
+                            <div class="panel-body" ng-show="showConfigOptions">
+                                <div class="row options">
+                                    <div class="col-md-3 col-sm-3"><label for="nameField" class="textLabel">Group id:</label></div>
+                                    <div class="col-md-9 col-sm-9"><input id="nameField"
+                                        type="text"
+                                        placeholder="Example: test.group.id" autocomplete="off"
+                                        maxlength="50" ng-model="deploy.groupid" ng-change="updateService()"></div>
+                                </div>
+                                <div class="row options">
+                                    <div class="col-md-3 col-sm-3"><label for="nameField" class="textLabel">Artifact id:</label></div>
+                                    <div class="col-md-9 col-sm-9"><input id="nameField"
+                                        type="text"
+                                        placeholder="Example: testArtifactId" autocomplete="off"
+                                        maxlength="50" ng-model="deploy.artifactid" ng-change="updateService()"></div>
+                                </div>
+                                <div class="row options">
+                                    <div class="col-md-12 col-sm-12">
+                                        <fieldset class="form-group">
+                                            <legend class="radio-legend">Build type:</legend>
+                                            <label class="radio-inline">
+                                                <input type="radio" name="buildRadio" value="{{buildType.MAVEN}}" ng-model="deploy.buildType" ng-click="updateService()">Maven
+                                            </label>
+                                            <label class="radio-inline">
+                                                <input type="radio" name="buildRadio" value="{{buildType.GRADLE}}" ng-model="deploy.buildType" ng-click="updateService()">Gradle
+                                            </label>
+                                        </fieldset>
+                                    </div>
+                                </div>
+                                <div class="row options">
+                                    <div class="col-md-12 col-sm-12">
+                                        <label class="checkbox-inline">
+                                            <input type="checkbox" ng-model="deploy.bluemix" ng-click="updateService()">Bluemix default deployment
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="row options">
-                    <label for="nameField" class="textLabel col-md-2 col-sm-2">Artifact id:</label>
-                    <input id="nameField"
-                           type="text"
-                           placeholder="Example: testArtifactId" autocomplete="off"
-                           maxlength="50" ng-model="deploy.artifactid" ng-change="updateService()">
-                </div>
-                <div class="options">
-                    <fieldset class="form-group">
-                        <legend class="radio-legend">Build type:</legend>
-                        <label class="radio-inline">
-                            <input type="radio" name="buildRadio" value="{{buildType.MAVEN}}" ng-model="deploy.buildType" ng-click="updateService()">Maven
-                        </label>
-                        <label class="radio-inline">
-                            <input type="radio" name="buildRadio" value="{{buildType.GRADLE}}" ng-model="deploy.buildType" ng-click="updateService()">Gradle
-                        </label>
-                    </fieldset>
-                </div>
-                <div class="options">
-                    <label class="checkbox-inline">
-                        <input type="checkbox" ng-model="deploy.bluemix" ng-click="updateService()">Bluemix default deployment
-                    </label>
-                </div>
+                <div ng-show="deploy.name"><a ng-href="{{createGitHubUrl()}}" target="#" class="btn-with-image btn btn-primary" role="button" ng-click="sendGAEvent('GitHubCreate', 'Java', 'JEE')">Accept and Create On GitHub<img class="btn-image" src="img/GitHub-Mark-Light-32px.png" alt="GitHub"/></a></div>
+                <div ng-show="!deploy.name"><a class="btn-with-image btn btn-primary" role="button" ng-disabled="true">Choose a project name<img class="btn-image" src="img/GitHub-Mark-Light-32px.png" alt="GitHub"/></a></div>
+                <div class="btn-separator">or</div>
+                <div ng-show="deploy.name"><a ng-href="{{createDownloadUrl()}}" target="#" class="btn btn-primary" role="button" ng-click="sendGAEvent('Download', 'Java', 'JEE')">Accept and Download</a></div>
+                <div ng-show="!deploy.name"><a class="btn btn-primary" role="button" ng-disabled="true">Choose a file name</a></div>
+                <div class="disclaimer">By clicking on one of the "Accept" buttons you agree that you have had the opportunity to review the <a href="http://www.apache.org/licenses/LICENSE-2.0" target="_blank">Apache Version 2.0</a> and <a href="https://public.dhe.ibm.com/ibmdl/export/pub/software/websphere/wasdev/license/base_ilan/ilan/16.0.0.3/lafiles/en.html"
+                                                                                                                                                                                                                                                        target="LibertyLicense">Liberty</a> licenses and you agree to be bound by their terms.</div>
             </div>
             <div class="col-md-6 col-sm-6">
                 <p class="instructionHeading">Once the download is complete, locate your project and unzip it.</p>
