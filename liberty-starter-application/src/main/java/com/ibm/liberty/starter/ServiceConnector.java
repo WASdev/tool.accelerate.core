@@ -46,11 +46,12 @@ public class ServiceConnector {
         String scheme = uri.getScheme();
         String authority = uri.getAuthority();
         serverHostPort = scheme + "://" + authority;
+        serverHostPort = "http://127.0.0.1";
         services = parseServicesJson();
     }
 
     public ServiceConnector(String hostPort) {
-        serverHostPort = hostPort;
+        serverHostPort = "http://127.0.0.1";
         services = parseServicesJson();
     }
     
@@ -60,7 +61,7 @@ public class ServiceConnector {
             
         }
         Services services = getObjectFromEndpoint(Services.class, 
-                                                  "http://localhost:9082/start/api/v1/services", 
+        		serverHostPort + "/start/api/v1/services", 
                                                   MediaType.APPLICATION_JSON_TYPE);
         log.info("Setting SERVICES object to " + services.getServices());
         return services;
@@ -147,27 +148,12 @@ public class ServiceConnector {
     }
     
     private String urlConstructor(String extension, Service service) {
-        String url = "http://localhost:9082/" + service.getEndpoint() + extension;
+        String url = serverHostPort + service.getEndpoint() + extension;
         return url;
     }
     
     public < E > E getObjectFromEndpoint(Class<E> klass, String url, MediaType mediaType) {
         System.out.println("Getting object from url " + url);
-//        E object = null;
-//        try {
-//            URL urlObject = new URL(url);
-//            HttpURLConnection conn = (HttpURLConnection) urlObject.openConnection();
-//            conn.setRequestMethod("GET");
-//            InputStream is = (InputStream) conn.getContent();
-//            ObjectInputStream objectStream = new ObjectInputStream(is);
-//            object = (E) objectStream.readObject();
-//            objectStream.close();
-//            is.close();
-//        } catch (IOException e) {
-//            System.out.println("Internal error: " + e);
-//        } catch (ClassNotFoundException e) {
-//            System.out.println("Internal error: " + e);
-//        }
         Client client = ClientBuilder.newClient();
         WebTarget target = client.target(url);
         Invocation.Builder invoBuild = target.request();
