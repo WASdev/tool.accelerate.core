@@ -43,15 +43,15 @@ public class ServiceConnector {
     private String serverHostPort;
     
     public ServiceConnector(URI uri) {
-        String scheme = uri.getScheme();
-        String authority = uri.getAuthority();
-        serverHostPort = scheme + "://" + authority;
-        serverHostPort = "http://127.0.0.1";
+//        String scheme = uri.getScheme();
+//        String authority = uri.getAuthority();
+//        serverHostPort = scheme + "://" + authority;
+        serverHostPort = "http://127.0.0.1:9082";
         services = parseServicesJson();
     }
 
     public ServiceConnector(String hostPort) {
-        serverHostPort = "http://127.0.0.1";
+        serverHostPort = "http://127.0.0.1:9082";
         services = parseServicesJson();
     }
     
