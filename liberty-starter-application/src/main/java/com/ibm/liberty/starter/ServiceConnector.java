@@ -148,6 +148,7 @@ public class ServiceConnector {
     }
     
     private String urlConstructor(String extension, Service service) {
+    	System.out.println("Constructing url:" + serverHostPort + "+" + service.getEndpoint() + "+" + extension);
         String url = serverHostPort + service.getEndpoint() + extension;
         return url;
     }

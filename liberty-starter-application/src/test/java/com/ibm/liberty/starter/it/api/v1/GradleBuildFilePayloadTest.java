@@ -56,7 +56,7 @@ public class GradleBuildFilePayloadTest {
     public void repoUrlInserted() throws Exception {
         File buildFile = new File(buildFilePath + ".repoUrlInserted");
         String queryString = "tech=test&name=TestApp&deploy=local&build=gradle";
-        String expectedUrl = "url 'http://localhost:" + System.getProperty("liberty.test.port") + "/start/api/v1/repo'";
+        String expectedUrl = "url 'http://127.0.0.1:" + System.getProperty("liberty.test.port") + "/start/api/v1/repo'";
         callDataEndpoint(queryString, ".repoUrlInserted");
         assertThat(buildFile, containsLinesInRelativeOrder(containsString(expectedUrl)));
     }
