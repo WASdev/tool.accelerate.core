@@ -41,17 +41,19 @@ public class ServiceConnector {
     
     private final Services services;
     private String serverHostPort;
-    private final String internalServerHostPort = "http://127.0.0.1:9082";
+    private final String internalServerHostPort;
     
     public ServiceConnector(URI uri) {
         String scheme = uri.getScheme();
         String authority = uri.getAuthority();
         serverHostPort = scheme + "://" + authority;
+        internalServerHostPort = "http://" + authority;
         services = parseServicesJson();
     }
 
-    public ServiceConnector(String hostPort) {
+    public ServiceConnector(String hostPort, String internalHostPort) {
         serverHostPort = hostPort;
+        internalServerHostPort = internalHostPort;
         services = parseServicesJson();
     }
     
