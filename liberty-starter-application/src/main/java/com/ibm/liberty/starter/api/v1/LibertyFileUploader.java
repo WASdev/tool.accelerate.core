@@ -61,7 +61,8 @@ public class LibertyFileUploader extends HttpServlet {
 		Collection<Part> filePartCollection = request.getParts();
 		
 		String serverHostPort = request.getRequestURL().toString().replace(request.getRequestURI(), "");
-		String internalHostPort = "http" + serverHostPort.substring(serverHostPort.indexOf(request.getScheme().toString()));
+		int schemeLength = request.getScheme().toString().length();
+		String internalHostPort = "http" + serverHostPort.substring(schemeLength);
 		log.log(Level.FINER, "serverHostPort : " + serverHostPort);
 		final ServiceConnector serviceConnector = new ServiceConnector(serverHostPort, internalHostPort);
 		HashMap<Part, String> fileNames = new HashMap<Part, String>();
