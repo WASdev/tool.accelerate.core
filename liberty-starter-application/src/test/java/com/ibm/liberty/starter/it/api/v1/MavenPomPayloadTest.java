@@ -72,7 +72,7 @@ public class MavenPomPayloadTest {
     @Test
     public void testRepoUrl() throws Exception {
         String queryString = "tech=test&name=TestApp&deploy=local&artifactId=testArtifactId&groupId=test.group.id";
-        String expectedUrl = "http://127.0.0.1:" + System.getProperty("liberty.test.port") + "/start/api/v1/repo";
+        String expectedUrl = "http://localhost:" + System.getProperty("liberty.test.port") + "/start/api/v1/repo";
         callDataEndpoint(queryString);
         assertTrue("Expected repo url to be:" + expectedUrl + ", instead found:" + repoUrls, repoUrls.contains(expectedUrl));
     }
