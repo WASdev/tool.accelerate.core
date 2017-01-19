@@ -41,27 +41,24 @@ public class ServiceConnector {
     
     private final Services services;
     private String serverHostPort;
+    private final String internalServerHostPort = "http://127.0.0.1:9082";
     
     public ServiceConnector(URI uri) {
-//        String scheme = uri.getScheme();
-//        String authority = uri.getAuthority();
-//        serverHostPort = scheme + "://" + authority;
-        serverHostPort = "http://127.0.0.1:9082";
+        String scheme = uri.getScheme();
+        String authority = uri.getAuthority();
+        serverHostPort = scheme + "://" + authority;
         services = parseServicesJson();
     }
 
     public ServiceConnector(String hostPort) {
-        serverHostPort = "http://127.0.0.1:9082";
+        serverHostPort = hostPort;
         services = parseServicesJson();
     }
     
     public Services parseServicesJson() {
-        log.info("Parsing services json file. SERVER_HOST_PORT=" + serverHostPort);
-        if (serverHostPort == null) {
-            
-        }
+        log.info("Parsing services json file. INTERNAL_SERVER_HOST_PORT=" + internalServerHostPort);
         Services services = getObjectFromEndpoint(Services.class, 
-        		serverHostPort + "/start/api/v1/services", 
+        		internalServerHostPort + "/start/api/v1/services", 
                                                   MediaType.APPLICATION_JSON_TYPE);
         log.info("Setting SERVICES object to " + services.getServices());
         return services;
@@ -148,8 +145,8 @@ public class ServiceConnector {
     }
     
     private String urlConstructor(String extension, Service service) {
-    	System.out.println("Constructing url:" + serverHostPort + "+" + service.getEndpoint() + "+" + extension);
-        String url = serverHostPort + service.getEndpoint() + extension;
+    	System.out.println("Constructing url:" + internalServerHostPort + "+" + service.getEndpoint() + "+" + extension);
+        String url = internalServerHostPort + service.getEndpoint() + extension;
         return url;
     }
     
