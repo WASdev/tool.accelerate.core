@@ -37,28 +37,28 @@ public class ServiceConnector {
     
     private final Services services;
     private String serverHostPort;
+    private final String internalServerHostPort;
     
     public ServiceConnector(URI uri) {
         String scheme = uri.getScheme();
         String authority = uri.getAuthority();
         serverHostPort = scheme + "://" + authority;
+        internalServerHostPort = "http://" + authority;
         services = parseServicesJson();
     }
 
-    public ServiceConnector(String hostPort) {
+    public ServiceConnector(String hostPort, String internalHostPort) {
         serverHostPort = hostPort;
+        internalServerHostPort = internalHostPort;
         services = parseServicesJson();
     }
     
     public Services parseServicesJson() {
-        log.info("Parsing services json file. SERVER_HOST_PORT=" + serverHostPort);
-        if (serverHostPort == null) {
-            
-        }
+        log.fine("Parsing services json file. INTERNAL_SERVER_HOST_PORT=" + internalServerHostPort);
         Services services = getObjectFromEndpoint(Services.class, 
-                                                  serverHostPort + "/start/api/v1/services", 
+                internalServerHostPort + "/start/api/v1/services", 
                                                   MediaType.APPLICATION_JSON_TYPE);
-        log.info("Setting SERVICES object to " + services.getServices());
+        log.fine("Setting SERVICES object to " + services.getServices());
         return services;
     }
     
@@ -72,7 +72,7 @@ public class ServiceConnector {
     
     // Returns the service object associated with the given id
     public Service getServiceObjectFromId(String id) {
-        System.out.println("Return service object for " + id);
+        log.fine("Return service object for " + id);
         Service service = null;
         for (Service s : services.getServices()) {
             if (id.equals(s.getId())) {
@@ -89,7 +89,7 @@ public class ServiceConnector {
     }
     
     public String processUploadedFiles(Service service, String uploadDirectory) {
-    	log.finer("service=" + service.getId() + " : uploadDirectory=" + uploadDirectory);
+        log.finer("service=" + service.getId() + " : uploadDirectory=" + uploadDirectory);
         String url = urlConstructor("/api/v1/provider/uploads/process?path=" + uploadDirectory, service);
         String response = getObjectFromEndpoint(String.class, url, MediaType.TEXT_PLAIN_TYPE);
         log.fine("Response of processing uploaded files from " + uploadDirectory + " : " + response);
@@ -97,33 +97,33 @@ public class ServiceConnector {
     }
     
     public String prepareDynamicPackages(Service service, String techWorkspaceDir, String options, String[] techs) {
-    	log.finer("service=" + service.getId() + " : options=" + options + " : techWorkspaceDir=" + techWorkspaceDir + " : techs=" + techs);
-    	String optionsParam = (options != null && !options.trim().isEmpty()) ? ("&options=" + options) : "";
-    	String techsParam = "&techs=" + String.join(",", techs);
-    	String url = urlConstructor("/api/v1/provider/packages/prepare?path=" + techWorkspaceDir + optionsParam + techsParam, service);
-    	try{
-    		String response = getObjectFromEndpoint(String.class, url, MediaType.TEXT_PLAIN_TYPE);
+        log.finer("service=" + service.getId() + " : options=" + options + " : techWorkspaceDir=" + techWorkspaceDir + " : techs=" + techs);
+        String optionsParam = (options != null && !options.trim().isEmpty()) ? ("&options=" + options) : "";
+        String techsParam = "&techs=" + String.join(",", techs);
+        String url = urlConstructor("/api/v1/provider/packages/prepare?path=" + techWorkspaceDir + optionsParam + techsParam, service);
+        try {
+            String response = getObjectFromEndpoint(String.class, url, MediaType.TEXT_PLAIN_TYPE);
             log.fine("Response of preparing dynamic packages from " + techWorkspaceDir + " : " + response);
             return response;
-    	}catch(javax.ws.rs.NotFoundException e){
-    		// The service doesn't offer this endpoint, so the exception can be ignored. 
-    		log.finest("Ignore expected exception : The service doesn't offer endpoint " + url + " : " + e);
+        } catch(javax.ws.rs.NotFoundException e){
+            // The service doesn't offer this endpoint, so the exception can be ignored. 
+            log.finest("Ignore expected exception : The service doesn't offer endpoint " + url + " : " + e);
         }
         return "";
     }
     
     public String getFeaturesToInstall(Service service) {
-    	log.finer("service=" + service.getId());
-    	String url = urlConstructor("/api/v1/provider/features/install", service);
-    	try{
-    		String response = getObjectFromEndpoint(String.class, url, MediaType.TEXT_PLAIN_TYPE);
-    		log.fine("Features to install for " + service.getId() + " : " + response);
-    		return response;
-    	}catch(javax.ws.rs.NotFoundException e){
-    		// The service doesn't offer this endpoint, so the exception can be ignored. 
-    		log.finest("Ignore expected exception : The service doesn't offer endpoint " + url + " : " + e);
-    	}
-    	return "";
+        log.finer("service=" + service.getId());
+        String url = urlConstructor("/api/v1/provider/features/install", service);
+        try {
+            String response = getObjectFromEndpoint(String.class, url, MediaType.TEXT_PLAIN_TYPE);
+            log.fine("Features to install for " + service.getId() + " : " + response);
+            return response;
+        } catch(javax.ws.rs.NotFoundException e){
+            // The service doesn't offer this endpoint, so the exception can be ignored. 
+            log.finest("Ignore expected exception : The service doesn't offer endpoint " + url + " : " + e);
+            }
+        return "";
     }
     
     public Sample getSample(Service service) {
@@ -143,7 +143,8 @@ public class ServiceConnector {
     }
     
     private String urlConstructor(String extension, Service service) {
-        String url = serverHostPort + service.getEndpoint() + extension;
+        log.fine("Constructing url:" + internalServerHostPort + "+" + service.getEndpoint() + "+" + extension);
+        String url = internalServerHostPort + service.getEndpoint() + extension;
         return url;
     }
     
