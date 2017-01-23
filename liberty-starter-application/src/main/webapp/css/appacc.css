@@ -176,6 +176,22 @@
   background-image: none;
 }
 
+.panel-configuration {
+  border-color: #F0F0F0;
+  margin-top: 10px;
+}
+
+.panel-configuration .panel-heading {
+  background-color: #ffffff;
+  padding-top: 0px;
+  padding-bottom: 0px;
+}
+
+.panel-configuration .panel-body {
+  padding-top: 0px;
+  padding-left: 30px;
+}
+
 .tech-with-logo {
     padding-left: 5px;
 }
@@ -185,6 +201,15 @@
 }
 
 .options {
+    margin-top: 9px;
+}
+
+.options .btn {
+    padding: 5px 10px;
+    margin-top: 18px;
+}
+
+.subOptions {
     margin-left: 36px;
     margin-top: 18px;
 }
