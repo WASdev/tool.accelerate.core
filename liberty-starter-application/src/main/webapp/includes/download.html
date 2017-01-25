@@ -59,16 +59,15 @@
                             </div>
                         </div>
                     </div>
-                </div>
-                <div ng-show="deploy.name"><a ng-href="{{createGitHubUrl()}}" target="#" class="btn btn-primary" role="button" ng-click="sendGAEvent('GitHubCreate', 'Java', 'JEE')">Accept and Create On GitHub</a></div>
+                </div><div class="disclaimer" ng-show="deploy.buildType == buildType.MAVEN">Please note: The Maven projects created by the Liberty app accelerator have dependencies on projects with the following licenses: <a href="http://www.apache.org/licenses/LICENSE-2.0" target="_blank">AL 2.0</a> and <a href="https://public.dhe.ibm.com/ibmdl/export/pub/software/websphere/wasdev/license/base_ilan/ilan/16.0.0.3/lafiles/en.html"
+                                                                                                                                                                                                                                                        target="LibertyLicense">ILAN</a>.</div>
+                <div class="disclaimer" ng-show="deploy.buildType == buildType.GRADLE">Please note: The Gradle projects created by the Liberty app accelerator have dependencies on projects with the following licenses: <a href="http://www.apache.org/licenses/LICENSE-2.0" target="_blank">AL 2.0</a> and <a href="https://public.dhe.ibm.com/ibmdl/export/pub/software/websphere/wasdev/license/base_ilan/ilan/16.0.0.3/lafiles/en.html"
+                                                                                                                                                                                                                                                        target="LibertyLicense">ILAN</a>.</div>
+                <div ng-show="deploy.name"><a ng-href="{{createGitHubUrl()}}" target="#" class="btn btn-primary" role="button" ng-click="sendGAEvent('GitHubCreate', 'Java', 'JEE')">Create On GitHub</a></div>
                 <div ng-show="!deploy.name"><a class="btn btn-primary" role="button" ng-disabled="true">Choose a project name</a></div>
                 <div class="btn-separator">or</div>
-                <div ng-show="deploy.name"><a ng-href="{{createDownloadUrl()}}" target="#" class="btn btn-primary" role="button" ng-click="sendGAEvent('Download', 'Java', 'JEE')">Accept and Download</a></div>
+                <div ng-show="deploy.name"><a ng-href="{{createDownloadUrl()}}" target="#" class="btn btn-primary" role="button" ng-click="sendGAEvent('Download', 'Java', 'JEE')">Download</a></div>
                 <div ng-show="!deploy.name"><a class="btn btn-primary" role="button" ng-disabled="true">Choose a project name</a></div>
-                <div class="disclaimer" ng-show="deploy.buildType == buildType.MAVEN">The Maven projects created by the Liberty app accelerator have dependencies on projects with the following licenses: <a href="http://www.apache.org/licenses/LICENSE-2.0" target="_blank">AL 2.0</a> and <a href="https://public.dhe.ibm.com/ibmdl/export/pub/software/websphere/wasdev/license/base_ilan/ilan/16.0.0.3/lafiles/en.html"
-                                                                                                                                                                                                                                                        target="LibertyLicense">ILAN</a>.</div>
-                <div class="disclaimer" ng-show="deploy.buildType == buildType.GRADLE">The Gradle projects created by the Liberty app accelerator have dependencies on projects with the following licenses: <a href="http://www.apache.org/licenses/LICENSE-2.0" target="_blank">AL 2.0</a> and <a href="https://public.dhe.ibm.com/ibmdl/export/pub/software/websphere/wasdev/license/base_ilan/ilan/16.0.0.3/lafiles/en.html"
-                                                                                                                                                                                                                                                        target="LibertyLicense">ILAN</a>.</div>
             </div>
             <div class="col-md-6 col-sm-6">
                 <p class="instructionHeading">Once the download is complete, locate your project and unzip it.</p>
