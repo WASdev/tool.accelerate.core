@@ -28,7 +28,7 @@
             <groupId>net.wasdev.wlp.starters.microprofile</groupId>
             <artifactId>server-snippet</artifactId>
             <type>xml</type>
-            <version>0.0.2</version>
+            <version>0.0.3</version>
         </dependency>
     </dependencies>
 </project>
