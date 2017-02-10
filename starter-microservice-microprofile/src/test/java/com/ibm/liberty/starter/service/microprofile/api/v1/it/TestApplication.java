@@ -49,13 +49,13 @@ public class TestApplication extends EndpointTest {
             if (Dependency.Scope.PROVIDED.equals(dependency.getScope())) {
                 assertEquals("groupId incorrect.", "net.wasdev.wlp.starters.microprofile", dependency.getGroupId());
                 assertEquals("artifactId incorrect.", "provided-pom", dependency.getArtifactId());
-                assertEquals("version incorrect.", "0.0.2", dependency.getVersion());
+                assertEquals("version incorrect.", "0.0.3", dependency.getVersion());
                 providedDependency = true;
             }
             if (Dependency.Scope.RUNTIME.equals(dependency.getScope())) {
                 assertEquals("groupId incorrect.", "net.wasdev.wlp.starters.microprofile", dependency.getGroupId());
                 assertEquals("artifactId incorrect.", "runtime-pom", dependency.getArtifactId());
-                assertEquals("version incorrect.", "0.0.2", dependency.getVersion());
+                assertEquals("version incorrect.", "0.0.3", dependency.getVersion());
                 runtimeDependency = true;
             }
         }
