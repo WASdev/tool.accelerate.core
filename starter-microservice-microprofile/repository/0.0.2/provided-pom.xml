@@ -4,7 +4,7 @@
 
     <groupId>net.wasdev.wlp.starters.microprofile</groupId>
     <artifactId>provided-pom</artifactId>
-    <version>0.0.3</version>
+    <version>0.0.2</version>
     <packaging>pom</packaging>
 
     <name>provided-pom</name>
