@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016 IBM Corp.
+ * Copyright (c) 2016,17 IBM Corp.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -61,7 +61,7 @@ public class ProviderEndpoint {
         runtimeDependency.setScope(scope);
         runtimeDependency.setGroupId("net.wasdev.wlp.starters.microprofile");
         runtimeDependency.setArtifactId(artifactId);
-        runtimeDependency.setVersion("0.0.2");
+        runtimeDependency.setVersion("0.0.3");
         return runtimeDependency;
     }
 
