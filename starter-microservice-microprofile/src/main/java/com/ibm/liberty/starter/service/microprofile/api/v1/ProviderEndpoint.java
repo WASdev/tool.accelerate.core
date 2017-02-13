@@ -61,7 +61,7 @@ public class ProviderEndpoint {
         runtimeDependency.setScope(scope);
         runtimeDependency.setGroupId("net.wasdev.wlp.starters.microprofile");
         runtimeDependency.setArtifactId(artifactId);
-        runtimeDependency.setVersion("0.0.2");
+        runtimeDependency.setVersion("0.0.3");
         return runtimeDependency;
     }
 
