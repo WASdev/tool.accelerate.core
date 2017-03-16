@@ -54,6 +54,20 @@ public class EndpointAvailabilityTest {
         }
         assertTrue("Incorrect response code: " + responseCode, responseCode == 200);
     }
+    
+    @Test
+    public void testTechEndpoint() throws Exception {
+        String url = "http://localhost:" + port + "/start/api/v1/tech";
+        System.out.println("Testing endpoint " + url);
+        int maxCount = 30;
+        int responseCode = makeRequest(url);
+        for(int i = 0; (responseCode != 200) && (i < maxCount); i++) {
+          System.out.println("Response code : " + responseCode + ", retrying ... (" + i + " of " + maxCount + ")");
+          Thread.sleep(5000);
+          responseCode = makeRequest(url);
+        }
+        assertTrue("Incorrect response code: " + responseCode, responseCode == 200);
+    }
 
     private int makeRequest(String url) {
       Client client = ClientBuilder.newClient();
