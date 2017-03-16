@@ -19,6 +19,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import com.ibm.liberty.starter.api.v1.model.provider.Dependency;
@@ -32,10 +33,11 @@ import com.ibm.liberty.starter.api.v1.model.provider.ServerConfig;
  */
 public class TestApplication extends EndpointTest {
     
-    private static final String DEPENDENCY_URL = "http://localhost:9082/persistence/artifacts/net/wasdev/wlp/starters/persistence";
-    private static final String PROVIDED_URL = "/provided-pom/0.0.1/provided-pom-0.0.1.pom";
-    private static final String RUNTIME_URL = "/runtime-pom/0.0.1/runtime-pom-0.0.1.pom";
-
+    @Before
+    public void checkSetup() {
+        checkAvailability("/api/v1/provider/");
+    }
+    
     @Test
     public void testProvider() throws Exception {
         Provider provider =  testEndpoint("/api/v1/provider/", Provider.class);

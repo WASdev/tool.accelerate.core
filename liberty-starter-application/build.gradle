@@ -103,6 +103,13 @@ task testAvailability(type: Test) {
     exclude '**/unit/**'
     
     systemProperties = ['liberty.test.port': "${libertyApplicationTestPort}"]
+    
+    testLogging {
+        events "started", "skipped", "failed"
+        showStackTraces true
+        showStandardStreams true
+        exceptionFormat "full"
+    }
 }
 
 task fvt(type: Test) {

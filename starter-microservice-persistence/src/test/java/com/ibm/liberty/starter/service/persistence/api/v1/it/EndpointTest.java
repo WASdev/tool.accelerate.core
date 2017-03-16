@@ -27,11 +27,38 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class EndpointTest {
 
+	//use this to give the REST endpoint a chance to come up after the server has reported it's started
+	public void checkAvailability(String endpoint) {
+		String ep = getEndPoint(endpoint);
+		for(int x = 0; x < 3; x++) {
+			Response response = null;
+	        try {
+		        response = sendRequest(ep, "GET");
+		        if(response.getStatus() == 200) {
+		        	return;
+		        }
+	        } finally {
+        		if(response != null) {
+        			response.close();
+        		}
+	        }
+	        try {
+				Thread.sleep(3000);
+			} catch (InterruptedException e) {
+				//just exit
+			}
+		}
+	}
+	
+	private String getEndPoint(String endpoint) {
+		String port = System.getProperty("liberty.test.port");
+        String war = System.getProperty("war.name");
+        return "http://localhost:" + port + "/" + war + endpoint;
+	}
+	
     @SuppressWarnings("unchecked")
 	public <T> T testEndpoint(String endpoint, Class<?> entity) throws Exception {
-        String port = System.getProperty("liberty.test.port");
-        String war = System.getProperty("war.name");
-        String url = "http://localhost:" + port + "/" + war + endpoint;
+        String url = getEndPoint(endpoint);
         System.out.println("Testing " + url);
         Response response = null;
         try {
