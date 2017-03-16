@@ -24,7 +24,7 @@ public class EndpointAvailabilityTest {
           Thread.sleep(5000);
           responseCode = makeRequest(url);
         }
-        assertTrue("Incorrect response code: " + responseCode, responseCode == 200);
+        assertTrue("Incorrect response code: " + responseCode, responseCode == 301);
     }
     
     @Test
@@ -38,7 +38,7 @@ public class EndpointAvailabilityTest {
           Thread.sleep(5000);
           responseCode = makeRequest(url);
         }
-        assertTrue("Incorrect response code: " + responseCode, responseCode == 200);
+        assertTrue("Incorrect response code: " + responseCode, responseCode == 301);
     }
     
     @Test
