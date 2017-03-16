@@ -22,7 +22,7 @@ angular.module('appAccelerator')
 
   $log.debug("AppAccelerator : using controller 'appCtrl'");
 
-  $scope.colCount = 4;    //used by angular to layout rows correctly
+  $scope.colCount = 3;    //used by angular to layout rows correctly
   $scope.hasTechnologies = false;
   $scope.serverError = false;
   $scope.technologies = [];   //this controls the layout of the technologies, the service has the list of selected ones
@@ -162,7 +162,7 @@ angular.module('appAccelerator')
         technology.info = false;            //do not show the information for this technology
         technology.displayOptions = false;  //don't show any options
         technology.panel = "panel-primary";
-        technology.name = technology.name.substring(0,15); //Ensure that panels don't overflow
+        technology.name = technology.name.substring(0,27); //Ensure that panels don't overflow
         technology.iconstyle = "icon";
         row.push(technology);
       }

@@ -52,6 +52,13 @@
             "imageSelected" : "img/MicroprofileLogoCroppedSelected.png"
         },
         {
+            "id": "ms-builder",
+            "name": "Microservice Builder (Beta)",
+            "description": "Builds on MicroProfile technology type to provide Docker, Jenkins and Kubernetes files for Microservice Builder Beta program.",
+            "endpoint": "/ms-builder",
+            "options" : false
+        },
+        {
             "id" : "swagger",
             "name" : "Swagger",
             "description" : "A simple yet powerful representation of RESTful APIs.",

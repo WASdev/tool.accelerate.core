@@ -15,40 +15,50 @@
  *******************************************************************************/
 package com.ibm.liberty.starter;
 
-import com.ibm.liberty.starter.api.v1.model.provider.Location;
-import com.ibm.liberty.starter.api.v1.model.provider.Provider;
-import com.ibm.liberty.starter.api.v1.model.provider.Sample;
-import com.ibm.liberty.starter.api.v1.model.registration.Service;
-import com.ibm.liberty.starter.build.FeaturesToInstallProvider;
-import com.ibm.liberty.starter.build.gradle.*;
-import com.ibm.liberty.starter.build.maven.*;
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.IOUtils;
-import org.xml.sax.SAXException;
-
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.TransformerException;
-import java.io.*;
-import java.util.*;
+import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
-import com.ibm.liberty.starter.api.v1.model.internal.Services;
+
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerException;
+
+import org.apache.commons.io.FileUtils;
+import org.xml.sax.SAXException;
+
 import com.ibm.liberty.starter.api.v1.model.provider.Location;
 import com.ibm.liberty.starter.api.v1.model.provider.Provider;
 import com.ibm.liberty.starter.api.v1.model.provider.Sample;
 import com.ibm.liberty.starter.api.v1.model.registration.Service;
-import com.ibm.liberty.starter.api.v1.temp.ServiceFinder;
+import com.ibm.liberty.starter.build.FeaturesToInstallProvider;
+import com.ibm.liberty.starter.build.gradle.CreateAppNameTags;
+import com.ibm.liberty.starter.build.gradle.CreateArtifactConfigTags;
+import com.ibm.liberty.starter.build.gradle.CreateDependencyTags;
+import com.ibm.liberty.starter.build.gradle.CreateFeaturesTags;
+import com.ibm.liberty.starter.build.gradle.CreateRepositoryTags;
+import com.ibm.liberty.starter.build.gradle.TemplatedFileToBytesConverter;
 import com.ibm.liberty.starter.build.maven.AddDependenciesCommand;
 import com.ibm.liberty.starter.build.maven.AddFeaturesCommand;
 import com.ibm.liberty.starter.build.maven.AppArtifactConfigCommand;
 import com.ibm.liberty.starter.build.maven.AppNameCommand;
+import com.ibm.liberty.starter.build.maven.PomModifier;
 import com.ibm.liberty.starter.build.maven.PomModifierCommand;
 import com.ibm.liberty.starter.build.maven.SetDefaultProfileCommand;
 import com.ibm.liberty.starter.build.maven.SetRepositoryCommand;
-import com.ibm.liberty.starter.build.maven.PomModifier;
 
 public class ProjectConstructor {
     
@@ -210,18 +220,44 @@ public class ProjectConstructor {
             String basePath = sample.getBase();
             for (Location location : locations) {
                 String fileUrl = location.getUrl();
-                InputStream is = inputData.serviceConnector.getResourceAsInputStream(basePath + fileUrl);
-                ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                IOUtils.copy(is, baos);
-                is.close();
-                byte[] bytes = baos.toByteArray();
-                baos.close();
-                if (fileUrl.startsWith("/")) {
-                    fileUrl = fileUrl.substring(1);
+                if (fileForOtherBuildType(fileUrl)) {
+                    continue;
+                } else {
+                    InputStream is = inputData.serviceConnector.getResourceAsInputStream(basePath + fileUrl);
+                    TemplatedFileToBytesConverter techSampleFileConverter = new TemplatedFileToBytesConverter(is, Collections.singletonMap("APP_NAME", inputData.appName));
+                    fileUrl = sanitiseFileUrl(fileUrl);
+                    putFileInMap(fileUrl, techSampleFileConverter.getBytes());
                 }
-                putFileInMap(fileUrl, bytes);
             }
         }
+    }
+    
+    private boolean fileForOtherBuildType(String fileUrl) {
+        boolean rejectFile = false;
+        switch (inputData.buildType) {
+        case GRADLE:
+            rejectFile = (fileUrl.endsWith(".mavenFile"));
+            break;
+        case MAVEN:
+            rejectFile =  (fileUrl.endsWith(".gradleFile"));
+            break;
+        }
+        return rejectFile;
+    }
+    
+    private String sanitiseFileUrl(String fileUrl) {
+        if (fileUrl.startsWith("/")) {
+            fileUrl = fileUrl.substring(1);
+        }
+        if (fileUrl.endsWith(".mavenFile")) {
+            int ending = fileUrl.indexOf(".mavenFile");
+            fileUrl = fileUrl.substring(0, ending);
+        }
+        if (fileUrl.endsWith(".gradleFile")) {
+            int ending = fileUrl.indexOf(".gradleFile");
+            fileUrl = fileUrl.substring(0, ending);
+        }
+        return fileUrl;
     }
 
     private void addBuildFilesToMap() throws SAXException, TransformerException, ParserConfigurationException, IOException {
