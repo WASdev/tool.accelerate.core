@@ -29,7 +29,7 @@ public class EndpointAvailabilityTest {
     
     @Test
     public void testEndpoint() throws Exception {
-    	String url = "http://172.0.0.1:" + port + "/";
+    	String url = "http://127.0.0.1:" + port + "/";
         System.out.println("Testing endpoint " + url);
         int maxCount = 30;
         int responseCode = makeRequest(url);
