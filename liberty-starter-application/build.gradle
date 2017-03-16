@@ -151,7 +151,7 @@ task cleanDropins (type: Delete){
 
 liberty {
     install {
-        runtimeUrl = "http://repo1.maven.org/maven2/com/ibm/websphere/appserver/runtime/wlp-webProfile7/16.0.0.4/wlp-webProfile7-16.0.0.4.zip"
+        type = "javaee7"
     }
     serverName = 'StarterServer'
     userDir = '../liberty-starter-wlpcfg'
