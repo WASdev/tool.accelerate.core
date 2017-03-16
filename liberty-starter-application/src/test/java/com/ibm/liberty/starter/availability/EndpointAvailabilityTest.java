@@ -19,7 +19,7 @@ public class EndpointAvailabilityTest {
         System.out.println("Testing endpoint " + url);
         int maxCount = 30;
         int responseCode = makeRequest(url);
-        for(int i = 0; (responseCode != 200) && (i < maxCount); i++) {
+        for(int i = 0; (responseCode != 301) && (i < maxCount); i++) {
           System.out.println("Response code : " + responseCode + ", retrying ... (" + i + " of " + maxCount + ")");
           Thread.sleep(5000);
           responseCode = makeRequest(url);
@@ -33,7 +33,7 @@ public class EndpointAvailabilityTest {
         System.out.println("Testing endpoint " + url);
         int maxCount = 30;
         int responseCode = makeRequest(url);
-        for(int i = 0; (responseCode != 200) && (i < maxCount); i++) {
+        for(int i = 0; (responseCode != 301) && (i < maxCount); i++) {
           System.out.println("Response code : " + responseCode + ", retrying ... (" + i + " of " + maxCount + ")");
           Thread.sleep(5000);
           responseCode = makeRequest(url);
