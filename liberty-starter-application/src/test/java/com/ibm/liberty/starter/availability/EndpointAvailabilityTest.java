@@ -49,7 +49,7 @@ public class EndpointAvailabilityTest {
         int responseCode = makeRequest(url);
         for(int i = 0; (responseCode != 200) && (i < maxCount); i++) {
           System.out.println("Response code : " + responseCode + ", retrying ... (" + i + " of " + maxCount + ")");
-          Thread.sleep(10000);
+          Thread.sleep(5000);
           responseCode = makeRequest(url);
         }
         assertTrue("Incorrect response code: " + responseCode, responseCode == 200);

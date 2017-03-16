@@ -177,6 +177,14 @@ def rootDirectory = project.projectDir.getAbsolutePath()
 def testResultsDir = new File(buildDir, "karmaResults")
 
 gradle.taskGraph.afterTask { Task task, TaskState state ->
+    if (task.name == "testAvailability" && state.failure) {
+        println '***FVT JUNIT LOGS***'
+        printDirectory(task.reports.junitXml.destination)
+        println '***FVT JUNIT LOGS END***'
+        println '***SERVER LOGS***'
+        printDirectory(file('../liberty-starter-wlpcfg/servers/StarterServer/logs'))
+        println '***SERVER LOGS END***'
+    }
     if (task.name == "fvt" && state.failure) {
         println '***FVT JUNIT LOGS***'
         printDirectory(task.reports.junitXml.destination)
