@@ -93,6 +93,18 @@ war {
     exclude '**/.project'
 }
 
+task testAvailability(type: Test) {
+    group 'Verification'
+    description 'Checks the application has started.'
+    reports.html.destination = file("$buildDir/reports/availability")
+    reports.junitXml.destination = file("$buildDir/test-results/availability")
+    include '**/availability/**'
+    exclude '**/it/**'
+    exclude '**/unit/**'
+    
+    systemProperties = ['liberty.test.port': "${libertyApplicationTestPort}"]
+}
+
 task fvt(type: Test) {
     group 'Verification'
     description 'Runs the functional verification tests.'
@@ -217,7 +229,8 @@ war.dependsOn(':liberty-filter-application:publishWar', ':starter-microservice-w
 installFeature.dependsOn('installLiberty')
 libertyStart.dependsOn('installFeature', 'addServerEnv', ':starter-microservice-test:publishTestWar', 'publishWar')
 localRun.dependsOn('installFeature', 'publishWar')
-fvt.dependsOn('libertyStart', 'testClasses')
+testAvailability.dependsOn('libertyStart')
+fvt.dependsOn('testAvailability', 'libertyStart', 'testClasses')
 fvt.finalizedBy('libertyStop', 'removeServerEnv')
 check.dependsOn('fvt', 'karmaRun')
 build.dependsOn('libertyPackage')
