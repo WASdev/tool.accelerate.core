@@ -29,11 +29,11 @@ import javax.ws.rs.core.Response;
 import org.junit.Assert;
 import org.junit.Test;
 
-public class MicroProfileAPIJarDownloadTest {
+public class APIJarDownloadTest {
 
     @Test
     public void testRepoUrl() throws Exception {
-        String url = "http://localhost:" + System.getProperty("liberty.test.port") + "/start/api/v1/repo/net/wasdev/wlp/starters/ms-builder/config/0.0.1/config-0.0.1.jar";
+        String url = "http://localhost:" + System.getProperty("liberty.test.port") + "/start/api/v1/repo/net/wasdev/wlp/starters/test/config/0.0.1/config-0.0.1.jar";
         Client client = ClientBuilder.newClient();
         Response response = client.target(url).request("application/zip").get();
         try {

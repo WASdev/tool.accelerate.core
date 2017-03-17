@@ -32,6 +32,8 @@ buildutils {
 
 task installAllPOMs(type: MavenTask) {
 	id 'test'
+    def String[] localJarArtifacts = ['config', 'faulttolerance']
+    jarArtifacts localJarArtifacts
 	hasProvided true
 	hasRuntime true
 	hasCompile true
