@@ -41,7 +41,7 @@ public class TestApplication extends EndpointTest {
     public void testProvider() throws Exception {
         Provider provider = testEndpoint("/api/v1/provider/", Provider.class);
         assertNotNull("No response from API for provider", provider);
-        assertTrue("Description was not found.", provider.getDescription().contains("<h2>MicroProfile</h2>"));
+        assertTrue("Description was not found.", provider.getDescription().contains("<h2>Microservice Builder (Beta)</h2>"));
         Dependency[] dependencies = provider.getDependencies();
         boolean providedDependency = false;
         boolean runtimeDependency = false;
