@@ -2,12 +2,12 @@
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>net.wasdev.wlp.starters.microprofile</groupId>
-    <artifactId>runtime-pom</artifactId>
-    <version>0.0.3</version>
+    <groupId>net.wasdev.wlp.starters.ms-builder</groupId>
+    <artifactId>provided-pom</artifactId>
+    <version>0.1</version>
     <packaging>pom</packaging>
 
-    <name>runtime-pom</name>
+    <name>provided-pom</name>
     
     <licenses>
         <license>
@@ -23,12 +23,21 @@
         <url>git@github.com:WASdev/tool.artisan.core.git</url>
     </scm>
 
+    <repositories>
+        <repository>
+            <id>ibm-maven-repo</id>
+            <name>ibm-maven-repo</name>
+            <url>https://public.dhe.ibm.com/ibmdl/export/pub/software/websphere/wasdev/maven/repository/</url>
+        </repository>
+    </repositories>
+
     <dependencies>
         <dependency>
             <groupId>net.wasdev.wlp.starters.microprofile</groupId>
-            <artifactId>server-snippet</artifactId>
+            <artifactId>provided-pom</artifactId>
             <type>xml</type>
             <version>0.0.3</version>
         </dependency>
     </dependencies>
+
 </project>

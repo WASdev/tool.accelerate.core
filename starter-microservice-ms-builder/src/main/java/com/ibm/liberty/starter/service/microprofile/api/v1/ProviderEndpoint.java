@@ -61,7 +61,7 @@ public class ProviderEndpoint {
         runtimeDependency.setScope(scope);
         runtimeDependency.setGroupId("net.wasdev.wlp.starters.ms-builder");
         runtimeDependency.setArtifactId(artifactId);
-        runtimeDependency.setVersion("0.0.1");
+        runtimeDependency.setVersion("0.1");
         return runtimeDependency;
     }
 

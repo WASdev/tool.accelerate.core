@@ -31,7 +31,7 @@ buildutils {
 
 task installAllPOMs(type: MavenTask) {
     id 'ms-builder'
-    def String[] localVersion = ['0.0.1']
+    def String[] localVersion = ['0.1']
     pomVersion localVersion
     def String[] localJarArtifacts = ['config', 'faulttolerance']
     jarArtifacts localJarArtifacts
