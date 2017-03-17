@@ -151,7 +151,7 @@ task cleanDropins (type: Delete){
 
 liberty {
     install {
-        type = "javaee7"
+        type = "webProfile7"
     }
     serverName = 'StarterServer'
     userDir = '../liberty-starter-wlpcfg'
