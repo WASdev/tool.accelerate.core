@@ -54,7 +54,7 @@
         {
             "id": "ms-builder",
             "name": "Microservice Builder (Beta)",
-            "description": "Builds on MicroProfile technology type to provide Docker, Jenkins and Kubernetes files for Microservice Builder Beta program.",
+            "description": "Support for the technologies required by the Microservice Builder (Beta) solution. See microservicebuilder.mybluemix.net.",
             "endpoint": "/ms-builder",
             "options" : false
         },
