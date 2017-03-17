@@ -30,6 +30,7 @@ angular.module('appAccelerator')
   var ctrl = this;    //used for scoping in promises
   var restId = "rest";
   var microprofileId = "microprofile";
+  var msBuilderId = "ms-builder";
   var swaggerId = "swagger";
   var swaggerFileSelect = undefined;
   var file = undefined;
@@ -39,7 +40,7 @@ angular.module('appAccelerator')
   appacc.addListener(function() {
     $log.debug("Swagger : checking service state.");
     
-    $scope.allowConfig = appacc.isSelected(restId) || appacc.isSelected(microprofileId);
+    $scope.allowConfig = appacc.isSelected(restId) || appacc.isSelected(microprofileId) || appacc.isSelected(msBuilderId);
     if(appacc.isSelected(swaggerId) && $scope.options.useSwaggerDoc && ctrl.fileUploadedOK && $scope.allowConfig) {
       appacc.addTechOption(techOptions);
     } else {

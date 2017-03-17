@@ -52,6 +52,13 @@
             "imageSelected" : "img/MicroprofileLogoCroppedSelected.png"
         },
         {
+            "id": "ms-builder",
+            "name": "Microservice Builder (Beta)",
+            "description": "Support for the technologies required by the Microservice Builder (Beta) solution. See microservicebuilder.mybluemix.net.",
+            "endpoint": "/ms-builder",
+            "options" : false
+        },
+        {
             "id" : "swagger",
             "name" : "Swagger",
             "description" : "A simple yet powerful representation of RESTful APIs.",

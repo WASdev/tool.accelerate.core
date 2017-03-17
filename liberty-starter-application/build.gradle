@@ -93,6 +93,25 @@ war {
     exclude '**/.project'
 }
 
+task testAvailability(type: Test) {
+    group 'Verification'
+    description 'Checks the application has started.'
+    reports.html.destination = file("$buildDir/reports/availability")
+    reports.junitXml.destination = file("$buildDir/test-results/availability")
+    include '**/availability/**'
+    exclude '**/it/**'
+    exclude '**/unit/**'
+    
+    systemProperties = ['liberty.test.port': "${libertyApplicationTestPort}"]
+    
+    testLogging {
+        events "started", "skipped", "failed"
+        showStackTraces true
+        showStandardStreams true
+        exceptionFormat "full"
+    }
+}
+
 task fvt(type: Test) {
     group 'Verification'
     description 'Runs the functional verification tests.'
@@ -132,7 +151,7 @@ task cleanDropins (type: Delete){
 
 liberty {
     install {
-        type = "javaee7"
+        runtimeUrl = "http://repo1.maven.org/maven2/com/ibm/websphere/appserver/runtime/wlp-webProfile7/17.0.0.1/wlp-webProfile7-17.0.0.1.zip"
     }
     serverName = 'StarterServer'
     userDir = '../liberty-starter-wlpcfg'
@@ -158,6 +177,14 @@ def rootDirectory = project.projectDir.getAbsolutePath()
 def testResultsDir = new File(buildDir, "karmaResults")
 
 gradle.taskGraph.afterTask { Task task, TaskState state ->
+    if (task.name == "testAvailability" && state.failure) {
+        println '***FVT JUNIT LOGS***'
+        printDirectory(task.reports.junitXml.destination)
+        println '***FVT JUNIT LOGS END***'
+        println '***SERVER LOGS***'
+        printDirectory(file('../liberty-starter-wlpcfg/servers/StarterServer/logs'))
+        println '***SERVER LOGS END***'
+    }
     if (task.name == "fvt" && state.failure) {
         println '***FVT JUNIT LOGS***'
         printDirectory(task.reports.junitXml.destination)
@@ -213,11 +240,12 @@ karma {
 }
 
 clean.dependsOn(':liberty-starter-wlpcfg:cleanServer', 'karmaClean')
-war.dependsOn(':liberty-filter-application:publishWar', ':starter-microservice-web:publishWar', ':starter-microservice-persistence:publishWar', ':starter-microservice-rest:publishWar', ':starter-microservice-websocket:publishWar', ':starter-microservice-springboot-web:publishWar', ':starter-microservice-watsonsdk:publishWar', ':starter-microservice-microprofile:publishWar', ':starter-microservice-swagger:publishWar', 'compressSkeletonBuildImage', 'copySpecialFiles', 'createSwaggerJSON')
+war.dependsOn(':liberty-filter-application:publishWar', ':starter-microservice-web:publishWar', ':starter-microservice-persistence:publishWar', ':starter-microservice-rest:publishWar', ':starter-microservice-websocket:publishWar', ':starter-microservice-springboot-web:publishWar', ':starter-microservice-watsonsdk:publishWar', ':starter-microservice-microprofile:publishWar', ':starter-microservice-ms-builder:publishWar', ':starter-microservice-swagger:publishWar', 'compressSkeletonBuildImage', 'copySpecialFiles', 'createSwaggerJSON')
 installFeature.dependsOn('installLiberty')
 libertyStart.dependsOn('installFeature', 'addServerEnv', ':starter-microservice-test:publishTestWar', 'publishWar')
 localRun.dependsOn('installFeature', 'publishWar')
-fvt.dependsOn('libertyStart', 'testClasses')
+testAvailability.dependsOn('libertyStart')
+fvt.dependsOn('testAvailability', 'libertyStart', 'testClasses')
 fvt.finalizedBy('libertyStop', 'removeServerEnv')
 check.dependsOn('fvt', 'karmaRun')
 build.dependsOn('libertyPackage')

@@ -21,33 +21,27 @@ import com.ibm.liberty.starter.gradle.MavenTask
 import com.ibm.liberty.starter.gradle.FvtTask
 
 dependencies {
-	compile group: 'commons-io', name: 'commons-io', version: '2.4' 
     providedCompile group:'javax.ws.rs', name:'javax.ws.rs-api', version: '2.0'
     providedCompile group:'javax.json', name:'javax.json-api', version:'1.0'
 }
 
 buildutils {
-	contextRoot = '/test'
+    contextRoot = '/ms-builder'
 }
 
 task installAllPOMs(type: MavenTask) {
-	id 'test'
+    id 'ms-builder'
+    def String[] localVersion = ['0.1']
+    pomVersion localVersion
     def String[] localJarArtifacts = ['config', 'faulttolerance']
     jarArtifacts localJarArtifacts
-	hasProvided true
-	hasRuntime true
-	hasCompile true
-	hasServerSnippet true
+    hasProvided true
+    hasRuntime true
 }
 
 task fvt(type: FvtTask) {
-	id 'test'
-	finalizedBy libertyStop
-}
-
-task publishTestWar(dependsOn: 'war' , type: Copy) {
-    from(war)
-    into('../liberty-starter-wlpcfg/servers/StarterServer/dropins')
+    id 'starter-microservice-ms-builder'
+    finalizedBy libertyStop
 }
 
 apply from: '../tech-type-task-graph.gradle'
