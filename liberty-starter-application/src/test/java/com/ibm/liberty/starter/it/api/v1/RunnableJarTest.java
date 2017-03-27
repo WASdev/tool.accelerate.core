@@ -45,7 +45,7 @@ public class RunnableJarTest {
 
         int mvnReturnCode = MvnUtils.runMvnCommand(logFilePrintStream, tempDir, downloadedZip, "install", "-P runnable");
 
-        assertEquals(0, mvnReturnCode);
+        assertEquals("mvn install -P runnable failed with a non zero return code", 0, mvnReturnCode);
         assertThat(new File(installLog), containsLinesInRelativeOrder(containsString("BUILD SUCCESS")));
         assertThat(new File(pathToOutputJar), is(anExistingFile()));
     }

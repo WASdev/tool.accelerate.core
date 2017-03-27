@@ -64,7 +64,7 @@ public class RunLocalMavenPayloadTest {
         
         int mvnReturnCode = MvnUtils.runMvnCommand(outputStream, tempDir, zip, "liberty:stop-server");
         
-        assertEquals(0, mvnReturnCode);
+        assertEquals("mvn liberty:stop-server failed with non zero return code", 0, mvnReturnCode);
         assertThat(stopServerLog, containsLinesInRelativeOrder(containsString("BUILD SUCCESS")));
     }
 

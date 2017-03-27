@@ -49,7 +49,7 @@ public class RunLocalGradlePayloadTest {
 
         int returnCode = runGradleCommand(logFile, "build", "libertyStart");
 
-        assertEquals(0, returnCode);
+        assertEquals("gradle build libertyStart failed with non zero return code", 0, returnCode);
         assertThat(logFile, containsLinesInRelativeOrder(containsString("BUILD SUCCESSFUL")));
         assertThat(new File(pathToOutputZip), is(anExistingFile()));
         DownloadedZip.testEndpointOnRunningApplication();
