@@ -191,12 +191,13 @@ public class ProjectConstructor {
         final int MAX_SIZE = 200000;
         char[] buffer = new char[MAX_SIZE];
         
+        int len = 0;
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(htmlIS));) {
-            reader.read(buffer, 0, MAX_SIZE);
+            len = reader.read(buffer, 0, MAX_SIZE);
         } catch (Exception e ){
             return null;
         }
-        String contents = new String(buffer);
+        String contents = new String(buffer, 0, len);
         int index = contents.indexOf("<div id=\"technologies\">");
         if (index != -1) {
             int length = contents.length();
