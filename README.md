@@ -21,12 +21,12 @@ Inside the project there is a application.servlet package containing the <code>L
 
 For the complete feature documentation, see the [servlet-3.1](http://www.ibm.com/support/knowledgecenter/en/SSEQTP_liberty/com.ibm.websphere.wlp.nd.multiplatform.doc/ae/rwlp_feature_servlet-3.1.html) feature description in IBM Knowledge Center.
 
-## Spring Boot with Spring MVC
+## Spring Boot with Spring REST
 This provides you with a SpringBoot application that will run on WebSphere Liberty.
 
 Inside the project there is a application.springboot.web package containing two classes:
 * SpringBootLibertyApplication</code>: The entry point for the SpringBoot application.
-* LibertyHelloController</code>: A Spring MVC endpoint which you can access at /springbootweb.
+* LibertyHelloController</code>: A Spring REST endpoint which you can access at /springbootweb.
 
 There is also a test class named <code>it.springboot.web.HelloControllerTest</code> that will test the Spring MVC endpoint to ensure it is working.
 
