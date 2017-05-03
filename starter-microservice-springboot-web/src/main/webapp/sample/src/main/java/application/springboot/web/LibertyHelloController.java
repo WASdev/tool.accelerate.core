@@ -23,7 +23,7 @@ public class LibertyHelloController {
 
     @RequestMapping("/springbootweb")
     public String hello() {
-        return "Hello from Spring Boot MVC running on Liberty!";
+        return "Hello from Spring Boot REST running on Liberty!";
     }
 
 }
