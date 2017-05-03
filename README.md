@@ -28,7 +28,7 @@ Inside the project there is a application.springboot.web package containing two 
 * SpringBootLibertyApplication</code>: The entry point for the SpringBoot application.
 * LibertyHelloController</code>: A Spring REST endpoint which you can access at /springbootweb.
 
-There is also a test class named <code>it.springboot.web.HelloControllerTest</code> that will test the Spring MVC endpoint to ensure it is working.
+There is also a test class named <code>it.springboot.web.HelloControllerTest</code> that will test the Spring REST endpoint to ensure it is working.
 
 ## Websockets
 This provides you with the websocket-1.1 feature.
