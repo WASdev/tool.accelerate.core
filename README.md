@@ -8,7 +8,7 @@ An application builder to allow you to construct starter Java applications that 
 * [Contributing to app accelerator](#contributing-to-app-accelerator)
   * [Building and Running](#building-and-running)
   * [Project Structure](#project-structure)
-  * [Adding Technology Options](#adding-technologies-options)
+  * [Adding Technology Options](#adding-technology-options)
   * [Testing Create on GitHub Capability](#testing-create-on-github-capability)
 
 ## Summary
@@ -30,7 +30,7 @@ The current technologies you can choose to build into your application are:
 * [Persistence](#persistence)
 * [Watson SDK](#watson-sdk)
 * [MicroProfile](#microprofile)
-* [Microservice Builder (Beta)](#microservice-builder-(beta))
+* [Microservice Builder (Beta)](#microservice-builder-beta)
 * [Swagger](#swagger)
 
 ### Rest
@@ -111,9 +111,9 @@ gradle build
 
 ### Running Locally
 
-Using Maven: `mvn liberty:run-server`
+Using [Maven](https://maven.apache.org/): `mvn liberty:run-server`
 
-Using Gradle: `gradle libertyStart`
+Using [Gradle](https://gradle.org/): `gradle libertyStart`
 
 The appliction can be accessed at http://localhost:9080/mylibertyApp
 
