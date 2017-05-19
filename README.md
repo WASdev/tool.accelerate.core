@@ -219,17 +219,17 @@ There are three html files in `webap/includes` that build up the key pieces of t
 * `download.html` represents Step 2 of the app accelerator UI
 * `footer.html` provides the footer for the web pages
 
-The `js` directory contains the javascript that controls the Angular tags in the html. The javascript files are splot into controllers, directives and services.
+The `js` directory contains the javascript that controls the Angular tags in the html. The javascript files are split into controllers, directives and services.
 
-The `appCtrl.js` controller provides the core functionality that controls which parts of the html is shown at any one time.
+* `appCtrl.js` controller provides the core functionality that controls which parts of the html is shown at any one time.
 
-The `appacc.js` service handles calls to the app accelerator backend and stores the users selections as they move through the page.
+* `appacc.js` service handles calls to the app accelerator backend and stores the users selections as they move through the page.
 
-The `ga.js` service passes information to Google Analytics for processing.
+* `ga.js` service passes information to Google Analytics for processing.
 
-The `techoptions.js` directive enables a specific technology to provide additional options. Thw Swagger technology type is one example of this.
+* `techoptions.js` directive enables a specific technology to provide additional options. Thw Swagger technology type is one example of this.
 
-the `/webapp/options` directory contains additional html and js files for technologies that require additional options. For example `options/swagger` provides html and javascript for the buttons to allow a user to upload a swagger.yaml file.
+The `/webapp/options` directory contains additional html and js files for technologies that require additional options. For example `options/swagger` provides html and javascript for the buttons to allow a user to upload a swagger.yaml file.
 
 ### Application Generation
 
