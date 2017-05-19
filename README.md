@@ -9,6 +9,8 @@ An application builder to allow you to construct starter Java applications that 
   * [Building and Running](#building-and-running)
   * [Project Structure](#project-structure)
   * [Adding Technology Options](#adding-technology-options)
+  * [User Interface](#user-interface)
+  * [Application Generation](#application-generation)
   * [Testing Create on GitHub Capability](#testing-create-on-github-capability)
 
 ## Summary
@@ -202,6 +204,46 @@ To see an example of everything you can include in a technology see the starter-
 3. In `liberty-starter-wlpcfg/servers/StarterServer/server.xml` add your application to the list. You need to provide the name of the war file being created in location, the context-root that matches the endpoint specified in the `services.json` file in step 1 and the id you specified in step 1.
 
 If you run `gradle clean build` your new project should now be built and the war should be put into the apps directory of your server.
+
+### User interface
+
+The code for the UI is under `liberty-starter-application/src/main/webapp`. It is built using [AngularJS](https://angularjs.org/). The content is defined in html files and then controlled using javascript files.
+
+There are three top level html files:
+* `index.html` is the main page for app accelerator
+* `wdt.html` provides content for the 'deploying to WDT' [instruction page](https://liberty-app-accelerator.wasdev.developer.ibm.com/start/wdt.html)
+* `plugin.html` is a test html page for allowing developers an easy way to extend app acceleratot and is not currently linked from the main page
+
+There are three html files in `webap/includes` that build up the key pieces of the UI:
+* `technologies.html` represents Step 1 of the app accelerator UI
+* `download.html` represents Step 2 of the app accelerator UI
+* `footer.html` provides the footer for the web pages
+
+The `js` directory contains the javascript that controls the Angular tags in the html. The javascript files are splot into controllers, directives and services.
+
+The `appCtrl.js` controller provides the core functionality that controls which parts of the html is shown at any one time.
+
+The `appacc.js` service handles calls to the app accelerator backend and stores the users selections as they move through the page.
+
+The `ga.js` service passes information to Google Analytics for processing.
+
+The `techoptions.js` directive enables a specific technology to provide additional options. Thw Swagger technology type is one example of this.
+
+the `/webapp/options` directory contains additional html and js files for technologies that require additional options. For example `options/swagger` provides html and javascript for the buttons to allow a user to upload a swagger.yaml file.
+
+### Application Generation
+
+Application generation is performed by the classes in `liberty-starter-application/src/main/java/com/ibm/liberty/starter`.
+
+Applications are generated following calls to either the `LibertyTechnologySelector` or `GitHubProjectEndpoint` APIs. When creating in GitHub the actual generation is invoked when the `GitHubCallback` class is invoked.
+
+Input validation is performed using the `ProjectContructionInput`, `ProjectContructionInputData` and `PatternValidation` classes.
+
+The `ProjectConstructor` class contains the core generation logic.
+
+Template files are located in `liberty-starter-application/skeletions`. The files in `base` are copied straight into the generated application. Files from the technology microservices are also copied directly into the generated application.
+
+Files in `skeletons/specialFiles` are processed before being written out. Gradle files are processed using commands in `liberty-starter-application/src/main/java/com/ibm/liberty/starter/build/gradle` and Maven files are processed using commands in `liberty-starter-application/src/main/java/com/ibm/liberty/starter/build/maven`.
 
 ### Testing Create on GitHub Capability
 
