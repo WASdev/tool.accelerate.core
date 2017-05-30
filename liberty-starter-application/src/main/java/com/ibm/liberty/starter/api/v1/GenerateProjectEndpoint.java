@@ -43,11 +43,12 @@ public class GenerateProjectEndpoint {
     @Produces(MediaType.APPLICATION_JSON)
     public Response generateProject(@QueryParam("tech") String[] techs, @QueryParam("techoptions") String[] techOptions, @QueryParam("name") String name,
                                 @QueryParam("deploy") final String deploy, @QueryParam("workspace") final String workspaceId, @QueryParam("build") final String build, 
-                                @QueryParam("artifactId") String artifactId, @QueryParam("groupId") String groupId, @QueryParam("generationId") String generationId, @Context UriInfo info) {
+                                @QueryParam("artifactId") String artifactId, @QueryParam("groupId") String groupId, @QueryParam("generationId") String generationId, 
+                                @QueryParam("beta") boolean beta, @Context UriInfo info) {
         log.info("GET request for /generate");
         try {
             ProjectConstructionInput inputProcessor = new ProjectConstructionInput(new ServiceConnector(info.getBaseUri()));
-            final ProjectConstructionInputData inputData = inputProcessor.processInput(techs, techOptions, name, deploy, workspaceId, build, artifactId, groupId, null, false);
+            final ProjectConstructionInputData inputData = inputProcessor.processInput(techs, techOptions, name, deploy, workspaceId, build, artifactId, groupId, null, beta, false);
             String id = (new BxCodegenClient()).generateProject(inputData);
             String requestQueryString = inputData.toRequestQueryString(id);
             String responseString = "{\"requestQueryString\":\"" + requestQueryString + "\"}";

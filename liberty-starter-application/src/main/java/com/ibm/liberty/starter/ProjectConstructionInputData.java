@@ -33,8 +33,9 @@ public class ProjectConstructionInputData {
     public final String artifactId;
     public final String groupId;
     public final String generationId;
+   public final boolean beta;
 
-    public ProjectConstructionInputData(Services services, ServiceConnector serviceConnector, String appName, ProjectConstructor.DeployType deployType, ProjectConstructor.BuildType buildType, String workspaceDirectory, String[] techOptions, String artifactId, String groupId, String generationId) {
+    public ProjectConstructionInputData(Services services, ServiceConnector serviceConnector, String appName, ProjectConstructor.DeployType deployType, ProjectConstructor.BuildType buildType, String workspaceDirectory, String[] techOptions, String artifactId, String groupId, String generationId, boolean beta) {
         this.services = services;
         this.serviceConnector = serviceConnector;
         this.appName = appName;
@@ -45,6 +46,7 @@ public class ProjectConstructionInputData {
         this.artifactId = artifactId;
         this.groupId = groupId;
         this.generationId = generationId;
+        this.beta = beta;
     }
     
     public String toBxJSON() {

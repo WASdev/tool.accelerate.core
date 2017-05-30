@@ -1,5 +1,9 @@
 /*******************************************************************************
+<<<<<<< e52255dd285433940539db20c7ed8712494ac459
  * Copyright (c) 2016,2017 IBM Corp.
+=======
+ * Copyright (c) 2016, 2017 IBM Corp.
+>>>>>>> Issue:4740or176: Allow app accelerator to use Liberty beta image (#177)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -39,7 +43,8 @@ public class GitHubProjectEndpoint {
     @GET
     public Response getResponse(@QueryParam("tech") String[] techs, @QueryParam("techoptions") String[] techOptions, @QueryParam("name") String name,
                                 @QueryParam("deploy") String deploy, @QueryParam("workspace") String workspaceId, @QueryParam("build") String build,
-                                @QueryParam("artifactId") String artifactId, @QueryParam("groupId") String groupId, @QueryParam("generationId") String generationId, @Context UriInfo info) throws NullPointerException, IOException {
+                                @QueryParam("artifactId") String artifactId, @QueryParam("groupId") String groupId, @QueryParam("generationId") String generationId, 
+                                @QueryParam("beta") boolean beta, @Context UriInfo info) throws NullPointerException, IOException {
         log.info("GET request for v1/createGitHubRepository");
         try {
             URI baseUri = info.getBaseUri();
@@ -51,7 +56,7 @@ public class GitHubProjectEndpoint {
             // rather than having to encode/decode it ourselves as well as providing checks on expiry times. Also a
             // JWT means that the callback becomes stateless rather than having to store the state object in the user's
             // session (although the workspace dir contains some state).
-            String state = inputProcessor.processInputAsJwt(techs, techOptions, name, deploy, workspaceId, build, artifactId, groupId, generationId);
+            String state = inputProcessor.processInputAsJwt(techs, techOptions, name, deploy, workspaceId, build, artifactId, groupId, generationId, beta);
             String clientId = (String) new InitialContext().lookup("gitHubClientId");
             URI gitHubAuth = new URI("https://github.com/login/oauth/authorize?client_id=" + clientId + "&scope=public_repo&state=" + state);
             log.info("redirecting to " + gitHubAuth);

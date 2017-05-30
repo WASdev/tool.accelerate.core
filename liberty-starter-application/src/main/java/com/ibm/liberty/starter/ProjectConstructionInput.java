@@ -40,13 +40,14 @@ public class ProjectConstructionInput {
     private static final String GROUP_ID_KEY = "groupId";
     private static final String ARTIFACT_ID_KEY = "artifactId";
     private static final String GENERATION_ID_KEY = "generationId";
+    private static final String BETA_KEY = "beta";
     private final ServiceConnector serviceConnector;
 
     public ProjectConstructionInput(ServiceConnector serviceConnector) {
         this.serviceConnector = serviceConnector;
     }
 
-    public ProjectConstructionInputData processInput(String[] techs, String[] techOptions, String name, String deploy, String workspaceId, String build, String artifactId, String groupId, String generationId, boolean prepareDynamicPackages) {
+    public ProjectConstructionInputData processInput(String[] techs, String[] techOptions, String name, String deploy, String workspaceId, String build, String artifactId, String groupId, String generationId, boolean beta, boolean prepareDynamicPackages) {
         List<Service> serviceList = new ArrayList<Service>();
         for (String tech : techs) {
             if (PatternValidation.checkPattern(PatternValidation.PatternType.TECH, tech)) {
@@ -103,7 +104,7 @@ public class ProjectConstructionInput {
             log.severe("Invalid generationId.");
             throw new ValidationException();
         }
-        return new ProjectConstructionInputData(services, serviceConnector, name, deployType, buildType, StarterUtil.getWorkspaceDir(workspaceId), techOptions, artifactId, groupId, generationId);
+        return new ProjectConstructionInputData(services, serviceConnector, name, deployType, buildType, StarterUtil.getWorkspaceDir(workspaceId), techOptions, artifactId, groupId, generationId, beta);
     }
     
     private void prepareDynamicPackages(Service service, String workspaceId, String techOptions, String[] techs) {
@@ -112,8 +113,8 @@ public class ProjectConstructionInput {
         }
     }
 
-    public String processInputAsJwt(String[] techs, String[] techOptions, String name, String deploy, String workspaceId, String build, String artifactId, String groupId, String generationId) throws NamingException {
-        ProjectConstructionInputData inputData = processInput(techs, techOptions, name, deploy, workspaceId, build, artifactId, groupId, generationId, true);
+    public String processInputAsJwt(String[] techs, String[] techOptions, String name, String deploy, String workspaceId, String build, String artifactId, String groupId, String generationId, boolean beta) throws NamingException {
+        ProjectConstructionInputData inputData = processInput(techs, techOptions, name, deploy, workspaceId, build, artifactId, groupId, generationId, beta, true);
         String techOptionsString = "";
         for(String option : inputData.techOptions) {
             techOptionsString += option + ",";
@@ -127,8 +128,9 @@ public class ProjectConstructionInput {
         claims.put(ARTIFACT_ID_KEY, inputData.artifactId);
         claims.put(GROUP_ID_KEY, inputData.groupId);
         claims.put(GENERATION_ID_KEY, inputData.generationId);
+        claims.put(BETA_KEY, inputData.beta);
         claims.put(SERVICE_IDS_KEY, inputData.services.getServices().stream().map(service -> service.getId()).collect(Collectors.toList()));
-
+        
         Calendar issuedAt = Calendar.getInstance();
         claims.setIssuedAt(issuedAt.getTime());
         Calendar expires = Calendar.getInstance();
@@ -161,7 +163,8 @@ public class ProjectConstructionInput {
                 ((String) claims.get(TECH_OPTIONS_KEY)).split(","),
                 (String) claims.get(ARTIFACT_ID_KEY),
                 (String) claims.get(GROUP_ID_KEY),
-                (String) claims.get(GENERATION_ID_KEY));
+                (String) claims.get(GENERATION_ID_KEY),
+                (boolean) claims.get(BETA_KEY));
     }
 
     private String getAppAcceleratorSecret() throws NamingException {

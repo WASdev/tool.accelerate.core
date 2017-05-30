@@ -39,13 +39,14 @@ angular.module('appAccelerator')
      var buildTypeToUse = buildType.MAVEN;
 
      var bluemix = false;
+     var beta = false;
      //put the selected technologies here so that it can seen by multiple controllers
      var selectedTechnologies = [];  //list of technologies currrently selected by the user
      var projectName = undefined;
      var workspaceID = undefined;
      var projectArtifactId = undefined;
      var projectGroupId = undefined;
-
+    
      var retrieveWorkspaceId = function() {
        $log.debug("AppAcc Svc : GET : workspace ID");
 
@@ -136,6 +137,7 @@ angular.module('appAccelerator')
             selected += ("tech=" + tech);
             $log.debug("AppAcc Svc : selected has value:" + selected);
           }
+        
           if(selected != "") {
             //something has been selected, so proceed
             var deployType = bluemix ? "&deploy=bluemix" : "&deploy=local";
@@ -154,6 +156,10 @@ angular.module('appAccelerator')
             if(projectArtifactId) {
               url += "&artifactId=" + projectArtifactId;
             }
+            if(isBeta()) {
+              url += "&beta=" + beta;
+            }
+            
             $log.debug("Constructed " + url);
 
           } else {
@@ -240,6 +246,13 @@ angular.module('appAccelerator')
         }
         return bluemix;
       }
+      
+      var isBeta = function(bool) {
+          if (bool != undefined) {
+            beta = bool;
+          }
+          return beta;
+        }
 
       var updateName = function(name) {
         if (name != undefined) {
@@ -319,6 +332,7 @@ angular.module('appAccelerator')
         addListener : addListener,
         retrieveWorkspaceId : retrieveWorkspaceId,
         buildType : buildType,
-        updateBuildType : updateBuildType
+        updateBuildType : updateBuildType,
+        isBeta : isBeta
       };
   }]);

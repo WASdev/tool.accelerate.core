@@ -47,11 +47,12 @@ public class DownloadProjectEndpoint {
     @Produces("application/zip")
     public Response getResponse(@QueryParam("tech") String[] techs, @QueryParam("techoptions") String[] techOptions, @QueryParam("name") String name,
                                 @QueryParam("deploy") final String deploy, @QueryParam("workspace") final String workspaceId, @QueryParam("build") final String build, 
-                                @QueryParam("artifactId") String artifactId, @QueryParam("groupId") String groupId, @QueryParam("generationId") String generationId, @Context UriInfo info) throws NullPointerException, IOException {
+                                @QueryParam("artifactId") String artifactId, @QueryParam("groupId") String groupId, @QueryParam("generationId") String generationId,
+                                @QueryParam("beta") boolean beta, @Context UriInfo info) throws NullPointerException, IOException {
         log.info("GET request for /data");
         try {
             ProjectConstructionInput inputProcessor = new ProjectConstructionInput(new ServiceConnector(info.getBaseUri()));
-            final ProjectConstructionInputData inputData = inputProcessor.processInput(techs, techOptions, name, deploy, workspaceId, build, artifactId, groupId, generationId, true);
+            final ProjectConstructionInputData inputData = inputProcessor.processInput(techs, techOptions, name, deploy, workspaceId, build, artifactId, groupId, generationId, beta, true);
             ProjectConstructor projectConstructor = new ProjectConstructor(inputData);
             Map<String, byte[]> fileMap = projectConstructor.buildFileMap();
             ZipWriter zipConstructor = new ZipWriter(fileMap);

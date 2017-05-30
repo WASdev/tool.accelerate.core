@@ -47,10 +47,10 @@ public class ProjectConstructionInputDataTest {
         serviceList.add(bar);
         Services services = new Services();
         services.setServices(serviceList);
-        inputData = new ProjectConstructionInputData(services, null, "testName", ProjectConstructor.DeployType.LOCAL, ProjectConstructor.BuildType.MAVEN, "c:/users/1234", new String[]{"foo:bar", "test:value"}, "testArtifact", "testGroup", "5678");
-        inputDataWithBx = new ProjectConstructionInputData(services, null, "testName", ProjectConstructor.DeployType.BLUEMIX, ProjectConstructor.BuildType.MAVEN, "c:/users/1234", new String[]{"foo:bar", "test:value"}, "testArtifact", "testGroup", "5678");
-        inputDataWithGradle = new ProjectConstructionInputData(services, null, "testName", ProjectConstructor.DeployType.LOCAL, ProjectConstructor.BuildType.GRADLE, "c:/users/1234", new String[]{"foo:bar", "test:value"}, "testArtifact", "testGroup", "5678");
-        inputDataWithNullIds = new ProjectConstructionInputData(services, null, "testName", ProjectConstructor.DeployType.LOCAL, ProjectConstructor.BuildType.MAVEN, "c:/users/1234", new String[]{"foo:bar", "test:value"}, null, null, "5678");
+        inputData = new ProjectConstructionInputData(services, null, "testName", ProjectConstructor.DeployType.LOCAL, ProjectConstructor.BuildType.MAVEN, "c:/users/1234", new String[]{"foo:bar", "test:value"}, "testArtifact", "testGroup", "5678", false);
+        inputDataWithBx = new ProjectConstructionInputData(services, null, "testName", ProjectConstructor.DeployType.BLUEMIX, ProjectConstructor.BuildType.MAVEN, "c:/users/1234", new String[]{"foo:bar", "test:value"}, "testArtifact", "testGroup", "5678", false);
+        inputDataWithGradle = new ProjectConstructionInputData(services, null, "testName", ProjectConstructor.DeployType.LOCAL, ProjectConstructor.BuildType.GRADLE, "c:/users/1234", new String[]{"foo:bar", "test:value"}, "testArtifact", "testGroup", "5678", false);
+        inputDataWithNullIds = new ProjectConstructionInputData(services, null, "testName", ProjectConstructor.DeployType.LOCAL, ProjectConstructor.BuildType.MAVEN, "c:/users/1234", new String[]{"foo:bar", "test:value"}, null, null, "5678", false);
     }
     
     @Test
