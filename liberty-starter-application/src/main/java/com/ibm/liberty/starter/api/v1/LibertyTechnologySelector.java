@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016 IBM Corp.
+ * Copyright (c) 2016, 2017 IBM Corp.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -41,11 +41,12 @@ public class LibertyTechnologySelector {
     @Produces("application/zip")
     public Response getResponse(@QueryParam("tech") String[] techs, @QueryParam("techoptions") String[] techOptions, @QueryParam("name") String name,
                                 @QueryParam("deploy") final String deploy, @QueryParam("workspace") final String workspaceId, @QueryParam("build") final String build, 
-                                @QueryParam("artifactId") String artifactId, @QueryParam("groupId") String groupId, @Context UriInfo info) throws NullPointerException, IOException {
+                                @QueryParam("artifactId") String artifactId, @QueryParam("groupId") String groupId, @Context UriInfo info,
+                                @QueryParam("beta") boolean beta) throws NullPointerException, IOException {
         log.info("GET request for /data");
         try {
             ProjectConstructionInput inputProcessor = new ProjectConstructionInput(new ServiceConnector(info.getBaseUri()));
-            final ProjectConstructionInputData inputData = inputProcessor.processInput(techs, techOptions, name, deploy, workspaceId, build, artifactId, groupId);
+            final ProjectConstructionInputData inputData = inputProcessor.processInput(techs, techOptions, name, deploy, workspaceId, build, artifactId, groupId, beta);
             StreamingOutput so = (OutputStream os) -> {
                 ProjectConstructor projectConstructor = new ProjectConstructor(inputData);
                 try {
