@@ -15,7 +15,8 @@
                 <div class="row options">
                     <div class="col-md-12 col-sm-12">
                         <label class="checkbox-inline">
-                            <input type="checkbox" ng-model="deploy.beta" ng-click="updateService()">Use Liberty Beta
+                            <input type="checkbox" ng-model="deploy.beta" ng-click="updateService()">Use <a href="https://developer.ibm.com/wasdev/docs/new-in-latest-earlyaccess/?src=accelerator"
+                            target="WASdev" ng-click="sendGAEvent('Outbound', 'WASdev', 'beta')">Liberty Beta</a>
                         </label>
                     </div>
                 </div>
