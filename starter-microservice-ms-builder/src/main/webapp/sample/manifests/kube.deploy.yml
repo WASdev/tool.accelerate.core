@@ -32,7 +32,7 @@ spec:
     spec:
       containers:
       - name: %APP_NAME%
-        image: %APP_NAME%:latest
+        image: %APP_NAME_LOWERCASE%:latest
         # resources:
         #   requests:
         #     cpu: 100m
