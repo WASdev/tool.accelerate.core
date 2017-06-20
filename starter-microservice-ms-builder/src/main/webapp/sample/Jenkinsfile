@@ -1,18 +1,6 @@
 #!groovy
 
-node('master') {
-
-  def utils = load "/scripts/buildUtils.groovy"
-
-  stage ('Extract') {
-    checkout scm
-  }
-
-  stage ('Build') {
-    utils.mavenBuild ('clean', 'package')
-    utils.dockerBuild('%APP_NAME_LOWERCASE%')
-  }
-
-  stage ('Deploy') {
-    utils.deploy ()
-  }
+@Library('MicroserviceBuilder') _
+microserviceBuilderPipeline {
+  image = '%APP_NAME_LOWERCASE%'
+}
