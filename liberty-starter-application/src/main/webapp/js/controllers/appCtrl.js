@@ -53,6 +53,10 @@ angular.module('appAccelerator')
 	  ga.report('send', 'event', p1, p2, p3);
   }
 
+  $scope.isSelected = function(technologyId) {
+    return appacc.isSelected(technologyId);
+  }
+
   $scope.toggleSelected = function(technology, $event) {
     $event.stopPropagation();
     technology.selected = !technology.selected;
@@ -63,6 +67,10 @@ angular.module('appAccelerator')
     $log.debug("AppAccelerator : Selected count " + $scope.selectedCount);
     technology.panel = technology.selected ? "panel-selected" : "panel-primary";
     technology.iconstyle = technology.selected ? "icon-selected" : "icon";
+    if(technology.id === "ms-builder") {
+      $log.debug("AppAccelerator : Switching buildType to " + appacc.buildType.MAVEN + "since ms-builder is selected.");
+      $scope.deploy.buildType = appacc.buildType.MAVEN;
+    }
     $scope.updateService();
   }
 
@@ -77,7 +85,7 @@ angular.module('appAccelerator')
     technology.info = false;
     technology.displayOptions = !technology.displayOptions;
   }
-  
+
   $scope.toggleConfigOptions = function($event) {
     $event.stopPropagation();
     $scope.showConfigOptions = !$scope.showConfigOptions;
@@ -141,7 +149,7 @@ angular.module('appAccelerator')
     }
     return selected;
   }
-  
+
   function newRowNeeded(index) {
     return (index % $scope.colCount) === 0;
   }
