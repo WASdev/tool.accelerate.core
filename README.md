@@ -32,7 +32,7 @@ The current technologies you can choose to build into your application are:
 * [Persistence](#persistence)
 * [Watson SDK](#watson-sdk)
 * [MicroProfile](#microprofile)
-* [Microservice Builder (Beta)](#microservice-builder-beta)
+* [Microservice Builder](#microservice-builder)
 * [Swagger](#swagger)
 
 ### Rest
@@ -79,10 +79,10 @@ If you want to share your thoughts you can post straight to the
 
 For the complete feature documentation, see the [microProfile-1.0 feature](http://www.ibm.com/support/knowledgecenter/en/SSEQTP_liberty/com.ibm.websphere.wlp.nd.multiplatform.doc/ae/rwlp_feature_microProfile-1.0.html) feature description in IBM Knowledge Center.
 
-### Microservice Builder (Beta)
-This provides support for the technologies required by the [Microservice Builder (Beta) solution](https://microservicebuilder.mybluemix.net/docs/index.html).
+### Microservice Builder
+This provides support for the technologies required by the [Microservice Builder solution](https://microservicebuilder.mybluemix.net/docs/index.html).
 
-Microservice Builder (Beta) delivers a turnkey solution incorporating a runtime, tooling, DevOps, fabric, and customer-managed container orchestration.
+Microservice Builder delivers a turnkey solution incorporating a runtime, tooling, DevOps, fabric, and customer-managed container orchestration.
 
 ### Swagger
 Swagger is a simple yet powerful representation of RESTful APIs.
