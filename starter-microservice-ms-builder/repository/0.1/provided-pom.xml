@@ -35,7 +35,7 @@
         <dependency>
             <groupId>net.wasdev.wlp.starters.microprofile</groupId>
             <artifactId>provided-pom</artifactId>
-            <type>xml</type>
+            <type>pom</type>
             <version>0.0.3</version>
         </dependency>
     </dependencies>

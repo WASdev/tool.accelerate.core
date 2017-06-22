@@ -43,8 +43,11 @@
                                             <label class="radio-inline">
                                                 <input type="radio" name="buildRadio" value="{{buildType.MAVEN}}" ng-model="deploy.buildType" ng-click="updateService()">Maven
                                             </label>
-                                            <label class="radio-inline">
+                                            <label class="radio-inline" ng-show="!isSelected('ms-builder')">
                                                 <input type="radio" name="buildRadio" value="{{buildType.GRADLE}}" ng-model="deploy.buildType" ng-click="updateService()">Gradle
+                                            </label>
+                                            <label class="radio-inline radio-disabled" ng-show="isSelected('ms-builder')"  data-toggle="tooltip" title="Gradle is not available when Microservice Builder is selected">
+                                                <input type="radio" name="buildRadio" ng-disabled=true>Gradle unavailable
                                             </label>
                                         </fieldset>
                                     </div>
