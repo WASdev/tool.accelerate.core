@@ -15,7 +15,11 @@
  *******************************************************************************/
 package com.ibm.liberty.starter;
 
+import java.util.List;
+import java.util.stream.Stream;
+
 import com.ibm.liberty.starter.api.v1.model.internal.Services;
+import com.ibm.liberty.starter.api.v1.model.registration.Service;
 
 public class ProjectConstructionInputData {
     public final Services services;
@@ -36,5 +40,22 @@ public class ProjectConstructionInputData {
         this.workspaceDirectory = workspaceDirectory;
         this.artifactId = artifactId;
         this.groupId = groupId;
+    }
+    
+    public String toBxJSON() {
+        List<Service> serviceList = services.getServices();
+        Stream<Service> stream = serviceList.stream();
+        StringBuffer technologies = new StringBuffer("\"");
+        stream.forEach((service) -> {
+            technologies.append(service.getId() + ",");
+        });
+        String stringresult = technologies.length() == 1 ? "" : technologies.substring(0, technologies.length() - 1) + "\"";
+        return "{\"technologies\":" + stringresult + ","
+                + "\"appName\":\"" + appName + "\","
+                + "\"deployType\":\"" + deployType.toString().toLowerCase() + "\","
+                + "\"buildType\":\"" + buildType.toString().toLowerCase() + "\","
+                + "\"artifactId\":\"" + artifactId + "\","
+                + "\"groupId\":\"" + groupId + "\","
+                + "\"createType\":\"picnmix\"}";
     }
 }
