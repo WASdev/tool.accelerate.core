@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016 IBM Corp.
+ * Copyright (c) 2016,2017 IBM Corp.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,24 +15,28 @@
  *******************************************************************************/
 package com.ibm.liberty.starter.unit;
 
-import com.ibm.liberty.starter.ProjectConstructionInput;
-import com.ibm.liberty.starter.ProjectConstructionInputData;
-import com.ibm.liberty.starter.ProjectConstructor;
-import org.junit.Before;
-import org.junit.ClassRule;
-import org.junit.Test;
+import static org.hamcrest.CoreMatchers.containsString;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.Matchers.arrayContaining;
+import static org.hamcrest.Matchers.hasSize;
+import static org.junit.Assert.assertThat;
 
-import javax.naming.NamingException;
-import javax.validation.ValidationException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.hamcrest.CoreMatchers.containsString;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.Matchers.hasSize;
-import static org.junit.Assert.assertThat;
+import javax.naming.NamingException;
+import javax.validation.ValidationException;
+
+import org.junit.Before;
+import org.junit.ClassRule;
+import org.junit.Test;
+
+import com.ibm.liberty.starter.ProjectConstructionInput;
+import com.ibm.liberty.starter.ProjectConstructionInputData;
+import com.ibm.liberty.starter.ProjectConstructor;
+import com.ibm.liberty.starter.unit.utils.MockServiceConnector;
 
 public class ProjectConstructionInputTest {
 
@@ -61,8 +65,9 @@ public class ProjectConstructionInputTest {
         String workspaceId = "randomId";
         String artifactId = "testArtifactId";
         String groupId = "test.group.id";
+        String generationId = "1234-abcd";
 
-        ProjectConstructionInputData result = testObject.processInput(new String[] {techName}, new String[] {techName + ":" + techOption}, name, "local", workspaceId, "gradle", artifactId, groupId);
+        ProjectConstructionInputData result = testObject.processInput(new String[] {techName}, new String[] {techName + ":" + techOption}, name, "local", workspaceId, "gradle", artifactId, groupId, generationId);
 
         assertThat(result.appName, is(name));
         assertThat(result.buildType, is(ProjectConstructor.BuildType.GRADLE));
@@ -73,6 +78,7 @@ public class ProjectConstructionInputTest {
         assertThat(result.services.getServices().get(0).getId(), is(techName));
         assertThat(result.artifactId, is(artifactId));
         assertThat(result.groupId, is(groupId));
+        assertThat(result.generationId, is(generationId));
         assertThat(serviceConnector.capturedTechWorkspaceDir, containsString(workspaceId));
         assertThat(serviceConnector.capturedTechs, is(new String[] {techName}));
         assertThat(serviceConnector.capturedOptions, is(techOption));
@@ -80,51 +86,56 @@ public class ProjectConstructionInputTest {
 
     @Test(expected = ValidationException.class)
     public void noNameThrowsAValidationException() throws Exception {
-        testObject.processInput(new String[] {}, new String[] {}, null, "local", "wibble", "gradle", null, null);
+        testObject.processInput(new String[] {}, new String[] {}, null, "local", "wibble", "gradle", null, null, null);
     }
 
     @Test(expected = ValidationException.class)
     public void nameWithInvalidCharactersThrowsAValidationException() throws Exception {
-        testObject.processInput(new String[] {}, new String[] {}, "wibble%", "local", "wibble", "gradle", null, null);
+        testObject.processInput(new String[] {}, new String[] {}, "wibble%", "local", "wibble", "gradle", null, null, null);
     }
 
     @Test(expected = ValidationException.class)
     public void longNameThrowsAValidationException() throws Exception {
-        testObject.processInput(new String[] {}, new String[] {}, "ThisIsAReallyLongNameButIsItLongEnoughNotQuiteSoLetsKeepGoing", "local", "wibble", "gradle", null, null);
+        testObject.processInput(new String[] {}, new String[] {}, "ThisIsAReallyLongNameButIsItLongEnoughNotQuiteSoLetsKeepGoing", "local", "wibble", "gradle", null, null, null);
     }
 
     @Test(expected = ValidationException.class)
     public void noDeployThrowsAValidationException() throws Exception {
-        testObject.processInput(new String[] {}, new String[] {}, "wibble", null, "wibble", "gradle", null, null);
+        testObject.processInput(new String[] {}, new String[] {}, "wibble", null, "wibble", "gradle", null, null, null);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void invalidDeployThrowsAIllegalArgumentException() throws Exception {
-        testObject.processInput(new String[] {}, new String[] {}, "wibble", "invalid", "wibble", "gradle", null, null);
+        testObject.processInput(new String[] {}, new String[] {}, "wibble", "invalid", "wibble", "gradle", null, null, null);
     }
 
     @Test
     public void noBuildDefaultsToMaven() throws Exception {
-        ProjectConstructionInputData result = testObject.processInput(new String[]{}, new String[]{}, "wibble", "local", "wibble", null, null, null);
+        ProjectConstructionInputData result = testObject.processInput(new String[]{}, new String[]{}, "wibble", "local", "wibble", null, null, null, null);
 
         assertThat(result.buildType, is(ProjectConstructor.BuildType.MAVEN));
     }
 
     @Test
     public void invalidBuildDefaultsToMaven() throws Exception {
-        ProjectConstructionInputData result = testObject.processInput(new String[]{}, new String[]{}, "wibble", "local", "wibble", "wibble", null, null);
+        ProjectConstructionInputData result = testObject.processInput(new String[]{}, new String[]{}, "wibble", "local", "wibble", "wibble", null, null, null);
 
         assertThat(result.buildType, is(ProjectConstructor.BuildType.MAVEN));
     }
 
     @Test(expected = ValidationException.class)
     public void invalidArtifactIdThrowsIllegalArgumentException() throws Exception {
-        testObject.processInput(new String[] {}, new String[] {}, "wibble", "local", "wibble", "gradle", "%wibble", null);
+        testObject.processInput(new String[] {}, new String[] {}, "wibble", "local", "wibble", "gradle", "%wibble", null, null);
     }
     
     @Test(expected = ValidationException.class)
     public void invalidGroupIdThrowsIllegalArgumentException() throws Exception {
-        testObject.processInput(new String[]{}, new String[]{}, "wibble", "local", "wibble", "gradle", null, "%wibble");
+        testObject.processInput(new String[]{}, new String[]{}, "wibble", "local", "wibble", "gradle", null, "%wibble", null);
+    }
+    
+    @Test(expected = ValidationException.class)
+    public void invalidGenerationIdThrowsIllegalArgumentException() throws Exception {
+        testObject.processInput(new String[]{}, new String[]{}, "wibble", "local", "wibble", "gradle", null, null, "ABC%");
     }
 
     @Test
@@ -135,18 +146,21 @@ public class ProjectConstructionInputTest {
         String workspaceId = "randomId";
         String artifactId = "testArtifactId";
         String groupId = "test.group.id";
+        String generationId = "1234-abcd";
 
-        String jwt = testObject.processInputAsJwt(new String[] {techName}, new String[] {techName + ":" + techOption}, name, "local", workspaceId, "gradle", artifactId, groupId);
+        String jwt = testObject.processInputAsJwt(new String[] {techName}, new String[] {techName + ":" + techOption}, name, "local", workspaceId, "gradle", artifactId, groupId, generationId);
         ProjectConstructionInputData result = testObject.processJwt(jwt);
 
         assertThat(result.appName, is(name));
         assertThat(result.buildType, is(ProjectConstructor.BuildType.GRADLE));
         assertThat(result.deployType, is(ProjectConstructor.DeployType.LOCAL));
         assertThat(result.workspaceDirectory, containsString(workspaceId));
+        assertThat(result.techOptions, arrayContaining(techName + ":" + techOption));
         assertThat(result.serviceConnector, is(serviceConnector));
         assertThat(result.services.getServices(), hasSize(1));
         assertThat(result.services.getServices().get(0).getId(), is(techName));
         assertThat(result.artifactId, is(artifactId));
         assertThat(result.groupId, is(groupId));
+        assertThat(result.generationId, is(generationId));
     }
 }

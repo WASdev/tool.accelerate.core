@@ -1,3 +1,18 @@
+/*******************************************************************************
+ * Copyright (c) 2017 IBM Corp.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *******************************************************************************/
 package com.ibm.liberty.starter.client;
 
 import java.io.ByteArrayInputStream;
@@ -6,6 +21,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Logger;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -20,17 +36,58 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import com.ibm.liberty.starter.ProjectConstructionInputData;
+import com.ibm.liberty.starter.exception.ProjectGenerationException;
 
 public class BxCodegenClient {
     
-    public static final String URL = "";//TODO: add bxcodegen url
+    private static final Logger log = Logger.getLogger(BxCodegenClient.class.getName());
     
-    public Map<String, byte[]> getFileMap(ProjectConstructionInputData inputData) {
+    public final String URL = System.getenv("bxCodegenEndpoint");
+    public final String STARTERKIT_URL = System.getenv("appAccelStarterkit");
+    private final int retriesAllowed = 9;
+    
+    public Map<String, byte[]> getFileMap(ProjectConstructionInputData inputData) throws ProjectGenerationException {
+        checkConfig();
+        if (inputData.generationId != null) {
+            return getExistingFileMap(inputData.generationId);
+        } else {
+            return generateAndGetFileMap(inputData);
+        }
+    }
+    
+    private Map<String, byte[]> generateAndGetFileMap(ProjectConstructionInputData inputData) {
         String payload = getPayload(inputData);
         String id = callBxCodegen(payload);
         waitForFinishedStatus(id);
         Map<String, byte[]> projectMap = getProjectMap(id);
         return projectMap;
+    }
+    
+    private Map<String, byte[]> getExistingFileMap(String id) {
+        Map<String, byte[]> projectMap = getProjectMap(id);
+        return projectMap;
+    }
+    
+    public String generateProject(ProjectConstructionInputData inputData) throws ProjectGenerationException {
+        checkConfig();
+        String payload = getPayload(inputData);
+        String id = callBxCodegen(payload);
+        waitForFinishedStatus(id);
+        return id;
+    }
+    
+    private void checkConfig() throws ProjectGenerationException {
+        String missingConfig = "";
+        if(URL == null) {
+            missingConfig += "generation URL, ";
+        }
+        if (STARTERKIT_URL == null) {
+            missingConfig += "starter URL, ";
+        }
+        if (!missingConfig.isEmpty()) {
+            String missing = missingConfig.substring(0, missingConfig.length() - 1);
+            throw new ProjectGenerationException("Missing project generation configuration: " + missing);
+        }
     }
     
     private String getPayload(ProjectConstructionInputData inputData) {
@@ -41,11 +98,11 @@ public class BxCodegenClient {
                 + "\"generator-java\":{"
                 + "\"options\":" + inputData.toBxJSON()
                 + "}},"
-                + "\"templateSources\":[\"\"]}";//TODO: add template url
+                + "\"templateSources\":[\"" + STARTERKIT_URL + "\"]}";
         return payload;
     }
     
-    private String callBxCodegen(String payload) {
+    protected String callBxCodegen(String payload) {
         System.out.println("Sending codegen request with payload: " + payload);
         Client client = ClientBuilder.newClient();
         WebTarget target = client.target(URL + "api/generator");
@@ -61,21 +118,31 @@ public class BxCodegenClient {
         return id;
     }
     
-    private void waitForFinishedStatus(String id) {
+    private void waitForFinishedStatus(String id) throws ProjectGenerationException {
         int retries = 0;
-        while (("RUNNING").equals(checkStatus(id)) && retries < 7) {
+        while (("RUNNING").equals(checkStatus(id)) && retries <= retriesAllowed) {
             System.out.println("Retry number " + retries);
             try {
                 Thread.sleep(3000);
             } catch (InterruptedException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
+                log.severe(e.getClass().getName() + " caught " + e.getMessage());
+                throw new ProjectGenerationException("Code generation failed for job with id: " + id + ". Try again later.");
             }
             retries++;
         }
+        String status = checkStatus(id);
+        if(!("FINISHED").equals(status)) {
+            if ("FAILED".equals(status)) {
+                throw new ProjectGenerationException("Code generation failed for job with id: " + id + ". Try again later.");
+            }
+            if ("RUNNING".equals(status)) {
+                throw new ProjectGenerationException("Code generation for job with id " + id + " timed out. Try again later");
+            }
+            throw new ProjectGenerationException("Did not receive FINISHED from Bx codegen for job with id: " + id + ". Status received:" + status);
+        }
     }
     
-    private String checkStatus(String id) {
+    protected String checkStatus(String id) {
         Client client = ClientBuilder.newClient();
         WebTarget target = client.target(URL + "api/generator/" + id + "/status");
         Invocation.Builder invoBuild = target.request();
@@ -86,7 +153,7 @@ public class BxCodegenClient {
         return responseStatus;
     }
     
-    private Map<String, byte[]> getProjectMap(String id) {
+    protected Map<String, byte[]> getProjectMap(String id) {
         Client client = ClientBuilder.newClient();
         WebTarget target = client.target(URL + "api/generator/" + id);
         Invocation.Builder invoBuild = target.request();

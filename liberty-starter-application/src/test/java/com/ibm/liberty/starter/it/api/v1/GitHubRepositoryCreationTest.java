@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016 IBM Corp.
+ * Copyright (c) 2016,2017 IBM Corp.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,8 +19,8 @@ import com.ibm.liberty.starter.*;
 import com.ibm.liberty.starter.api.v1.model.internal.Services;
 import com.ibm.liberty.starter.api.v1.model.provider.Dependency;
 import com.ibm.liberty.starter.api.v1.model.registration.Service;
-import com.ibm.liberty.starter.unit.MockServiceConnector;
 import com.ibm.liberty.starter.unit.SetupInitialContext;
+import com.ibm.liberty.starter.unit.utils.MockServiceConnector;
 import org.eclipse.egit.github.core.Repository;
 import org.eclipse.egit.github.core.RepositoryContents;
 import org.eclipse.egit.github.core.service.ContentsService;
@@ -65,11 +65,11 @@ public class GitHubRepositoryCreationTest {
         service.setId("wibble");
         List<Service> serviceList = Collections.singletonList(service);
         services.setServices(serviceList);
-        ProjectConstructionInputData inputData = new ProjectConstructionInputData(services, serviceConnector, name, ProjectConstructor.DeployType.LOCAL, ProjectConstructor.BuildType.MAVEN, null, null, null);
+        ProjectConstructionInputData inputData = new ProjectConstructionInputData(services, serviceConnector, name, ProjectConstructor.DeployType.LOCAL, ProjectConstructor.BuildType.MAVEN, null, null, null, null, null);
 
         ProjectConstructor constructor = new ProjectConstructor(inputData);
         GitHubConnector connector = new GitHubConnector(oAuthToken);
-        GitHubWriter writer = new GitHubWriter(constructor.buildFileMap(), inputData.appName, inputData.buildType, baseUri, connector);
+        GitHubWriter writer = new GitHubWriter(constructor.buildFileMap(), inputData.appName, connector);
         writer.createProjectOnGitHub();
 
         RepositoryService repositoryService = new RepositoryService();

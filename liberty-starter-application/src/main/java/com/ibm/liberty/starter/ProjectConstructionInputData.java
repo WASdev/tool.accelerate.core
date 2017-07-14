@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016 IBM Corp.
+ * Copyright (c) 2016,2017 IBM Corp.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,18 +28,22 @@ public class ProjectConstructionInputData {
     public final ProjectConstructor.DeployType deployType;
     public final ProjectConstructor.BuildType buildType;
     public final String workspaceDirectory;
+    public final String[] techOptions;
     public final String artifactId;
     public final String groupId;
+    public final String generationId;
 
-    public ProjectConstructionInputData(Services services, ServiceConnector serviceConnector, String appName, ProjectConstructor.DeployType deployType, ProjectConstructor.BuildType buildType, String workspaceDirectory, String artifactId, String groupId) {
+    public ProjectConstructionInputData(Services services, ServiceConnector serviceConnector, String appName, ProjectConstructor.DeployType deployType, ProjectConstructor.BuildType buildType, String workspaceDirectory, String[] techOptions, String artifactId, String groupId, String generationId) {
         this.services = services;
         this.serviceConnector = serviceConnector;
         this.appName = appName;
         this.deployType = deployType;
         this.buildType = buildType;
         this.workspaceDirectory = workspaceDirectory;
+        this.techOptions = techOptions;
         this.artifactId = artifactId;
         this.groupId = groupId;
+        this.generationId = generationId;
     }
     
     public String toBxJSON() {
@@ -57,5 +61,22 @@ public class ProjectConstructionInputData {
                 + "\"artifactId\":\"" + artifactId + "\","
                 + "\"groupId\":\"" + groupId + "\","
                 + "\"createType\":\"picnmix\"}";
+    }
+    
+    public String toRequestQueryString(String id) {
+        List<Service> serviceList = services.getServices();
+        Stream<Service> stream = serviceList.stream();
+        StringBuffer technologies = new StringBuffer("");
+        stream.forEach((service) -> {
+            technologies.append("&tech=" + service.getId());
+        });
+        String techOptionsString = "";
+        for(String options : techOptions) {
+            techOptionsString += "&techOptions=" + options;
+        }
+        String[] workspaceArray = workspaceDirectory.split("/");
+        String workspaceId = workspaceArray[workspaceArray.length -1];
+        String genId = (id == null ? generationId : id);
+        return "name=" + appName + technologies + "&deploy=" + deployType.toString().toLowerCase() + "&build=" + buildType.toString() + "&workspace=" + workspaceId + techOptionsString + "&artifactId=" + artifactId + "&groupId=" + groupId + "&generationId=" + genId;
     }
 }

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016 IBM Corp.
+ * Copyright (c) 2016,2017 IBM Corp.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,7 @@ import java.util.regex.Pattern;
 public class PatternValidation {
 
     public enum PatternType {
-        TECH, NAME, PATH_EXTENSION, ARTIFACT_ID
+        TECH, NAME, PATH_EXTENSION, ARTIFACT_ID, GENERATION_ID
     }
 
     public static boolean checkPattern(PatternType patternType, String object) {
@@ -47,6 +47,8 @@ public class PatternValidation {
             case ARTIFACT_ID:
                 pattern = Pattern.compile("[a-zA-Z0-9-_.]*");
                 break;
+            case GENERATION_ID:
+                pattern = Pattern.compile("[a-z0-9-]*");
         }
         return pattern;
     }
