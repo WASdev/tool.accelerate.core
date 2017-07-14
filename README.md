@@ -117,7 +117,7 @@ Using [Maven](https://maven.apache.org/): `mvn liberty:run-server`
 
 Using [Gradle](https://gradle.org/): `gradle libertyStart`
 
-The appliction can be accessed at http://localhost:9080/mylibertyApp
+The application can be accessed at http://localhost:9080/mylibertyApp
 
 ### Deploying to Bluemix
 
@@ -155,6 +155,8 @@ Build the application using: `gradle clean build`
 Run the application: `liberty-starter-application:localRun`
 
 The application should be available at http://localhost:9082/start.
+
+To run the application locally with it calling bx codegen: `liberty-starter-application:libertyStart -PappAccelStarterkit=<app accelerator starter kit url> -PbxCodegenClient=<url for the bx codegen service to use>`
 
 ### Project Structure
 The project is split up into several different pieces.
