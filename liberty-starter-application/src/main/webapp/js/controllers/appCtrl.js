@@ -45,13 +45,16 @@ angular.module('appAccelerator')
   $scope.projectQueryString = undefined;
 
   $scope.callGenerateUrl = function() {
+    $scope.sendGAEvent('Generate', 'Java', 'JEE');
     $scope.generateProjectDisabled = true;
     $scope.generateStatus = "Generating project... this may take a minute";
     appacc.callGenerateUrl().then(function(response) {
+      $scope.sendGAEvent('Generate Success', 'Java', 'JEE');
       $scope.generateProjectDisabled = false;
       $scope.generateStatus = "Generated successfully";
       $scope.projectQueryString = response;
     }, function(response) {
+      $scope.sendGAEvent('Generate Failed', 'Java', 'JEE');
       $scope.generateProjectDisabled = false;
       $scope.generateStatus = response;
     });
