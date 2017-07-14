@@ -15,76 +15,28 @@
  *******************************************************************************/ 
 package com.ibm.liberty.starter.service.springboot.api.v1.it;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Before;
 import org.junit.Test;
 
-import com.ibm.liberty.starter.api.v1.model.provider.Dependency;
-import com.ibm.liberty.starter.api.v1.model.provider.Provider;
-import com.ibm.liberty.starter.api.v1.model.provider.Sample;
-import com.ibm.liberty.starter.api.v1.model.provider.ServerConfig;
+import com.ibm.liberty.starter.api.v1.model.provider.EndpointResponse;
 
 /**
  * Test the deployed service responds as expected
  *
  */
 public class TestApplication extends EndpointTest {
-	
-	@Before
-	public void checkSetup() {
-		checkAvailability("/api/v1/provider/");
-	}
+    
+    @Before
+    public void checkSetup() {
+        checkAvailability("/api/v1/provider/");
+    }
 
     @Test
     public void testProvider() throws Exception {
-        Provider provider =  testEndpoint("/api/v1/provider/", Provider.class);
-        assertNotNull("No response from API for provider", provider);
-        assertTrue("Description was not found.", provider.getDescription().contains("<h2>Spring Boot with Spring REST</h2>"));
-        Dependency[] dependencies = provider.getDependencies();
-        boolean providedDependency = false;
-        boolean runtimeDependency = false;
-        boolean compileDependency = false;
-        for (Dependency dependency : dependencies) {
-            if (Dependency.Scope.PROVIDED.equals(dependency.getScope())) {
-                assertTrue("groupId incorrect.", "net.wasdev.wlp.starters.springboot".equals(dependency.getGroupId()));
-                assertTrue("artifactId incorrect.", "provided-pom".equals(dependency.getArtifactId()));
-                assertTrue("version incorrect.", "0.0.3".equals(dependency.getVersion()));
-                providedDependency = true;
-            }
-            if (Dependency.Scope.RUNTIME.equals(dependency.getScope())) {
-                assertTrue("groupId incorrect.", "net.wasdev.wlp.starters.springboot".equals(dependency.getGroupId()));
-                assertTrue("artifactId incorrect.", "runtime-pom".equals(dependency.getArtifactId()));
-                assertTrue("version incorrect.", "0.0.3".equals(dependency.getVersion()));
-                runtimeDependency = true;
-            }
-            if (Dependency.Scope.COMPILE.equals(dependency.getScope())) {
-                assertTrue("groupId incorrect.", "net.wasdev.wlp.starters.springboot".equals(dependency.getGroupId()));
-                assertTrue("artifactId incorrect.", "compile-pom".equals(dependency.getArtifactId()));
-                assertTrue("version incorrect.", "0.0.3".equals(dependency.getVersion()));
-                compileDependency = true;
-            }
-        }
-        assertTrue("Provided dependencies weren't specified.", providedDependency);
-        assertTrue("Runtime dependencies weren't specified.", runtimeDependency);
-        assertTrue("Compile dependencies weren't specified.", compileDependency);
+        EndpointResponse response = testEndpoint("/api/v1/provider/", EndpointResponse.class);
+        String status = response.getStatus();
+        assertTrue("Expected response to be UP, instead found" + status, status.equals("UP"));
     }
-    
-    @Test
-    public void testConfig() throws Exception {
-    	ServerConfig config = testEndpoint("/api/v1/provider/config", ServerConfig.class);
-    	assertNotNull("No response from API for configuration", config);
-    	String actual = config.getTags()[0].getTags()[0].getValue();
-    	String expected = "websocket-1.1";
-    	assertEquals("Incorrect feature specified", expected , actual);
-    }
-    
-    @Test
-    public void testSamples() throws Exception {
-    	Sample sample = testEndpoint("/api/v1/provider/samples", Sample.class);
-    	assertNotNull("No response from API for sample", sample);
-    	assertNotNull("Expected locations", sample.getLocations());
-    	assertEquals("No files were expected for sample", 3, sample.getLocations().length);
-    }
-
 }

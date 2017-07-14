@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016 IBM Corp.
+ * Copyright (c) 2017 IBM Corp.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -12,18 +12,19 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *******************************************************************************/ 
-package it.springboot.web;
+ *******************************************************************************/
+package com.ibm.liberty.starter.api.v1.model.provider;
 
-import it.EndpointTest;
-
-import org.junit.Test;
-
-public class HelloControllerTest extends EndpointTest {
-
+public class EndpointResponse {
     
-    @Test
-    public void testDeployment() {
-        testEndpoint("/springbootweb", "Hello from Spring Boot REST running on Liberty!");
+    private String status;
+
+    public String getStatus() {
+        return status;
     }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
 }

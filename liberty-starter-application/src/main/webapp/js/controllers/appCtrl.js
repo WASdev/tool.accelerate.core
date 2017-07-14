@@ -66,7 +66,7 @@ angular.module('appAccelerator')
   }
 
   $scope.sendGAEvent = function(p1, p2, p3) {
-	  ga.report('send', 'event', p1, p2, p3);
+    ga.report('send', 'event', p1, p2, p3);
   }
 
   $scope.isSelected = function(technologyId) {

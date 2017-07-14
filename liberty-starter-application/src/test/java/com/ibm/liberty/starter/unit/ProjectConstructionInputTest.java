@@ -45,7 +45,7 @@ public class ProjectConstructionInputTest {
 
     @Before
     public void createTestObject() throws URISyntaxException {
-        serviceConnector = new MockServiceConnector(new URI(""), null);
+        serviceConnector = new MockServiceConnector(new URI(""));
         testObject = new ProjectConstructionInput(serviceConnector);
     }
 

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016 IBM Corp.
+ * Copyright (c) 2016,2017 IBM Corp.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,11 +24,8 @@ import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Invocation;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 
 import com.ibm.liberty.starter.api.v1.model.internal.Services;
-import com.ibm.liberty.starter.api.v1.model.provider.Provider;
-import com.ibm.liberty.starter.api.v1.model.provider.Sample;
 import com.ibm.liberty.starter.api.v1.model.registration.Service;
 
 public class ServiceConnector {
@@ -82,12 +79,6 @@ public class ServiceConnector {
         return service;
     }
     
-    public Provider getProvider(Service service) {
-        String url = urlConstructor("/api/v1/provider", service);
-        Provider provider = getObjectFromEndpoint(Provider.class, url, MediaType.APPLICATION_JSON_TYPE);
-        return provider;
-    }
-    
     public String processUploadedFiles(Service service, String uploadDirectory) {
         log.finer("service=" + service.getId() + " : uploadDirectory=" + uploadDirectory);
         String url = urlConstructor("/api/v1/provider/uploads/process?path=" + uploadDirectory, service);
@@ -112,30 +103,6 @@ public class ServiceConnector {
         return "";
     }
     
-    public String getFeaturesToInstall(Service service) {
-        log.finer("service=" + service.getId());
-        String url = urlConstructor("/api/v1/provider/features/install", service);
-        try {
-            String response = getObjectFromEndpoint(String.class, url, MediaType.TEXT_PLAIN_TYPE);
-            log.fine("Features to install for " + service.getId() + " : " + response);
-            return response;
-        } catch(javax.ws.rs.NotFoundException e){
-            // The service doesn't offer this endpoint, so the exception can be ignored. 
-            log.finest("Ignore expected exception : The service doesn't offer endpoint " + url + " : " + e);
-            }
-        return "";
-    }
-    
-    public Sample getSample(Service service) {
-        String url = urlConstructor("/api/v1/provider/samples", service);
-        Sample sample = getObjectFromEndpoint(Sample.class, url, MediaType.APPLICATION_JSON_TYPE);
-        return sample;
-    }
-    
-    public InputStream getResourceAsInputStream(String url) {
-        return getObjectFromEndpoint(InputStream.class, url, MediaType.WILDCARD_TYPE);
-    }
-    
     public InputStream getArtifactAsInputStream(Service service, String extension) {
         extension = extension.startsWith("/") ? extension.substring(1) : extension;
         String url = urlConstructor("/artifacts/" + extension, service);
@@ -156,16 +123,6 @@ public class ServiceConnector {
         E object = invoBuild.accept(mediaType).get(klass);
         client.close();
         return object;
-    }
-    
-    public Response getResponseFromEndpoint(String url, MediaType mediaType) {
-        System.out.println("Getting object from url " + url);
-        Client client = ClientBuilder.newClient();
-        WebTarget target = client.target(url);
-        Invocation.Builder invoBuild = target.request();
-        Response response = invoBuild.accept(mediaType).get();
-        client.close();
-        return response;
     }
 
 }

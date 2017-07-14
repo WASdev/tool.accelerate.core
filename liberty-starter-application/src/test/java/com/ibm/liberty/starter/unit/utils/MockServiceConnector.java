@@ -15,28 +15,22 @@
  *******************************************************************************/
 package com.ibm.liberty.starter.unit.utils;
 
-import com.ibm.liberty.starter.ServiceConnector;
-import com.ibm.liberty.starter.api.v1.model.internal.Services;
-import com.ibm.liberty.starter.api.v1.model.provider.Dependency;
-import com.ibm.liberty.starter.api.v1.model.provider.Location;
-import com.ibm.liberty.starter.api.v1.model.provider.Provider;
-import com.ibm.liberty.starter.api.v1.model.provider.Sample;
-import com.ibm.liberty.starter.api.v1.model.registration.Service;
-
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.ibm.liberty.starter.ServiceConnector;
+import com.ibm.liberty.starter.api.v1.model.internal.Services;
+import com.ibm.liberty.starter.api.v1.model.registration.Service;
+
 public class MockServiceConnector extends ServiceConnector {
     
-    private Dependency[] dependencies;
     public String capturedTechWorkspaceDir;
     public String capturedOptions;
     public String[] capturedTechs;
 
-    public MockServiceConnector(URI uri, Dependency[] dependencies) {
+    public MockServiceConnector(URI uri) {
         super(uri);
-        this.dependencies = dependencies;
     }
     
     @Override
@@ -49,32 +43,12 @@ public class MockServiceConnector extends ServiceConnector {
         services.setServices(serviceList);
         return services;
     }
-    
-    @Override
-    public Provider getProvider(Service service) {
-        Provider provider = new Provider();
-        provider.setDescription("wibble description");
-        provider.setDependencies(dependencies);
-        return provider;
-    }
-
-    @Override
-    public Sample getSample(Service service) {
-        Sample sample = new Sample();
-        sample.setLocations(new Location[]{});
-        return sample;
-    }
 
     @Override
     public String prepareDynamicPackages(Service service, String techWorkspaceDir, String options, String[] techs) {
         capturedTechWorkspaceDir = techWorkspaceDir;
         capturedOptions = options;
         capturedTechs = techs;
-        return null;
-    }
-
-    @Override
-    public String getFeaturesToInstall(Service service) {
         return null;
     }
 }
