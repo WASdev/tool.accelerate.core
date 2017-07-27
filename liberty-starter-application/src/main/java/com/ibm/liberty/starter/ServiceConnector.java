@@ -24,6 +24,7 @@ import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Invocation;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import com.ibm.liberty.starter.api.v1.model.internal.Services;
 import com.ibm.liberty.starter.api.v1.model.registration.Service;
@@ -87,20 +88,19 @@ public class ServiceConnector {
         return response;
     }
     
-    public String prepareDynamicPackages(Service service, String techWorkspaceDir, String options, String[] techs) {
+    public void prepareDynamicPackages(Service service, String techWorkspaceDir, String options, String[] techs) {
         log.finer("service=" + service.getId() + " : options=" + options + " : techWorkspaceDir=" + techWorkspaceDir + " : techs=" + techs);
         String optionsParam = (options != null && !options.trim().isEmpty()) ? ("&options=" + options) : "";
         String techsParam = "&techs=" + String.join(",", techs);
         String url = urlConstructor("/api/v1/provider/packages/prepare?path=" + techWorkspaceDir + optionsParam + techsParam, service);
-        try {
-            String response = getObjectFromEndpoint(String.class, url, MediaType.TEXT_PLAIN_TYPE);
-            log.fine("Response of preparing dynamic packages from " + techWorkspaceDir + " : " + response);
-            return response;
-        } catch(javax.ws.rs.NotFoundException e){
+        Response response = getResponseFromEndpoint(url, MediaType.TEXT_PLAIN_TYPE);
+        String responseString = response.readEntity(String.class);
+        if (response.getStatus() == 404) {
             // The service doesn't offer this endpoint, so the exception can be ignored. 
-            log.finest("Ignore expected exception : The service doesn't offer endpoint " + url + " : " + e);
+            log.warning("Ignore expected 404 : The service doesn't offer endpoint " + url);
+        } else {
+            log.fine("Response of preparing dynamic packages from " + techWorkspaceDir + " : " + responseString);
         }
-        return "";
     }
     
     public InputStream getArtifactAsInputStream(Service service, String extension) {
@@ -123,6 +123,16 @@ public class ServiceConnector {
         E object = invoBuild.accept(mediaType).get(klass);
         client.close();
         return object;
+    }
+    
+    public Response getResponseFromEndpoint(String url, MediaType mediaType) {
+        System.out.println("Getting object from url " + url);
+        Client client = ClientBuilder.newClient();
+        WebTarget target = client.target(url);
+        Invocation.Builder invoBuild = target.request();
+        Response response = invoBuild.accept(mediaType).get();
+        client.close();
+        return response;
     }
 
 }

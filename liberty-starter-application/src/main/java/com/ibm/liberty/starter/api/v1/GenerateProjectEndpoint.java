@@ -47,7 +47,7 @@ public class GenerateProjectEndpoint {
         log.info("GET request for /generate");
         try {
             ProjectConstructionInput inputProcessor = new ProjectConstructionInput(new ServiceConnector(info.getBaseUri()));
-            final ProjectConstructionInputData inputData = inputProcessor.processInput(techs, techOptions, name, deploy, workspaceId, build, artifactId, groupId, null);
+            final ProjectConstructionInputData inputData = inputProcessor.processInput(techs, techOptions, name, deploy, workspaceId, build, artifactId, groupId, null, false);
             String id = (new BxCodegenClient()).generateProject(inputData);
             String requestQueryString = inputData.toRequestQueryString(id);
             String responseString = "{\"requestQueryString\":\"" + requestQueryString + "\"}";

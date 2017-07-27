@@ -45,10 +45,9 @@ public class MockServiceConnector extends ServiceConnector {
     }
 
     @Override
-    public String prepareDynamicPackages(Service service, String techWorkspaceDir, String options, String[] techs) {
+    public void prepareDynamicPackages(Service service, String techWorkspaceDir, String options, String[] techs) {
         capturedTechWorkspaceDir = techWorkspaceDir;
         capturedOptions = options;
         capturedTechs = techs;
-        return null;
     }
 }

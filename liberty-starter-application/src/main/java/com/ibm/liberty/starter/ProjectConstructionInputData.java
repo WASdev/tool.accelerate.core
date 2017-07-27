@@ -18,6 +18,7 @@ package com.ibm.liberty.starter;
 import java.util.List;
 import java.util.stream.Stream;
 
+import com.ibm.liberty.starter.ProjectConstructor.DeployType;
 import com.ibm.liberty.starter.api.v1.model.internal.Services;
 import com.ibm.liberty.starter.api.v1.model.registration.Service;
 
@@ -54,13 +55,23 @@ public class ProjectConstructionInputData {
             technologies.append(service.getId() + ",");
         });
         String stringresult = technologies.length() == 1 ? "" : technologies.substring(0, technologies.length() - 1) + "\"";
-        return "{\"technologies\":" + stringresult + ","
+        String json = "{\"technologies\":" + stringresult + ","
                 + "\"appName\":\"" + appName + "\","
-                + "\"deployType\":\"" + deployType.toString().toLowerCase() + "\","
                 + "\"buildType\":\"" + buildType.toString().toLowerCase() + "\","
-                + "\"artifactId\":\"" + artifactId + "\","
-                + "\"groupId\":\"" + groupId + "\","
-                + "\"createType\":\"picnmix\"}";
+                + "\"createType\":\"picnmix\"";
+        if (deployType.equals(DeployType.BLUEMIX)) {
+            json += ",\"platforms\":\"bluemix\"";
+        } else {
+            json += ",\"platforms\":\"\"";
+        }
+        if (artifactId != null) {
+            json += ",\"artifactId\":\"" + artifactId + "\"";
+        }
+        if (groupId != null) {
+            json += ",\"groupId\":\"" + groupId + "\"";
+        }
+        json += "}";
+        return json;
     }
     
     public String toRequestQueryString(String id) {
@@ -72,7 +83,7 @@ public class ProjectConstructionInputData {
         });
         String techOptionsString = "";
         for(String options : techOptions) {
-            techOptionsString += "&techOptions=" + options;
+            techOptionsString += "&techoptions=" + options;
         }
         String[] workspaceArray = workspaceDirectory.split("/");
         String workspaceId = workspaceArray[workspaceArray.length -1];

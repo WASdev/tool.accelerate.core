@@ -51,7 +51,7 @@ public class DownloadProjectEndpoint {
         log.info("GET request for /data");
         try {
             ProjectConstructionInput inputProcessor = new ProjectConstructionInput(new ServiceConnector(info.getBaseUri()));
-            final ProjectConstructionInputData inputData = inputProcessor.processInput(techs, techOptions, name, deploy, workspaceId, build, artifactId, groupId, generationId);
+            final ProjectConstructionInputData inputData = inputProcessor.processInput(techs, techOptions, name, deploy, workspaceId, build, artifactId, groupId, generationId, true);
             ProjectConstructor projectConstructor = new ProjectConstructor(inputData);
             Map<String, byte[]> fileMap = projectConstructor.buildFileMap();
             ZipWriter zipConstructor = new ZipWriter(fileMap);
