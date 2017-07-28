@@ -72,6 +72,9 @@ public class ProjectConstructionInputData {
         if (groupId != null) {
             json += ",\"groupId\":\"" + groupId + "\"";
         }
+        if (beta) {
+            json += ",\"libertybeta\":\"true\"";
+        }
         json += "}";
         return json;
     }
@@ -90,6 +93,6 @@ public class ProjectConstructionInputData {
         String[] workspaceArray = workspaceDirectory.split("/");
         String workspaceId = workspaceArray[workspaceArray.length -1];
         String genId = (id == null ? generationId : id);
-        return "name=" + appName + technologies + "&deploy=" + deployType.toString().toLowerCase() + "&build=" + buildType.toString() + "&workspace=" + workspaceId + techOptionsString + "&artifactId=" + artifactId + "&groupId=" + groupId + "&generationId=" + genId;
+        return "name=" + appName + technologies + "&deploy=" + deployType.toString().toLowerCase() + "&build=" + buildType.toString() + "&workspace=" + workspaceId + techOptionsString + "&artifactId=" + artifactId + "&groupId=" + groupId + "&generationId=" + genId + "&beta=" + beta;
     }
 }
