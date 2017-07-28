@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016 IBM Corp.
+ * Copyright (c) 2016,2017 IBM Corp.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,12 +15,16 @@
  *******************************************************************************/
 package com.ibm.liberty.starter.it.api.v1;
 
-import com.ibm.liberty.starter.*;
-import com.ibm.liberty.starter.api.v1.model.internal.Services;
-import com.ibm.liberty.starter.api.v1.model.provider.Dependency;
-import com.ibm.liberty.starter.api.v1.model.registration.Service;
-import com.ibm.liberty.starter.unit.MockServiceConnector;
-import com.ibm.liberty.starter.unit.SetupInitialContext;
+import static org.hamcrest.Matchers.greaterThan;
+import static org.hamcrest.Matchers.hasSize;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assume.assumeTrue;
+
+import java.io.IOException;
+import java.net.URI;
+import java.util.Collections;
+import java.util.List;
+
 import org.eclipse.egit.github.core.Repository;
 import org.eclipse.egit.github.core.RepositoryContents;
 import org.eclipse.egit.github.core.service.ContentsService;
@@ -29,15 +33,15 @@ import org.eclipse.egit.github.core.service.UserService;
 import org.junit.ClassRule;
 import org.junit.Test;
 
-import java.io.IOException;
-import java.net.URI;
-import java.util.Collections;
-import java.util.List;
-
-import static org.hamcrest.Matchers.greaterThan;
-import static org.hamcrest.Matchers.hasSize;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assume.assumeTrue;
+import com.ibm.liberty.starter.GitHubConnector;
+import com.ibm.liberty.starter.GitHubWriter;
+import com.ibm.liberty.starter.ProjectConstructionInputData;
+import com.ibm.liberty.starter.ProjectConstructor;
+import com.ibm.liberty.starter.ServiceConnector;
+import com.ibm.liberty.starter.api.v1.model.internal.Services;
+import com.ibm.liberty.starter.api.v1.model.registration.Service;
+import com.ibm.liberty.starter.unit.SetupInitialContext;
+import com.ibm.liberty.starter.unit.utils.MockServiceConnector;
 
 /**
  * <p>This class will test creating a project on GitHub. It will only run if you supply it your GitHub
@@ -59,17 +63,17 @@ public class GitHubRepositoryCreationTest {
         String name = "TestAppAcceleratorProject";
         String port = System.getProperty("liberty.test.port");
         URI baseUri = new URI("http://localhost:" + port + "/start");
-        ServiceConnector serviceConnector = new MockServiceConnector(baseUri, new Dependency[]{});
+        ServiceConnector serviceConnector = new MockServiceConnector(baseUri);
         Services services = new Services();
         Service service = new Service();
         service.setId("wibble");
         List<Service> serviceList = Collections.singletonList(service);
         services.setServices(serviceList);
-        ProjectConstructionInputData inputData = new ProjectConstructionInputData(services, serviceConnector, name, ProjectConstructor.DeployType.LOCAL, ProjectConstructor.BuildType.MAVEN, null, null, null);
+        ProjectConstructionInputData inputData = new ProjectConstructionInputData(services, serviceConnector, name, ProjectConstructor.DeployType.LOCAL, ProjectConstructor.BuildType.MAVEN, null, null, null, null, null);
 
         ProjectConstructor constructor = new ProjectConstructor(inputData);
         GitHubConnector connector = new GitHubConnector(oAuthToken);
-        GitHubWriter writer = new GitHubWriter(constructor.buildFileMap(), inputData.appName, inputData.buildType, baseUri, connector);
+        GitHubWriter writer = new GitHubWriter(constructor.buildFileMap(), inputData.appName, connector);
         writer.createProjectOnGitHub();
 
         RepositoryService repositoryService = new RepositoryService();

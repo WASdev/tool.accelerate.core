@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016 IBM Corp.
+ * Copyright (c) 2016,2017 IBM Corp.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,61 +15,24 @@
  *******************************************************************************/
 package com.ibm.liberty.starter.it.api.v1;
 
-import static org.junit.Assert.assertTrue;
-
-import java.io.File;
-import java.io.InputStream;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipInputStream;
-
-import javax.ws.rs.client.Client;
-import javax.ws.rs.client.ClientBuilder;
-import javax.ws.rs.core.Response;
-
-import org.junit.Assert;
 import org.junit.Test;
+
+import com.ibm.liberty.starter.it.api.v1.utils.RepositoryAPIJarClient;
 
 public class APIJarDownloadTest {
 
     @Test
-    public void testRepoUrl() throws Exception {
-        String url = "http://localhost:" + System.getProperty("liberty.test.port") + "/start/api/v1/repo/net/wasdev/wlp/starters/test/config/0.0.1/config-0.0.1.jar";
-        Client client = ClientBuilder.newClient();
-        Response response = client.target(url).request("application/zip").get();
-        try {
-            int responseStatus = response.getStatus();
-            if (responseStatus != 200) {
-                Assert.fail("Expected response status 200, instead found " + responseStatus + ". Response was " + response.readEntity(String.class));
-            }
-            assertTrue("Config class not found", findConfig(response));
-        } finally {
-            response.close();
-        }
-
+    public void testTestMicroserviceJar() throws Exception {
+        RepositoryAPIJarClient.assertJar("test", "0.0.1", RepositoryAPIJarClient.CONFIG);
     }
-
-    private boolean findConfig(Response resp) throws Exception {
-        // Read the response into an InputStream
-        InputStream entityInputStream = resp.readEntity(InputStream.class);
-        // Create a new ZipInputStream from the response InputStream
-        ZipInputStream zipIn = new ZipInputStream(entityInputStream);
-        // This system property is being set in the liberty-starter-application/build.gradle file
-        String tempDir = System.getProperty("liberty.temp.dir");
-        File file = new File(tempDir + "/config.jar");
-        System.out.println("Creating zip file: " + file.toString());
-        file.getParentFile().mkdirs();
-        ZipEntry inputEntry = null;
-        boolean found = false;
-        while ((inputEntry = zipIn.getNextEntry()) != null) {
-            String entryName = inputEntry.getName();
-            System.out.println("File: "+entryName);
-            if ("org/eclipse/microprofile/config/Config.class".equals(entryName)) {
-                System.out.println("Found Config.class file.");
-                found = true;
-            }
-            zipIn.closeEntry();
-        }
-        zipIn.close();
-        return found;
+    
+    @Test
+    public void testMsBuilderConfigJar() throws Exception {
+        RepositoryAPIJarClient.assertJar("ms-builder", "0.1", RepositoryAPIJarClient.CONFIG);
+    }
+    
+    @Test
+    public void testMsBuilderFaultToleranceJar() throws Exception {
+        RepositoryAPIJarClient.assertJar("ms-builder", "0.1", RepositoryAPIJarClient.FAULT_TOLERANCE);
     }
 }

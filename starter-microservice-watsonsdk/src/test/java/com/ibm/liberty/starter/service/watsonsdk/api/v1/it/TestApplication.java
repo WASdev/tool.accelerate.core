@@ -15,32 +15,28 @@
  *******************************************************************************/ 
 package com.ibm.liberty.starter.service.watsonsdk.api.v1.it;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Before;
 import org.junit.Test;
 
-import com.ibm.liberty.starter.api.v1.model.provider.Sample;
+import com.ibm.liberty.starter.api.v1.model.provider.EndpointResponse;
 
 /**
  * Test the deployed service responds as expected
  *
  */
 public class TestApplication extends EndpointTest {
-	
-	@Before
-	public void checkSetup() {
-		checkAvailability("/api/v1/provider/samples");
-	}
+    
+    @Before
+    public void checkSetup() {
+        checkAvailability("/api/v1/provider/");
+    }
 
     @Test
-    public void testSamples() throws Exception {
-    	Sample sample = testEndpoint("/api/v1/provider/samples", Sample.class);
-    	assertNotNull("No response from API for sample", sample);
-    	if(sample.getLocations() == null) {
-    		return;
-    	}
-    	assertEquals("No files expected for sample", 0, sample.getLocations().length);
+    public void testProvider() throws Exception {
+        EndpointResponse response = testEndpoint("/api/v1/provider/", EndpointResponse.class);
+        String status = response.getStatus();
+        assertTrue("Expected response to be UP, instead found" + status, status.equals("UP"));
     }
 }
