@@ -1,9 +1,5 @@
 /*******************************************************************************
-<<<<<<< e52255dd285433940539db20c7ed8712494ac459
  * Copyright (c) 2016,2017 IBM Corp.
-=======
- * Copyright (c) 2016, 2017 IBM Corp.
->>>>>>> Issue:4740or176: Allow app accelerator to use Liberty beta image (#177)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
