@@ -51,8 +51,11 @@
                                             <label class="radio-inline">
                                                 <input type="radio" name="buildRadio" value="{{buildType.MAVEN}}" ng-model="deploy.buildType" ng-click="updateService()">Maven
                                             </label>
-                                            <label class="radio-inline">
+                                            <label class="radio-inline" ng-show="!isSelected('ms-builder')">
                                                 <input type="radio" name="buildRadio" value="{{buildType.GRADLE}}" ng-model="deploy.buildType" ng-click="updateService()">Gradle
+                                            </label>
+                                            <label class="radio-inline radio-disabled" ng-show="isSelected('ms-builder')"  data-toggle="tooltip" title="Gradle is not available when Microservice Builder is selected">
+                                                <input type="radio" name="buildRadio" ng-disabled=true>Gradle unavailable
                                             </label>
                                         </fieldset>
                                     </div>
@@ -67,9 +70,9 @@
                             </div>
                         </div>
                     </div>
-                </div><div class="disclaimer" ng-show="deploy.buildType == buildType.MAVEN">Please note: The Maven projects created by the Liberty app accelerator have dependencies on projects with the following licenses: <a href="http://www.apache.org/licenses/LICENSE-2.0" target="_blank">AL 2.0</a> and <a href="https://public.dhe.ibm.com/ibmdl/export/pub/software/websphere/wasdev/license/base_ilan/ilan/17.0.0.1/lafiles/en.html"
+                </div><div class="disclaimer" ng-show="deploy.buildType == buildType.MAVEN">Please note: The Maven projects created by the Liberty app accelerator have dependencies on projects with the following licenses: <a href="http://www.apache.org/licenses/LICENSE-2.0" target="_blank">AL 2.0</a> and <a href="https://public.dhe.ibm.com/ibmdl/export/pub/software/websphere/wasdev/license/base_ilan/ilan/17.0.0.2/lafiles/en.html"
                                                                                                                                                                                                                                                         target="LibertyLicense">ILAN</a>.</div>
-                <div class="disclaimer" ng-show="deploy.buildType == buildType.GRADLE">Please note: The Gradle projects created by the Liberty app accelerator have dependencies on projects with the following licenses: <a href="http://www.apache.org/licenses/LICENSE-2.0" target="_blank">AL 2.0</a> and <a href="https://public.dhe.ibm.com/ibmdl/export/pub/software/websphere/wasdev/license/base_ilan/ilan/17.0.0.1/lafiles/en.html"
+                <div class="disclaimer" ng-show="deploy.buildType == buildType.GRADLE">Please note: The Gradle projects created by the Liberty app accelerator have dependencies on projects with the following licenses: <a href="http://www.apache.org/licenses/LICENSE-2.0" target="_blank">AL 2.0</a> and <a href="https://public.dhe.ibm.com/ibmdl/export/pub/software/websphere/wasdev/license/base_ilan/ilan/17.0.0.2/lafiles/en.html"
                                                                                                                                                                                                                                                         target="LibertyLicense">ILAN</a>.</div>
                 <div ng-show="deploy.name"><a ng-href="{{createGitHubUrl()}}" target="#" class="btn btn-primary" role="button" ng-click="sendGAEvent('GitHubCreate', 'Java', 'JEE')">Create On GitHub</a></div>
                 <div ng-show="!deploy.name"><a class="btn btn-primary" role="button" ng-disabled="true">Choose a project name</a></div>

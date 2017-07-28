@@ -227,7 +227,10 @@ public class ProjectConstructor {
                     continue;
                 } else {
                     InputStream is = inputData.serviceConnector.getResourceAsInputStream(basePath + fileUrl);
-                    TemplatedFileToBytesConverter techSampleFileConverter = new TemplatedFileToBytesConverter(is, Collections.singletonMap("APP_NAME", inputData.appName));
+                    Map<String, String> templateTags = new HashMap<>();
+                    templateTags.put("APP_NAME", inputData.appName);
+                    templateTags.put("APP_NAME_LOWERCASE", inputData.appName.toLowerCase());
+                    TemplatedFileToBytesConverter techSampleFileConverter = new TemplatedFileToBytesConverter(is, templateTags);
                     fileUrl = sanitiseFileUrl(fileUrl);
                     putFileInMap(fileUrl, techSampleFileConverter.getBytes());
                 }
