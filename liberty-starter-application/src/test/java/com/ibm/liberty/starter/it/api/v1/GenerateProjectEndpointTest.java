@@ -18,7 +18,12 @@ package com.ibm.liberty.starter.it.api.v1;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assume.assumeTrue;
 
+import java.io.InputStream;
+import java.io.StringReader;
+
+import javax.json.Json;
 import javax.json.JsonObject;
+import javax.json.JsonReader;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.core.MediaType;
@@ -40,8 +45,10 @@ public class GenerateProjectEndpointTest {
             assumeTrue(!generateOutput.contains("Missing project generation configuration: generation URL, starter URL"));
         }
         assertTrue("Expected response status 200, instead found " + generateResponseStatus + " and output " + generateOutput, generateResponseStatus == 200);
-        JsonObject queryString = generateResponse.readEntity(JsonObject.class);
-        Response response = DownloadZip.get(queryString.getString("requestQueryString"));
+        String responseString = generateResponse.readEntity(String.class);
+        JsonReader jsonReader = Json.createReader(new StringReader(responseString));
+        String queryString = jsonReader.readObject().getString("requestQueryString");
+        Response response = DownloadZip.get(queryString);
         try {
             int responseStatus = response.getStatus();
             String output = "";
