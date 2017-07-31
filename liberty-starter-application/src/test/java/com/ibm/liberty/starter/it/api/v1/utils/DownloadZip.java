@@ -68,7 +68,7 @@ public class DownloadZip {
             if (entryName.startsWith("src/test/java")) {
                 foundTests = true;
             }
-            if (entryName.startsWith(".bluemix/")) {
+            if (entryName.equals("manifest.yml")) {
                 foundBluemixFiles = true;
             }
             zipIn.closeEntry();
