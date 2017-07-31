@@ -20,6 +20,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.arrayContaining;
 import static org.hamcrest.Matchers.hasSize;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -78,6 +79,7 @@ public class ProjectConstructionInputTest {
         assertThat(result.artifactId, is(artifactId));
         assertThat(result.groupId, is(groupId));
         assertThat(result.generationId, is(generationId));
+        assertTrue(result.beta);
         assertThat(serviceConnector.capturedTechWorkspaceDir, containsString(workspaceId));
         assertThat(serviceConnector.capturedTechs, is(new String[] {techName}));
         assertThat(serviceConnector.capturedOptions, is(techOption));
@@ -160,5 +162,6 @@ public class ProjectConstructionInputTest {
         assertThat(result.artifactId, is(artifactId));
         assertThat(result.groupId, is(groupId));
         assertThat(result.generationId, is(generationId));
+        assertTrue(result.beta);
     }
 }
