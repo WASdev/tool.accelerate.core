@@ -35,7 +35,8 @@ angular.module('appAccelerator')
     name : "LibertyProject",
     buildType : appacc.updateBuildType(),
     artifactid : null,
-    groupid : null
+    groupid : null,
+    beta : appacc.isBeta()
   };
   $scope.showConfigOptions = false;
   $scope.angleIconDown = "fa-angle-down";
@@ -133,6 +134,8 @@ angular.module('appAccelerator')
     appacc.updateGroupId($scope.deploy.groupid);
     $log.debug("Updating build type to " + $scope.deploy.buildType);
     appacc.updateBuildType($scope.deploy.buildType);
+    appacc.isBeta($scope.deploy.beta);
+    $log.debug("AppAccelerator : beta has value: " + appacc.isBeta());
     appacc.notifyListeners();
   }
 

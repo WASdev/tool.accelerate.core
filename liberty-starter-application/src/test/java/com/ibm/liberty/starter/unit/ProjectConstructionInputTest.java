@@ -20,6 +20,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.arrayContaining;
 import static org.hamcrest.Matchers.hasSize;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -66,9 +67,8 @@ public class ProjectConstructionInputTest {
         String artifactId = "testArtifactId";
         String groupId = "test.group.id";
         String generationId = "1234-abcd";
-
-        ProjectConstructionInputData result = testObject.processInput(new String[] {techName}, new String[] {techName + ":" + techOption}, name, "local", workspaceId, "gradle", artifactId, groupId, generationId, true);
-
+        boolean beta = true;
+        ProjectConstructionInputData result = testObject.processInput(new String[] {techName}, new String[] {techName + ":" + techOption}, name, "local", workspaceId, "gradle", artifactId, groupId, generationId, beta, true);
         assertThat(result.appName, is(name));
         assertThat(result.buildType, is(ProjectConstructor.BuildType.GRADLE));
         assertThat(result.deployType, is(ProjectConstructor.DeployType.LOCAL));
@@ -79,6 +79,7 @@ public class ProjectConstructionInputTest {
         assertThat(result.artifactId, is(artifactId));
         assertThat(result.groupId, is(groupId));
         assertThat(result.generationId, is(generationId));
+        assertTrue(result.beta);
         assertThat(serviceConnector.capturedTechWorkspaceDir, containsString(workspaceId));
         assertThat(serviceConnector.capturedTechs, is(new String[] {techName}));
         assertThat(serviceConnector.capturedOptions, is(techOption));
@@ -86,56 +87,54 @@ public class ProjectConstructionInputTest {
 
     @Test(expected = ValidationException.class)
     public void noNameThrowsAValidationException() throws Exception {
-        testObject.processInput(new String[] {}, new String[] {}, null, "local", "wibble", "gradle", null, null, null, false);
+        testObject.processInput(new String[] {}, new String[] {}, null, "local", "wibble", "gradle", null, null, null, false, false);
     }
 
     @Test(expected = ValidationException.class)
     public void nameWithInvalidCharactersThrowsAValidationException() throws Exception {
-        testObject.processInput(new String[] {}, new String[] {}, "wibble%", "local", "wibble", "gradle", null, null, null, false);
+        testObject.processInput(new String[] {}, new String[] {}, "wibble%", "local", "wibble", "gradle", null, null, null, false, false);
     }
 
     @Test(expected = ValidationException.class)
     public void longNameThrowsAValidationException() throws Exception {
-        testObject.processInput(new String[] {}, new String[] {}, "ThisIsAReallyLongNameButIsItLongEnoughNotQuiteSoLetsKeepGoing", "local", "wibble", "gradle", null, null, null, false);
+        testObject.processInput(new String[] {}, new String[] {}, "ThisIsAReallyLongNameButIsItLongEnoughNotQuiteSoLetsKeepGoing", "local", "wibble", "gradle", null, null, null, false, false);
     }
 
     @Test(expected = ValidationException.class)
     public void noDeployThrowsAValidationException() throws Exception {
-        testObject.processInput(new String[] {}, new String[] {}, "wibble", null, "wibble", "gradle", null, null, null, false);
+        testObject.processInput(new String[] {}, new String[] {}, "wibble", null, "wibble", "gradle", null, null, null, false, false);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void invalidDeployThrowsAIllegalArgumentException() throws Exception {
-        testObject.processInput(new String[] {}, new String[] {}, "wibble", "invalid", "wibble", "gradle", null, null, null, false);
+        testObject.processInput(new String[] {}, new String[] {}, "wibble", "invalid", "wibble", "gradle", null, null, null, false, false);
     }
 
     @Test
     public void noBuildDefaultsToMaven() throws Exception {
-        ProjectConstructionInputData result = testObject.processInput(new String[]{}, new String[]{}, "wibble", "local", "wibble", null, null, null, null, false);
-
+        ProjectConstructionInputData result = testObject.processInput(new String[]{}, new String[]{}, "wibble", "local", "wibble", null, null, null, null, false, false);
         assertThat(result.buildType, is(ProjectConstructor.BuildType.MAVEN));
     }
 
     @Test
     public void invalidBuildDefaultsToMaven() throws Exception {
-        ProjectConstructionInputData result = testObject.processInput(new String[]{}, new String[]{}, "wibble", "local", "wibble", "wibble", null, null, null, false);
-
+        ProjectConstructionInputData result = testObject.processInput(new String[]{}, new String[]{}, "wibble", "local", "wibble", "wibble", null, null, null, false, false);
         assertThat(result.buildType, is(ProjectConstructor.BuildType.MAVEN));
     }
 
     @Test(expected = ValidationException.class)
     public void invalidArtifactIdThrowsIllegalArgumentException() throws Exception {
-        testObject.processInput(new String[] {}, new String[] {}, "wibble", "local", "wibble", "gradle", "%wibble", null, null, false);
+        testObject.processInput(new String[] {}, new String[] {}, "wibble", "local", "wibble", "gradle", "%wibble", null, null, false, false);
     }
     
     @Test(expected = ValidationException.class)
     public void invalidGroupIdThrowsIllegalArgumentException() throws Exception {
-        testObject.processInput(new String[]{}, new String[]{}, "wibble", "local", "wibble", "gradle", null, "%wibble", null, false);
+        testObject.processInput(new String[]{}, new String[]{}, "wibble", "local", "wibble", "gradle", null, "%wibble", null, false, false);
     }
     
     @Test(expected = ValidationException.class)
     public void invalidGenerationIdThrowsIllegalArgumentException() throws Exception {
-        testObject.processInput(new String[]{}, new String[]{}, "wibble", "local", "wibble", "gradle", null, null, "ABC%", false);
+        testObject.processInput(new String[]{}, new String[]{}, "wibble", "local", "wibble", "gradle", null, null, "ABC%", false, false);
     }
 
     @Test
@@ -147,8 +146,9 @@ public class ProjectConstructionInputTest {
         String artifactId = "testArtifactId";
         String groupId = "test.group.id";
         String generationId = "1234-abcd";
+        boolean beta = true;
 
-        String jwt = testObject.processInputAsJwt(new String[] {techName}, new String[] {techName + ":" + techOption}, name, "local", workspaceId, "gradle", artifactId, groupId, generationId);
+        String jwt = testObject.processInputAsJwt(new String[] {techName}, new String[] {techName + ":" + techOption}, name, "local", workspaceId, "gradle", artifactId, groupId, generationId, beta);
         ProjectConstructionInputData result = testObject.processJwt(jwt);
 
         assertThat(result.appName, is(name));
@@ -162,5 +162,6 @@ public class ProjectConstructionInputTest {
         assertThat(result.artifactId, is(artifactId));
         assertThat(result.groupId, is(groupId));
         assertThat(result.generationId, is(generationId));
+        assertTrue(result.beta);
     }
 }

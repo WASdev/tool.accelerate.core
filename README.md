@@ -157,7 +157,7 @@ Run the application: `gradle liberty-starter-application:localRun`
 The application should be available at http://localhost:9082/start.
 
 To run the application locally with it calling bx codegen:
-`gradle liberty-starter-application:libertyStart -PappAccelStarterkit=<app accelerator starter kit url> -PbxCodegenClient=<url for the bx codegen service to use>`
+`gradle liberty-starter-application:libertyStart -PappAccelStarterkit=<app accelerator starter kit url> -PbxCodegenEndpoint=<url for the bx codegen service to use>`
 
 ### Project Structure
 The project is split up into several different pieces.

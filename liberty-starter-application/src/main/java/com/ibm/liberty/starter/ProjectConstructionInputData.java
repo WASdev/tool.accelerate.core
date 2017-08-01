@@ -33,8 +33,9 @@ public class ProjectConstructionInputData {
     public final String artifactId;
     public final String groupId;
     public final String generationId;
+    public final boolean beta;
 
-    public ProjectConstructionInputData(Services services, ServiceConnector serviceConnector, String appName, ProjectConstructor.DeployType deployType, ProjectConstructor.BuildType buildType, String workspaceDirectory, String[] techOptions, String artifactId, String groupId, String generationId) {
+    public ProjectConstructionInputData(Services services, ServiceConnector serviceConnector, String appName, ProjectConstructor.DeployType deployType, ProjectConstructor.BuildType buildType, String workspaceDirectory, String[] techOptions, String artifactId, String groupId, String generationId, boolean beta) {
         this.services = services;
         this.serviceConnector = serviceConnector;
         this.appName = appName;
@@ -45,6 +46,7 @@ public class ProjectConstructionInputData {
         this.artifactId = artifactId;
         this.groupId = groupId;
         this.generationId = generationId;
+        this.beta = beta;
     }
     
     public String toBxJSON() {
@@ -70,6 +72,9 @@ public class ProjectConstructionInputData {
         if (groupId != null) {
             json += ",\"groupId\":\"" + groupId + "\"";
         }
+        if (beta) {
+            json += ",\"libertybeta\":\"true\"";
+        }
         json += "}";
         return json;
     }
@@ -88,6 +93,6 @@ public class ProjectConstructionInputData {
         String[] workspaceArray = workspaceDirectory.split("/");
         String workspaceId = workspaceArray[workspaceArray.length -1];
         String genId = (id == null ? generationId : id);
-        return "name=" + appName + technologies + "&deploy=" + deployType.toString().toLowerCase() + "&build=" + buildType.toString() + "&workspace=" + workspaceId + techOptionsString + "&artifactId=" + artifactId + "&groupId=" + groupId + "&generationId=" + genId;
+        return "name=" + appName + technologies + "&deploy=" + deployType.toString().toLowerCase() + "&build=" + buildType.toString() + "&workspace=" + workspaceId + techOptionsString + "&artifactId=" + artifactId + "&groupId=" + groupId + "&generationId=" + genId + "&beta=" + beta;
     }
 }

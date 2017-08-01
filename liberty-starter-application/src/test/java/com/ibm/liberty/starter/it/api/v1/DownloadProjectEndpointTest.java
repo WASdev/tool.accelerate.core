@@ -64,7 +64,7 @@ public class DownloadProjectEndpointTest {
     
     @Test
     public void generateBluemixProjectTest() throws Exception {
-        String queryString = "tech=rest&name=Test&deploy=local";
+        String queryString = "tech=rest&name=Test&deploy=bluemix";
         Response response = DownloadZip.get(queryString);
         try {
             int responseStatus = response.getStatus();

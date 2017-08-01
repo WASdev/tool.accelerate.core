@@ -12,6 +12,14 @@
                            placeholder="Example: LibertyProject" autocomplete="off"
                            maxlength="50" ng-model="deploy.name" ng-change="updateService()">
                 </div>
+                <div class="row options">
+                    <div class="col-md-12 col-sm-12">
+                        <label class="checkbox-inline">
+                            <input type="checkbox" ng-model="deploy.beta" ng-click="updateService()">Use <a href="https://developer.ibm.com/wasdev/docs/new-in-latest-earlyaccess/?src=accelerator"
+                            target="WASdev" ng-click="sendGAEvent('Outbound', 'WASdev', 'beta')">Liberty Beta</a>
+                        </label>
+                    </div>
+                </div>
                 <div class="row">
                     <div class="col-md-10 col-sm-10">
                         <div class="panel panel-configuration">

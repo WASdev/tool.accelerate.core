@@ -49,8 +49,8 @@ public class BxCodegenClientTest {
         servicesList.add(new Service());
         Services services = new Services();
         services.setServices(servicesList);
-        inputData = new ProjectConstructionInputData(services, null, "TestName", ProjectConstructor.DeployType.LOCAL, ProjectConstructor.BuildType.MAVEN, "workspaceDir", null, "testArtifactId", "test.group.id", null);
-        inputDataWithId = new ProjectConstructionInputData(services, null, "TestName", ProjectConstructor.DeployType.LOCAL, ProjectConstructor.BuildType.MAVEN, "workspaceDir", null, "testArtifactId", "test.group.id", "5678");
+        inputData = new ProjectConstructionInputData(services, null, "TestName", ProjectConstructor.DeployType.LOCAL, ProjectConstructor.BuildType.MAVEN, "workspaceDir", null, "testArtifactId", "test.group.id", null, false);
+        inputDataWithId = new ProjectConstructionInputData(services, null, "TestName", ProjectConstructor.DeployType.LOCAL, ProjectConstructor.BuildType.MAVEN, "workspaceDir", null, "testArtifactId", "test.group.id", "5678", false);
     }
 
     @Test

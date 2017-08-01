@@ -35,6 +35,7 @@ public class ProjectConstructionInputDataTest {
     static ProjectConstructionInputData inputDataWithBx;
     static ProjectConstructionInputData inputDataWithGradle;
     static ProjectConstructionInputData inputDataWithNullIds;
+    static ProjectConstructionInputData inputDataWithBeta;
     
     @BeforeClass
     public static void setup() {
@@ -47,10 +48,11 @@ public class ProjectConstructionInputDataTest {
         serviceList.add(bar);
         Services services = new Services();
         services.setServices(serviceList);
-        inputData = new ProjectConstructionInputData(services, null, "testName", ProjectConstructor.DeployType.LOCAL, ProjectConstructor.BuildType.MAVEN, "c:/users/1234", new String[]{"foo:bar", "test:value"}, "testArtifact", "testGroup", "5678");
-        inputDataWithBx = new ProjectConstructionInputData(services, null, "testName", ProjectConstructor.DeployType.BLUEMIX, ProjectConstructor.BuildType.MAVEN, "c:/users/1234", new String[]{"foo:bar", "test:value"}, "testArtifact", "testGroup", "5678");
-        inputDataWithGradle = new ProjectConstructionInputData(services, null, "testName", ProjectConstructor.DeployType.LOCAL, ProjectConstructor.BuildType.GRADLE, "c:/users/1234", new String[]{"foo:bar", "test:value"}, "testArtifact", "testGroup", "5678");
-        inputDataWithNullIds = new ProjectConstructionInputData(services, null, "testName", ProjectConstructor.DeployType.LOCAL, ProjectConstructor.BuildType.MAVEN, "c:/users/1234", new String[]{"foo:bar", "test:value"}, null, null, "5678");
+        inputData = new ProjectConstructionInputData(services, null, "testName", ProjectConstructor.DeployType.LOCAL, ProjectConstructor.BuildType.MAVEN, "c:/users/1234", new String[]{"foo:bar", "test:value"}, "testArtifact", "testGroup", "5678", false);
+        inputDataWithBx = new ProjectConstructionInputData(services, null, "testName", ProjectConstructor.DeployType.BLUEMIX, ProjectConstructor.BuildType.MAVEN, "c:/users/1234", new String[]{"foo:bar", "test:value"}, "testArtifact", "testGroup", "5678", false);
+        inputDataWithGradle = new ProjectConstructionInputData(services, null, "testName", ProjectConstructor.DeployType.LOCAL, ProjectConstructor.BuildType.GRADLE, "c:/users/1234", new String[]{"foo:bar", "test:value"}, "testArtifact", "testGroup", "5678", false);
+        inputDataWithNullIds = new ProjectConstructionInputData(services, null, "testName", ProjectConstructor.DeployType.LOCAL, ProjectConstructor.BuildType.MAVEN, "c:/users/1234", new String[]{"foo:bar", "test:value"}, null, null, "5678", false);
+        inputDataWithBeta = new ProjectConstructionInputData(services, null, "testName", ProjectConstructor.DeployType.LOCAL, ProjectConstructor.BuildType.MAVEN, "c:/users/1234", new String[]{"foo:bar", "test:value"}, "testArtifact", "testGroup", "5678", true);
     }
     
     @Test
@@ -97,8 +99,21 @@ public class ProjectConstructionInputDataTest {
     }
     
     @Test
+    public void toBxJsonTestWithBeta() throws Exception {
+        String expected = "{\"technologies\":\"foo,bar\","
+                + "\"appName\":\"testName\","
+                + "\"buildType\":\"maven\","
+                + "\"createType\":\"picnmix\","
+                + "\"platforms\":\"\","
+                + "\"artifactId\":\"testArtifact\","
+                + "\"groupId\":\"testGroup\","
+                + "\"libertybeta\":\"true\"}";
+        assertEquals(expected, inputDataWithBeta.toBxJSON());
+    }
+    
+    @Test
     public void toRequestQueryStringTest() throws Exception {
-        String[] expected = {"tech=foo", "tech=bar", "name=testName", "deploy=local", "build=MAVEN", "workspace=1234", "techoptions=foo:bar", "techoptions=test:value", "artifactId=testArtifact", "groupId=testGroup", "generationId=5678"};
+        String[] expected = {"tech=foo", "tech=bar", "name=testName", "deploy=local", "build=MAVEN", "workspace=1234", "techoptions=foo:bar", "techoptions=test:value", "artifactId=testArtifact", "groupId=testGroup", "generationId=5678", "beta=false"};
         String actual = "&" + inputData.toRequestQueryString(null) + "&";
         for(String expectedString : expected) {
             assertTrue("Didn't find expected string " + expectedString, actual.contains("&" + expectedString + "&"));
@@ -107,7 +122,7 @@ public class ProjectConstructionInputDataTest {
     
     @Test
     public void toRequestQueryStringTestWithId() throws Exception {
-        String[] expected = {"tech=foo", "tech=bar", "name=testName", "deploy=local", "build=MAVEN", "workspace=1234", "techoptions=foo:bar", "techoptions=test:value", "artifactId=testArtifact", "groupId=testGroup", "generationId=abcd"};
+        String[] expected = {"tech=foo", "tech=bar", "name=testName", "deploy=local", "build=MAVEN", "workspace=1234", "techoptions=foo:bar", "techoptions=test:value", "artifactId=testArtifact", "groupId=testGroup", "generationId=abcd", "beta=false"};
         String actual = "&" + inputData.toRequestQueryString("abcd") + "&";
         for(String expectedString : expected) {
             assertTrue("Didn't find expected string " + expectedString, actual.contains("&" + expectedString + "&"));
