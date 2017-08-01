@@ -191,7 +191,7 @@
         <dependency>
             <groupId>org.apache.cxf</groupId>
             <artifactId>cxf-rt-rs-client</artifactId>
-            <version>3.1.1</version>
+            <version>3.1.11</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -286,7 +286,7 @@
                     <assemblyArtifact>
                         <groupId>com.ibm.websphere.appserver.runtime</groupId>
                         <artifactId>wlp-webProfile7</artifactId>
-                        <version>17.0.0.1</version>
+                        <version>17.0.0.2</version>
                         <type>zip</type>
                     </assemblyArtifact>
                     <assemblyInstallDirectory>${project.build.directory}</assemblyInstallDirectory>

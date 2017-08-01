@@ -18,6 +18,7 @@ package com.ibm.liberty.starter;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Map;
+import java.util.TreeMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.zip.ZipEntry;
@@ -29,7 +30,7 @@ public class ZipWriter {
     private final Map<String, byte[]> fileMap;
 
     public ZipWriter(Map<String, byte[]> fileMap) {
-        this.fileMap = fileMap;
+        this.fileMap = new TreeMap<>(fileMap);
     }
 
     public void buildZip(OutputStream os) throws IOException {

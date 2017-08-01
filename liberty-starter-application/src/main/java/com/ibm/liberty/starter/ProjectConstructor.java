@@ -191,12 +191,13 @@ public class ProjectConstructor {
         final int MAX_SIZE = 200000;
         char[] buffer = new char[MAX_SIZE];
         
+        int len = 0;
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(htmlIS));) {
-            reader.read(buffer, 0, MAX_SIZE);
+            len = reader.read(buffer, 0, MAX_SIZE);
         } catch (Exception e ){
             return null;
         }
-        String contents = new String(buffer);
+        String contents = new String(buffer, 0, len);
         int index = contents.indexOf("<div id=\"technologies\">");
         if (index != -1) {
             int length = contents.length();
@@ -224,7 +225,10 @@ public class ProjectConstructor {
                     continue;
                 } else {
                     InputStream is = inputData.serviceConnector.getResourceAsInputStream(basePath + fileUrl);
-                    TemplatedFileToBytesConverter techSampleFileConverter = new TemplatedFileToBytesConverter(is, Collections.singletonMap("APP_NAME", inputData.appName));
+                    Map<String, String> templateTags = new HashMap<>();
+                    templateTags.put("APP_NAME", inputData.appName);
+                    templateTags.put("APP_NAME_LOWERCASE", inputData.appName.toLowerCase());
+                    TemplatedFileToBytesConverter techSampleFileConverter = new TemplatedFileToBytesConverter(is, templateTags);
                     fileUrl = sanitiseFileUrl(fileUrl);
                     putFileInMap(fileUrl, techSampleFileConverter.getBytes());
                 }

@@ -28,7 +28,7 @@ import com.ibm.liberty.starter.api.v1.model.provider.Sample;
 
 /**
  * Test the deployed service responds as expected
- * 
+ *
  */
 public class TestApplication extends EndpointTest {
 
@@ -41,7 +41,7 @@ public class TestApplication extends EndpointTest {
     public void testProvider() throws Exception {
         Provider provider = testEndpoint("/api/v1/provider/", Provider.class);
         assertNotNull("No response from API for provider", provider);
-        assertTrue("Description was not found.", provider.getDescription().contains("<h2>Microservice Builder (Beta)</h2>"));
+        assertTrue("Description was not found.", provider.getDescription().contains("<h2>Microservice Builder</h2>"));
         Dependency[] dependencies = provider.getDependencies();
         boolean providedDependency = false;
         boolean runtimeDependency = false;
