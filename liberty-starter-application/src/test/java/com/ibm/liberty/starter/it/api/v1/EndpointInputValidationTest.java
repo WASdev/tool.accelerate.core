@@ -54,7 +54,7 @@ public class EndpointInputValidationTest {
 
     @Test
     public void testTechSelectorValidName() throws Exception {
-        String endpoint = "/start/api/v1/data?tech=test&name=testName&deploy=local";
+        String endpoint = "/start/api/v1/data?tech=rest&name=testName&deploy=local";
         Response response = callEndpoint(endpoint);
         int status = response.getStatus();
         String output = "";
