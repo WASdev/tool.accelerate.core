@@ -12,6 +12,14 @@
                            placeholder="Example: LibertyProject" autocomplete="off"
                            maxlength="50" ng-model="deploy.name" ng-change="updateService()">
                 </div>
+                <div class="row options">
+                    <div class="col-md-12 col-sm-12">
+                        <label class="checkbox-inline">
+                            <input type="checkbox" ng-model="deploy.beta" ng-click="updateService()">Use <a href="https://developer.ibm.com/wasdev/docs/new-in-latest-earlyaccess/?src=accelerator"
+                            target="WASdev" ng-click="sendGAEvent('Outbound', 'WASdev', 'beta')">Liberty Beta</a>
+                        </label>
+                    </div>
+                </div>
                 <div class="row">
                     <div class="col-md-10 col-sm-10">
                         <div class="panel panel-configuration">
@@ -66,11 +74,15 @@
                                                                                                                                                                                                                                                         target="LibertyLicense">ILAN</a>.</div>
                 <div class="disclaimer" ng-show="deploy.buildType == buildType.GRADLE">Please note: The Gradle projects created by the Liberty app accelerator have dependencies on projects with the following licenses: <a href="http://www.apache.org/licenses/LICENSE-2.0" target="_blank">AL 2.0</a> and <a href="https://public.dhe.ibm.com/ibmdl/export/pub/software/websphere/wasdev/license/base_ilan/ilan/17.0.0.2/lafiles/en.html"
                                                                                                                                                                                                                                                         target="LibertyLicense">ILAN</a>.</div>
-                <div ng-show="deploy.name"><a ng-href="{{createGitHubUrl()}}" target="#" class="btn btn-primary" role="button" ng-click="sendGAEvent('GitHubCreate', 'Java', 'JEE')">Create On GitHub</a></div>
+                <div ng-show="deploy.name && !projectQueryString"><a class="btn btn-primary" role="button" ng-click="callGenerateUrl()" ng-disabled="generateProjectDisabled">Generate project</a></div>
+                <div ng-show="deploy.name && projectQueryString"><a class="btn btn-primary" role="button" ng-click="callGenerateUrl()" ng-disabled="generateProjectDisabled">Re-generate project</a></div>
                 <div ng-show="!deploy.name"><a class="btn btn-primary" role="button" ng-disabled="true">Choose a project name</a></div>
-                <div class="btn-separator">or</div>
-                <div ng-show="deploy.name"><a ng-href="{{createDownloadUrl()}}" target="#" class="btn btn-primary" role="button" ng-click="sendGAEvent('Download', 'Java', 'JEE')">Download</a></div>
-                <div ng-show="!deploy.name"><a class="btn btn-primary" role="button" ng-disabled="true">Choose a project name</a></div>
+                <div class="serverResponse" ng-show="generateStatus"><span class="step3SwaggerFileStatus">{{generateStatus}}</span></div>
+                <div class="btn-separator"></div>
+                <div class="row" ng-show="projectQueryString">
+                    <div class="col-md-3"><a ng-href="{{getDownloadUrl()}}" target="#" class="btn btn-primary" role="button" ng-click="sendGAEvent('Download', 'Java', 'JEE')">Download project</a></div>
+                    <div class="col-md-4"><a ng-href="{{getGitHubUrl()}}" target="#" class="btn btn-primary" role="button" ng-click="sendGAEvent('GitHubCreate', 'Java', 'JEE')">Create On GitHub</a></div>
+                </div>
             </div>
             <div class="col-md-6 col-sm-6">
                 <p class="instructionHeading">Once the download is complete, locate your project and unzip it.</p>

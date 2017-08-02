@@ -9,19 +9,19 @@ describe('appacc', function() {
     it('adds gradle to the URL if gradle is the selected build technology', function() {
       appacc.updateBuildType(appacc.buildType.GRADLE);
       appacc.addSelectedTechnology('testTechnology');
-      var url = appacc.createDownloadUrl();
+      var url = appacc.createQueryUrlForBase('/start/api/v1/data?');
       expect(url).toContain('&build=GRADLE');
     });
     it('adds the artifactId to the URL if it is provided', function() {
       appacc.updateArtifactId('testArtifactId');
       appacc.addSelectedTechnology('testTechnology');
-      var url = appacc.createDownloadUrl();
+      var url = appacc.createQueryUrlForBase('/start/api/v1/data?');
       expect(url).toContain('&artifactId=testArtifactId');
     });
     it('adds the groupId to the URL if it is provided', function() {
         appacc.updateGroupId('test.group.id');
         appacc.addSelectedTechnology('testTechnology');
-        var url = appacc.createDownloadUrl();
+        var url = appacc.createQueryUrlForBase('/start/api/v1/data?');
         expect(url).toContain('&groupId=test.group.id');
     });
   });

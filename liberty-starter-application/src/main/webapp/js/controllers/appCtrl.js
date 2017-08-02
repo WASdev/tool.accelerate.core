@@ -35,22 +35,42 @@ angular.module('appAccelerator')
     name : "LibertyProject",
     buildType : appacc.updateBuildType(),
     artifactid : null,
-    groupid : null
+    groupid : null,
+    beta : appacc.isBeta()
   };
   $scope.showConfigOptions = false;
   $scope.angleIconDown = "fa-angle-down";
   $scope.angleIconUp = "fa-angle-up";
+  $scope.generateStatus = undefined;
+  $scope.generateProjectDisabled = false;
+  $scope.projectQueryString = undefined;
 
-  $scope.createDownloadUrl = function() {
-    return appacc.createDownloadUrl();
+  $scope.callGenerateUrl = function() {
+    $scope.sendGAEvent('Generate', 'Java', 'JEE');
+    $scope.generateProjectDisabled = true;
+    $scope.generateStatus = "Generating project... this may take a minute";
+    appacc.callGenerateUrl().then(function(response) {
+      $scope.sendGAEvent('Generate Success', 'Java', 'JEE');
+      $scope.generateProjectDisabled = false;
+      $scope.generateStatus = "Generated successfully";
+      $scope.projectQueryString = response;
+    }, function(response) {
+      $scope.sendGAEvent('Generate Failed', 'Java', 'JEE');
+      $scope.generateProjectDisabled = false;
+      $scope.generateStatus = response;
+    });
   }
 
-  $scope.createGitHubUrl = function() {
-    return appacc.createGitHubUrl();
+  $scope.getDownloadUrl = function() {
+    return appacc.getDownloadUrl($scope.projectQueryString);
+  }
+
+  $scope.getGitHubUrl = function() {
+    return appacc.getGitHubUrl($scope.projectQueryString);
   }
 
   $scope.sendGAEvent = function(p1, p2, p3) {
-	  ga.report('send', 'event', p1, p2, p3);
+    ga.report('send', 'event', p1, p2, p3);
   }
 
   $scope.isSelected = function(technologyId) {
@@ -114,6 +134,8 @@ angular.module('appAccelerator')
     appacc.updateGroupId($scope.deploy.groupid);
     $log.debug("Updating build type to " + $scope.deploy.buildType);
     appacc.updateBuildType($scope.deploy.buildType);
+    appacc.isBeta($scope.deploy.beta);
+    $log.debug("AppAccelerator : beta has value: " + appacc.isBeta());
     appacc.notifyListeners();
   }
 
