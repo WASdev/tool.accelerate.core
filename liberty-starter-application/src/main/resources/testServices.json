@@ -58,7 +58,7 @@
             "imageSelected" : "img/MicroprofileLogoCroppedSelected.png"
         },
         {
-            "id": "ms-builder",
+            "id": "msbuilder",
             "name": "Microservice Builder",
             "description": "Support for the technologies required by the Microservice Builder solution (Maven only). See developer.ibm.com/microservice-builder.",
             "endpoint": "/ms-builder",

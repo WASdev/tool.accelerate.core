@@ -175,8 +175,8 @@ public class BxCodegenClient {
             }
             zis.close();
         } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            log.severe("Caught IOException while reading project zip to Map<String, byte[]> : " + e.getMessage());
+            throw new ProjectGenerationException("Code generation failed for job with id: " + id + ". Try again later.");
         }
         return map;
     }
