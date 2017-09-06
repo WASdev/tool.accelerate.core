@@ -17,7 +17,7 @@ public class EndpointAvailabilityTest {
     public void testLocalHostEndpoint() throws Exception {
         String url = "http://localhost:" + port + "/";
         System.out.println("Testing endpoint " + url);
-        int maxCount = 30;
+        int maxCount = 35;
         int responseCode = makeRequest(url);
         for(int i = 0; (responseCode != 301) && (i < maxCount); i++) {
           System.out.println("Response code : " + responseCode + ", retrying ... (" + i + " of " + maxCount + ")");
@@ -31,7 +31,7 @@ public class EndpointAvailabilityTest {
     public void testEndpoint() throws Exception {
     	String url = "http://127.0.0.1:" + port + "/";
         System.out.println("Testing endpoint " + url);
-        int maxCount = 30;
+        int maxCount = 35;
         int responseCode = makeRequest(url);
         for(int i = 0; (responseCode != 301) && (i < maxCount); i++) {
           System.out.println("Response code : " + responseCode + ", retrying ... (" + i + " of " + maxCount + ")");
@@ -45,7 +45,7 @@ public class EndpointAvailabilityTest {
     public void testStartEndpoint() throws Exception {
         String url = "http://localhost:" + port + "/start/";
         System.out.println("Testing endpoint " + url);
-        int maxCount = 30;
+        int maxCount = 35;
         int responseCode = makeRequest(url);
         for(int i = 0; (responseCode != 200) && (i < maxCount); i++) {
           System.out.println("Response code : " + responseCode + ", retrying ... (" + i + " of " + maxCount + ")");
@@ -59,7 +59,7 @@ public class EndpointAvailabilityTest {
     public void testTechEndpoint() throws Exception {
         String url = "http://localhost:" + port + "/start/api/v1/tech";
         System.out.println("Testing endpoint " + url);
-        int maxCount = 30;
+        int maxCount = 35;
         int responseCode = makeRequest(url);
         for(int i = 0; (responseCode != 200) && (i < maxCount); i++) {
           System.out.println("Response code : " + responseCode + ", retrying ... (" + i + " of " + maxCount + ")");
