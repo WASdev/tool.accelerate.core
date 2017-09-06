@@ -44,7 +44,7 @@ public class BxCodegenClient {
     
     public final String URL = System.getenv("bxCodegenEndpoint");
     public final String STARTERKIT_URL = System.getenv("appAccelStarterkit");
-    private final int retriesAllowed = 9;
+    private final int retriesAllowed = 18;
     
     public Map<String, byte[]> getFileMap(ProjectConstructionInputData inputData) throws ProjectGenerationException {
         checkConfig();
