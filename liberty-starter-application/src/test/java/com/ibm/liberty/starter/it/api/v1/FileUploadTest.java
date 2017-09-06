@@ -17,17 +17,11 @@ package com.ibm.liberty.starter.it.api.v1;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assume.assumeTrue;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -53,26 +47,9 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import com.ibm.liberty.starter.build.maven.DomUtil;
+import static com.ibm.liberty.starter.it.api.v1.utils.UploadEndpointUtils.*;
 
 public class FileUploadTest {
-    
-    @Test
-    public void testStarterWorkspaceEndpoint() throws Exception {
-        String endpoint = "/start/api/v1/workspace";
-        Client client = ClientBuilder.newClient();
-        String port = System.getProperty("liberty.test.port");
-        String url = "http://localhost:" + port + endpoint;
-        System.out.println("Testing " + url);
-        Response response = client.target(url).request().get();
-        try {
-            int status = response.getStatus();
-            assertEquals("Response incorrect, response status was " + status, 200, status);
-            String workspaceId = response.readEntity(String.class);
-            assertNotNull("Returned workspace ID was not a valid UUID : " + workspaceId, UUID.fromString(workspaceId));
-        } finally {
-            response.close();
-        }
-    }
     
     @Test
     public void testUploadInvalidNoTech() throws Exception {
@@ -238,44 +215,5 @@ public class FileUploadTest {
     private Node getChildNode(Node parentNode, String name, String value){
         List<Node> matchingChildren = getChildren(parentNode, name, value);
         return (matchingChildren.size() > 0) ? matchingChildren.get(0) : null;
-    }
-    
-    private int invokeUploadEndpoint(String params, String fileName, String fileContent) throws Exception {
-        String port = System.getProperty("liberty.test.port");
-        String path = "http://localhost:" + port + "/start/api/v1/upload" + ((params != null && !params.trim().isEmpty()) ? ("?" + params) : "");
-        System.out.println("Testing " + path);
-        
-        String boundary = "----WebKitFormBoundarybcoFJqLu81T8NPk8";
-        URL url = new URL(path);
-        HttpURLConnection httpConnection = (HttpURLConnection) url.openConnection();
-        httpConnection.setUseCaches(false);
-        httpConnection.setDoInput(true);
-        httpConnection.setDoOutput(true);        
-        
-        httpConnection.setRequestProperty("Content-Type", "multipart/form-data; boundary=" + boundary);
-        OutputStream outputStream = httpConnection.getOutputStream();
-        PrintWriter writer = new PrintWriter(new OutputStreamWriter(outputStream), true);
-        
-        final String NEW_LINE = "\r\n";
-        writer.append("--" + boundary).append(NEW_LINE);
-        writer.append("Content-Disposition: form-data; name=\"fileFormData\"; filename=\"" + fileName + "\"").append(NEW_LINE);
-        writer.append("Content-Type: application/octet-stream").append(NEW_LINE).append(NEW_LINE);
-        writer.append(fileContent).append(NEW_LINE);
-        writer.append(NEW_LINE).flush();
-        writer.append("--" + boundary + "--").append(NEW_LINE);
-        writer.close();
-        
-        httpConnection.disconnect();
-        return httpConnection.getResponseCode();
-    }
-    
-    private String getBasicSwagger(String modelName) {
-        String swaggerContent = "{\"swagger\": \"2.0\",\"info\": {\"description\": \"Info APIs for Collective\",\"version\": \"1.0.0\"},\"basePath\": \"/\","
-                + "\"paths\": {\"/ibm/api/root1/v1/info\": {\"get\": {\"summary\": \"Retrieve collective's core information\","
-                + "\"description\": \"Returns a JSON with core information about collective\",\"operationId\": \"getInfo\",\"produces\": "
-                + "[\"application/json\"],\"responses\": {\"200\": {\"description\": \"successful operation\","
-                + "\"schema\": {\"$ref\": \"#/definitions/" + modelName + "\"}},\"404\": {\"description\": \"Invalid path\"}}}}},\"definitions\": {"
-                + "\"" + modelName + "\": {\"properties\": {\"name\": {\"type\": \"string\",\"description\": \"Name of the collective\"}}}}}";
-        return swaggerContent;
     }
 }
