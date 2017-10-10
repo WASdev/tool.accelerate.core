@@ -124,7 +124,7 @@
                         <p class="instructionRun">src/main/java</p>
                         <div ng-show="!deploy.bluemix">
                             <p class="instruction">Your Liberty server can be found in: </p>
-                            <p class="instructionRun" ng-show="deploy.buildType == buildType.MAVEN">target/wlp/usr/servers/LibertyProjectServer</p>
+                            <p class="instructionRun" ng-show="deploy.buildType == buildType.MAVEN">target/liberty/wlp/usr/servers/defaultServer</p>
                             <p class="instructionRun" ng-show="deploy.buildType == buildType.GRADLE">build/wlp/usr/servers/defaultServer</p>
                         </div>
                         <p class="instruction">Optionally, <a href="wdt.html" target="_blank" ng-click="sendGAEvent('Outbound', 'resources', 'WDT')">import your project</a> into WebSphere Developer Tool</p>
