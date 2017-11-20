@@ -119,9 +119,9 @@ Using [Gradle](https://gradle.org/): `gradle libertyStart`
 
 The application can be accessed at http://localhost:9080/mylibertyApp
 
-### Deploying to Bluemix
+### Deploying to IBM Cloud
 
-To deploy an application to Bluemix you first need a [Bluemix account](https://console.eu-gb.bluemix.net/). Once you have created a Bluemix account you can build and deploy your application.
+To deploy an application to IBM Cloud you first need an [IBM Cloud account](https://console.eu-gb.bluemix.net/). Once you have created an IBM Cloud account you can build and deploy your application.
 
 Using Maven:
 
@@ -134,9 +134,9 @@ Using Gradle:
 ```
 gradle build cfPush -PcfOrg=[your email address] -PcfUsername=[your username] -PcfPassword=[your password]
 ```
-Where `cf.org` is the Bluemix organization you want to deploy to and `cf.username` and `cf.password` are your credentials for Bluemix. Once the build has been run see your command line output to find the endpoint for your application or look for it in the Bluemix dashboard.
+Where `cf.org` is the IBM Cloud organization you want to deploy to and `cf.username` and `cf.password` are your credentials for IBM Cloud. Once the build has been run see your command line output to find the endpoint for your application or look for it in the IBM Cloud dashboard.
 
-You can optionally supply the following Bluemix configurations in the command line or in the top level pom.xml:
+You can optionally supply the following IBM Cloud configurations in the command line or in the top level pom.xml:
 * <cf.context>eu-gb.mybluemix.net</cf.context>
 * <cf.target>https://api.eu-gb.bluemix.net</cf.target>
 * <cf.space>dev</cf.space>

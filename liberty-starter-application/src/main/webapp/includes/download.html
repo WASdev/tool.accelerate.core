@@ -63,7 +63,7 @@
                                 <div class="row options">
                                     <div class="col-md-12 col-sm-12">
                                         <label class="checkbox-inline">
-                                            <input type="checkbox" ng-model="deploy.bluemix" ng-click="updateService()">Bluemix default deployment
+                                            <input type="checkbox" ng-model="deploy.bluemix" ng-click="updateService()">IBM Cloud default deployment
                                         </label>
                                     </div>
                                 </div>
@@ -94,7 +94,7 @@
                             <p class="instructionRun" ng-show="deploy.buildType == buildType.GRADLE">gradle build libertyStart</p>
                         </div>
                         <div ng-show="deploy.bluemix">
-                            <p class="instruction">Deploy to Bluemix with: </p>
+                            <p class="instruction">Deploy to IBM Cloud with: </p>
                             <p class="instructionRun" ng-show="deploy.buildType == buildType.MAVEN">mvn install -Pbluemix -Dcf.org=<span
                                     class="purpleCode">[your email address]</span> -Dcf.username=<span
                                     class="purpleCode">[your username]</span> -Dcf.password=<span
@@ -114,7 +114,7 @@
                         </div>
                         <div ng-show="deploy.bluemix">
                             <p class="instructionRun"><a href="http://{{deploy.name}}.mybluemix.net/{{deploy.name}}/" target="_blank" ng-click="sendGAEvent('Outbound', 'app endpoint', 'bluemix')">http://{{deploy.name}}.mybluemix.net/{{deploy.name}}/</a></p>
-                            <p class="instruction">To manage your deployed application visit your dashboard on Bluemix.</p>
+                            <p class="instruction">To manage your deployed application visit your dashboard on IBM Cloud.</p>
                         </div>
                     </div>
                 </div>
