@@ -143,7 +143,6 @@ public class FileUploadTest {
                                     foundInstallNode = true;
                                     Node config = ((Element) execution).getElementsByTagName("configuration").item(0);
                                     Node features = ((Element) config).getElementsByTagName("features").item(0);
-                                    assertTrue("Install feature was not found : apiDiscovery-1.0", hasChildNode(features, "feature", "apiDiscovery-1.0"));
                                     assertTrue("acceptLicense node with property true was not found", hasChildNode(features, "acceptLicense", "true"));
                                     foundFeaturesToInstall = true;
                                 }
