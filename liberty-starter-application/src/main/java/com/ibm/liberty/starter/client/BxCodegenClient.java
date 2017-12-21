@@ -95,7 +95,7 @@ public class BxCodegenClient {
                 + "\"backendPlatform\":\"JAVA\","
                 + "\"name\":\"" + inputData.appName + "\"},"
                 + "\"generatorOptions\":{"
-                + "\"generator-java\":{"
+                + "\"generator-ibm-java\":{"
                 + "\"options\":" + inputData.toBxJSON()
                 + "}},"
                 + "\"templateSources\":[\"" + STARTERKIT_URL + "\"]}";
