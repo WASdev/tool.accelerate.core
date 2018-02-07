@@ -104,7 +104,7 @@ public class FileUploadTest {
             boolean deletedFileExists = false;
             boolean foundFeaturesToInstall = false;
             boolean foundPluginNode = false;
-            boolean foundInstallNode = false;
+            boolean foundAcceptLicense = false;
             String zipEntries = "";
             Document pomContents = null;
             while ((inputEntry = zipIn.getNextEntry()) != null) {
@@ -135,20 +135,13 @@ public class FileUploadTest {
                         Element pluginNode = (Element) pluginNodeList.item(i);
                         if (DomUtil.nodeHasId(pluginNode, "liberty-maven-plugin")) {
                             foundPluginNode = true;
-                            Node executions = pluginNode.getElementsByTagName("executions").item(0);
-                            if (executions != null) {
-                                NodeList executionNodes = ((Element) executions).getChildNodes();
-                            
-                                for (int j = 0; j < executionNodes.getLength(); j++) {
-                                    Node execution = executionNodes.item(j);
-                                    if (DomUtil.nodeHasId(execution, "install-feature")) {
-                                        foundInstallNode = true;
-                                        Node config = ((Element) execution).getElementsByTagName("configuration").item(0);
-                                        Node features = ((Element) config).getElementsByTagName("features").item(0);
-                                        assertTrue("acceptLicense node with property true was not found", hasChildNode(features, "acceptLicense", "true"));
-                                        foundFeaturesToInstall = true;
-                                    }
-                                }
+                            Node features = pluginNode.getElementsByTagName("features").item(0);
+                            NodeList featureNodes = ((Element) features).getChildNodes();
+                            for (int j = 0; j < featureNodes.getLength(); j++) {
+                                    Node feature = featureNodes.item(j);
+                                    foundAcceptLicense = true;
+                                    assertTrue("acceptLicense node with property true was not found", hasChildNode(features, "acceptLicense", "true"));
+                                    foundFeaturesToInstall = true;
                             }
                         }
                     }
@@ -159,7 +152,7 @@ public class FileUploadTest {
             assertTrue("Model file doesn't exist at src/main/java/io/swagger/model/CollectiveInfo3.java in the zip file. Entries found:" + zipEntries, modelFileExists);
             assertTrue("API file doesn't exist at src/main/java/io/swagger/api/IbmApi.java in the zip file. Entries found:" + zipEntries, apiFileExists);
             assertTrue("liberty-maven-plugin node was not found", foundPluginNode);
-            assertTrue("install-feature node was not found", foundInstallNode);
+            assertTrue("acceptLicense node was not found", foundAcceptLicense);
             assertTrue("Features to install were not found in pom.xml from the zip file.", foundFeaturesToInstall);
             assertFalse("Deleted file exists in the zip file. Entries found:" + zipEntries, deletedFileExists);
         } finally {
