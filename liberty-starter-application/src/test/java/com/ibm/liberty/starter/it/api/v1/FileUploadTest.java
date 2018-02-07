@@ -136,13 +136,10 @@ public class FileUploadTest {
                         if (DomUtil.nodeHasId(pluginNode, "liberty-maven-plugin")) {
                             foundPluginNode = true;
                             Node features = pluginNode.getElementsByTagName("features").item(0);
-                            NodeList featureNodes = ((Element) features).getChildNodes();
-                            for (int j = 0; j < featureNodes.getLength(); j++) {
-                                    Node feature = featureNodes.item(j);
-                                    foundAcceptLicense = true;
-                                    assertTrue("acceptLicense node with property true was not found", hasChildNode(features, "acceptLicense", "true"));
-                                    foundFeaturesToInstall = true;
-                            }
+                            assertTrue("acceptLicense node with property true was not found", hasChildNode(features, "acceptLicense", "true"));
+                            foundAcceptLicense = true;
+                            foundFeaturesToInstall = true;
+                            
                         }
                     }
                 }
