@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016 IBM Corp.
+ * Copyright (c) 2016,2017 IBM Corp.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,8 +27,6 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import com.ibm.liberty.starter.api.v1.model.internal.Services;
-import com.ibm.liberty.starter.api.v1.model.provider.Provider;
-import com.ibm.liberty.starter.api.v1.model.provider.Sample;
 import com.ibm.liberty.starter.api.v1.model.registration.Service;
 
 public class ServiceConnector {
@@ -82,12 +80,6 @@ public class ServiceConnector {
         return service;
     }
     
-    public Provider getProvider(Service service) {
-        String url = urlConstructor("/api/v1/provider", service);
-        Provider provider = getObjectFromEndpoint(Provider.class, url, MediaType.APPLICATION_JSON_TYPE);
-        return provider;
-    }
-    
     public String processUploadedFiles(Service service, String uploadDirectory) {
         log.finer("service=" + service.getId() + " : uploadDirectory=" + uploadDirectory);
         String url = urlConstructor("/api/v1/provider/uploads/process?path=" + uploadDirectory, service);
@@ -96,44 +88,19 @@ public class ServiceConnector {
         return response;
     }
     
-    public String prepareDynamicPackages(Service service, String techWorkspaceDir, String options, String[] techs) {
+    public void prepareDynamicPackages(Service service, String techWorkspaceDir, String options, String[] techs) {
         log.finer("service=" + service.getId() + " : options=" + options + " : techWorkspaceDir=" + techWorkspaceDir + " : techs=" + techs);
         String optionsParam = (options != null && !options.trim().isEmpty()) ? ("&options=" + options) : "";
         String techsParam = "&techs=" + String.join(",", techs);
         String url = urlConstructor("/api/v1/provider/packages/prepare?path=" + techWorkspaceDir + optionsParam + techsParam, service);
-        try {
-            String response = getObjectFromEndpoint(String.class, url, MediaType.TEXT_PLAIN_TYPE);
-            log.fine("Response of preparing dynamic packages from " + techWorkspaceDir + " : " + response);
-            return response;
-        } catch(javax.ws.rs.NotFoundException e){
+        Response response = getResponseFromEndpoint(url, MediaType.TEXT_PLAIN_TYPE);
+        String responseString = response.readEntity(String.class);
+        if (response.getStatus() == 404) {
             // The service doesn't offer this endpoint, so the exception can be ignored. 
-            log.finest("Ignore expected exception : The service doesn't offer endpoint " + url + " : " + e);
+            log.warning("Ignore expected 404 : The service doesn't offer endpoint " + url);
+        } else {
+            log.fine("Response of preparing dynamic packages from " + techWorkspaceDir + " : " + responseString);
         }
-        return "";
-    }
-    
-    public String getFeaturesToInstall(Service service) {
-        log.finer("service=" + service.getId());
-        String url = urlConstructor("/api/v1/provider/features/install", service);
-        try {
-            String response = getObjectFromEndpoint(String.class, url, MediaType.TEXT_PLAIN_TYPE);
-            log.fine("Features to install for " + service.getId() + " : " + response);
-            return response;
-        } catch(javax.ws.rs.NotFoundException e){
-            // The service doesn't offer this endpoint, so the exception can be ignored. 
-            log.finest("Ignore expected exception : The service doesn't offer endpoint " + url + " : " + e);
-            }
-        return "";
-    }
-    
-    public Sample getSample(Service service) {
-        String url = urlConstructor("/api/v1/provider/samples", service);
-        Sample sample = getObjectFromEndpoint(Sample.class, url, MediaType.APPLICATION_JSON_TYPE);
-        return sample;
-    }
-    
-    public InputStream getResourceAsInputStream(String url) {
-        return getObjectFromEndpoint(InputStream.class, url, MediaType.WILDCARD_TYPE);
     }
     
     public InputStream getArtifactAsInputStream(Service service, String extension) {

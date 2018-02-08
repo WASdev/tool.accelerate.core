@@ -41,17 +41,40 @@ angular.module('appAccelerator')
   $scope.showConfigOptions = false;
   $scope.angleIconDown = "fa-angle-down";
   $scope.angleIconUp = "fa-angle-up";
+  $scope.generateStatus = undefined;
+  $scope.generateProjectDisabled = false;
+  $scope.projectQueryString = undefined;
 
-  $scope.createDownloadUrl = function() {
-    return appacc.createDownloadUrl();
+  $scope.callGenerateUrl = function() {
+    $scope.sendGAEvent('Generate', 'Java', 'JEE');
+    $scope.generateProjectDisabled = true;
+    $scope.generateStatus = "Generating project... this may take a minute";
+    appacc.callGenerateUrl().then(function(response) {
+      $scope.sendGAEvent('Generate Success', 'Java', 'JEE');
+      $scope.generateProjectDisabled = false;
+      $scope.generateStatus = "Generated successfully";
+      $scope.projectQueryString = response;
+    }, function(response) {
+      $scope.sendGAEvent('Generate Failed', 'Java', 'JEE');
+      $scope.generateProjectDisabled = false;
+      $scope.generateStatus = response;
+    });
   }
 
-  $scope.createGitHubUrl = function() {
-    return appacc.createGitHubUrl();
+  $scope.getDownloadUrl = function() {
+    return appacc.getDownloadUrl($scope.projectQueryString);
+  }
+
+  $scope.getGitHubUrl = function() {
+    return appacc.getGitHubUrl($scope.projectQueryString);
   }
 
   $scope.sendGAEvent = function(p1, p2, p3) {
-	  ga.report('send', 'event', p1, p2, p3);
+    ga.report('send', 'event', p1, p2, p3);
+  }
+
+  $scope.isSelected = function(technologyId) {
+    return appacc.isSelected(technologyId);
   }
 
   $scope.toggleSelected = function(technology, $event) {
@@ -64,6 +87,10 @@ angular.module('appAccelerator')
     $log.debug("AppAccelerator : Selected count " + $scope.selectedCount);
     technology.panel = technology.selected ? "panel-selected" : "panel-primary";
     technology.iconstyle = technology.selected ? "icon-selected" : "icon";
+    if(technology.id === "ms-builder") {
+      $log.debug("AppAccelerator : Switching buildType to " + appacc.buildType.MAVEN + "since ms-builder is selected.");
+      $scope.deploy.buildType = appacc.buildType.MAVEN;
+    }
     $scope.updateService();
   }
 
@@ -78,7 +105,7 @@ angular.module('appAccelerator')
     technology.info = false;
     technology.displayOptions = !technology.displayOptions;
   }
-  
+
   $scope.toggleConfigOptions = function($event) {
     $event.stopPropagation();
     $scope.showConfigOptions = !$scope.showConfigOptions;
@@ -144,7 +171,7 @@ angular.module('appAccelerator')
     }
     return selected;
   }
-  
+
   function newRowNeeded(index) {
     return (index % $scope.colCount) === 0;
   }

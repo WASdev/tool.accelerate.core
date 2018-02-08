@@ -13,11 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
+
 :focus {
     outline: #9B9B9B dotted thin;
 }
- 
+
 @font-face {
     font-family: "HelvNeueRoman";
     src: url("../fonts/HelvNeueRomanforIBM.otf");
@@ -322,4 +322,8 @@
     margin-bottom: 5px;
     font-size: 100%;
     max-width: 100%;
+}
+
+.radio-disabled {
+  color: #666666;
 }

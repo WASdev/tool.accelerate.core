@@ -42,7 +42,12 @@ public class RepositoryCallInterceptor {
             String fileExtension = "net/wasdev/wlp/starters/" + tech + "/" + path;
             System.out.println("Request for artifact file " + fileExtension);
             ServiceConnector serviceConnector = new ServiceConnector(info.getBaseUri());
-            Service service = serviceConnector.getServiceObjectFromId(tech);
+            Service service;
+            if ("ms-builder".equals(tech)) {
+                service = serviceConnector.getServiceObjectFromId("msbuilder");
+            } else {
+                service = serviceConnector.getServiceObjectFromId(tech);
+            }
             if (service == null) {
                 return Response.status(Status.NOT_FOUND).entity("Tech type " + tech + " not found").build();
             }

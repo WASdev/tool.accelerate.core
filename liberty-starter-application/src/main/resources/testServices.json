@@ -5,6 +5,72 @@
             "name" : "Test",
             "description" : "Test",
             "endpoint" : "/test"
+        },
+        {
+            "id" : "rest",
+            "name" : "REST",
+            "description" : "Support for Java API for RESTful Web Services.",
+            "endpoint" : "/rest",
+            "options" : false
+        },
+        {
+            "id" : "websocket",
+            "name" : "Web Sockets",
+            "description" : "Support for WebSocket applications.",
+            "endpoint" : "/websocket",
+            "options" : false
+        },
+        {
+            "id" : "persistence",
+            "name" : "Persistence",
+            "description" : "Support for applications that use application-managed and container-managed JPA.",
+            "endpoint" : "/persistence",
+            "options" : false
+        },
+        {
+            "id": "web",
+            "name" : "Servlet",
+            "description": "Support for HTTP Servlets.",
+            "endpoint" : "/web",
+            "options" : false
+        },
+        {
+            "id": "springbootweb",
+            "name": "Spring Boot",
+            "description": "Support for Spring Boot with Spring MVC applications.",
+            "endpoint" : "/springbootweb",
+            "options" : false
+        },
+        {
+            "id": "watsonsdk",
+            "name": "Watson SDK",
+            "description": "Adds the Watson SDK dependency to the project, allowing you to integrate Watson services.",
+            "endpoint" : "/watsonsdk",
+            "options" : false
+        },
+        {
+            "id": "microprofile",
+            "name": "MicroProfile",
+            "description": "Support for technologies required by the MicroProfile community effort. See microprofile.io.",
+            "endpoint": "/microprofile",
+            "options" : false,
+            "image" : "img/MicroprofileLogoCropped.png",
+            "imageSelected" : "img/MicroprofileLogoCroppedSelected.png"
+        },
+        {
+            "id": "msbuilder",
+            "name": "Microservice Builder",
+            "description": "Support for the technologies required by the Microservice Builder solution (Maven only). See developer.ibm.com/microservice-builder.",
+            "endpoint": "/ms-builder",
+            "options" : false
+        },
+        {
+            "id" : "swagger",
+            "name" : "Swagger",
+            "description" : "A simple yet powerful representation of RESTful APIs.",
+            "endpoint" : "/swagger",
+            "configuration" : "rest",
+            "options" : true
         }
     ]
 }

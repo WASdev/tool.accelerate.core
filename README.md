@@ -32,7 +32,7 @@ The current technologies you can choose to build into your application are:
 * [Persistence](#persistence)
 * [Watson SDK](#watson-sdk)
 * [MicroProfile](#microprofile)
-* [Microservice Builder (Beta)](#microservice-builder-beta)
+* [Microservice Builder](#microservice-builder)
 * [Swagger](#swagger)
 
 ### Rest
@@ -79,10 +79,10 @@ If you want to share your thoughts you can post straight to the
 
 For the complete feature documentation, see the [microProfile-1.0 feature](http://www.ibm.com/support/knowledgecenter/en/SSEQTP_liberty/com.ibm.websphere.wlp.nd.multiplatform.doc/ae/rwlp_feature_microProfile-1.0.html) feature description in IBM Knowledge Center.
 
-### Microservice Builder (Beta)
-This provides support for the technologies required by the [Microservice Builder (Beta) solution](https://microservicebuilder.mybluemix.net/docs/index.html).
+### Microservice Builder
+This provides support for the technologies required by the [Microservice Builder solution](https://microservicebuilder.mybluemix.net/docs/index.html).
 
-Microservice Builder (Beta) delivers a turnkey solution incorporating a runtime, tooling, DevOps, fabric, and customer-managed container orchestration.
+Microservice Builder delivers a turnkey solution incorporating a runtime, tooling, DevOps, fabric, and customer-managed container orchestration.
 
 ### Swagger
 Swagger is a simple yet powerful representation of RESTful APIs.
@@ -117,11 +117,11 @@ Using [Maven](https://maven.apache.org/): `mvn liberty:run-server`
 
 Using [Gradle](https://gradle.org/): `gradle libertyStart`
 
-The appliction can be accessed at http://localhost:9080/mylibertyApp
+The application can be accessed at http://localhost:9080/mylibertyApp
 
-### Deploying to Bluemix
+### Deploying to IBM Cloud
 
-To deploy an application to Bluemix you first need a [Bluemix account](https://console.eu-gb.bluemix.net/). Once you have created a Bluemix account you can build and deploy your application.
+To deploy an application to IBM Cloud you first need an [IBM Cloud account](https://console.eu-gb.bluemix.net/). Once you have created an IBM Cloud account you can build and deploy your application.
 
 Using Maven:
 
@@ -134,9 +134,9 @@ Using Gradle:
 ```
 gradle build cfPush -PcfOrg=[your email address] -PcfUsername=[your username] -PcfPassword=[your password]
 ```
-Where `cf.org` is the Bluemix organization you want to deploy to and `cf.username` and `cf.password` are your credentials for Bluemix. Once the build has been run see your command line output to find the endpoint for your application or look for it in the Bluemix dashboard.
+Where `cf.org` is the IBM Cloud organization you want to deploy to and `cf.username` and `cf.password` are your credentials for IBM Cloud. Once the build has been run see your command line output to find the endpoint for your application or look for it in the IBM Cloud dashboard.
 
-You can optionally supply the following Bluemix configurations in the command line or in the top level pom.xml:
+You can optionally supply the following IBM Cloud configurations in the command line or in the top level pom.xml:
 * <cf.context>eu-gb.mybluemix.net</cf.context>
 * <cf.target>https://api.eu-gb.bluemix.net</cf.target>
 * <cf.space>dev</cf.space>
@@ -152,9 +152,12 @@ The app accelerator project is built using [Gradle](https://gradle.org/).
 
 Build the application using: `gradle clean build`
 
-Run the application: `liberty-starter-application:localRun`
+Run the application: `gradle liberty-starter-application:localRun`
 
 The application should be available at http://localhost:9082/start.
+
+To run the application locally with it calling bx codegen:
+`gradle liberty-starter-application:libertyStart -PappAccelStarterkit=<app accelerator starter kit url> -PbxCodegenEndpoint=<url for the bx codegen service to use>`
 
 ### Project Structure
 The project is split up into several different pieces.

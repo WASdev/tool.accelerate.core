@@ -28,6 +28,7 @@ angular.module('appAccelerator')
      var techURL = serviceURL + "/tech";  //where to get the technology types from
      var dataURL = serviceURL + "/data?";              //tech=rest&deploy=local&name=libertyProject&workspace=642f3151-c9b6-4d5c-b185-4c29b8
      var gitHubUrl = serviceURL + "/createGitHubRepository?";              //tech=rest&deploy=local&name=libertyProject&workspace=642f3151-c9b6-4d5c-b185-4c29b8
+     var generateURL = serviceURL + "/generate?";
      var optionsURL = "/start/options";
      var workspaceURL = serviceURL + "/workspace";
      var buildType = {
@@ -127,7 +128,7 @@ angular.module('appAccelerator')
         return q.promise;
       };
 
-      var createDownloadUrlForBase = function (baseUrl) {
+      var createQueryUrlForBase = function (baseUrl) {
           var url = undefined;
           var selected = "";   //the list of selected technologies
           for(var i = 0; i < selectedTechnologies.length; i++) {
@@ -170,12 +171,29 @@ angular.module('appAccelerator')
           return url;
       };
 
-      var createDownloadUrl = function() {
-        return createDownloadUrlForBase(dataURL);
+      var callGenerateUrl = function() {
+        var genUrl = createQueryUrlForBase(generateURL);
+        $log.debug("AppAcc Svc : calling generate url : " + genUrl);
+        var q = $q.defer();
+        $http({
+            url: genUrl,
+            method: 'GET'
+            }).then(function(response) {
+              $log.debug("AppAcc Svc : " + response.status + ' ' + response.statusText + " %o - OK");
+              q.resolve(response.data.requestQueryString);
+            }, function(response) {
+              $log.debug("AppAcc Svc : " + response.status + ' ' + response.statusText + " %o - FAILED", response.data);
+              q.reject(response.data.error);
+            });
+        return q.promise;
       }
 
-      var createGitHubUrl = function() {
-        return createDownloadUrlForBase(gitHubUrl);
+      var getDownloadUrl = function(queryString) {
+        return dataURL + queryString;
+      }
+
+      var getGitHubUrl = function(queryString) {
+        return gitHubUrl + queryString;
       }
 
       //how many technologies have currently been selected
@@ -295,8 +313,10 @@ angular.module('appAccelerator')
 
       return {
         getTechnologies: getTechnologies,
-        createDownloadUrl : createDownloadUrl,
-        createGitHubUrl : createGitHubUrl,
+        createQueryUrlForBase : createQueryUrlForBase,
+        callGenerateUrl : callGenerateUrl,
+        getDownloadUrl : getDownloadUrl,
+        getGitHubUrl : getGitHubUrl,
         getTechOptions : getTechOptions,
         getSelectedCount : getSelectedCount,
         addSelectedTechnology : addSelectedTechnology,

@@ -1,5 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2017 IBM Corp.
+ * Copyright (c) 2016,2017 IBM Corp.
+
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,10 +35,12 @@ public class ProjectConstructionInput {
     private static final String SERVICE_IDS_KEY = "serviceIds";
     private static final String BUILD_KEY = "build";
     private static final String WORKSPACE_DIR_KEY = "workspaceDir";
+    private static final String TECH_OPTIONS_KEY = "techOptions";
     private static final String DEPLOY_KEY = "deploy";
     private static final String NAME_KEY = "name";
     private static final String GROUP_ID_KEY = "groupId";
     private static final String ARTIFACT_ID_KEY = "artifactId";
+    private static final String GENERATION_ID_KEY = "generationId";
     private static final String BETA_KEY = "beta";
     private final ServiceConnector serviceConnector;
 
@@ -45,15 +48,15 @@ public class ProjectConstructionInput {
         this.serviceConnector = serviceConnector;
     }
 
-    public ProjectConstructionInputData processInput(String[] techs, String[] techOptions, String name, String deploy, String workspaceId, String build, String artifactId, String groupId, boolean beta) {
+    public ProjectConstructionInputData processInput(String[] techs, String[] techOptions, String name, String deploy, String workspaceId, String build, String artifactId, String groupId, String generationId, boolean beta, boolean prepareDynamicPackages) {
         List<Service> serviceList = new ArrayList<Service>();
         for (String tech : techs) {
             if (PatternValidation.checkPattern(PatternValidation.PatternType.TECH, tech)) {
                 Service service = serviceConnector.getServiceObjectFromId(tech);
                 if (service != null) {
                     serviceList.add(service);
-                    if (workspaceId != null && !workspaceId.trim().isEmpty()) {
-                        serviceConnector.prepareDynamicPackages(service, StarterUtil.getWorkspaceDir(workspaceId) + "/" + service.getId(), getTechOptions(techOptions, tech), techs);
+                    if (prepareDynamicPackages) {
+                        prepareDynamicPackages(service, workspaceId, getTechOptions(techOptions, tech), techs);
                     }
                 }
             } else {
@@ -97,19 +100,35 @@ public class ProjectConstructionInput {
             log.severe("Invalid groupId.");
             throw new ValidationException();
         }
-        return new ProjectConstructionInputData(services, serviceConnector, name, deployType, buildType, StarterUtil.getWorkspaceDir(workspaceId), artifactId, groupId, beta);
+        
+        if (generationId != null && !PatternValidation.checkPattern(PatternValidation.PatternType.GENERATION_ID, generationId)) {
+            log.severe("Invalid generationId.");
+            throw new ValidationException();
+        }
+        return new ProjectConstructionInputData(services, serviceConnector, name, deployType, buildType, StarterUtil.getWorkspaceDir(workspaceId), techOptions, artifactId, groupId, generationId, beta);
+    }
+    
+    private void prepareDynamicPackages(Service service, String workspaceId, String techOptions, String[] techs) {
+        if (workspaceId != null && !workspaceId.trim().isEmpty()) {
+            serviceConnector.prepareDynamicPackages(service, StarterUtil.getWorkspaceDir(workspaceId) + "/" + service.getId(), techOptions, techs);
+        }
     }
 
-    public String processInputAsJwt(String[] techs, String[] techOptions, String name, String deploy, String workspaceId, String build, String artifactId, String groupId, boolean beta) throws NamingException {
-        ProjectConstructionInputData inputData = processInput(techs, techOptions, name, deploy, workspaceId, build, artifactId, groupId, beta);
-
+    public String processInputAsJwt(String[] techs, String[] techOptions, String name, String deploy, String workspaceId, String build, String artifactId, String groupId, String generationId, boolean beta) throws NamingException {
+        ProjectConstructionInputData inputData = processInput(techs, techOptions, name, deploy, workspaceId, build, artifactId, groupId, generationId, beta, true);
+        String techOptionsString = "";
+        for(String option : inputData.techOptions) {
+            techOptionsString += option + ",";
+        }
         Claims claims = Jwts.claims();
         claims.put(NAME_KEY, inputData.appName);
         claims.put(DEPLOY_KEY, inputData.deployType);
         claims.put(WORKSPACE_DIR_KEY, inputData.workspaceDirectory);
+        claims.put(TECH_OPTIONS_KEY, techOptionsString);
         claims.put(BUILD_KEY, inputData.buildType);
         claims.put(ARTIFACT_ID_KEY, inputData.artifactId);
         claims.put(GROUP_ID_KEY, inputData.groupId);
+        claims.put(GENERATION_ID_KEY, inputData.generationId);
         claims.put(BETA_KEY, inputData.beta);
         claims.put(SERVICE_IDS_KEY, inputData.services.getServices().stream().map(service -> service.getId()).collect(Collectors.toList()));
         
@@ -142,8 +161,10 @@ public class ProjectConstructionInput {
                 ProjectConstructor.DeployType.valueOf((String) claims.get(DEPLOY_KEY)),
                 ProjectConstructor.BuildType.valueOf((String) claims.get(BUILD_KEY)),
                 (String) claims.get(WORKSPACE_DIR_KEY),
+                ((String) claims.get(TECH_OPTIONS_KEY)).split(","),
                 (String) claims.get(ARTIFACT_ID_KEY),
                 (String) claims.get(GROUP_ID_KEY),
+                (String) claims.get(GENERATION_ID_KEY),
                 (boolean) claims.get(BETA_KEY));
     }
 

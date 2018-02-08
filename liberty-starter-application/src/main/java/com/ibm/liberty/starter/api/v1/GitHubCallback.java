@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016 IBM Corp.
+ * Copyright (c) 2016,2017 IBM Corp.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -53,7 +53,7 @@ public class GitHubCallback {
 
             ProjectConstructor constructor = new ProjectConstructor(inputData);
             GitHubConnector connector = new GitHubConnector(oAuthToken);
-            GitHubWriter writer = new GitHubWriter(constructor.buildFileMap(), inputData.appName, inputData.buildType, baseUri, connector);
+            GitHubWriter writer = new GitHubWriter(constructor.buildFileMap(), inputData.appName, connector);
             writer.createProjectOnGitHub();
             return Response.seeOther(new URI(connector.getRepositoryLocation())).build();
         } catch (IllegalArgumentException e) {

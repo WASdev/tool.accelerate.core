@@ -15,20 +15,16 @@
  *******************************************************************************/
 package com.ibm.liberty.starter.service.microprofile.api.v1.it;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Before;
 import org.junit.Test;
 
-import com.ibm.liberty.starter.api.v1.model.provider.Dependency;
-import com.ibm.liberty.starter.api.v1.model.provider.Provider;
-import com.ibm.liberty.starter.api.v1.model.provider.Sample;
+import com.ibm.liberty.starter.api.v1.model.provider.EndpointResponse;
 
 /**
  * Test the deployed service responds as expected
- * 
+ *
  */
 public class TestApplication extends EndpointTest {
 
@@ -39,36 +35,8 @@ public class TestApplication extends EndpointTest {
 
     @Test
     public void testProvider() throws Exception {
-        Provider provider = testEndpoint("/api/v1/provider/", Provider.class);
-        assertNotNull("No response from API for provider", provider);
-        assertTrue("Description was not found.", provider.getDescription().contains("<h2>Microservice Builder (Beta)</h2>"));
-        Dependency[] dependencies = provider.getDependencies();
-        boolean providedDependency = false;
-        boolean runtimeDependency = false;
-        for (Dependency dependency : dependencies) {
-            if (Dependency.Scope.PROVIDED.equals(dependency.getScope())) {
-                assertEquals("groupId incorrect.", "net.wasdev.wlp.starters.ms-builder", dependency.getGroupId());
-                assertEquals("artifactId incorrect.", "provided-pom", dependency.getArtifactId());
-                assertEquals("version incorrect.", "0.1", dependency.getVersion());
-                providedDependency = true;
-            }
-            if (Dependency.Scope.RUNTIME.equals(dependency.getScope())) {
-                assertEquals("groupId incorrect.", "net.wasdev.wlp.starters.ms-builder", dependency.getGroupId());
-                assertEquals("artifactId incorrect.", "runtime-pom", dependency.getArtifactId());
-                assertEquals("version incorrect.", "0.1", dependency.getVersion());
-                runtimeDependency = true;
-            }
-        }
-        assertTrue("Provided dependencies were specified.", providedDependency);
-        assertTrue("Runtime dependencies were specified.", runtimeDependency);
+        EndpointResponse response = testEndpoint("/api/v1/provider/", EndpointResponse.class);
+        String status = response.getStatus();
+        assertTrue("Expected response to be UP, instead found" + status, status.equals("UP"));
     }
-
-    @Test
-    public void testSamples() throws Exception {
-        Sample sample = testEndpoint("/api/v1/provider/samples", Sample.class);
-        assertNotNull("No response from API for sample", sample);
-        assertNotNull("Expected locations", sample.getLocations());
-        assertEquals("Expected 4 samples.", 4, sample.getLocations().length);
-    }
-
 }
