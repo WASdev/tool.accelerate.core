@@ -79,7 +79,7 @@ public class FileUploadTest {
         responseCode = invokeUploadEndpoint("tech=swagger&workspace=" + uuid + "&cleanup=true&process=true", "sampleUpload3.json", getBasicSwagger("CollectiveInfo3"));
         assertEquals("Response 3 was incorrect, response was " + responseCode, Response.Status.OK.getStatusCode(), responseCode);
         
-        // Invoke the v1/data endpoint to ensure that the packaged files are contained within the zip and the features to 
+        // Invoke the v1/data endpoint to ensure that the packaged files are contained within the zip and the features to
         // install specified by the 'swagger' tech type are present within pom.xml
         Client client = ClientBuilder.newClient();
         String port = System.getProperty("liberty.test.port");
@@ -173,7 +173,7 @@ public class FileUploadTest {
     /**
          * Get all matching child nodes
          * @param parentNode - the parent node
-         * @param name - name of child node to match 
+         * @param name - name of child node to match
          * @param value - value of child node to match, specify null to not match value
          * @return matching child nodes
          */
@@ -199,7 +199,7 @@ public class FileUploadTest {
     /**
      * Get the matching child node
      * @param parentNode - the parent node
-     * @param name - name of child node to match 
+     * @param name - name of child node to match
      * @param value - value of child node to match
      * @return the child node if a match was found, null otherwise
      */
