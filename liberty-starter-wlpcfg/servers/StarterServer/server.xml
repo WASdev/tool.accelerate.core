@@ -14,13 +14,16 @@
 <server description="Liberty server" >
 
     <featureManager>
+        <feature>webProfile-7.0</feature>
+        <feature>ssl-1.0</feature>
+        <feature>apiDiscovery-1.0</feature>
+    <!--
         <feature>servlet-3.1</feature>
         <feature>jaxrs-2.0</feature>
         <feature>jsonp-1.0</feature>
         <feature>cdi-1.2</feature>
-        <feature>ssl-1.0</feature>
-        <feature>apiDiscovery-1.0</feature>
         <feature>jndi-1.0</feature>
+    -->
 	</featureManager>
     
     <httpEndpoint httpPort="9082" httpsPort="9445" id="defaultHttpEndpoint" host="*"/>
