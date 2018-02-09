@@ -139,7 +139,6 @@ public class FileUploadTest {
                             assertTrue("acceptLicense node with property true was not found", hasChildNode(features, "acceptLicense", "true"));
                             foundAcceptLicense = true;
                             foundFeaturesToInstall = true;
-                            
                         }
                     }
                 }
